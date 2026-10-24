@@ -128,6 +128,12 @@
       "trainerr": "Fiche rédigée pour Trainerr.",
       "user": "Exercice ajouté par toi."
     },
-    "kg": "{load} kg"
+    "kg": "{load} kg",
+    "illustration": {
+      "label": "Illustration du mouvement : {name}",
+      "pause": "Mettre l'animation en pause",
+      "play": "Reprendre l'animation",
+      "caption": "Illustration : {exercise} —"
+    }
   }
 }

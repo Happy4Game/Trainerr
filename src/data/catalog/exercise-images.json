@@ -1,0 +1,218 @@
+{
+  "Dumbbell_Bench_Press": {
+    "wgerName": "Benchpress Dumbbells",
+    "sourceUrl": "https://wger.de/exercise/75/view/",
+    "images": [
+      {
+        "file": "Dumbbell_Bench_Press-1.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Dumbbell_Bench_Press-2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Barbell_Bench_Press_-_Medium_Grip": {
+    "wgerName": "Bench Press",
+    "sourceUrl": "https://wger.de/exercise/73/view/",
+    "images": [
+      {
+        "file": "Barbell_Bench_Press_-_Medium_Grip-1.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Barbell_Bench_Press_-_Medium_Grip-2.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Butterfly": {
+    "wgerName": "Butterfly",
+    "sourceUrl": "https://wger.de/exercise/135/view/",
+    "images": [
+      {
+        "file": "Butterfly-1.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Butterfly-2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Machine_Shoulder_Military_Press": {
+    "wgerName": "Shoulder Press, on Machine",
+    "sourceUrl": "https://wger.de/exercise/543/view/",
+    "images": [
+      {
+        "file": "Machine_Shoulder_Military_Press-1.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "wger.de"
+      },
+      {
+        "file": "Machine_Shoulder_Military_Press-2.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "wger.de"
+      }
+    ]
+  },
+  "Dumbbell_Shoulder_Press": {
+    "wgerName": "Shoulder Press, Dumbbells",
+    "sourceUrl": "https://wger.de/exercise/567/view/",
+    "images": [
+      {
+        "file": "Dumbbell_Shoulder_Press-1.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Dumbbell_Shoulder_Press-2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Side_Lateral_Raise": {
+    "wgerName": "Lateral Raises",
+    "sourceUrl": "https://wger.de/exercise/348/view/",
+    "images": [
+      {
+        "file": "Side_Lateral_Raise-1.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Side_Lateral_Raise-2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Dumbbell_Bicep_Curl": {
+    "wgerName": "Biceps Curls With Dumbbell",
+    "sourceUrl": "https://wger.de/exercise/92/view/",
+    "images": [
+      {
+        "file": "Dumbbell_Bicep_Curl-1.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Dumbbell_Bicep_Curl-2.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Hammer_Curls": {
+    "wgerName": "Hammer Curls",
+    "sourceUrl": "https://wger.de/exercise/272/view/",
+    "images": [
+      {
+        "file": "Hammer_Curls-1.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Hammer_Curls-2.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Hack_Squat": {
+    "wgerName": "Leg Press on Hackenschmidt Machine",
+    "sourceUrl": "https://wger.de/exercise/375/view/",
+    "images": [
+      {
+        "file": "Hack_Squat-1.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Hack_Squat-2.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Lying_Leg_Curls": {
+    "wgerName": "Leg Curls (laying)",
+    "sourceUrl": "https://wger.de/exercise/365/view/",
+    "images": [
+      {
+        "file": "Lying_Leg_Curls-1.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Lying_Leg_Curls-2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Seated_Leg_Curl": {
+    "wgerName": "Leg Curls (sitting)",
+    "sourceUrl": "https://wger.de/exercise/366/view/",
+    "images": [
+      {
+        "file": "Seated_Leg_Curl-1.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Seated_Leg_Curl-2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  },
+  "Hyperextensions_Back_Extensions": {
+    "wgerName": "Hyperextensions",
+    "sourceUrl": "https://wger.de/exercise/301/view/",
+    "images": [
+      {
+        "file": "Hyperextensions_Back_Extensions-1.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      },
+      {
+        "file": "Hyperextensions_Back_Extensions-2.png",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "author": "Everkinetic"
+      }
+    ]
+  }
+}

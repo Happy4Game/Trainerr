@@ -28,3 +28,10 @@ Date : 2026-10-24 · Statut : accepté
 ## Limite connue
 
 Dans le navigateur, une écriture interrompue par un rechargement immédiat de la page peut être perdue (la base est copiée dans IndexedDB après chaque écriture). L'écran affiche « Paliers enregistrés » une fois l'écriture terminée. Sur téléphone, la base SQLite native n'a pas ce problème.
+
+## Illustrations (ajout du 2026-10-24)
+
+- Source : images de [wger.de](https://wger.de) avec licence et auteur connus. `scripts/update-exercise-images.mjs` associe à la main chaque machine courante à un exercice wger, télécharge au plus 2 images (départ et arrivée du mouvement) et note licence, auteur et lien dans `src/data/catalog/exercise-images.json`.
+- **Auteurs retenus : Everkinetic (illustrations publiées sous CC BY-SA) et wger.de.** Les images envoyées par d'autres utilisateurs de wger sont écartées : l'une porte un filigrane « © HOIST Fitness Systems », d'autres ressemblent à des visuels commerciaux. Elles pourront être ajoutées après vérification une à une (Chest Press, Triceps Pushdown, Lat Pulldown, Seated Row, Leg Press, Leg Extension, Squat, Hip Abduction/Adduction, Calf Raise, Plank, machines divergentes…).
+- Les images générées par IA sont exclues.
+- La fiche alterne les deux images (bouton pause ; images côte à côte si le téléphone demande moins d'animations) et affiche sous l'image : nom de l'exercice illustré, auteur, licence, lien wger. CC BY-SA impose cette attribution ; les images ne sont pas modifiées.

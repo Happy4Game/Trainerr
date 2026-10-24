@@ -128,6 +128,12 @@
       "trainerr": "Card written for Trainerr.",
       "user": "Exercise added by you."
     },
-    "kg": "{load} kg"
+    "kg": "{load} kg",
+    "illustration": {
+      "label": "Movement illustration: {name}",
+      "pause": "Pause the animation",
+      "play": "Play the animation",
+      "caption": "Illustration: {exercise} —"
+    }
   }
 }

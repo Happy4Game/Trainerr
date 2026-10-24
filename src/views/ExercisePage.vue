@@ -22,6 +22,8 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { MuscleId } from '@/domain/muscles';
 import { repRangeFor } from '@/domain/progression';
+import { illustrationFor } from '@/data/catalog/exerciseImages';
+import ExerciseIllustration from '@/ui/ExerciseIllustration.vue';
 import LoadStepsEditor from '@/ui/LoadStepsEditor.vue';
 import MuscleMap from '@/ui/muscleMap/MuscleMap.vue';
 import { useCatalog } from '@/ui/useCatalog';
@@ -43,6 +45,7 @@ const otherName = computed(() => {
   );
   return [...new Set(names)].join(' · ') || undefined;
 });
+const illustration = computed(() => illustrationFor(props.id));
 const range = computed(() => (exercise.value ? repRangeFor(exercise.value) : undefined));
 
 const stepsSaved = ref(false);
@@ -92,6 +95,13 @@ const muscleList = (muscles: readonly MuscleId[]) =>
           />
           {{ t(entry.favorite ? 'exercise.favorite.remove' : 'exercise.favorite.add') }}
         </ion-button>
+
+        <ExerciseIllustration
+          v-if="illustration"
+          :illustration="illustration"
+          :name="title"
+          class="ion-margin-top"
+        />
 
         <div class="chips">
           <ion-chip>{{ t(`groups.${exercise.group}`) }}</ion-chip>
