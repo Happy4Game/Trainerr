@@ -7,7 +7,7 @@ Suit l'ordre de construction de [SPEC.md](SPEC.md) (section « Choix techniques 
 | 1     | Socle : projet, base SQLite, migrations, outils qualité    | ✅ Fait                         |
 | 2     | Domaine : progression, planning, modèles, supersets, stats | ✅ Fait                         |
 | 3     | Catalogue                                                  | ✅ Fait                         |
-| 4     | Séance                                                     | ✅ Fait (sauf gêne en séance)   |
+| 4     | Séance                                                     | ✅ Fait                         |
 | 5     | Parcours utilisateur                                       | ✅ Fait                         |
 | 6     | Suivi                                                      | ✅ Fait (sauf photo du corps)   |
 | 7     | Pages de contenu                                           | ✅ Fait (contact à choisir)     |
