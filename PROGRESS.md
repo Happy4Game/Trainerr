@@ -2,17 +2,17 @@
 
 Suit l'ordre de construction de [SPEC.md](SPEC.md) (section « Choix techniques et plan »).
 
-| Étape | Contenu                                                    | Statut      |
-| ----- | ---------------------------------------------------------- | ----------- |
-| 1     | Socle : projet, base SQLite, migrations, outils qualité    | ✅ Fait     |
-| 2     | Domaine : progression, planning, modèles, supersets, stats | ✅ Fait     |
-| 3     | Catalogue                                                  | ✅ Fait     |
-| 4     | Séance                                                     | ⏳ Suivante |
-| 5     | Parcours utilisateur                                       | ⏳          |
-| 6     | Suivi                                                      | ⏳          |
-| 7     | Pages de contenu                                           | ⏳          |
-| 8     | Connecté                                                   | ⏳          |
-| 9     | Finition                                                   | ⏳          |
+| Étape | Contenu                                                    | Statut                          |
+| ----- | ---------------------------------------------------------- | ------------------------------- |
+| 1     | Socle : projet, base SQLite, migrations, outils qualité    | ✅ Fait                         |
+| 2     | Domaine : progression, planning, modèles, supersets, stats | ✅ Fait                         |
+| 3     | Catalogue                                                  | ✅ Fait                         |
+| 4     | Séance                                                     | ✅ Fait (sauf gêne en séance)   |
+| 5     | Parcours utilisateur                                       | ✅ Fait                         |
+| 6     | Suivi                                                      | ✅ Fait (sauf photo du corps)   |
+| 7     | Pages de contenu                                           | ✅ Fait (contact à choisir)     |
+| 8     | Connecté                                                   | ⏸️ En attente de décisions      |
+| 9     | Finition                                                   | 🔄 En partie (sauvegarde faite) |
 
 ## Étape 1 — Socle
 
@@ -52,12 +52,60 @@ Tests : 143 au total, dont les **10 cas réels d'octobre 2026** (`tests/fixtures
 - Base : migration v2, import du catalogue seulement quand il change, favoris et paliers conservés.
 - Détails et choix : [ADR 0005](docs/adr/0005-catalogue.md).
 
+Illustrations des mouvements : 12 machines, dessins Everkinetic / wger.de (CC BY-SA), départ et arrivée animés ; les autres images de wger sont écartées tant qu'elles ne sont pas vérifiées (ADR 0005).
+
+## Étape 4 — Séance
+
+- Séance du jour construite depuis les favoris et la rotation ; charge et reps pré-remplies (historique, reprise ou série test) ; **une tape sur la difficulté enregistre la série**.
+- Minuteur de repos (heure de fin absolue, vibration), échauffement conseillé, annulation de la dernière série, passer un exercice.
+- **Machine occupée** : alternatives avec leur charge, la machine est reproposée après l'exercice suivant, reportée à la prochaine séance du même type si elle reste prise, salle bondée → haltères et poulies.
+- Calculateur de disques (dessin SVG, − / +), saisie vocale (« 16 kilos, 10 reps, limite »), reprise de la séance après fermeture de l'appli.
+- Migration v3 (plan de séance), récap de fin de séance.
+
+## Étape 5 — Parcours utilisateur
+
+- Questionnaire du premier lancement (7 questions + notifications), bouton « Passer » avec les valeurs par défaut.
+- Écran **Planning** : semaine générée, grille de disponibilités, modèle et nombre de séances, note « 1 fois par semaine ».
+- Écran **Aujourd'hui** : séance du jour, compteur de la semaine, régularité, accès aux réglages.
+- **Mode reprise** : anciennes charges sur chaque fiche, départ réduit (90 / 80 / 70 %), jauge de retour à l'ancien niveau.
+- **Notifications locales** : rappel 1 h avant, relance douce, 1 par jour au plus, jamais en heures de silence ni en créneau bloqué (plugin Local Notifications, aucun serveur).
+- Les réglages (disponibilités, autre sport, reprise, notifications) sont stockés en JSON dans `app_meta` plutôt que dans la table `availability` : plus simple tant qu'il n'y a qu'une salle (à revoir avec « Plusieurs salles »).
+
+## Étape 6 — Suivi
+
+- Onglet **Historique** : Séances, Stats, Corps.
+- Stats : courbe du 1RM estimé par exercice, séries par muscle avec la zone 10–20, équilibre poussée / tirage, calendrier de régularité (8 semaines), charge de travail par semaine, records. Graphiques en SVG avec description textuelle.
+- Détection de stagnation (3 séances sans progrès), suivi du poids et des mensurations, cible de protéines (1,6 g/kg).
+
+## Étape 7 — Pages de contenu
+
+- Réglages (roue dentée sur Aujourd'hui) : Bien débuter, À propos, Crédits, supersets, refaire le questionnaire, notifications type par type, **Mes données**.
+- Bien débuter : 14 fiches avec leur source ; les 3 fiches « À sourcer » sont marquées comme telles.
+- Crédits : données, auteurs des images, sources scientifiques, et les 104 bibliothèques embarquées avec le texte de leur licence (générés au build ; le build échoue sur une licence hors de la liste du cahier des charges).
+- À propos : le texte du cahier des charges. **Le bouton « Signaler une erreur » attend ton choix** (formulaire, e-mail ou page du projet).
+
+## Étape 8 — Connecté (en attente)
+
+Défis entre amis (serveur et comptes), montre connectée, conseils en langage naturel par une API d'IA : ces fonctions demandent des comptes, un serveur et l'envoi de données hors du téléphone. À décider avec Thibaut avant de les coder.
+
+## Étape 9 — Finition (en partie)
+
+- Fait : export JSON et CSV, import, suppression complète avec confirmation ; tests de bout en bout des parcours principaux (11).
+- Reste : enregistrement des fichiers avec les plugins Capacitor sur téléphone (export par le menu Partager), projet Android, accessibilité (relecture TalkBack), régression visuelle, pseudo-langue de test, bêta-test.
+
+## Reste à faire (fonctions du cahier des charges)
+
+- Séance : bouton « Ça tire » (gêne) dans l'écran de séance (règles déjà prêtes dans `advice.ts`), supersets affichés ensemble dans la séance (règles prêtes dans `supersets.ts`), séance express.
+- Fonctions complémentaires : badges, image récap à partager, cycles, notes de séance, partage avec un coach, plusieurs salles, widget, montre, mode maison, échauffement articulaire, import depuis d'autres applis, sauvegarde chiffrée.
+- Notifications : record battu, régularité, retour au niveau, conseil de la semaine (types prévus dans les réglages, pas encore déclenchés).
+
 ## Problèmes connus
 
 - `npm audit` signale 3 failles « modérées » dans `uuid`, utilisé par l'outil iOS de `@capacitor/cli` (développement seulement, pas dans l'appli). Le correctif proposé rétrograde Capacitor : à revoir quand Capacitor publiera une mise à jour.
 - sql.js est figé en 1.12.0 pour rester compatible avec jeep-sqlite (voir [ADR 0002](docs/adr/0002-sqlite-local.md)).
 - Exercices hors des ~30 machines courantes : nom et instructions en anglais.
-- Photo de la plaque de la machine (optionnelle) : pas encore faite, elle demande le plugin appareil photo.
+- Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
+- Les exports se téléchargent dans le navigateur ; sur téléphone il faudra les plugins Filesystem / Share.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
 - Pas encore de projet Android (`npx cap add android`) : il faudra Android Studio et le SDK sur le poste.
 - Le dépôt n'a pas encore de remote GitHub : les branches sont locales, les pull requests seront ouvertes quand le dépôt GitHub existera.
