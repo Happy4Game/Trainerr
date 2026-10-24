@@ -15,6 +15,11 @@ import {
   type ActiveSession,
   type SessionPlan,
 } from '@/data/repositories/sessionRepository';
+import {
+  listReferences,
+  setReference,
+  type ReferenceLoad,
+} from '@/data/repositories/referenceRepository';
 import { getSettings, type Settings } from '@/data/repositories/settingsRepository';
 import {
   alternativesFor,
@@ -51,6 +56,7 @@ const phase = ref<Phase>('loading');
 const errorMessage = ref('');
 const settings = ref<Settings>();
 const history = ref<(SessionLog & { plan: Partial<SessionPlan> })[]>([]);
+const references = ref<ReferenceLoad[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
 const summary = ref<{ sets: number; workloadKg: number; carryOver: readonly string[] }>();
@@ -124,7 +130,16 @@ function proposalFor(exerciseId: string): Proposal | undefined {
     const p = nextSetProposal({ set: last, range, steps, isLastSet: false });
     return { loadKg: p.loadKg, targetReps: p.targetReps, reason: p.reason, reminders: p.reminders };
   }
-  const start = startingProposal({ history: historyFor(exerciseId), range, steps });
+  const reference = references.value.find((r) => r.exerciseId === exerciseId);
+  const comeback = settings.value?.comeback;
+  const start = startingProposal({
+    history: historyFor(exerciseId),
+    range,
+    steps,
+    ...(comeback && reference
+      ? { comeback: { referenceKg: reference.loadKg, pause: comeback.pause } }
+      : {}),
+  });
   return { loadKg: start.loadKg, targetReps: start.targetReps, reason: start.kind, reminders: [] };
 }
 
@@ -158,6 +173,7 @@ async function load(): Promise<void> {
     const { db } = await openAppDatabase();
     settings.value = await getSettings(db);
     history.value = await listDoneSessions(db);
+    references.value = await listReferences(db);
     active.value = await getActiveSession(db);
     phase.value = active.value ? 'active' : 'idle';
   } catch (error) {
@@ -319,6 +335,24 @@ async function finish(): Promise<void> {
   phase.value = summary.value ? 'finished' : 'idle';
 }
 
+async function saveReference(exerciseId: string, loadKg: number, reps: number): Promise<void> {
+  const { db } = await openAppDatabase();
+  const reference = { exerciseId, loadKg, reps, date: today() };
+  await setReference(db, reference);
+  references.value = [...references.value.filter((r) => r.exerciseId !== exerciseId), reference];
+}
+
+/** Heaviest complete work set since the comeback started, for the "back to level" gauge. */
+function bestSinceComeback(exerciseId: string): number | undefined {
+  const since = settings.value?.comeback?.startedOn ?? '';
+  const loads = history.value
+    .filter((s) => s.date >= since)
+    .flatMap((s) => s.sets)
+    .filter((set) => set.exerciseId === exerciseId && !set.warmup && set.completeReps !== false)
+    .map((set) => set.loadKg);
+  return loads.length > 0 ? Math.max(...loads) : undefined;
+}
+
 function closeSummary(): void {
   summary.value = undefined;
   phase.value = 'idle';
@@ -359,6 +393,9 @@ export function useSession() {
     skipExercise,
     finish,
     closeSummary,
+    references,
+    saveReference,
+    bestSinceComeback,
     endRest: () => (restEndsAt.value = undefined),
     reload: load,
   };

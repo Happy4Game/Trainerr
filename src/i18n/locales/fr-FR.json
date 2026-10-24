@@ -360,5 +360,15 @@
   "history": {
     "empty": "Pas encore de séance terminée.",
     "workload": "Charge de travail : {kg} kg"
+  },
+  "comeback": {
+    "title": "Avant ma pause",
+    "help": "Note ta meilleure série d'avant la pause : l'appli repartira d'une charge réduite, puis remontera dès que les séries sont faciles.",
+    "load": "Charge (kg)",
+    "reps": "Reps",
+    "save": "Enregistrer",
+    "start": "Charge de départ proposée : {load} kg",
+    "gauge": "Retour à l'ancien niveau : {current} / {reference} kg = {percent} %",
+    "reached": "Tu as retrouvé ton niveau d'avant !"
   }
 }

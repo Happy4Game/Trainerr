@@ -360,5 +360,15 @@
   "history": {
     "empty": "No finished workout yet.",
     "workload": "Workload: {kg} kg"
+  },
+  "comeback": {
+    "title": "Before my break",
+    "help": "Enter your best set before the break: the app restarts from a reduced load, then goes up as soon as sets are easy.",
+    "load": "Load (kg)",
+    "reps": "Reps",
+    "save": "Save",
+    "start": "Suggested starting load: {load} kg",
+    "gauge": "Back to your old level: {current} / {reference} kg = {percent} %",
+    "reached": "You are back to your old level!"
   }
 }

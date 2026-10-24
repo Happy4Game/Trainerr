@@ -1,0 +1,116 @@
+<script setup lang="ts">
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonInput,
+  IonProgressBar,
+} from '@ionic/vue';
+import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { comebackStartLoad, returnToLevel, type PauseLength } from '@/domain/comeback';
+import { parseLoad, type LoadSteps } from '@/domain/loadSteps';
+import { useSession } from '@/ui/session/useSession';
+
+const props = defineProps<{ exerciseId: string; pause: PauseLength; steps: LoadSteps }>();
+
+const { t, n } = useI18n();
+const session = useSession();
+
+const reference = computed(() =>
+  session.references.value.find((r) => r.exerciseId === props.exerciseId),
+);
+const loadText = ref('');
+const repsText = ref('');
+watch(
+  reference,
+  (r) => {
+    loadText.value = r ? String(r.loadKg) : '';
+    repsText.value = r ? String(r.reps) : '';
+  },
+  { immediate: true },
+);
+
+const startLoad = computed(() =>
+  reference.value && props.steps.length > 0
+    ? comebackStartLoad({
+        referenceKg: reference.value.loadKg,
+        pause: props.pause,
+        steps: props.steps,
+      })
+    : undefined,
+);
+const best = computed(() => session.bestSinceComeback(props.exerciseId));
+const gauge = computed(() =>
+  reference.value && best.value !== undefined
+    ? returnToLevel({ currentKg: best.value, referenceKg: reference.value.loadKg })
+    : undefined,
+);
+
+async function save(): Promise<void> {
+  const load = parseLoad(loadText.value);
+  const reps = parseLoad(repsText.value);
+  if (load === undefined || reps === undefined) return;
+  await session.saveReference(props.exerciseId, load, reps);
+}
+</script>
+
+<template>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ t('comeback.title') }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ t('comeback.help') }}</p>
+      <div class="inputs">
+        <ion-input
+          v-model="loadText"
+          fill="outline"
+          :label="t('comeback.load')"
+          label-placement="stacked"
+          inputmode="decimal"
+        />
+        <ion-input
+          v-model="repsText"
+          fill="outline"
+          :label="t('comeback.reps')"
+          label-placement="stacked"
+          inputmode="decimal"
+        />
+        <ion-button @click="save">{{ t('comeback.save') }}</ion-button>
+      </div>
+      <p v-if="startLoad !== undefined">
+        {{ t('comeback.start', { load: n(startLoad) }) }}
+      </p>
+      <template v-if="gauge && reference">
+        <p>
+          {{
+            t('comeback.gauge', {
+              current: n(best ?? 0),
+              reference: n(reference.loadKg),
+              percent: gauge.percent,
+            })
+          }}
+        </p>
+        <ion-progress-bar :value="Math.min(1, gauge.percent / 100)" :aria-hidden="true" />
+        <p v-if="gauge.reached" class="reached" role="status">{{ t('comeback.reached') }}</p>
+      </template>
+    </ion-card-content>
+  </ion-card>
+</template>
+
+<style scoped>
+.inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-block: 8px;
+}
+.reached {
+  font-weight: 600;
+  color: var(--ion-color-success);
+}
+</style>

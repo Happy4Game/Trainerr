@@ -156,3 +156,24 @@ describe('settings', () => {
     });
   });
 });
+
+describe('comeback references', () => {
+  it('stores, replaces and deletes the load before the break', async () => {
+    const { setReference, listReferences, deleteReference } =
+      await import('@/data/repositories/referenceRepository');
+    await setReference(db, {
+      exerciseId: 'Dumbbell_Bench_Press',
+      loadKg: 22,
+      reps: 8,
+      date: '2026-04-10',
+    });
+    await setReference(db, { exerciseId: 'Leg_Press', loadKg: 127, reps: 10, date: '2026-04-10' });
+    await setReference(db, { exerciseId: 'Leg_Press', loadKg: 130, reps: 8, date: '2026-10-30' });
+    expect(await listReferences(db)).toEqual([
+      { exerciseId: 'Dumbbell_Bench_Press', loadKg: 22, reps: 8, date: '2026-04-10' },
+      { exerciseId: 'Leg_Press', loadKg: 130, reps: 8, date: '2026-10-30' },
+    ]);
+    await deleteReference(db, 'Leg_Press');
+    expect(await listReferences(db)).toHaveLength(1);
+  });
+});

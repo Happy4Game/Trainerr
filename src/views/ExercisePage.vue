@@ -24,7 +24,10 @@ import type { MuscleId } from '@/domain/muscles';
 import { repRangeFor } from '@/domain/progression';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import ExerciseIllustration from '@/ui/ExerciseIllustration.vue';
+import ComebackCard from '@/ui/ComebackCard.vue';
 import LoadStepsEditor from '@/ui/LoadStepsEditor.vue';
+import { useSettings } from '@/ui/useSettings';
+import { defaultStepsFor } from '@/domain/loadSteps';
 import MuscleMap from '@/ui/muscleMap/MuscleMap.vue';
 import { useCatalog } from '@/ui/useCatalog';
 
@@ -45,6 +48,14 @@ const otherName = computed(() => {
   );
   return [...new Set(names)].join(' · ') || undefined;
 });
+const { settings } = useSettings();
+const stepsForComeback = computed(() =>
+  entry.value && entry.value.loadSteps.length > 0
+    ? entry.value.loadSteps
+    : exercise.value
+      ? defaultStepsFor(exercise.value.equipment)
+      : [],
+);
 const illustration = computed(() => illustrationFor(props.id));
 const range = computed(() => (exercise.value ? repRangeFor(exercise.value) : undefined));
 
@@ -177,6 +188,13 @@ const muscleList = (muscles: readonly MuscleId[]) =>
             </ion-item>
           </ion-card-content>
         </ion-card>
+
+        <ComebackCard
+          v-if="settings?.comeback"
+          :exercise-id="exercise.id"
+          :pause="settings.comeback.pause"
+          :steps="stepsForComeback"
+        />
 
         <ion-label>
           <p class="small">{{ t(`exercise.source.${exercise.source}`) }}</p>
