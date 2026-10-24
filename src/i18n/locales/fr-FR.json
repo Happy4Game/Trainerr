@@ -359,7 +359,12 @@
   },
   "history": {
     "empty": "Pas encore de séance terminée.",
-    "workload": "Charge de travail : {kg} kg"
+    "workload": "Charge de travail : {kg} kg",
+    "views": {
+      "sessions": "Séances",
+      "stats": "Stats",
+      "body": "Corps"
+    }
   },
   "comeback": {
     "title": "Avant ma pause",
@@ -370,5 +375,55 @@
     "start": "Charge de départ proposée : {load} kg",
     "gauge": "Retour à l'ancien niveau : {current} / {reference} kg = {percent} %",
     "reached": "Tu as retrouvé ton niveau d'avant !"
+  },
+  "stats": {
+    "strength": {
+      "title": "Évolution de la force",
+      "exercise": "Exercice",
+      "unit": "1RM estimé (kg), formule d'Epley",
+      "none": "Pas encore de série comparable (les séries d'échauffement et en tempo lent sont exclues).",
+      "description": "1RM estimé {exercise} : {change} % sur {sessions} séances",
+      "stagnation": "Pas de progrès sur les 3 dernières séances : essaie une variante de l'exercice ou une semaine plus légère."
+    },
+    "volume": {
+      "title": "Séries par muscle cette semaine",
+      "help": "Zone conseillée : {min} à {max} séries par muscle et par semaine.",
+      "below": "{sets} séries, en dessous",
+      "inRange": "{sets} séries",
+      "above": "{sets} séries, au-dessus",
+      "pushDominant": "La poussée ({push} séries) domine nettement le tirage ({pull}) : ajoute du tirage, surtout si une épaule tire."
+    },
+    "regularity": {
+      "title": "Régularité",
+      "pace": "{current} semaine(s) d'affilée au rythme · record : {best}",
+      "calendar": "{count} jours d'entraînement sur les 8 dernières semaines"
+    },
+    "workload": {
+      "title": "Charge de travail",
+      "unit": "kg soulevés par semaine (charge × reps)",
+      "description": "Charge de travail sur {weeks} semaines",
+      "single": "{kg} kg cette semaine"
+    },
+    "records": {
+      "title": "Records",
+      "load": "{load} kg × {reps} ({date})",
+      "oneRepMax": "1RM estimé {value} kg"
+    }
+  },
+  "body": {
+    "title": "Suivi du corps",
+    "weight": "Poids (kg)",
+    "arm": "Bras (cm)",
+    "waist": "Taille (cm)",
+    "save": "Enregistrer",
+    "privacy": "Ces données restent sur ton téléphone et ne sont jamais synchronisées.",
+    "kg": "{value} kg",
+    "cm": "{value} cm",
+    "delete": "Supprimer cette mesure",
+    "protein": {
+      "title": "Protéines",
+      "target": "Cible : environ {grams} g de protéines par jour ({weight} kg × 1,6 g).",
+      "source": "Source : Morton et al. 2018, voir les Crédits."
+    }
   }
 }

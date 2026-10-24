@@ -359,7 +359,12 @@
   },
   "history": {
     "empty": "No finished workout yet.",
-    "workload": "Workload: {kg} kg"
+    "workload": "Workload: {kg} kg",
+    "views": {
+      "sessions": "Workouts",
+      "stats": "Stats",
+      "body": "Body"
+    }
   },
   "comeback": {
     "title": "Before my break",
@@ -370,5 +375,55 @@
     "start": "Suggested starting load: {load} kg",
     "gauge": "Back to your old level: {current} / {reference} kg = {percent} %",
     "reached": "You are back to your old level!"
+  },
+  "stats": {
+    "strength": {
+      "title": "Strength over time",
+      "exercise": "Exercise",
+      "unit": "Estimated 1RM (kg), Epley formula",
+      "none": "No comparable set yet (warm-up and slow-tempo sets are left out).",
+      "description": "Estimated 1RM {exercise}: {change} % over {sessions} workouts",
+      "stagnation": "No progress over the last 3 workouts: try a variant of the exercise or a lighter week."
+    },
+    "volume": {
+      "title": "Sets per muscle this week",
+      "help": "Suggested zone: {min} to {max} sets per muscle per week.",
+      "below": "{sets} sets, below",
+      "inRange": "{sets} sets",
+      "above": "{sets} sets, above",
+      "pushDominant": "Push ({push} sets) clearly outweighs pull ({pull}): add pulling work, especially if a shoulder hurts."
+    },
+    "regularity": {
+      "title": "Consistency",
+      "pace": "{current} week(s) in a row on pace · best: {best}",
+      "calendar": "{count} training days over the last 8 weeks"
+    },
+    "workload": {
+      "title": "Workload",
+      "unit": "kg lifted per week (load × reps)",
+      "description": "Workload over {weeks} weeks",
+      "single": "{kg} kg this week"
+    },
+    "records": {
+      "title": "Records",
+      "load": "{load} kg × {reps} ({date})",
+      "oneRepMax": "Estimated 1RM {value} kg"
+    }
+  },
+  "body": {
+    "title": "Body tracking",
+    "weight": "Weight (kg)",
+    "arm": "Arm (cm)",
+    "waist": "Waist (cm)",
+    "save": "Save",
+    "privacy": "This data stays on your phone and is never synced.",
+    "kg": "{value} kg",
+    "cm": "{value} cm",
+    "delete": "Delete this measurement",
+    "protein": {
+      "title": "Protein",
+      "target": "Target: about {grams} g of protein a day ({weight} kg × 1.6 g).",
+      "source": "Source: Morton et al. 2018, see the Credits."
+    }
   }
 }

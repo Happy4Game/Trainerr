@@ -177,3 +177,20 @@ describe('comeback references', () => {
     expect(await listReferences(db)).toHaveLength(1);
   });
 });
+
+describe('body measurements', () => {
+  it('stores weight and measurements, oldest first, and deletes them', async () => {
+    const { addMeasurement, listMeasurements, deleteMeasurement } =
+      await import('@/data/repositories/bodyRepository');
+    const later = await addMeasurement(db, {
+      date: '2026-11-15',
+      weightKg: 73,
+      measurements: { arm: 34 },
+    });
+    await addMeasurement(db, { date: '2026-10-15', measurements: { waist: 80 } });
+    expect((await listMeasurements(db)).map((m) => m.date)).toEqual(['2026-10-15', '2026-11-15']);
+    expect((await listMeasurements(db))[1]).toEqual(later);
+    await deleteMeasurement(db, later.id);
+    expect(await listMeasurements(db)).toHaveLength(1);
+  });
+});

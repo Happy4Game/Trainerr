@@ -6,13 +6,20 @@ import {
   IonLabel,
   IonList,
   IonPage,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { sessionWorkload } from '@/domain/stats';
+import BodyView from '@/ui/BodyView.vue';
 import { useSession } from '@/ui/session/useSession';
+import StatsView from '@/ui/StatsView.vue';
+
+const VIEWS = ['sessions', 'stats', 'body'] as const;
+const view = ref<(typeof VIEWS)[number]>('sessions');
 
 const { t, n, locale } = useI18n();
 const session = useSession();
@@ -51,9 +58,21 @@ function lines(
       <ion-toolbar>
         <ion-title>{{ t('tabs.history') }}</ion-title>
       </ion-toolbar>
+      <ion-toolbar>
+        <ion-segment
+          :value="view"
+          @ion-change="view = ($event.detail.value as (typeof VIEWS)[number]) ?? 'sessions'"
+        >
+          <ion-segment-button v-for="v in VIEWS" :key="v" :value="v">
+            <ion-label>{{ t(`history.views.${v}`) }}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <p v-if="sessions.length === 0">{{ t('history.empty') }}</p>
+      <StatsView v-if="view === 'stats'" />
+      <BodyView v-else-if="view === 'body'" />
+      <p v-else-if="sessions.length === 0">{{ t('history.empty') }}</p>
       <ion-list v-else>
         <ion-item v-for="s in sessions" :key="s.id">
           <ion-label class="ion-text-wrap">
