@@ -1,0 +1,58 @@
+/** Loads available on a machine, in kg, sorted ascending. */
+export type LoadSteps = readonly number[];
+
+/**
+ * A jump to the next step is a "missing step" when it is larger than both
+ * thresholds (e.g. a stack going 52 → 59 kg). Dumbbells going 16 → 18 kg are
+ * +12.5 % but only 2 kg, so they jump normally. Values to be validated.
+ */
+export const MISSING_STEP_MIN_RATIO = 0.1;
+export const MISSING_STEP_MIN_KG = 2.5;
+
+const EPSILON = 1e-9;
+
+export function uniformSteps(min: number, max: number, increment: number): number[] {
+  const count = Math.floor((max - min) / increment + EPSILON);
+  return Array.from({ length: count + 1 }, (_, i) => roundKg(min + i * increment));
+}
+
+export function normalizeSteps(steps: readonly number[]): number[] {
+  return [...new Set(steps.filter((load) => load > 0))].sort((a, b) => a - b);
+}
+
+/** Lightest step strictly heavier than the load. */
+export function stepUp(steps: LoadSteps, loadKg: number): number | undefined {
+  return steps.find((step) => step > loadKg + EPSILON);
+}
+
+/** Heaviest step strictly lighter than the load. */
+export function stepDown(steps: LoadSteps, loadKg: number): number | undefined {
+  return steps.findLast((step) => step < loadKg - EPSILON);
+}
+
+/** Closest step; on a tie, the lighter one. */
+export function nearestStep(steps: LoadSteps, targetKg: number): number {
+  assertNotEmpty(steps);
+  return steps.reduce((best, step) =>
+    Math.abs(step - targetKg) < Math.abs(best - targetKg) - EPSILON ? step : best,
+  );
+}
+
+/** Heaviest step not above the target, or the lightest step if all are above. */
+export function floorStep(steps: LoadSteps, targetKg: number): number {
+  assertNotEmpty(steps);
+  return steps.findLast((step) => step <= targetKg + EPSILON) ?? (steps[0] as number);
+}
+
+export function isMissingStepJump(fromKg: number, toKg: number): boolean {
+  const jump = toKg - fromKg;
+  return jump > MISSING_STEP_MIN_KG + EPSILON && jump > fromKg * MISSING_STEP_MIN_RATIO + EPSILON;
+}
+
+export function roundKg(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
+function assertNotEmpty(steps: LoadSteps): void {
+  if (steps.length === 0) throw new Error('No load steps configured for this machine.');
+}

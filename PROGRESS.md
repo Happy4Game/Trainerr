@@ -5,8 +5,8 @@ Suit l'ordre de construction de [SPEC.md](SPEC.md) (section « Choix techniques 
 | Étape | Contenu                                                    | Statut      |
 | ----- | ---------------------------------------------------------- | ----------- |
 | 1     | Socle : projet, base SQLite, migrations, outils qualité    | ✅ Fait     |
-| 2     | Domaine : progression, planning, modèles, supersets, stats | 🔄 En cours |
-| 3     | Catalogue                                                  | ⏳          |
+| 2     | Domaine : progression, planning, modèles, supersets, stats | ✅ Fait     |
+| 3     | Catalogue                                                  | ⏳ Suivante |
 | 4     | Séance                                                     | ⏳          |
 | 5     | Parcours utilisateur                                       | ⏳          |
 | 6     | Suivi                                                      | ⏳          |
@@ -20,6 +20,28 @@ Suit l'ordre de construction de [SPEC.md](SPEC.md) (section « Choix techniques 
 - 5 onglets (Aujourd'hui, Séance, Catalogue, Historique, Planning), textes en français et anglais via vue-i18n, thème sombre automatique.
 - Base SQLite : schéma v1 (toutes les tables du modèle de données), migrations transactionnelles, base d'exemple figée.
 - Qualité : ESLint (domaine isolé de Vue/Ionic/SQLite), Prettier, Vitest + couverture, Playwright, contrôle des traductions, hook avant commit, GitHub Actions.
+
+## Étape 2 — Domaine
+
+Tout est dans `src/domain/`, en TypeScript pur (ESLint interdit d'y importer Vue, Ionic ou SQLite).
+
+| Module                           | Contenu                                                                                        |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `progression.ts`, `loadSteps.ts` | Règles entre deux séries et entre deux séances, palier absent, première fois sur une machine   |
+| `oneRepMax.ts`                   | 1RM estimé (Epley), « combien pour X reps ? »                                                  |
+| `comeback.ts`                    | Mode reprise : charge de départ (90 / 80 / 70 %), volume réduit 2 semaines, jauge de retour    |
+| `trainingModels.ts`              | Les 7 modèles, recommandation selon le nombre de séances, note « 1 fois par semaine »          |
+| `planning.ts`, `dates.ts`        | Rotation continue, semaine générée (créneaux, heures de silence, autres sports, jour de repos) |
+| `sessionBuilder.ts`              | Choix des exercices parmi les favoris : composés d'abord, variantes A / B, zone à ménager      |
+| `supersets.ts`                   | Agoniste-antagoniste par défaut, haut/bas si proches, jamais de composé lourd                  |
+| `stats.ts`                       | Courbe de force, charge de travail, séries par muscle, régularité, records                     |
+| `busyMachine.ts`                 | Mode « machine prise » : alternatives, file d'attente, report, salle bondée                    |
+| `advice.ts`                      | Gêne, signaux d'alerte, courbatures                                                            |
+| `plates.ts`                      | Calculateur de disques (recherche exhaustive, pas gloutonne)                                   |
+
+Tests : 143 au total, dont les **10 cas réels d'octobre 2026** (`tests/fixtures/golden/october-2026.json`) et des tests de propriétés (fast-check) : charge toujours sur un palier existant, jamais de hausse après Limite/Échec, disques exacts ou 2 charges les plus proches, planning hors créneaux bloqués et heures de silence. Couverture du domaine : 99,5 % des lignes.
+
+**Choix à valider** : voir [ADR 0004](docs/adr/0004-regles-du-domaine.md).
 
 ## Problèmes connus
 
