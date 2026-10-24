@@ -16,7 +16,6 @@
     }
   },
   "placeholder": {
-    "session": "The current workout will show up here (step 4).",
     "history": "Your workout history arrives with workouts.",
     "planning": "The weekly planning arrives in step 5."
   },
@@ -134,6 +133,126 @@
       "pause": "Pause the animation",
       "play": "Play the animation",
       "caption": "Illustration: {exercise} —"
+    }
+  },
+  "templates": {
+    "fullBodyA": "Full body A",
+    "fullBodyB": "Full body B",
+    "upperA": "Upper body A",
+    "lowerA": "Lower body A",
+    "upperB": "Upper body B",
+    "lowerB": "Lower body B",
+    "pushA": "Push A",
+    "pullA": "Pull A",
+    "legsA": "Legs A",
+    "pushB": "Push B",
+    "pullB": "Pull B",
+    "legsB": "Legs B",
+    "push": "Push",
+    "pull": "Pull",
+    "legs": "Legs",
+    "upper": "Upper body",
+    "lower": "Lower body",
+    "upperPower": "Upper body (power)",
+    "lowerPower": "Lower body (power)",
+    "upperHypertrophy": "Upper body (volume)",
+    "lowerHypertrophy": "Lower body (volume)",
+    "chestBackA": "Chest + back A",
+    "shouldersArmsA": "Shoulders + arms A",
+    "chestBackB": "Chest + back B",
+    "shouldersArmsB": "Shoulders + arms B",
+    "chest": "Chest",
+    "back": "Back",
+    "shoulders": "Shoulders",
+    "arms": "Arms",
+    "legsDay": "Legs"
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "ok": "Good",
+    "hard": "Hard",
+    "fail": "Failed"
+  },
+  "session": {
+    "next": "Today's workout: {template}",
+    "start": "Start the workout",
+    "noFavorites": "No favorite machine for the {template} workout. Star the machines of your gym in the catalog.",
+    "goToCatalog": "Open the catalog",
+    "setNumber": "Set {current} / {total}",
+    "reason": {
+      "aboveRange": "above the range, going up",
+      "easy": "easy set, going up",
+      "inRange": "same load, aim for the top of the range",
+      "hard": "hard set, same load",
+      "belowRange": "below the range, going down",
+      "failure": "failed, going down",
+      "incompleteReps": "incomplete reps, going down",
+      "missingStep": "next step too heavy, add reps",
+      "noHeavierStep": "heaviest step reached",
+      "progression": "from your last workouts",
+      "comeback": "comeback: reduced load",
+      "testSet": "first time: light test set"
+    },
+    "reminder": {
+      "rangeOfMotion": "Full range of motion: an incomplete rep does not count.",
+      "technique": "Two failures in a row: read the cues on the card again."
+    },
+    "load": "Load",
+    "reps": "Reps",
+    "lighter": "Lighter step",
+    "heavier": "Heavier step",
+    "fewerReps": "One rep less",
+    "moreReps": "One rep more",
+    "halfRep": "Add a half rep",
+    "incomplete": "Incomplete reps",
+    "slowTempo": "Slow tempo",
+    "howWasIt": "How was this set?",
+    "busy": "Machine taken",
+    "busyTitle": "{name} is taken",
+    "busyHelp": "Do something else meanwhile, the app asks again after the next exercise.",
+    "alternative": {
+      "substitute": "Same muscles",
+      "swap": "Next exercise of the workout"
+    },
+    "continue": "Go on with the rest",
+    "isFree": "Is {name} free?",
+    "free": "Yes, going",
+    "stillBusy": "Still taken",
+    "crowded": "Crowded gym: finish with dumbbells and cables, same muscles.",
+    "replace": "{from} → {to}",
+    "warmup": "Suggested warm-up: {load} × {reps}",
+    "warmupDone": "Warm-up done",
+    "warmupShort": "warm-up",
+    "skip": "Skip this exercise",
+    "allDone": "All exercises done. Well done!",
+    "carryOver": "Moved to the next workout of the same type: {names}",
+    "logged": "Sets of this workout",
+    "undo": "Undo the last set",
+    "finish": "Finish the workout",
+    "rest": {
+      "title": "Rest",
+      "label": "Rest: {time} left",
+      "skip": "Skip"
+    },
+    "voice": {
+      "start": "Dictate",
+      "listening": "Listening…"
+    },
+    "plates": {
+      "open": "Plates",
+      "title": "Plate calculator",
+      "close": "Close",
+      "lighter": "Lighter achievable load",
+      "heavier": "Heavier achievable load",
+      "closest": "Exact load impossible: {below} kg or {above} kg",
+      "perSide": "Per side: {plates} kg",
+      "bar": "{kg} kg bar"
+    },
+    "summary": {
+      "title": "Workout finished",
+      "sets": "{count} set | {count} sets",
+      "workload": "Workload: {kg} kg",
+      "close": "Close"
     }
   }
 }

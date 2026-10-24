@@ -10,11 +10,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', redirect: '/tabs/today' },
       { path: 'today', component: () => import('@/views/TodayPage.vue') },
-      {
-        path: 'session',
-        component: () => import('@/views/PlaceholderPage.vue'),
-        props: { titleKey: 'tabs.session', messageKey: 'placeholder.session' },
-      },
+      { path: 'session', component: () => import('@/views/SessionPage.vue') },
       { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
       { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
       {

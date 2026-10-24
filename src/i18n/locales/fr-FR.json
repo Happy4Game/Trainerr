@@ -16,7 +16,6 @@
     }
   },
   "placeholder": {
-    "session": "La séance en cours s'affichera ici (étape 4).",
     "history": "L'historique de tes séances arrive avec les séances.",
     "planning": "Le planning de la semaine arrive à l'étape 5."
   },
@@ -134,6 +133,126 @@
       "pause": "Mettre l'animation en pause",
       "play": "Reprendre l'animation",
       "caption": "Illustration : {exercise} —"
+    }
+  },
+  "templates": {
+    "fullBodyA": "Full body A",
+    "fullBodyB": "Full body B",
+    "upperA": "Haut du corps A",
+    "lowerA": "Bas du corps A",
+    "upperB": "Haut du corps B",
+    "lowerB": "Bas du corps B",
+    "pushA": "Push A",
+    "pullA": "Pull A",
+    "legsA": "Legs A",
+    "pushB": "Push B",
+    "pullB": "Pull B",
+    "legsB": "Legs B",
+    "push": "Push",
+    "pull": "Pull",
+    "legs": "Legs",
+    "upper": "Haut du corps",
+    "lower": "Bas du corps",
+    "upperPower": "Haut du corps (force)",
+    "lowerPower": "Bas du corps (force)",
+    "upperHypertrophy": "Haut du corps (volume)",
+    "lowerHypertrophy": "Bas du corps (volume)",
+    "chestBackA": "Pecs + dos A",
+    "shouldersArmsA": "Épaules + bras A",
+    "chestBackB": "Pecs + dos B",
+    "shouldersArmsB": "Épaules + bras B",
+    "chest": "Pectoraux",
+    "back": "Dos",
+    "shoulders": "Épaules",
+    "arms": "Bras",
+    "legsDay": "Jambes"
+  },
+  "difficulty": {
+    "easy": "Facile",
+    "ok": "Correct",
+    "hard": "Limite",
+    "fail": "Échec"
+  },
+  "session": {
+    "next": "Séance du jour : {template}",
+    "start": "Commencer la séance",
+    "noFavorites": "Aucune machine favorite pour la séance {template}. Mets une étoile sur les machines de ta salle dans le catalogue.",
+    "goToCatalog": "Ouvrir le catalogue",
+    "setNumber": "Série {current} / {total}",
+    "reason": {
+      "aboveRange": "au-dessus de la fourchette, on monte",
+      "easy": "série facile, on monte",
+      "inRange": "même charge, vise le haut de la fourchette",
+      "hard": "série limite, même charge",
+      "belowRange": "sous la fourchette, on baisse",
+      "failure": "échec, on baisse",
+      "incompleteReps": "reps incomplètes, on baisse",
+      "missingStep": "palier suivant trop lourd, ajoute des reps",
+      "noHeavierStep": "palier le plus lourd atteint",
+      "progression": "d'après tes dernières séances",
+      "comeback": "reprise : charge réduite",
+      "testSet": "première fois : série test légère"
+    },
+    "reminder": {
+      "rangeOfMotion": "Amplitude complète : une rep incomplète ne compte pas.",
+      "technique": "Deux échecs de suite : relis les consignes de la fiche."
+    },
+    "load": "Charge",
+    "reps": "Reps",
+    "lighter": "Palier plus léger",
+    "heavier": "Palier plus lourd",
+    "fewerReps": "Une rep de moins",
+    "moreReps": "Une rep de plus",
+    "halfRep": "Ajouter une demi-rep",
+    "incomplete": "Reps incomplètes",
+    "slowTempo": "Tempo lent",
+    "howWasIt": "Comment était cette série ?",
+    "busy": "Machine occupée",
+    "busyTitle": "{name} est occupée",
+    "busyHelp": "Fais autre chose en attendant, l'appli te repropose la machine après l'exercice suivant.",
+    "alternative": {
+      "substitute": "Mêmes muscles",
+      "swap": "Exercice suivant de la séance"
+    },
+    "continue": "Continuer avec la suite",
+    "isFree": "{name} est libre ?",
+    "free": "Oui, j'y vais",
+    "stillBusy": "Toujours occupée",
+    "crowded": "Salle bondée : finis la séance avec haltères et poulies, mêmes muscles.",
+    "replace": "{from} → {to}",
+    "warmup": "Échauffement conseillé : {load} × {reps}",
+    "warmupDone": "Échauffement fait",
+    "warmupShort": "échauffement",
+    "skip": "Passer cet exercice",
+    "allDone": "Tous les exercices sont faits. Bravo !",
+    "carryOver": "Reporté à la prochaine séance du même type : {names}",
+    "logged": "Séries de la séance",
+    "undo": "Annuler la dernière série",
+    "finish": "Terminer la séance",
+    "rest": {
+      "title": "Repos",
+      "label": "Repos : {time} restant",
+      "skip": "Passer"
+    },
+    "voice": {
+      "start": "Dicter",
+      "listening": "J'écoute…"
+    },
+    "plates": {
+      "open": "Disques",
+      "title": "Calculateur de disques",
+      "close": "Fermer",
+      "lighter": "Charge réalisable plus légère",
+      "heavier": "Charge réalisable plus lourde",
+      "closest": "Charge exacte impossible : {below} kg ou {above} kg",
+      "perSide": "Par côté : {plates} kg",
+      "bar": "barre de {kg} kg"
+    },
+    "summary": {
+      "title": "Séance terminée",
+      "sets": "{count} série | {count} séries",
+      "workload": "Charge de travail : {kg} kg",
+      "close": "Fermer"
     }
   }
 }
