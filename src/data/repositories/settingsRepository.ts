@@ -1,4 +1,7 @@
+import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
+import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
+import type { SportId, WeeklySlot } from '@/domain/planning';
 import type { Goal, SessionMinutes } from '@/domain/sessionBuilder';
 import { recommendModel, type TrainingModelId } from '@/domain/trainingModels';
 import type { SqlDatabase } from '../sqlite/database';
@@ -10,9 +13,22 @@ export interface Settings {
   readonly model: TrainingModelId;
   readonly supersets: boolean;
   readonly protectedZone?: ProtectedZone;
+  readonly level: 'beginner' | 'trained' | 'comeback';
+  /** Comeback mode: length of the break and first day back. */
+  readonly comeback?: { readonly pause: PauseLength; readonly startedOn: string };
+  readonly freeSlots: readonly WeeklySlot[];
+  readonly blockedSlots: readonly WeeklySlot[];
+  readonly otherSport?: { readonly sport: SportId; readonly slots: readonly WeeklySlot[] };
+  readonly notifications: NotificationPrefs;
   /** Set once the first-launch questionnaire is done or skipped. */
   readonly onboarded: boolean;
 }
+
+/** Weekday evenings after work and weekend mornings, until the user sets them. */
+const DEFAULT_FREE_SLOTS: WeeklySlot[] = [
+  ...[1, 2, 3, 4, 5].map((weekday) => ({ weekday, start: '18:00', end: '21:00' })),
+  ...[6, 7].map((weekday) => ({ weekday, start: '09:00', end: '12:00' })),
+];
 
 /** The "Passer" defaults of the questionnaire: hypertrophy, 4 sessions, 1 h. */
 export const DEFAULT_SETTINGS: Settings = {
@@ -21,6 +37,10 @@ export const DEFAULT_SETTINGS: Settings = {
   sessionMinutes: 60,
   model: recommendModel(4),
   supersets: false,
+  level: 'trained',
+  freeSlots: DEFAULT_FREE_SLOTS,
+  blockedSlots: [],
+  notifications: { ...DEFAULT_NOTIFICATION_PREFS, enabled: false },
   onboarded: false,
 };
 
