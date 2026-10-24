@@ -23,7 +23,11 @@ import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { Exercise } from '@/domain/types';
 import PlateCalculator from '@/ui/session/PlateCalculator.vue';
 import RestTimer from '@/ui/session/RestTimer.vue';
+import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
+import { updateSettings, useSettings } from '@/ui/useSettings';
+import { startOfWeek } from '@/domain/dates';
+import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
 import { useSession } from '@/ui/session/useSession';
 
 const { t, n, locale } = useI18n();
@@ -31,6 +35,34 @@ const session = useSession();
 const { phase, template, preview, active, step, warmup, restEndsAt, summary, crowded } = session;
 
 const busyFor = ref<string>();
+const reportingDiscomfort = ref(false);
+const { settings: appSettings } = useSettings();
+
+const remainingExercises = computed(() => {
+  const s = active.value;
+  if (!s) return [];
+  return [...s.plan.queue.pending, ...s.plan.queue.waiting.map((w) => w.exerciseId)]
+    .map((id) => session.entryOf(id)?.exercise)
+    .filter((e): e is CatalogExercise => !!e);
+});
+const today = () => new Date().toISOString().slice(0, 10);
+// Same discomfort reported again this week: the advice gets stronger.
+const reportsThisWeek = computed(() => {
+  const counts: Record<string, number> = {};
+  for (const d of appSettings.value?.discomforts ?? []) {
+    if (d.date >= startOfWeek(today())) counts[d.zone] = (counts[d.zone] ?? 0) + 1;
+  }
+  return counts;
+});
+
+async function onDiscomfort(response: DiscomfortResponse, zone: DiscomfortZone): Promise<void> {
+  await session.removeExercises(
+    response.stopSession ? remainingExercises.value.map((e) => e.id) : response.removeExerciseIds,
+  );
+  await updateSettings({
+    discomforts: [...(appSettings.value?.discomforts ?? []), { date: today(), zone }].slice(-20),
+  });
+}
 const busyAlternatives = ref<Alternative[]>([]);
 const platesLoad = ref<number>();
 
@@ -186,6 +218,14 @@ async function logWarmup(): Promise<void> {
           </ion-card-content>
         </ion-card>
 
+        <DiscomfortCard
+          v-if="reportingDiscomfort"
+          :remaining="remainingExercises"
+          :reports-this-week="reportsThisWeek"
+          @apply="onDiscomfort"
+          @close="reportingDiscomfort = false"
+        />
+
         <template v-if="step?.kind === 'exercise'">
           <ion-card v-if="warmup" class="warmup">
             <ion-card-content>
@@ -196,6 +236,9 @@ async function logWarmup(): Promise<void> {
             </ion-card-content>
           </ion-card>
           <SetEntry :exercise-id="step.exerciseId" @busy="onBusy" @plates="platesLoad = $event" />
+          <ion-button fill="outline" color="warning" @click="reportingDiscomfort = true">
+            {{ t('discomfort.open') }}
+          </ion-button>
           <ion-button fill="clear" color="medium" @click="session.skipExercise(step.exerciseId)">
             {{ t('session.skip') }}
           </ion-button>

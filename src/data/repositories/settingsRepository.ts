@@ -20,6 +20,8 @@ export interface Settings {
   readonly blockedSlots: readonly WeeklySlot[];
   readonly otherSport?: { readonly sport: SportId; readonly slots: readonly WeeklySlot[] };
   readonly notifications: NotificationPrefs;
+  /** Discomforts reported during sessions: repeated ones change the advice, and stop nudges. */
+  readonly discomforts?: readonly { readonly date: string; readonly zone: string }[];
   /** Set once the first-launch questionnaire is done or skipped. */
   readonly onboarded: boolean;
 }

@@ -306,6 +306,20 @@ async function machineStillBusy(exerciseId: string): Promise<void> {
   await updatePlan({ ...active.value.plan, queue: stillBusy(active.value.plan.queue, exerciseId) });
 }
 
+/** Removes exercises from the rest of the session (discomfort), without logging anything. */
+async function removeExercises(exerciseIds: readonly string[]): Promise<void> {
+  if (!active.value || exerciseIds.length === 0) return;
+  const queue = exerciseIds.reduce(
+    (q, id) => ({
+      ...q,
+      pending: q.pending.filter((p) => p !== id),
+      waiting: q.waiting.filter((w) => w.exerciseId !== id),
+    }),
+    active.value.plan.queue,
+  );
+  await updatePlan({ ...active.value.plan, queue });
+}
+
 async function skipExercise(exerciseId: string): Promise<void> {
   if (!active.value) return;
   await updatePlan({
@@ -391,6 +405,7 @@ export function useSession() {
     machineFree,
     machineStillBusy,
     skipExercise,
+    removeExercises,
     finish,
     closeSummary,
     references,

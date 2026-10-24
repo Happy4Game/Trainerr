@@ -570,5 +570,41 @@
     "confirm": "Séances, séries, mesures, réglages : tout sera effacé de ce téléphone. Ce n'est pas réversible. Exporte une sauvegarde avant si tu veux la garder.",
     "confirmYes": "Oui, tout supprimer",
     "cancel": "Annuler"
+  },
+  "discomfort": {
+    "open": "Ça tire",
+    "title": "Une gêne ?",
+    "where": "Où ?",
+    "signs": "Coche ce qui correspond :",
+    "confirm": "Valider",
+    "cancel": "Annuler",
+    "ok": "Compris",
+    "notDiagnosis": "Ce n'est pas un diagnostic : l'appli ne remplace pas un médecin ou un kiné.",
+    "removed": "{count} exercice retiré de la séance. | {count} exercices retirés de la séance.",
+    "zones": {
+      "frontShoulder": "Avant de l'épaule",
+      "shoulder": "Épaule",
+      "elbow": "Coude",
+      "wrist": "Poignet",
+      "lowerBack": "Bas du dos",
+      "knee": "Genou",
+      "hip": "Hanche",
+      "other": "Ailleurs"
+    },
+    "flags": {
+      "sharpPain": "Douleur vive",
+      "jointPain": "Douleur dans l'articulation",
+      "painAtRest": "Douleur même au repos",
+      "tingling": "Fourmillements",
+      "chestPainBreathless": "Douleur dans la poitrine et essoufflement"
+    },
+    "advice": {
+      "heatAndRest": "Arrête les exercices qui sollicitent cette zone. Chaleur et repos aident souvent.",
+      "warningSigns": "Si la douleur devient vive, articulaire, présente au repos ou avec des fourmillements : arrête et consulte.",
+      "seePhysioIfPersists": "C'est la 2e fois cette semaine : un seul exercice d'épaule par séance Push. Si ça persiste, consulte un kiné.",
+      "stopAndConsult": "Arrête la séance maintenant et consulte un médecin ou un kiné.",
+      "callEmergency": "Arrête tout et appelle le 15 (SAMU) maintenant.",
+      "sorenessVsPain": "Une courbature est diffuse et passe en 2 à 3 jours : tu peux garder ton programme."
+    }
   }
 }

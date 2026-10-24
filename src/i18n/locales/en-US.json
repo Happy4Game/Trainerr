@@ -570,5 +570,41 @@
     "confirm": "Workouts, sets, measurements, settings: everything will be erased from this phone. This cannot be undone. Export a backup first if you want to keep it.",
     "confirmYes": "Yes, delete everything",
     "cancel": "Cancel"
+  },
+  "discomfort": {
+    "open": "Something hurts",
+    "title": "Discomfort?",
+    "where": "Where?",
+    "signs": "Tick what applies:",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "ok": "Got it",
+    "notDiagnosis": "This is not a diagnosis: the app does not replace a doctor or a physiotherapist.",
+    "removed": "{count} exercise removed from the workout. | {count} exercises removed from the workout.",
+    "zones": {
+      "frontShoulder": "Front of the shoulder",
+      "shoulder": "Shoulder",
+      "elbow": "Elbow",
+      "wrist": "Wrist",
+      "lowerBack": "Lower back",
+      "knee": "Knee",
+      "hip": "Hip",
+      "other": "Elsewhere"
+    },
+    "flags": {
+      "sharpPain": "Sharp pain",
+      "jointPain": "Pain in the joint",
+      "painAtRest": "Pain even at rest",
+      "tingling": "Tingling",
+      "chestPainBreathless": "Chest pain and breathlessness"
+    },
+    "advice": {
+      "heatAndRest": "Stop the exercises loading this area. Heat and rest often help.",
+      "warningSigns": "If the pain gets sharp, in the joint, at rest or with tingling: stop and see a professional.",
+      "seePhysioIfPersists": "Second time this week: one shoulder exercise per Push workout only. If it persists, see a physiotherapist.",
+      "stopAndConsult": "Stop the workout now and see a doctor or a physiotherapist.",
+      "callEmergency": "Stop everything and call the emergency number (15 in France) now.",
+      "sorenessVsPain": "Soreness is diffuse and goes away in 2 to 3 days: you can keep your program."
+    }
   }
 }
