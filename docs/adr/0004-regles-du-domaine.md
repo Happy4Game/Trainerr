@@ -1,6 +1,6 @@
 # 0004 — Règles du domaine : choix faits là où le cahier des charges laisse une marge
 
-Date : 2026-10-24 · Statut : **à valider par Thibaut**
+Date : 2026-10-24 · Statut : accepté (validé par Thibaut le 2026-10-24 : « sinon je te laisse faire »)
 
 Chaque point ci-dessous est un réglage par défaut. Il se change facilement (une constante ou une ligne), et les tests disent tout de suite ce qui bouge.
 
@@ -22,7 +22,7 @@ Chaque point ci-dessous est un réglage par défaut. Il se change facilement (un
 
 ## Planning (`planning.ts`)
 
-11. **Les heures de silence (22h–8h) s'appliquent aussi aux séances**, comme l'exige la propriété de test du cahier des charges. Conséquence : une séance de 1 h à 21h tient (21h–22h), mais une séance de 1 h 30 à 21h n'est pas placée. À revoir si Thibaut veut pouvoir s'entraîner après 22h.
+11. **Les heures de silence (22h–8h) ne concernent que les notifications** (validé par Thibaut le 2026-10-24). Le planning place les séances à n'importe quelle heure des créneaux libres, même tard le soir ; seules les notifications évitent les heures de silence. Écart volontaire avec la propriété de test « ni pendant les heures de silence » du cahier des charges.
 12. **Autres sports** : vélo → pas de Legs le jour même ni le lendemain ; course et football → pas de Legs la veille, le jour même, le lendemain ; sports de combat → pas de Push la veille, le jour même, le lendemain ; natation → aucune contrainte de planning (volume d'épaules réduit, à faire à l'étape 5).
 13. **Répartition** : moins de séances que de jours libres → jours espacés (4 séances sur 7 jours → lun, mar, jeu, sam). Si une séance est interdite un jour (sport), la suivante de la rotation prend sa place.
 

@@ -36,7 +36,6 @@ export interface PlanningInput {
   readonly sessionMinutes: number;
   readonly freeSlots: readonly WeeklySlot[];
   readonly blockedSlots: readonly WeeklySlot[];
-  readonly quietHours: { readonly start: string; readonly end: string };
   readonly otherSports: readonly {
     readonly sport: SportId;
     readonly slots: readonly WeeklySlot[];
@@ -111,7 +110,6 @@ function earliestStart(input: PlanningInput, weekday: Weekday): number | undefin
   const busy = [...input.blockedSlots, ...input.otherSports.flatMap((sport) => sport.slots)]
     .filter((slot) => slot.weekday === weekday)
     .map((slot) => [timeToMinutes(slot.start), timeToMinutes(slot.end)] as const);
-  busy.push(...quietIntervals(input.quietHours));
 
   const free = input.freeSlots
     .filter((slot) => slot.weekday === weekday)
@@ -129,19 +127,6 @@ function earliestStart(input: PlanningInput, weekday: Weekday): number | undefin
     }
   }
   return undefined;
-}
-
-/** Quiet hours may wrap around midnight (22:00 → 08:00). */
-function quietIntervals(quiet: { start: string; end: string }): (readonly [number, number])[] {
-  const start = timeToMinutes(quiet.start);
-  const end = timeToMinutes(quiet.end);
-  if (start === end) return [];
-  return start < end
-    ? [[start, end]]
-    : [
-        [start, 24 * 60],
-        [0, end],
-      ];
 }
 
 function conflictsWithSport(

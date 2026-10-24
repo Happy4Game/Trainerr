@@ -39,9 +39,9 @@ Tout est dans `src/domain/`, en TypeScript pur (ESLint interdit d'y importer Vue
 | `advice.ts`                      | Gêne, signaux d'alerte, courbatures                                                            |
 | `plates.ts`                      | Calculateur de disques (recherche exhaustive, pas gloutonne)                                   |
 
-Tests : 143 au total, dont les **10 cas réels d'octobre 2026** (`tests/fixtures/golden/october-2026.json`) et des tests de propriétés (fast-check) : charge toujours sur un palier existant, jamais de hausse après Limite/Échec, disques exacts ou 2 charges les plus proches, planning hors créneaux bloqués et heures de silence. Couverture du domaine : 99,5 % des lignes.
+Tests : 143 au total, dont les **10 cas réels d'octobre 2026** (`tests/fixtures/golden/october-2026.json`) et des tests de propriétés (fast-check) : charge toujours sur un palier existant, jamais de hausse après Limite/Échec, disques exacts ou 2 charges les plus proches, planning hors créneaux bloqués. Couverture du domaine : 99,5 % des lignes.
 
-**Choix à valider** : voir [ADR 0004](docs/adr/0004-regles-du-domaine.md).
+**Choix par défaut** (validés) : voir [ADR 0004](docs/adr/0004-regles-du-domaine.md). Les heures de silence ne s'appliquent qu'aux notifications (étape 5).
 
 ## Problèmes connus
 

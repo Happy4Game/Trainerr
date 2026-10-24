@@ -19,7 +19,6 @@ function input(overrides: Partial<PlanningInput> = {}): PlanningInput {
     sessionMinutes: 60,
     freeSlots: everyEvening,
     blockedSlots: [],
-    quietHours: { start: '22:00', end: '08:00' },
     otherSports: [],
     ...overrides,
   };
@@ -79,7 +78,7 @@ describe('weekly planning', () => {
     expect(plan.sessions[0]).toMatchObject({ weekday: 1, start: '20:30', end: '21:30' });
   });
 
-  it('never runs into quiet hours', () => {
+  it('places late sessions: quiet hours only apply to notifications', () => {
     const plan = planWeek(
       input({
         sessionsPerWeek: 1,
@@ -87,8 +86,7 @@ describe('weekly planning', () => {
         freeSlots: [{ weekday: 1, start: '21:00', end: '23:30' }],
       }),
     );
-    expect(plan.sessions).toEqual([]);
-    expect(plan.unplaced).toBe(1);
+    expect(plan.sessions[0]).toMatchObject({ weekday: 1, start: '21:00', end: '22:30' });
   });
 
   it('cycling: no Legs on the ride day nor the day after', () => {
@@ -151,7 +149,7 @@ describe('weekly planning', () => {
       sessionMinutes: fc.constantFrom(30, 45, 60, 90),
     });
 
-    it('never places a session in a blocked slot, in quiet hours, or outside free time', () => {
+    it('never places a session in a blocked slot or outside free time', () => {
       fc.assert(
         fc.property(planning, (p) => {
           const plan = planWeek(input(p));
@@ -159,8 +157,6 @@ describe('weekly planning', () => {
             const start = timeToMinutes(session.start);
             const end = timeToMinutes(session.end);
             expect(end - start).toBe(p.sessionMinutes);
-            expect(start).toBeGreaterThanOrEqual(timeToMinutes('08:00'));
-            expect(end).toBeLessThanOrEqual(timeToMinutes('22:00'));
             for (const blocked of p.blockedSlots.filter((b) => b.weekday === session.weekday)) {
               const overlaps =
                 start < timeToMinutes(blocked.end) && timeToMinutes(blocked.start) < end;
