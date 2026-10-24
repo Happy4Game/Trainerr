@@ -11,6 +11,7 @@ import {
   getActiveSession,
   listDoneSessions,
   savePlan,
+  setSessionNote,
   startSession,
   type ActiveSession,
   type SessionPlan,
@@ -55,7 +56,7 @@ type Phase = 'loading' | 'idle' | 'active' | 'finished' | 'error';
 const phase = ref<Phase>('loading');
 const errorMessage = ref('');
 const settings = ref<Settings>();
-const history = ref<(SessionLog & { plan: Partial<SessionPlan> })[]>([]);
+const history = ref<(SessionLog & { plan: Partial<SessionPlan>; note?: string })[]>([]);
 const references = ref<ReferenceLoad[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
@@ -320,6 +321,14 @@ async function removeExercises(exerciseIds: readonly string[]): Promise<void> {
   await updatePlan({ ...active.value.plan, queue });
 }
 
+async function saveNote(note: string): Promise<void> {
+  if (!active.value) return;
+  const { db } = await openAppDatabase();
+  await setSessionNote(db, active.value.id, note);
+  const { note: _previous, ...rest } = active.value;
+  active.value = note.trim() ? { ...rest, note: note.trim() } : rest;
+}
+
 async function skipExercise(exerciseId: string): Promise<void> {
   if (!active.value) return;
   await updatePlan({
@@ -405,6 +414,7 @@ export function useSession() {
     machineFree,
     machineStillBusy,
     skipExercise,
+    saveNote,
     removeExercises,
     finish,
     closeSummary,

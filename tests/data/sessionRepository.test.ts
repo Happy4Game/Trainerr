@@ -10,6 +10,7 @@ import {
   getActiveSession,
   listDoneSessions,
   savePlan,
+  setSessionNote,
   startSession,
   type SessionPlan,
 } from '@/data/repositories/sessionRepository';
@@ -68,6 +69,19 @@ describe('sessions', () => {
       { exerciseId: 'Dumbbell_Bench_Press', loadKg: 8, reps: 15, difficulty: 'easy', warmup: true },
       { exerciseId: 'Dumbbell_Bench_Press', loadKg: 18, reps: 9.5, difficulty: 'hard' },
     ]);
+  });
+
+  it('keeps a note on the session', async () => {
+    const id = await startSession(db, {
+      date: '2026-10-26',
+      templateId: 'pushA',
+      gymId: DEFAULT_GYM_ID,
+      plan,
+    });
+    await setSessionNote(db, id, '  Mal dormi  ');
+    expect((await getActiveSession(db))?.note).toBe('Mal dormi');
+    await finishSession(db, id, plan);
+    expect((await listDoneSessions(db))[0]?.note).toBe('Mal dormi');
   });
 
   it('undoes a set', async () => {

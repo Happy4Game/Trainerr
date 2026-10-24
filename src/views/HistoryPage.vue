@@ -79,6 +79,7 @@ function lines(
             <h2>{{ t(`templates.${s.templateId}`) }} · {{ dateLabel(s.date) }}</h2>
             <p>{{ t('history.workload', { kg: n(Math.round(sessionWorkload(s))) }) }}</p>
             <p v-for="line in lines(s.sets)" :key="line">{{ line }}</p>
+            <p v-if="s.note" class="note">« {{ s.note }} »</p>
           </ion-label>
         </ion-item>
       </ion-list>

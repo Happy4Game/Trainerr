@@ -25,6 +25,8 @@ export interface ActiveSession {
   readonly templateId: string;
   readonly plan: SessionPlan;
   readonly sets: readonly StoredSet[];
+  /** Free text: "mal dormi", "salle bondée"… */
+  readonly note?: string;
 }
 
 export function newId(): string {
@@ -71,6 +73,10 @@ export async function addSet(db: SqlDatabase, sessionId: string, set: SetLog): P
   return { ...set, id };
 }
 
+export async function setSessionNote(db: SqlDatabase, sessionId: string, note: string) {
+  await db.run('UPDATE session SET note = ? WHERE id = ?', [note.trim() || null, sessionId]);
+}
+
 export async function deleteSet(db: SqlDatabase, setId: string): Promise<void> {
   await db.run('DELETE FROM set_log WHERE id = ?', [setId]);
 }
@@ -96,6 +102,7 @@ interface SessionRow {
   date: string;
   template: string;
   plan: string;
+  note: string | null;
 }
 interface SetRow {
   id: string;
@@ -131,7 +138,7 @@ async function setsOf(db: SqlDatabase, where: string, params: string[]): Promise
 
 export async function getActiveSession(db: SqlDatabase): Promise<ActiveSession | undefined> {
   const rows = await db.query<SessionRow>(
-    `SELECT id, date, template, plan FROM session WHERE status = 'inProgress' ORDER BY date DESC LIMIT 1`,
+    `SELECT id, date, template, plan, note FROM session WHERE status = 'inProgress' ORDER BY date DESC LIMIT 1`,
   );
   const row = rows[0];
   if (!row) return undefined;
@@ -142,15 +149,16 @@ export async function getActiveSession(db: SqlDatabase): Promise<ActiveSession |
     templateId: row.template,
     plan: JSON.parse(row.plan) as SessionPlan,
     sets: sets.map(toSet),
+    ...(row.note ? { note: row.note } : {}),
   };
 }
 
 /** Finished sessions, oldest first, with their sets and plan. */
 export async function listDoneSessions(
   db: SqlDatabase,
-): Promise<(SessionLog & { plan: Partial<SessionPlan> })[]> {
+): Promise<(SessionLog & { plan: Partial<SessionPlan>; note?: string })[]> {
   const rows = await db.query<SessionRow>(
-    `SELECT id, date, template, plan FROM session WHERE status = 'done' ORDER BY date, rowid`,
+    `SELECT id, date, template, plan, note FROM session WHERE status = 'done' ORDER BY date, rowid`,
   );
   const sets = await setsOf(db, `s.status = 'done'`, []);
   const bySession = new Map<string, StoredSet[]>();
@@ -165,5 +173,6 @@ export async function listDoneSessions(
     templateId: row.template,
     sets: bySession.get(row.id) ?? [],
     plan: JSON.parse(row.plan) as Partial<SessionPlan>,
+    ...(row.note ? { note: row.note } : {}),
   }));
 }

@@ -12,6 +12,7 @@ import {
   IonList,
   IonModal,
   IonPage,
+  IonTextarea,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
@@ -287,6 +288,18 @@ async function logWarmup(): Promise<void> {
             {{ t('session.undo') }}
           </ion-button>
         </section>
+
+        <ion-item lines="none" class="note">
+          <ion-textarea
+            :model-value="active.note ?? ''"
+            :label="t('session.note')"
+            label-placement="stacked"
+            :placeholder="t('session.notePlaceholder')"
+            auto-grow
+            :debounce="500"
+            @ion-input="session.saveNote(String($event.detail.value ?? ''))"
+          />
+        </ion-item>
 
         <ion-button
           expand="block"

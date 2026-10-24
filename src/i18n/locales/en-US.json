@@ -251,7 +251,9 @@
       "sets": "{count} set | {count} sets",
       "workload": "Workload: {kg} kg",
       "close": "Close"
-    }
+    },
+    "note": "Workout note",
+    "notePlaceholder": "E.g. slept badly, crowded gym"
   },
   "availability": {
     "day": "Day",

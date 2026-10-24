@@ -251,7 +251,9 @@
       "sets": "{count} série | {count} séries",
       "workload": "Charge de travail : {kg} kg",
       "close": "Fermer"
-    }
+    },
+    "note": "Note de séance",
+    "notePlaceholder": "Ex. mal dormi, salle bondée"
   },
   "availability": {
     "day": "Jour",

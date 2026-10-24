@@ -61,6 +61,7 @@ Illustrations des mouvements : 12 machines, dessins Everkinetic / wger.de (CC BY
 - **Machine occupée** : alternatives avec leur charge, la machine est reproposée après l'exercice suivant, reportée à la prochaine séance du même type si elle reste prise, salle bondée → haltères et poulies.
 - Calculateur de disques (dessin SVG, − / +), saisie vocale (« 16 kilos, 10 reps, limite »), reprise de la séance après fermeture de l'appli.
 - Migration v3 (plan de séance), récap de fin de séance.
+- Notes de séance (« mal dormi », « salle bondée »), affichées dans l'historique.
 - Bouton **« Ça tire »** : zone + signaux d'alerte ; avant de l'épaule → exercices de poussée restants retirés ; signaux d'alerte → arrêt de la séance ; douleur thoracique + essoufflement → appeler le 15 ; même gêne 2 fois dans la semaine → conseil kiné.
 
 ## Étape 5 — Parcours utilisateur
@@ -97,7 +98,7 @@ Défis entre amis (serveur et comptes), montre connectée, conseils en langage n
 ## Reste à faire (fonctions du cahier des charges)
 
 - Séance : supersets affichés ensemble dans la séance (règles prêtes dans `supersets.ts`), séance express.
-- Fonctions complémentaires : badges, image récap à partager, cycles, notes de séance, partage avec un coach, plusieurs salles, widget, montre, mode maison, échauffement articulaire, import depuis d'autres applis, sauvegarde chiffrée.
+- Fonctions complémentaires : badges, image récap à partager, cycles, partage avec un coach, plusieurs salles, widget, montre, mode maison, échauffement articulaire, import depuis d'autres applis, sauvegarde chiffrée.
 - Notifications : record battu, régularité, retour au niveau, conseil de la semaine (types prévus dans les réglages, pas encore déclenchés).
 
 ## Problèmes connus
