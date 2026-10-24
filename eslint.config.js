@@ -30,6 +30,10 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_' },
+      ],
       // Ionic utilise l'attribut slot des Web Components, pas les slots de Vue.
       'vue/no-deprecated-slot-attribute': 'off',
     },

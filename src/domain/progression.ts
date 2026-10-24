@@ -1,3 +1,4 @@
+import { comebackStartLoad, type PauseLength } from './comeback';
 import { floorStep, isMissingStepJump, stepDown, stepUp, type LoadSteps } from './loadSteps';
 import type { Exercise, ExerciseKind, RepRange, SetLog } from './types';
 
@@ -173,4 +174,27 @@ export function firstTimeProposal(input: {
 
 function isFailedSet(set: SetLog, range: RepRange): boolean {
   return set.difficulty === 'fail' || set.completeReps === false || set.reps < range.min;
+}
+
+/** Starting load of an exercise in a new session: history, then comeback reference, then a test set. */
+export function startingProposal(input: {
+  history: readonly (readonly SetLog[])[];
+  range: RepRange;
+  steps: LoadSteps;
+  comeback?: { referenceKg: number; pause: PauseLength };
+}): { loadKg: number; targetReps: number; kind: 'progression' | 'comeback' | 'testSet' } {
+  const { history, range, steps, comeback } = input;
+  const fromHistory = nextSessionProposal({ history, range, steps });
+  if (fromHistory) {
+    return { loadKg: fromHistory.loadKg, targetReps: fromHistory.targetReps, kind: 'progression' };
+  }
+  if (comeback) {
+    return {
+      loadKg: comebackStartLoad({ ...comeback, steps }),
+      targetReps: range.max,
+      kind: 'comeback',
+    };
+  }
+  const test = firstTimeProposal({ range, steps });
+  return { loadKg: test.loadKg, targetReps: test.targetReps, kind: 'testSet' };
 }

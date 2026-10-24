@@ -136,6 +136,13 @@ export const migrations: readonly Migration[] = [
       );
     `,
   },
+  {
+    version: 3,
+    description: 'Session plan (exercise order, waiting queue) to resume a session in progress',
+    sql: `
+      ALTER TABLE session ADD COLUMN plan TEXT NOT NULL DEFAULT '{}';
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;

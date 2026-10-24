@@ -50,7 +50,7 @@ async function saveLoadSteps(id: string, steps: readonly number[]): Promise<void
 
 async function saveNote(id: string, note: string): Promise<void> {
   update(id, (entry) => {
-    const { note: _previous, ...rest } = entry; // eslint-disable-line @typescript-eslint/no-unused-vars
+    const { note: _previous, ...rest } = entry;
     return note.trim() ? { ...rest, note: note.trim() } : rest;
   });
   const { db } = await openAppDatabase();
