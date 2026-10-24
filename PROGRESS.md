@@ -6,8 +6,8 @@ Suit l'ordre de construction de [SPEC.md](SPEC.md) (section « Choix techniques 
 | ----- | ---------------------------------------------------------- | ----------- |
 | 1     | Socle : projet, base SQLite, migrations, outils qualité    | ✅ Fait     |
 | 2     | Domaine : progression, planning, modèles, supersets, stats | ✅ Fait     |
-| 3     | Catalogue                                                  | ⏳ Suivante |
-| 4     | Séance                                                     | ⏳          |
+| 3     | Catalogue                                                  | ✅ Fait     |
+| 4     | Séance                                                     | ⏳ Suivante |
 | 5     | Parcours utilisateur                                       | ⏳          |
 | 6     | Suivi                                                      | ⏳          |
 | 7     | Pages de contenu                                           | ⏳          |
@@ -43,10 +43,21 @@ Tests : 143 au total, dont les **10 cas réels d'octobre 2026** (`tests/fixtures
 
 **Choix par défaut** (validés) : voir [ADR 0004](docs/adr/0004-regles-du-domaine.md). Les heures de silence ne s'appliquent qu'aux notifications (étape 5).
 
+## Étape 3 — Catalogue
+
+- 482 exercices : 480 de free-exercise-db (domaine public) + 2 machines de ta salle absentes de la source.
+- ~30 machines courantes avec nom français, nom affiché sur la machine, alias et 3 consignes (à relire par un coach).
+- Écran **Catalogue** : recherche sans accents (nom, alias, muscle), filtres Tout / Mes machines / Poussée / Tirage / Jambes / Gainage, étoile des favoris.
+- **Fiche machine** : silhouette face/dos avec muscles principaux et secondaires, type et fourchette de reps, consignes, paliers de charge (ajout, suppression, génération « de 25 à 86 tous les 7 »), réglages de la machine.
+- Base : migration v2, import du catalogue seulement quand il change, favoris et paliers conservés.
+- Détails et choix : [ADR 0005](docs/adr/0005-catalogue.md).
+
 ## Problèmes connus
 
 - `npm audit` signale 3 failles « modérées » dans `uuid`, utilisé par l'outil iOS de `@capacitor/cli` (développement seulement, pas dans l'appli). Le correctif proposé rétrograde Capacitor : à revoir quand Capacitor publiera une mise à jour.
 - sql.js est figé en 1.12.0 pour rester compatible avec jeep-sqlite (voir [ADR 0002](docs/adr/0002-sqlite-local.md)).
-- Le paquet JavaScript principal fait 1,2 Mo (Ionic complet) : à découper à l'étape 9.
+- Exercices hors des ~30 machines courantes : nom et instructions en anglais.
+- Photo de la plaque de la machine (optionnelle) : pas encore faite, elle demande le plugin appareil photo.
+- Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
 - Pas encore de projet Android (`npx cap add android`) : il faudra Android Studio et le SDK sur le poste.
 - Le dépôt n'a pas encore de remote GitHub : les branches sont locales, les pull requests seront ouvertes quand le dépôt GitHub existera.

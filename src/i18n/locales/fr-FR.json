@@ -17,8 +17,117 @@
   },
   "placeholder": {
     "session": "La séance en cours s'affichera ici (étape 4).",
-    "catalog": "Le catalogue des machines arrive à l'étape 3.",
     "history": "L'historique de tes séances arrive avec les séances.",
     "planning": "Le planning de la semaine arrive à l'étape 5."
+  },
+  "gym": {
+    "defaultName": "Ma salle"
+  },
+  "muscles": {
+    "chest": "Pectoraux",
+    "frontDelts": "Avant des épaules",
+    "sideDelts": "Côté des épaules",
+    "rearDelts": "Arrière des épaules",
+    "triceps": "Triceps",
+    "biceps": "Biceps",
+    "forearms": "Avant-bras",
+    "lats": "Grand dorsal",
+    "upperBack": "Haut du dos",
+    "traps": "Trapèzes",
+    "lowerBack": "Lombaires",
+    "abs": "Abdominaux",
+    "obliques": "Obliques",
+    "glutes": "Fessiers",
+    "quads": "Quadriceps",
+    "hamstrings": "Ischio-jambiers",
+    "adductors": "Adducteurs",
+    "abductors": "Abducteurs",
+    "calves": "Mollets"
+  },
+  "groups": {
+    "push": "Poussée",
+    "pull": "Tirage",
+    "legs": "Jambes",
+    "core": "Gainage"
+  },
+  "kinds": {
+    "heavyCompound": "Composé lourd",
+    "machineCompound": "Composé machine",
+    "isolation": "Isolation"
+  },
+  "equipment": {
+    "machine": "Machine guidée",
+    "cable": "Poulie",
+    "dumbbell": "Haltères",
+    "barbell": "Barre",
+    "bodyweight": "Poids du corps"
+  },
+  "catalog": {
+    "search": "Chercher une machine ou un muscle",
+    "filters": {
+      "all": "Tout",
+      "favorites": "Mes machines",
+      "push": "Poussée",
+      "pull": "Tirage",
+      "legs": "Jambes",
+      "core": "Gainage"
+    },
+    "loading": "Chargement du catalogue…",
+    "error": "Impossible de charger le catalogue : {message}",
+    "empty": "Aucun exercice ne correspond.",
+    "noFavorites": "Mets une étoile sur les machines de ta salle : seules celles-ci seront proposées dans tes séances.",
+    "count": "{count} exercice | {count} exercices",
+    "showMore": "Afficher plus",
+    "addFavorite": "Ajouter {name} à mes machines",
+    "removeFavorite": "Retirer {name} de mes machines"
+  },
+  "exercise": {
+    "notFound": "Exercice introuvable.",
+    "favorite": {
+      "add": "Ajouter à mes machines",
+      "remove": "Dans mes machines"
+    },
+    "repRange": "{min} à {max} reps",
+    "muscles": {
+      "title": "Muscles travaillés",
+      "primary": "Principaux",
+      "secondary": "Secondaires",
+      "none": "Aucun",
+      "map": "Silhouette : {muscles}"
+    },
+    "cues": {
+      "title": "Consignes",
+      "source": "Source : {source}",
+      "review": "Consignes à relire par un coach avant la publication de l'appli.",
+      "englishOnly": "Instructions en anglais (free-exercise-db), traduction à venir."
+    },
+    "machine": {
+      "title": "Ma machine",
+      "note": "Réglages (siège, dossier, poignée…)",
+      "notePlaceholder": "Ex. siège cran 4"
+    },
+    "steps": {
+      "title": "Paliers de charge",
+      "help": "Les charges proposées seront arrondies à ces paliers.",
+      "defaults": "Paliers par défaut, à remplacer par ceux de ta machine : {steps}…",
+      "add": "Ajouter un palier (kg)",
+      "addButton": "Ajouter",
+      "remove": "Retirer {load} kg",
+      "invalid": "Charge invalide",
+      "generate": {
+        "title": "Générer une série de paliers (en kg)",
+        "first": "Départ",
+        "increment": "Écart",
+        "last": "Fin",
+        "button": "Générer"
+      },
+      "saved": "Paliers enregistrés"
+    },
+    "source": {
+      "free-exercise-db": "Fiche issue de free-exercise-db (domaine public).",
+      "trainerr": "Fiche rédigée pour Trainerr.",
+      "user": "Exercice ajouté par toi."
+    },
+    "kg": "{load} kg"
   }
 }

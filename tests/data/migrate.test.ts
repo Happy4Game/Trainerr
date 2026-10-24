@@ -7,6 +7,7 @@ import { SqlJsDatabase } from '../support/sqlJsDatabase';
 
 const fixturesDir = resolve(import.meta.dirname, '../fixtures/db');
 const TABLES = [
+  'app_meta',
   'availability',
   'badge',
   'body_measurement',
@@ -133,7 +134,7 @@ describe('migrations', () => {
     ).rejects.toThrow(/FOREIGN KEY/);
     await expect(
       db.run(
-        "INSERT INTO exercise VALUES ('e', 'E', NULL, '[]', 'arms', 'isolation', 'machine', NULL, NULL)",
+        "INSERT INTO exercise (id, name, ppl_group, kind, equipment) VALUES ('e', 'E', 'arms', 'isolation', 'machine')",
       ),
     ).rejects.toThrow(/CHECK/);
   });

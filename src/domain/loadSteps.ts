@@ -1,3 +1,5 @@
+import type { Equipment } from './types';
+
 /** Loads available on a machine, in kg, sorted ascending. */
 export type LoadSteps = readonly number[];
 
@@ -55,4 +57,32 @@ export function roundKg(value: number): number {
 
 function assertNotEmpty(steps: LoadSteps): void {
   if (steps.length === 0) throw new Error('No load steps configured for this machine.');
+}
+
+/** Reads a load typed by the user: "2,5", "2.5" or "52 kg". Undefined if not a positive number. */
+export function parseLoad(text: string): number | undefined {
+  const cleaned = text
+    .trim()
+    .replace(/\s*kg$/i, '')
+    .replace(',', '.');
+  if (!/^\d+(\.\d+)?$/.test(cleaned)) return undefined;
+  const value = Number(cleaned);
+  return value > 0 ? value : undefined;
+}
+
+/** Steps used until the user enters the real ones for a machine. */
+export function defaultStepsFor(equipment: Equipment): number[] {
+  switch (equipment) {
+    case 'dumbbell':
+      return uniformSteps(2, 60, 2);
+    case 'barbell':
+      // 20 kg bar, then a pair of 1.25 kg plates at a time.
+      return uniformSteps(20, 250, 2.5);
+    case 'bodyweight':
+      // Extra weight on top of the body weight.
+      return uniformSteps(0, 50, 5);
+    case 'machine':
+    case 'cable':
+      return uniformSteps(5, 200, 5);
+  }
 }

@@ -17,8 +17,117 @@
   },
   "placeholder": {
     "session": "The current workout will show up here (step 4).",
-    "catalog": "The machine catalog arrives in step 3.",
     "history": "Your workout history arrives with workouts.",
     "planning": "The weekly planning arrives in step 5."
+  },
+  "gym": {
+    "defaultName": "My gym"
+  },
+  "muscles": {
+    "chest": "Chest",
+    "frontDelts": "Front delts",
+    "sideDelts": "Side delts",
+    "rearDelts": "Rear delts",
+    "triceps": "Triceps",
+    "biceps": "Biceps",
+    "forearms": "Forearms",
+    "lats": "Lats",
+    "upperBack": "Upper back",
+    "traps": "Traps",
+    "lowerBack": "Lower back",
+    "abs": "Abs",
+    "obliques": "Obliques",
+    "glutes": "Glutes",
+    "quads": "Quads",
+    "hamstrings": "Hamstrings",
+    "adductors": "Adductors",
+    "abductors": "Abductors",
+    "calves": "Calves"
+  },
+  "groups": {
+    "push": "Push",
+    "pull": "Pull",
+    "legs": "Legs",
+    "core": "Core"
+  },
+  "kinds": {
+    "heavyCompound": "Heavy compound",
+    "machineCompound": "Machine compound",
+    "isolation": "Isolation"
+  },
+  "equipment": {
+    "machine": "Machine",
+    "cable": "Cable",
+    "dumbbell": "Dumbbells",
+    "barbell": "Barbell",
+    "bodyweight": "Bodyweight"
+  },
+  "catalog": {
+    "search": "Search a machine or a muscle",
+    "filters": {
+      "all": "All",
+      "favorites": "My machines",
+      "push": "Push",
+      "pull": "Pull",
+      "legs": "Legs",
+      "core": "Core"
+    },
+    "loading": "Loading the catalog…",
+    "error": "Could not load the catalog: {message}",
+    "empty": "No exercise matches.",
+    "noFavorites": "Star the machines of your gym: only those will be used in your workouts.",
+    "count": "{count} exercise | {count} exercises",
+    "showMore": "Show more",
+    "addFavorite": "Add {name} to my machines",
+    "removeFavorite": "Remove {name} from my machines"
+  },
+  "exercise": {
+    "notFound": "Exercise not found.",
+    "favorite": {
+      "add": "Add to my machines",
+      "remove": "In my machines"
+    },
+    "repRange": "{min} to {max} reps",
+    "muscles": {
+      "title": "Muscles worked",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "none": "None",
+      "map": "Body map: {muscles}"
+    },
+    "cues": {
+      "title": "Cues",
+      "source": "Source: {source}",
+      "review": "Cues to be proofread by a coach before the app is released.",
+      "englishOnly": "Instructions from free-exercise-db."
+    },
+    "machine": {
+      "title": "My machine",
+      "note": "Settings (seat, backrest, handle…)",
+      "notePlaceholder": "E.g. seat notch 4"
+    },
+    "steps": {
+      "title": "Load steps",
+      "help": "Suggested loads are rounded to these steps.",
+      "defaults": "Default steps, replace them with your machine's: {steps}…",
+      "add": "Add a step (kg)",
+      "addButton": "Add",
+      "remove": "Remove {load} kg",
+      "invalid": "Invalid load",
+      "generate": {
+        "title": "Generate a series of steps (kg)",
+        "first": "From",
+        "increment": "Step",
+        "last": "To",
+        "button": "Generate"
+      },
+      "saved": "Steps saved"
+    },
+    "source": {
+      "free-exercise-db": "Card from free-exercise-db (public domain).",
+      "trainerr": "Card written for Trainerr.",
+      "user": "Exercise added by you."
+    },
+    "kg": "{load} kg"
   }
 }

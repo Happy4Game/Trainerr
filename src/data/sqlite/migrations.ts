@@ -120,6 +120,22 @@ export const migrations: readonly Migration[] = [
       );
     `,
   },
+  {
+    version: 2,
+    description: 'Exercise catalog content (free-exercise-db) and app metadata',
+    sql: `
+      ALTER TABLE exercise ADD COLUMN name_en TEXT NOT NULL DEFAULT '';
+      ALTER TABLE exercise ADD COLUMN cues TEXT;
+      ALTER TABLE exercise ADD COLUMN cues_source TEXT;
+      ALTER TABLE exercise ADD COLUMN instructions_en TEXT NOT NULL DEFAULT '[]';
+      ALTER TABLE exercise ADD COLUMN source TEXT NOT NULL DEFAULT 'user';
+
+      CREATE TABLE app_meta (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      );
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;

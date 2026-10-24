@@ -15,11 +15,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/PlaceholderPage.vue'),
         props: { titleKey: 'tabs.session', messageKey: 'placeholder.session' },
       },
-      {
-        path: 'catalog',
-        component: () => import('@/views/PlaceholderPage.vue'),
-        props: { titleKey: 'tabs.catalog', messageKey: 'placeholder.catalog' },
-      },
+      { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
+      { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
       {
         path: 'history',
         component: () => import('@/views/PlaceholderPage.vue'),

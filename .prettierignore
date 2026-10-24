@@ -7,3 +7,5 @@ package-lock.json
 SPEC.md
 playwright-report
 test-results
+src/data/catalog/free-exercise-db.json
+src/ui/muscleMap/bodyPaths.json

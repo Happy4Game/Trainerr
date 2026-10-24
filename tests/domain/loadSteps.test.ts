@@ -1,10 +1,12 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import {
+  defaultStepsFor,
   floorStep,
   isMissingStepJump,
   nearestStep,
   normalizeSteps,
+  parseLoad,
   stepDown,
   stepUp,
   uniformSteps,
@@ -54,6 +56,24 @@ describe('load steps', () => {
     expect(isMissingStepJump(52, 59)).toBe(true);
     expect(isMissingStepJump(16, 18)).toBe(false); // 12.5 % but only 2 kg
     expect(isMissingStepJump(107, 110)).toBe(false); // 3 kg but only 2.8 %
+  });
+
+  it('reads a load typed with a comma or a dot', () => {
+    expect(parseLoad('2,5')).toBe(2.5);
+    expect(parseLoad('2.5')).toBe(2.5);
+    expect(parseLoad(' 52 kg ')).toBe(52);
+    expect(parseLoad('')).toBeUndefined();
+    expect(parseLoad('abc')).toBeUndefined();
+    expect(parseLoad('-3')).toBeUndefined();
+    expect(parseLoad('0')).toBeUndefined();
+  });
+
+  it('offers default steps until the machine is set up', () => {
+    expect(defaultStepsFor('dumbbell').slice(0, 3)).toEqual([2, 4, 6]);
+    expect(defaultStepsFor('barbell').slice(0, 3)).toEqual([20, 22.5, 25]);
+    expect(defaultStepsFor('machine').slice(0, 3)).toEqual([5, 10, 15]);
+    expect(defaultStepsFor('cable').slice(0, 3)).toEqual([5, 10, 15]);
+    expect(defaultStepsFor('bodyweight').slice(0, 3)).toEqual([0, 5, 10]);
   });
 
   it('always returns an existing step (property)', () => {
