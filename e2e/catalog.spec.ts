@@ -1,7 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
+import { skipOnboarding } from './helpers';
 
 async function openCatalog(page: Page) {
-  await page.goto('/tabs/catalog');
+  await skipOnboarding(page);
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
 }
 

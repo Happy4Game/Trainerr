@@ -7,17 +7,15 @@
     "planning": "Planning"
   },
   "today": {
-    "comingSoon": "Today's workout will show up here.",
-    "database": {
-      "title": "Database",
-      "loading": "Opening the database…",
-      "ready": "Database ready (schema version {version})",
-      "error": "Could not open the database: {message}"
-    }
-  },
-  "placeholder": {
-    "history": "Your workout history arrives with workouts.",
-    "planning": "The weekly planning arrives in step 5."
+    "inProgress": "Workout in progress: {template}",
+    "plannedAt": "Planned today at {start}.",
+    "restDay": "No workout planned today: rest, or an extra workout if you feel like it.",
+    "go": "See the workout",
+    "resume": "Resume the workout",
+    "week": "This week",
+    "weekCount": "{done} of {target} workouts",
+    "streak": "{count} week on pace | {count} weeks in a row on pace",
+    "seePlanning": "See the planning"
   },
   "gym": {
     "defaultName": "My gym"
@@ -254,5 +252,113 @@
       "workload": "Workload: {kg} kg",
       "close": "Close"
     }
+  },
+  "availability": {
+    "day": "Day",
+    "periods": {
+      "morning": "Morning",
+      "noon": "Noon",
+      "evening": "Evening",
+      "late": "Late"
+    }
+  },
+  "models": {
+    "fullBody": "Full body",
+    "upperLower": "Upper / Lower",
+    "ppl": "Push / Pull / Legs",
+    "pplul": "PPL + Upper / Lower",
+    "phul": "PHUL (power + hypertrophy)",
+    "arnold": "Arnold split",
+    "broSplit": "Bro split"
+  },
+  "sports": {
+    "none": "No",
+    "cycling": "Cycling (deliveries too)",
+    "running": "Running",
+    "football": "Football",
+    "swimming": "Swimming",
+    "combat": "Combat sport",
+    "other": "Other"
+  },
+  "zones": {
+    "none": "None",
+    "shoulders": "Shoulders",
+    "knees": "Knees",
+    "back": "Back"
+  },
+  "onboarding": {
+    "title": "Welcome",
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
+    "goal": {
+      "question": "Your goal?",
+      "hypertrophy": "Build muscle",
+      "maintenance": "Stay in shape",
+      "strength": "Get stronger"
+    },
+    "sessions": {
+      "question": "How many workouts a week?",
+      "model": "Suggested program: {model}"
+    },
+    "level": {
+      "question": "Your level?",
+      "beginner": "I'm starting",
+      "trained": "I already train",
+      "comeback": "I'm coming back after a break",
+      "pause": "How long was the break?",
+      "comebackHint": "You can enter your old loads on each machine card: the app will start from a reduced load."
+    },
+    "availability": {
+      "question": "When are you available?",
+      "hint": "Tick the slots when you can go to the gym."
+    },
+    "duration": {
+      "question": "How long is a workout for you?",
+      "30": "30 min",
+      "45": "45 min",
+      "60": "1 h",
+      "90": "1 h 30"
+    },
+    "sport": {
+      "question": "Do you practice another sport?",
+      "when": "When?"
+    },
+    "zone": {
+      "question": "A body area to spare?"
+    },
+    "notifications": {
+      "question": "Reminders?",
+      "why": "A reminder 1 h before each planned workout, and a short note if it has been a while. At most one notification a day, never between 10 pm and 8 am.",
+      "privacy": "Everything stays on your phone: no server, no data sent.",
+      "accept": "Turn on reminders",
+      "later": "Later"
+    },
+    "aiNote": "App built with AI by a student: more in “About”.",
+    "pauses": {
+      "underOneMonth": "Less than 1 month",
+      "oneToThreeMonths": "1 to 3 months",
+      "overThreeMonths": "More than 3 months"
+    }
+  },
+  "planning": {
+    "week": "Your week",
+    "rest": "Rest",
+    "unplaced": "{count} workout found no slot: add availability. | {count} workouts found no slot: add availability.",
+    "availability": "My availability",
+    "edit": "Edit",
+    "save": "Save",
+    "program": "My program",
+    "model": "Model",
+    "sessionsPerWeek": "Workouts per week",
+    "frequencyNote": "With this setting, each muscle is trained only once a week. Twice a week gives better results at equal volume (Schoenfeld, 2016)."
+  },
+  "notifications": {
+    "reminder": "{template} at {time} today. Your workout is waiting!",
+    "nudge": "It's been {days} days. A short 30-minute workout?"
+  },
+  "history": {
+    "empty": "No finished workout yet.",
+    "workload": "Workload: {kg} kg"
   }
 }

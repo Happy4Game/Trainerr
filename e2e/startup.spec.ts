@@ -1,18 +1,15 @@
 import { expect, test } from '@playwright/test';
-import { latestSchemaVersion } from '../src/data/sqlite/migrations';
+import { skipOnboarding } from './helpers';
 
-const ready = new RegExp(`Base prête \\(schéma version ${latestSchemaVersion}\\)`);
-
-test('the app opens on Today and the database is ready', async ({ page }) => {
-  await page.goto('/');
-  await expect(page).toHaveURL(/\/tabs\/today$/);
-  await expect(page.getByRole('status')).toHaveText(ready, {
-    timeout: 15_000,
-  });
+test('the first launch opens the questionnaire, skipping it leads to the catalog', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
 });
 
 test('the five tabs are reachable', async ({ page }) => {
-  await page.goto('/');
+  await skipOnboarding(page);
   for (const [label, path] of [
     ['Séance', 'session'],
     ['Catalogue', 'catalog'],
@@ -25,11 +22,10 @@ test('the five tabs are reachable', async ({ page }) => {
   }
 });
 
-test('the database survives a reload', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByRole('status')).toHaveText(/Base prête/, { timeout: 15_000 });
+test('the questionnaire is not shown again after a reload', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/tabs/today');
+  await expect(page.getByText(/Séance du jour/)).toBeVisible({ timeout: 20_000 });
   await page.reload();
-  await expect(page.getByRole('status')).toHaveText(ready, {
-    timeout: 15_000,
-  });
+  await expect(page.getByText(/Séance du jour/)).toBeVisible({ timeout: 20_000 });
 });

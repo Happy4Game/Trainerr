@@ -27,7 +27,7 @@ export interface Settings {
 /** Weekday evenings after work and weekend mornings, until the user sets them. */
 const DEFAULT_FREE_SLOTS: WeeklySlot[] = [
   ...[1, 2, 3, 4, 5].map((weekday) => ({ weekday, start: '18:00', end: '21:00' })),
-  ...[6, 7].map((weekday) => ({ weekday, start: '09:00', end: '12:00' })),
+  ...[6, 7].map((weekday) => ({ weekday, start: '08:00', end: '11:00' })),
 ];
 
 /** The "Passer" defaults of the questionnaire: hypertrophy, 4 sessions, 1 h. */

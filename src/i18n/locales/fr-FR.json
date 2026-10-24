@@ -7,17 +7,15 @@
     "planning": "Planning"
   },
   "today": {
-    "comingSoon": "La séance du jour s'affichera ici.",
-    "database": {
-      "title": "Base de données",
-      "loading": "Ouverture de la base…",
-      "ready": "Base prête (schéma version {version})",
-      "error": "Impossible d'ouvrir la base : {message}"
-    }
-  },
-  "placeholder": {
-    "history": "L'historique de tes séances arrive avec les séances.",
-    "planning": "Le planning de la semaine arrive à l'étape 5."
+    "inProgress": "Séance en cours : {template}",
+    "plannedAt": "Prévue aujourd'hui à {start}.",
+    "restDay": "Pas de séance prévue aujourd'hui : repos, ou une séance en plus si tu en as envie.",
+    "go": "Voir la séance",
+    "resume": "Reprendre la séance",
+    "week": "Cette semaine",
+    "weekCount": "{done} séance(s) sur {target} visées",
+    "streak": "{count} semaine au rythme | {count} semaines d'affilée au rythme",
+    "seePlanning": "Voir le planning"
   },
   "gym": {
     "defaultName": "Ma salle"
@@ -254,5 +252,113 @@
       "workload": "Charge de travail : {kg} kg",
       "close": "Fermer"
     }
+  },
+  "availability": {
+    "day": "Jour",
+    "periods": {
+      "morning": "Matin",
+      "noon": "Midi",
+      "evening": "Soir",
+      "late": "Tard"
+    }
+  },
+  "models": {
+    "fullBody": "Full body",
+    "upperLower": "Haut / Bas",
+    "ppl": "Push / Pull / Legs",
+    "pplul": "PPL + Haut / Bas",
+    "phul": "PHUL (force + volume)",
+    "arnold": "Arnold split",
+    "broSplit": "Un muscle par jour"
+  },
+  "sports": {
+    "none": "Non",
+    "cycling": "Vélo (dont livraison)",
+    "running": "Course à pied",
+    "football": "Football",
+    "swimming": "Natation",
+    "combat": "Sport de combat",
+    "other": "Autre"
+  },
+  "zones": {
+    "none": "Aucune",
+    "shoulders": "Épaules",
+    "knees": "Genoux",
+    "back": "Dos"
+  },
+  "onboarding": {
+    "title": "Bienvenue",
+    "skip": "Passer",
+    "next": "Suivant",
+    "back": "Retour",
+    "goal": {
+      "question": "Ton objectif ?",
+      "hypertrophy": "Prendre du muscle",
+      "maintenance": "Garder la forme",
+      "strength": "Gagner en force"
+    },
+    "sessions": {
+      "question": "Combien de séances par semaine ?",
+      "model": "Programme conseillé : {model}"
+    },
+    "level": {
+      "question": "Ton niveau ?",
+      "beginner": "Je débute",
+      "trained": "Je m'entraîne déjà",
+      "comeback": "Je reprends après une pause",
+      "pause": "Combien de temps de pause ?",
+      "comebackHint": "Tu pourras noter tes anciennes charges sur chaque fiche machine : l'appli partira d'une charge réduite."
+    },
+    "availability": {
+      "question": "Quand es-tu disponible ?",
+      "hint": "Coche les créneaux où tu peux aller à la salle."
+    },
+    "duration": {
+      "question": "Combien de temps dure une séance pour toi ?",
+      "30": "30 min",
+      "45": "45 min",
+      "60": "1 h",
+      "90": "1 h 30"
+    },
+    "sport": {
+      "question": "Tu pratiques un autre sport ?",
+      "when": "Quand ?"
+    },
+    "zone": {
+      "question": "Une zone à ménager ?"
+    },
+    "notifications": {
+      "question": "Des rappels ?",
+      "why": "Un rappel 1 h avant chaque séance prévue, et un petit mot si ça fait longtemps. Au maximum une notification par jour, jamais entre 22 h et 8 h.",
+      "privacy": "Tout reste sur ton téléphone : aucun serveur, aucune donnée envoyée.",
+      "accept": "Activer les rappels",
+      "later": "Plus tard"
+    },
+    "aiNote": "Appli conçue avec l'IA par un étudiant : plus d'infos dans « À propos ».",
+    "pauses": {
+      "underOneMonth": "Moins d'1 mois",
+      "oneToThreeMonths": "1 à 3 mois",
+      "overThreeMonths": "Plus de 3 mois"
+    }
+  },
+  "planning": {
+    "week": "Ta semaine",
+    "rest": "Repos",
+    "unplaced": "{count} séance n'a pas trouvé de créneau : ajoute des disponibilités. | {count} séances n'ont pas trouvé de créneau : ajoute des disponibilités.",
+    "availability": "Mes disponibilités",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "program": "Mon programme",
+    "model": "Modèle",
+    "sessionsPerWeek": "Séances par semaine",
+    "frequencyNote": "Avec ce réglage, chaque muscle n'est travaillé qu'une fois par semaine. Deux fois par semaine donne de meilleurs résultats à volume égal (Schoenfeld, 2016)."
+  },
+  "notifications": {
+    "reminder": "{template} à {time} aujourd'hui. Ta séance t'attend !",
+    "nudge": "Ça fait {days} jours. Une séance courte de 30 min, ça te dit ?"
+  },
+  "history": {
+    "empty": "Pas encore de séance terminée.",
+    "workload": "Charge de travail : {kg} kg"
   }
 }

@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 import TabsLayout from '@/ui/TabsLayout.vue';
+import { loadSettings } from '@/ui/useSettings';
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/tabs/today' },
+  { path: '/onboarding', component: () => import('@/views/OnboardingPage.vue') },
   {
     path: '/tabs/',
     component: TabsLayout,
@@ -13,16 +15,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'session', component: () => import('@/views/SessionPage.vue') },
       { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
       { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
-      {
-        path: 'history',
-        component: () => import('@/views/PlaceholderPage.vue'),
-        props: { titleKey: 'tabs.history', messageKey: 'placeholder.history' },
-      },
-      {
-        path: 'planning',
-        component: () => import('@/views/PlaceholderPage.vue'),
-        props: { titleKey: 'tabs.planning', messageKey: 'placeholder.planning' },
-      },
+      { path: 'history', component: () => import('@/views/HistoryPage.vue') },
+      { path: 'planning', component: () => import('@/views/PlanningPage.vue') },
     ],
   },
 ];
@@ -30,4 +24,15 @@ const routes: RouteRecordRaw[] = [
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+});
+
+// First launch: the questionnaire comes before anything else.
+router.beforeEach(async (to) => {
+  if (to.path === '/onboarding') return true;
+  try {
+    const settings = await loadSettings();
+    return settings.onboarded ? true : '/onboarding';
+  } catch {
+    return true;
+  }
 });

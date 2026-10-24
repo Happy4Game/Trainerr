@@ -69,14 +69,17 @@ const entryOf = (id: string): CatalogEntry | undefined => byId.value.get(id);
 const stepsOf = (entry: CatalogEntry) =>
   entry.loadSteps.length > 0 ? entry.loadSteps : defaultStepsFor(entry.exercise.equipment);
 
+const lastDoneTemplateId = computed(() => {
+  if (!settings.value) return undefined;
+  const rotation = rotationFor(settings.value.model);
+  return [...history.value].reverse().find((s) => rotation.some((t) => t.id === s.templateId))
+    ?.templateId;
+});
+
 /** Template of the next session: the rotation continues from the last session done. */
 const template = computed<SessionTemplate | undefined>(() => {
   if (!settings.value) return undefined;
-  const rotation = rotationFor(settings.value.model);
-  const last = [...history.value]
-    .reverse()
-    .find((s) => rotation.some((t) => t.id === s.templateId));
-  return nextTemplate(rotation, last?.templateId);
+  return nextTemplate(rotationFor(settings.value.model), lastDoneTemplateId.value);
 });
 
 /** Exercises proposed for the next session, from the favorite machines. */
@@ -329,6 +332,8 @@ export function useSession() {
     catalogState,
     settings,
     template,
+    lastDoneTemplateId,
+    history,
     preview,
     active,
     step,

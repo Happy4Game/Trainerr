@@ -19,7 +19,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "check:i18n": "node scripts/check-i18n.mjs",
-    "check": "npm run lint && npm run typecheck && npm run check:i18n && npm run test:coverage",
+    "check": "npm run lint && npm run typecheck && npm run check:i18n && npm run test:coverage && vite build",
     "copy:wasm": "node scripts/copy-sql-wasm.mjs",
     "postinstall": "node scripts/copy-sql-wasm.mjs",
     "prepare": "husky"
@@ -28,6 +28,7 @@
     "@capacitor-community/sqlite": "8.1.1",
     "@capacitor/android": "8.5.3",
     "@capacitor/core": "8.5.3",
+    "@capacitor/local-notifications": "8.3.1",
     "@ionic/vue": "9.0.7",
     "@ionic/vue-router": "9.0.7",
     "jeep-sqlite": "2.8.0",
