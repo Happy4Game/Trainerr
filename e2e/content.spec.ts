@@ -4,7 +4,7 @@ import { skipOnboarding } from './helpers';
 test('settings lead to the getting started, about and credits pages', async ({ page }) => {
   await skipOnboarding(page);
   await page.getByRole('tab', { name: "Aujourd'hui" }).click();
-  await page.getByRole('button', { name: 'Réglages' }).click();
+  await page.getByRole('link', { name: 'Réglages' }).click();
 
   await page.getByText('Bien débuter').click();
   await expect(page.getByText('La technique passe avant la charge')).toBeVisible();
@@ -15,7 +15,7 @@ test('settings lead to the getting started, about and credits pages', async ({ p
   await expect(
     page.getByText(/entièrement réalisée avec l'aide d'une intelligence artificielle/),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Voir les crédits et les sources' }).click();
+  await page.getByRole('link', { name: 'Voir les crédits et les sources' }).click();
 
   await expect(page.getByRole('link', { name: 'free-exercise-db' })).toBeVisible();
   await expect(page.getByText('Everkinetic')).toBeVisible();
