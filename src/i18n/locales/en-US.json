@@ -558,5 +558,17 @@
     "report": "Report a mistake or suggest an idea",
     "reportSoon": "The contact option is coming soon.",
     "credits": "See the credits and sources"
+  },
+  "data": {
+    "title": "My data",
+    "privacy": "Everything stays on your phone. Export a backup to switch phones.",
+    "export": "Export a backup (JSON)",
+    "exportCsv": "Export my sets (CSV)",
+    "import": "Import a backup",
+    "delete": "Delete all my data",
+    "confirmTitle": "Confirm deletion",
+    "confirm": "Workouts, sets, measurements, settings: everything will be erased from this phone. This cannot be undone. Export a backup first if you want to keep it.",
+    "confirmYes": "Yes, delete everything",
+    "cancel": "Cancel"
   }
 }

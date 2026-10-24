@@ -15,6 +15,7 @@ import {
   useIonRouter,
 } from '@ionic/vue';
 import { useI18n } from 'vue-i18n';
+import DataSection from '@/ui/DataSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
@@ -127,6 +128,7 @@ async function redoQuestionnaire(): Promise<void> {
             </p>
           </ion-label>
         </ion-item>
+        <DataSection />
       </ion-list>
     </ion-content>
   </ion-page>

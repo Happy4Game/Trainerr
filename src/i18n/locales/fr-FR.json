@@ -558,5 +558,17 @@
     "report": "Signaler une erreur ou proposer une idée",
     "reportSoon": "Le moyen de contact arrive bientôt.",
     "credits": "Voir les crédits et les sources"
+  },
+  "data": {
+    "title": "Mes données",
+    "privacy": "Tout reste sur ton téléphone. Exporte une sauvegarde pour changer de téléphone.",
+    "export": "Exporter une sauvegarde (JSON)",
+    "exportCsv": "Exporter mes séries (CSV)",
+    "import": "Importer une sauvegarde",
+    "delete": "Supprimer toutes mes données",
+    "confirmTitle": "Confirmer la suppression",
+    "confirm": "Séances, séries, mesures, réglages : tout sera effacé de ce téléphone. Ce n'est pas réversible. Exporte une sauvegarde avant si tu veux la garder.",
+    "confirmYes": "Oui, tout supprimer",
+    "cancel": "Annuler"
   }
 }
