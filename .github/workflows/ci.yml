@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Types
+        run: npm run typecheck
+      - name: Traductions
+        run: npm run check:i18n
+      - name: Tests et couverture
+        run: npm run test:coverage
+      - name: Build
+        run: npx vite build
+      - name: Tests de bout en bout
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e
+      - name: Résumé lisible
+        if: always()
+        run: |
+          {
+            echo "## Résultat des tests"
+            if [ -f coverage/coverage-summary.json ]; then
+              node -e "const s=require('./coverage/coverage-summary.json').total; console.log('Couverture des lignes : ' + s.lines.pct + ' %')"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

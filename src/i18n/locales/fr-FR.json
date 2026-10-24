@@ -1,0 +1,24 @@
+{
+  "tabs": {
+    "today": "Aujourd'hui",
+    "session": "Séance",
+    "catalog": "Catalogue",
+    "history": "Historique",
+    "planning": "Planning"
+  },
+  "today": {
+    "comingSoon": "La séance du jour s'affichera ici.",
+    "database": {
+      "title": "Base de données",
+      "loading": "Ouverture de la base…",
+      "ready": "Base prête (schéma version {version})",
+      "error": "Impossible d'ouvrir la base : {message}"
+    }
+  },
+  "placeholder": {
+    "session": "La séance en cours s'affichera ici (étape 4).",
+    "catalog": "Le catalogue des machines arrive à l'étape 3.",
+    "history": "L'historique de tes séances arrive avec les séances.",
+    "planning": "Le planning de la semaine arrive à l'étape 5."
+  }
+}

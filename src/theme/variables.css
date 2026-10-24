@@ -1,0 +1,9 @@
+/* Thème de l'appli. Le thème sombre suit le réglage du téléphone (palette dark.system d'Ionic). */
+:root {
+  --ion-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Zones tactiles d'au moins 48 px (recommandation Android, au-dessus des 44 pt d'Apple). */
+ion-tab-button {
+  min-height: 56px;
+}

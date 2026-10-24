@@ -1,0 +1,24 @@
+{
+  "tabs": {
+    "today": "Today",
+    "session": "Workout",
+    "catalog": "Catalog",
+    "history": "History",
+    "planning": "Planning"
+  },
+  "today": {
+    "comingSoon": "Today's workout will show up here.",
+    "database": {
+      "title": "Database",
+      "loading": "Opening the database…",
+      "ready": "Database ready (schema version {version})",
+      "error": "Could not open the database: {message}"
+    }
+  },
+  "placeholder": {
+    "session": "The current workout will show up here (step 4).",
+    "catalog": "The machine catalog arrives in step 3.",
+    "history": "Your workout history arrives with workouts.",
+    "planning": "The weekly planning arrives in step 5."
+  }
+}

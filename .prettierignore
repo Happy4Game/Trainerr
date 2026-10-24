@@ -1,0 +1,9 @@
+dist
+coverage
+android
+ios
+public/assets
+package-lock.json
+SPEC.md
+playwright-report
+test-results
