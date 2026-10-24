@@ -425,5 +425,138 @@
       "target": "Cible : environ {grams} g de protéines par jour ({weight} kg × 1,6 g).",
       "source": "Source : Morton et al. 2018, voir les Crédits."
     }
+  },
+  "settings": {
+    "title": "Réglages",
+    "content": "Infos",
+    "workout": "Séances",
+    "supersets": "Proposer des supersets",
+    "redo": "Refaire le questionnaire",
+    "notifications": "Notifications",
+    "notificationsAll": "Autoriser les notifications",
+    "kinds": {
+      "sessionReminder": "Rappel avant une séance",
+      "nudge": "Relance douce",
+      "record": "Record battu",
+      "streak": "Régularité",
+      "backToLevel": "Retour au niveau",
+      "tip": "Conseil de la semaine"
+    },
+    "quietHours": "Jamais de notification entre {start} et {end}, ni pendant tes créneaux bloqués."
+  },
+  "tips": {
+    "title": "Bien débuter",
+    "source": "Source :",
+    "disclaimer": "Ces fiches ne remplacent pas l'avis d'un coach, d'un médecin ou d'un kiné.",
+    "status": {
+      "toSource": "Source à ajouter avant la publication de l'appli.",
+      "coachReview": "Expérience de terrain, à relire par un coach.",
+      "internal": "Règle du moteur de progression de l'appli."
+    },
+    "themes": {
+      "technique": "Technique",
+      "effort": "Effort",
+      "progression": "Progression",
+      "programme": "Programme",
+      "nutrition": "Nutrition",
+      "recovery": "Récupération",
+      "health": "Santé",
+      "motivation": "Motivation",
+      "etiquette": "Savoir-vivre"
+    },
+    "items": {
+      "completeReps": {
+        "title": "La technique passe avant la charge",
+        "body": "Une rep incomplète (amplitude non atteinte) ne compte pas. Mieux vaut baisser d'un palier et faire le mouvement en entier."
+      },
+      "warmup": {
+        "title": "S'échauffer",
+        "body": "Une série légère de 12 à 15 reps sur le premier exercice suffit à préparer muscles et articulations. L'appli te la propose."
+      },
+      "benchElbows": {
+        "title": "Développé couché : coudes et omoplates",
+        "body": "Coudes à environ 45° du corps plutôt qu'à l'horizontale, omoplates serrées et basses pendant tout le mouvement."
+      },
+      "repsInReserve": {
+        "title": "Garder 1 à 2 reps en réserve",
+        "body": "Finir ses séries en sentant qu'on pourrait encore faire 1 ou 2 reps, sans aller à l'échec à chaque fois."
+      },
+      "progression": {
+        "title": "Quand monter la charge",
+        "body": "Quand tu atteins le haut de la fourchette de reps sur toutes tes séries, la charge monte d'un palier à la séance suivante."
+      },
+      "frequency": {
+        "title": "Deux fois par semaine, 10 à 20 séries",
+        "body": "Travailler chaque muscle 2 fois par semaine, avec 10 à 20 séries par muscle et par semaine, donne de bons résultats pour prendre du muscle."
+      },
+      "machines": {
+        "title": "Machines ou poids libres",
+        "body": "Les deux font autant grossir le muscle : choisis ce que tu préfères et ce qui est libre à la salle."
+      },
+      "protein": {
+        "title": "Les protéines",
+        "body": "Viser environ 1,6 g de protéines par kg de poids de corps et par jour : au-delà, le gain devient faible."
+      },
+      "collagen": {
+        "title": "Le collagène",
+        "body": "Le collagène ne remplace pas les protéines classiques (viande, poisson, œufs, laitages, légumineuses) pour construire du muscle."
+      },
+      "soreness": {
+        "title": "Courbature ou douleur ?",
+        "body": "Une courbature est diffuse et passe en 2 à 3 jours. Une douleur vive, dans une articulation ou au repos n'est pas normale : arrête et demande conseil."
+      },
+      "sleep": {
+        "title": "Le repos fait partie du programme",
+        "body": "Le sommeil et au moins un jour de repos complet par semaine aident les muscles à récupérer et à progresser."
+      },
+      "kneeCracking": {
+        "title": "Des genoux qui craquent",
+        "body": "Des genoux qui craquent sans douleur, c'est fréquent et en général sans gravité. Si ça fait mal ou que ça gonfle, consulte."
+      },
+      "photo": {
+        "title": "Une photo par mois",
+        "body": "Même lumière, même angle, une fois par mois : c'est plus parlant que le miroir de tous les jours."
+      },
+      "etiquette": {
+        "title": "Le savoir-vivre à la salle",
+        "body": "Essuie la machine, range les poids, et partage la machine entre tes séries si quelqu'un attend."
+      }
+    }
+  },
+  "credits": {
+    "title": "Crédits",
+    "data": {
+      "title": "Données et images",
+      "freeExerciseDb": "catalogue d'exercices, domaine public (Unlicense).",
+      "wger": "illustrations des mouvements, non modifiées :",
+      "and": "et",
+      "muscleMap": "silhouettes musculaires, licence MIT.",
+      "lucide": "icônes, licence ISC."
+    },
+    "sources": {
+      "title": "Sources scientifiques",
+      "themes": {
+        "programme": "Programme et volume",
+        "nutrition": "Nutrition",
+        "technique": "Technique",
+        "health": "Santé",
+        "models": "Modèles d'entraînement"
+      }
+    },
+    "libraries": {
+      "title": "Bibliothèques",
+      "help": "{count} bibliothèques libres embarquées dans l'appli, avec le texte de leur licence.",
+      "standard": "Texte standard de la licence :"
+    }
+  },
+  "about": {
+    "title": "À propos",
+    "p1": "Cette application a été entièrement réalisée avec l'aide d'une intelligence artificielle, et guidée par moi, Thibaut, étudiant développeur qui essaie d'apprendre du mieux qu'il peut.",
+    "p2": "Je ne suis ni coach ni professionnel de santé, et je ne suis pas parfait : il peut rester des erreurs. Les conseils de l'appli s'appuient sur des études citées dans les Crédits, mais ils ne remplacent pas l'avis d'un coach, d'un médecin ou d'un kiné.",
+    "p3": "À la base, je ne suis pas fan de l'IA. Mais ici, c'est pour la bonne cause, et je trouve que ça marche bien.",
+    "p4": "Toute aide est bonne à prendre : une erreur repérée, une idée, un conseil, n'hésite pas à me le dire.",
+    "report": "Signaler une erreur ou proposer une idée",
+    "reportSoon": "Le moyen de contact arrive bientôt.",
+    "credits": "Voir les crédits et les sources"
   }
 }

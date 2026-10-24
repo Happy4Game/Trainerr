@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "node scripts/generate-licenses.mjs && vue-tsc --noEmit && vite build",
     "preview": "vite preview --host",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . && prettier --check .",

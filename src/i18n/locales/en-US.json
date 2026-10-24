@@ -425,5 +425,138 @@
       "target": "Target: about {grams} g of protein a day ({weight} kg × 1.6 g).",
       "source": "Source: Morton et al. 2018, see the Credits."
     }
+  },
+  "settings": {
+    "title": "Settings",
+    "content": "About the app",
+    "workout": "Workouts",
+    "supersets": "Suggest supersets",
+    "redo": "Answer the questionnaire again",
+    "notifications": "Notifications",
+    "notificationsAll": "Allow notifications",
+    "kinds": {
+      "sessionReminder": "Reminder before a workout",
+      "nudge": "Gentle nudge",
+      "record": "Record beaten",
+      "streak": "Consistency",
+      "backToLevel": "Back to level",
+      "tip": "Tip of the week"
+    },
+    "quietHours": "Never a notification between {start} and {end}, nor during your blocked slots."
+  },
+  "tips": {
+    "title": "Getting started",
+    "source": "Source:",
+    "disclaimer": "These cards do not replace the advice of a coach, a doctor or a physiotherapist.",
+    "status": {
+      "toSource": "Source to be added before the app is released.",
+      "coachReview": "Field experience, to be proofread by a coach.",
+      "internal": "Rule of the app's progression engine."
+    },
+    "themes": {
+      "technique": "Technique",
+      "effort": "Effort",
+      "progression": "Progression",
+      "programme": "Program",
+      "nutrition": "Nutrition",
+      "recovery": "Recovery",
+      "health": "Health",
+      "motivation": "Motivation",
+      "etiquette": "Gym etiquette"
+    },
+    "items": {
+      "completeReps": {
+        "title": "Technique before load",
+        "body": "An incomplete rep (range of motion not reached) does not count. Better go down one step and do the full movement."
+      },
+      "warmup": {
+        "title": "Warm up",
+        "body": "One light set of 12 to 15 reps on the first exercise is enough to prepare muscles and joints. The app suggests it."
+      },
+      "benchElbows": {
+        "title": "Bench press: elbows and shoulder blades",
+        "body": "Elbows at about 45° from the body rather than flared, shoulder blades squeezed and down during the whole movement."
+      },
+      "repsInReserve": {
+        "title": "Keep 1 to 2 reps in reserve",
+        "body": "End your sets feeling you could still do 1 or 2 reps, without going to failure every time."
+      },
+      "progression": {
+        "title": "When to add weight",
+        "body": "When you reach the top of the rep range on all your sets, the load goes up one step at the next workout."
+      },
+      "frequency": {
+        "title": "Twice a week, 10 to 20 sets",
+        "body": "Training each muscle twice a week, with 10 to 20 sets per muscle per week, works well to build muscle."
+      },
+      "machines": {
+        "title": "Machines or free weights",
+        "body": "Both build muscle equally: pick what you like and what is free at the gym."
+      },
+      "protein": {
+        "title": "Protein",
+        "body": "Aim for about 1.6 g of protein per kg of body weight per day: beyond that, the extra gain is small."
+      },
+      "collagen": {
+        "title": "Collagen",
+        "body": "Collagen does not replace regular protein (meat, fish, eggs, dairy, legumes) to build muscle."
+      },
+      "soreness": {
+        "title": "Soreness or pain?",
+        "body": "Soreness is diffuse and goes away in 2 to 3 days. Sharp pain, joint pain or pain at rest is not normal: stop and ask for advice."
+      },
+      "sleep": {
+        "title": "Rest is part of the program",
+        "body": "Sleep and at least one full rest day a week help muscles recover and grow."
+      },
+      "kneeCracking": {
+        "title": "Cracking knees",
+        "body": "Knees that crack without pain are common and usually harmless. If it hurts or swells, see a professional."
+      },
+      "photo": {
+        "title": "One photo a month",
+        "body": "Same light, same angle, once a month: it tells more than the daily mirror."
+      },
+      "etiquette": {
+        "title": "Gym etiquette",
+        "body": "Wipe the machine, put the weights back, and share the machine between sets if someone is waiting."
+      }
+    }
+  },
+  "credits": {
+    "title": "Credits",
+    "data": {
+      "title": "Data and images",
+      "freeExerciseDb": "exercise catalog, public domain (Unlicense).",
+      "wger": "movement illustrations, unmodified:",
+      "and": "and",
+      "muscleMap": "muscle silhouettes, MIT license.",
+      "lucide": "icons, ISC license."
+    },
+    "sources": {
+      "title": "Scientific sources",
+      "themes": {
+        "programme": "Program and volume",
+        "nutrition": "Nutrition",
+        "technique": "Technique",
+        "health": "Health",
+        "models": "Training models"
+      }
+    },
+    "libraries": {
+      "title": "Libraries",
+      "help": "{count} open-source libraries shipped in the app, with their license text.",
+      "standard": "Standard license text:"
+    }
+  },
+  "about": {
+    "title": "About",
+    "p1": "This app was built entirely with the help of an artificial intelligence, and guided by me, Thibaut, a student developer trying to learn as best he can.",
+    "p2": "I am neither a coach nor a health professional, and I am not perfect: there may be mistakes left. The app's advice relies on studies cited in the Credits, but it does not replace the advice of a coach, a doctor or a physiotherapist.",
+    "p3": "I was not a fan of AI to begin with. But here it is for a good cause, and I find it works well.",
+    "p4": "Any help is welcome: a mistake spotted, an idea, a tip, feel free to tell me.",
+    "report": "Report a mistake or suggest an idea",
+    "reportSoon": "The contact option is coming soon.",
+    "credits": "See the credits and sources"
   }
 }

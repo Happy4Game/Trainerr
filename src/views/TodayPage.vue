@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -11,6 +12,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
+import { Settings } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { weeksOnPace } from '@/domain/stats';
@@ -41,6 +43,11 @@ const streak = computed(() =>
     <ion-header>
       <ion-toolbar>
         <ion-title>{{ t('tabs.today') }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button router-link="/tabs/settings" :aria-label="t('settings.title')">
+            <Settings :size="24" aria-hidden="true" />
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
