@@ -208,7 +208,8 @@
       "noHeavierStep": "You are at the heaviest step of the machine.",
       "progression": "Based on your last sessions.",
       "comeback": "Coming back after a break: reduced load to restart safely.",
-      "testSet": "First time: light test set to find your load."
+      "testSet": "First time: light test set to find your load.",
+      "usual": "Based on the load noted on the machine card."
     },
     "reminder": {
       "rangeOfMotion": "Full range of motion: an incomplete rep does not count.",
@@ -308,7 +309,8 @@
         "lighter": "Go lighter: {load} × {reps}",
         "first": "Start at {load} × {reps}",
         "comeback": "Easy comeback: {load} × {reps}"
-      }
+      },
+      "usual": "Your usual load: {set}"
     },
     "steps": {
       "do": "Do your set",
@@ -438,14 +440,21 @@
     "edit": "Edit {session}"
   },
   "comeback": {
-    "title": "Before my break",
-    "help": "Enter your best set before the break: the app restarts from a reduced load, then goes up as soon as sets are easy.",
     "load": "Load ({unit})",
     "reps": "Reps",
     "save": "Save",
     "start": "Suggested starting load: {load}",
     "gauge": "Back to your old level: {current} / {reference} = {percent} %",
-    "reached": "You are back to your old level!"
+    "reached": "You are back to your old level!",
+    "comeback": {
+      "title": "Before my break",
+      "help": "Note your best set from before the break: the app will start from a reduced load, then go up as soon as sets are easy."
+    },
+    "usual": {
+      "title": "My load on this machine",
+      "help": "Note the load and reps you usually do: your first session will start from there instead of a test set. Then the app follows your sessions."
+    },
+    "saved": "Load saved."
   },
   "stats": {
     "strength": {

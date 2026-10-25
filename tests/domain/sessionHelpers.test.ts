@@ -52,6 +52,36 @@ describe('starting load of an exercise', () => {
     ).toEqual({ loadKg: 16, targetReps: 10, kind: 'comeback' });
   });
 
+  it('starts from the usual load noted on the card, on a real step', () => {
+    expect(
+      startingProposal({
+        history: [],
+        range,
+        steps: dumbbellSteps,
+        usual: { loadKg: 21, reps: 9 },
+      }),
+    ).toEqual({ loadKg: 20, targetReps: 9, kind: 'usual' });
+  });
+
+  it('keeps the reps target inside the range from the usual load', () => {
+    expect(
+      startingProposal({
+        history: [],
+        range,
+        steps: dumbbellSteps,
+        usual: { loadKg: 20, reps: 15 },
+      }).targetReps,
+    ).toBe(10);
+  });
+
+  it('prefers the sessions done to the usual load', () => {
+    const history = [[{ exerciseId: 'x', loadKg: 16, reps: 10, difficulty: 'ok' as const }]];
+    expect(
+      startingProposal({ history, range, steps: dumbbellSteps, usual: { loadKg: 30, reps: 8 } })
+        .kind,
+    ).toBe('progression');
+  });
+
   it('starts with a light test set the first time', () => {
     expect(startingProposal({ history: [], range, steps: dumbbellSteps })).toEqual({
       loadKg: 2,

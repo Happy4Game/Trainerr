@@ -181,6 +181,9 @@ function proposalFor(exerciseId: string): Proposal | undefined {
     ...(comeback && reference
       ? { comeback: { referenceKg: reference.loadKg, pause: comeback.pause } }
       : {}),
+    ...(!comeback && reference
+      ? { usual: { loadKg: reference.loadKg, reps: reference.reps } }
+      : {}),
   });
   return { loadKg: start.loadKg, targetReps: start.targetReps, reason: start.kind, reminders: [] };
 }

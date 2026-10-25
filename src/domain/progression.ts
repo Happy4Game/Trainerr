@@ -182,8 +182,14 @@ export function startingProposal(input: {
   range: RepRange;
   steps: LoadSteps;
   comeback?: { referenceKg: number; pause: PauseLength };
-}): { loadKg: number; targetReps: number; kind: 'progression' | 'comeback' | 'testSet' } {
-  const { history, range, steps, comeback } = input;
+  /** Usual load noted on the machine card: the start when nothing is logged yet. */
+  usual?: { loadKg: number; reps: number };
+}): {
+  loadKg: number;
+  targetReps: number;
+  kind: 'progression' | 'comeback' | 'usual' | 'testSet';
+} {
+  const { history, range, steps, comeback, usual } = input;
   const fromHistory = nextSessionProposal({ history, range, steps });
   if (fromHistory) {
     return { loadKg: fromHistory.loadKg, targetReps: fromHistory.targetReps, kind: 'progression' };
@@ -193,6 +199,13 @@ export function startingProposal(input: {
       loadKg: comebackStartLoad({ ...comeback, steps }),
       targetReps: range.max,
       kind: 'comeback',
+    };
+  }
+  if (usual) {
+    return {
+      loadKg: floorStep(steps, usual.loadKg),
+      targetReps: Math.min(range.max, Math.max(range.min, usual.reps)),
+      kind: 'usual',
     };
   }
   const test = firstTimeProposal({ range, steps });

@@ -76,6 +76,9 @@ function changeReps(delta: number): void {
 
 // Last session with this exercise, and the advice for this set compared with the previous one.
 const lastTime = computed(() => session.lastTimeSets(props.exerciseId));
+const usual = computed(() =>
+  session.references.value.find((r) => r.exerciseId === props.exerciseId),
+);
 const lastTimeText = computed(() =>
   lastTime.value.map((set) => `${kg(set.loadKg)} × ${n(set.reps)}`).join(', '),
 );
@@ -158,6 +161,9 @@ function listen(): void {
     <div class="coach" :class="advice" role="note">
       <p v-if="lastTime.length > 0" class="before">
         {{ t('session.coach.lastTime', { sets: lastTimeText }) }}
+      </p>
+      <p v-else-if="usual" class="before">
+        {{ t('session.coach.usual', { set: `${kg(usual.loadKg)} × ${n(usual.reps)}` }) }}
       </p>
       <p v-else class="before">{{ t('session.coach.noHistory') }}</p>
       <p class="advice">

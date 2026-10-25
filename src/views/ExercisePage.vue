@@ -286,9 +286,8 @@ const muscleList = (muscles: readonly MuscleId[]) =>
         <ExerciseProgress :exercise-id="exercise.id" :name="title" :steps="stepsForComeback" />
 
         <ComebackCard
-          v-if="settings?.comeback"
           :exercise-id="exercise.id"
-          :pause="settings.comeback.pause"
+          :pause="settings?.comeback?.pause"
           :steps="stepsForComeback"
         />
 

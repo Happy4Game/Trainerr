@@ -208,7 +208,8 @@
       "noHeavierStep": "Tu es au palier le plus lourd de la machine.",
       "progression": "D'après tes dernières séances.",
       "comeback": "Reprise après une pause : charge réduite pour repartir sans te blesser.",
-      "testSet": "Première fois : série test légère pour trouver ta charge."
+      "testSet": "Première fois : série test légère pour trouver ta charge.",
+      "usual": "D'après la charge notée sur la fiche de la machine."
     },
     "reminder": {
       "rangeOfMotion": "Amplitude complète : une rep incomplète ne compte pas.",
@@ -308,7 +309,8 @@
         "lighter": "Allège : {load} × {reps}",
         "first": "Commence à {load} × {reps}",
         "comeback": "Reprise en douceur : {load} × {reps}"
-      }
+      },
+      "usual": "Ta charge habituelle : {set}"
     },
     "steps": {
       "do": "Fais ta série",
@@ -438,14 +440,21 @@
     "edit": "Modifier {session}"
   },
   "comeback": {
-    "title": "Avant ma pause",
-    "help": "Note ta meilleure série d'avant la pause : l'appli repartira d'une charge réduite, puis remontera dès que les séries sont faciles.",
     "load": "Charge ({unit})",
     "reps": "Reps",
     "save": "Enregistrer",
     "start": "Charge de départ proposée : {load}",
     "gauge": "Retour à l'ancien niveau : {current} / {reference} = {percent} %",
-    "reached": "Tu as retrouvé ton niveau d'avant !"
+    "reached": "Tu as retrouvé ton niveau d'avant !",
+    "comeback": {
+      "title": "Avant ma pause",
+      "help": "Note ta meilleure série d'avant la pause : l'appli repartira d'une charge réduite, puis remontera dès que les séries sont faciles."
+    },
+    "usual": {
+      "title": "Ma charge sur cette machine",
+      "help": "Note la charge et les reps que tu fais d'habitude : ta première séance partira de là au lieu d'une série test. Ensuite, l'appli suit tes séances."
+    },
+    "saved": "Charge enregistrée."
   },
   "stats": {
     "strength": {

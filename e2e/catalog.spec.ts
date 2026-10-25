@@ -116,3 +116,21 @@ test('instructions are machine-translated, with the original text on demand', as
   await page.getByRole('button', { name: 'Voir la traduction' }).click();
   await expect(page.getByText(/Monte les haltères en tournant les paumes/)).toBeVisible();
 });
+
+test('the usual load noted on the card is the start of the first session', async ({ page }) => {
+  await openCatalog(page);
+  await search(page, 'pec deck');
+  await page.getByRole('button', { name: 'Ajouter Écarté à la machine à mes machines' }).click();
+  await page.getByRole('heading', { name: 'Écarté à la machine' }).click();
+
+  await expect(page.getByText('Ma charge sur cette machine')).toBeVisible();
+  await page.getByRole('textbox', { name: 'Charge (kg)', disabled: false }).fill('40');
+  await page.getByRole('textbox', { name: 'Reps', disabled: false }).fill('12');
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+  await expect(page.getByText('Charge enregistrée.')).toBeVisible();
+
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Commencer la séance' }).click();
+  await expect(page.getByText('Ta charge habituelle : 40 kg × 12')).toBeVisible();
+  await expect(page.getByTestId('load')).toHaveText(/40\s*kg/);
+});

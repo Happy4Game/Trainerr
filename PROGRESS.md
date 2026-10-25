@@ -87,6 +87,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Écran de série simplifié : « La dernière fois : … », conseil en clair (monte la charge, vise une rep de plus, garde, allège) avec sa raison, puis deux étapes numérotées (① ta série, déjà remplie ; ② ton ressenti, qui enregistre). Les options rares sont rangées dans « Préciser la série ».
 
+- Fiche machine : « Ma charge sur cette machine » est visible sur toutes les fiches (elle n'apparaissait qu'en mode reprise). La première séance part de cette charge au lieu d'une série test ; en mode reprise, elle devient « Avant ma pause ».
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.
