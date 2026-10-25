@@ -24,6 +24,7 @@ import type { MuscleId } from '@/domain/muscles';
 import { repRangeFor } from '@/domain/progression';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import ExerciseIllustration from '@/ui/ExerciseIllustration.vue';
+import { useSession } from '@/ui/session/useSession';
 import ComebackCard from '@/ui/ComebackCard.vue';
 import ExerciseProgress from '@/ui/ExerciseProgress.vue';
 import { readPhoto } from '@/ui/photo';
@@ -33,7 +34,7 @@ import { defaultStepsFor } from '@/domain/loadSteps';
 import MuscleMap from '@/ui/muscleMap/MuscleMap.vue';
 import { useCatalog } from '@/ui/useCatalog';
 
-const props = defineProps<{ id: string }>();
+const props = defineProps<{ id: string; fromSession?: boolean }>();
 
 const { t, locale } = useI18n();
 const {
@@ -49,6 +50,8 @@ async function onPhoto(event: Event): Promise<void> {
   if (file) await savePlatePhoto(props.id, await readPhoto(file));
 }
 const entry = entryOf(props.id);
+const { active: activeSession } = useSession();
+const sessionInProgress = computed(() => activeSession.value !== undefined);
 const exercise = computed(() => entry.value?.exercise);
 
 const french = computed(() => locale.value.startsWith('fr'));
@@ -91,9 +94,24 @@ const muscleList = (muscles: readonly MuscleId[]) =>
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/tabs/catalog" :text="t('common.back')" />
+          <ion-back-button
+            :default-href="fromSession ? '/tabs/session' : '/tabs/catalog'"
+            :text="fromSession ? t('exercise.session') : t('common.back')"
+          />
         </ion-buttons>
         <ion-title>{{ title }}</ion-title>
+      </ion-toolbar>
+      <!-- During a session, the way back is always one tap away. -->
+      <ion-toolbar v-if="sessionInProgress" color="primary" class="session-bar">
+        <ion-button
+          expand="block"
+          fill="clear"
+          color="light"
+          router-link="/tabs/session"
+          router-direction="back"
+        >
+          {{ t('exercise.backToSession') }}
+        </ion-button>
       </ion-toolbar>
     </ion-header>
 

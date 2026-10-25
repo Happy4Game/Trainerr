@@ -75,6 +75,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - **Pré-séance** : avec trop peu de machines en favori, l'écran Séance propose une séance complétée avec des machines populaires (dessinées d'abord), à lancer telle quelle ou à ajouter à mes machines en un geste.
 
+- Pendant la séance, la machine du moment montre son dessin ; un geste ouvre sa fiche dans l'onglet Séance, et « Revenir à la séance » ramène à la série en cours (bandeau visible sur toutes les fiches tant qu'une séance est en cours).
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

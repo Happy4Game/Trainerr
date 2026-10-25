@@ -78,6 +78,8 @@ const nameOf = (id: string) => {
   return locale.value.startsWith('fr') ? entry.exercise.name : entry.exercise.nameEn;
 };
 const exerciseName = (e: Exercise) => nameOf(e.id);
+/** Card of a machine; a banner there leads back to the session. */
+const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
 
 /** Ends the session, then updates the challenges in the background: offline is fine. */
@@ -170,7 +172,7 @@ async function logWarmup(): Promise<void> {
             <template v-if="preview.length > 0">
               <ol class="plan">
                 <li v-for="e in preview" :key="e.id">
-                  {{ exerciseName(e) }}
+                  <router-link :to="cardLink(e.id)">{{ exerciseName(e) }}</router-link>
                   <span class="muted"> · {{ kg(session.proposalFor(e.id)?.loadKg ?? 0) }}</span>
                 </li>
               </ol>
@@ -204,10 +206,12 @@ async function logWarmup(): Promise<void> {
               </p>
               <ol class="plan">
                 <li v-for="e in readyMade.exercises" :key="e.id">
-                  {{ exerciseName(e) }}
-                  <span v-if="readyMade.suggestedIds.includes(e.id)" class="tag">{{
-                    t('session.readyMade.suggested')
-                  }}</span>
+                  <router-link :to="cardLink(e.id)">{{ exerciseName(e) }}</router-link>
+                  <span
+                    v-if="preview.length > 0 && readyMade.suggestedIds.includes(e.id)"
+                    class="tag"
+                    >{{ t('session.readyMade.suggested') }}</span
+                  >
                   <span class="muted"> · {{ kg(session.proposalFor(e.id)?.loadKg ?? 0) }}</span>
                 </li>
               </ol>
@@ -278,6 +282,10 @@ async function logWarmup(): Promise<void> {
                     <template v-if="alternative.loadKg !== undefined">
                       · {{ kg(alternative.loadKg) }}
                     </template>
+                    ·
+                    <router-link :to="cardLink(alternative.exercise.id)" @click.stop>{{
+                      t('session.seeMovement')
+                    }}</router-link>
                   </p>
                 </ion-label>
               </ion-item>

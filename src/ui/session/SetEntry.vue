@@ -7,6 +7,7 @@ import { stepDown, stepUp } from '@/domain/loadSteps';
 import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { useSession } from './useSession';
+import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
 import { useUnits } from '@/ui/useUnits';
 
@@ -18,6 +19,11 @@ const session = useSession();
 
 const entry = computed(() => session.entryOf(props.exerciseId));
 const proposal = computed(() => session.proposalFor(props.exerciseId));
+const cardLink = computed(() => `/tabs/session/exercise/${encodeURIComponent(props.exerciseId)}`);
+const thumbnail = computed(() => {
+  const image = illustrationFor(props.exerciseId)?.images[0];
+  return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
+});
 const steps = computed(() => (entry.value ? session.stepsOf(entry.value) : []));
 const done = computed(() => session.workSetsInSession(props.exerciseId).length);
 const target = computed(() => session.plannedSets(props.exerciseId));
@@ -103,7 +109,13 @@ function listen(): void {
 
 <template>
   <section v-if="entry && proposal" class="entry" :aria-label="name">
-    <h2>{{ name }}</h2>
+    <router-link :to="cardLink" class="header" :aria-label="t('session.seeCard', { name })">
+      <img v-if="thumbnail" :src="thumbnail" alt="" class="thumb" />
+      <span class="title">
+        <h2>{{ name }}</h2>
+        <span class="hint">{{ t('session.seeMovement') }} ›</span>
+      </span>
+    </router-link>
     <p class="meta">
       {{ t('session.setNumber', { current: Math.min(done + 1, target), total: target }) }}
       · {{ t(`session.reason.${proposal.reason}`) }}
@@ -204,6 +216,30 @@ function listen(): void {
 </template>
 
 <style scoped>
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  color: inherit;
+  text-decoration: none;
+}
+.header h2 {
+  margin: 0;
+}
+.thumb {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 8px;
+  /* Black-on-white drawing: white card in the dark theme too. */
+  background: #fff;
+}
+.hint {
+  font-size: 0.85rem;
+  color: var(--ion-color-primary);
+}
 h2 {
   margin-block: 0 4px;
   font-size: 1.4rem;

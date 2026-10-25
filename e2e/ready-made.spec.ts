@@ -37,3 +37,24 @@ test('one favorite: the pre-session keeps it, and the suggestions can be added t
   await expect(readyMade).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Commencer la séance' })).toBeVisible();
 });
+
+test('during a session, the machine card opens and leads back to the session', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: 'Passer', exact: true }).click();
+  await expect(page.getByText('Série 2 / 3')).toBeVisible();
+  const current = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
+
+  await page.getByRole('link', { name: `Voir la fiche de ${current}` }).click();
+  // The card opens in the Session tab.
+  await expect(page.getByRole('tab', { name: 'Séance', selected: true })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: current })).toBeVisible();
+  await expect(page.getByRole('img', { name: /Illustration du mouvement/ })).toBeVisible();
+
+  await page.getByRole('link', { name: '← Revenir à la séance' }).click();
+  await expect(page.getByRole('region', { name: current })).toBeVisible();
+  await expect(page.getByText('Série 2 / 3')).toBeVisible();
+});

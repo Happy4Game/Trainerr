@@ -140,7 +140,9 @@
       "play": "Reprendre l'animation",
       "caption": "Illustration : {exercise} —",
       "source": "source"
-    }
+    },
+    "backToSession": "← Revenir à la séance",
+    "session": "Séance"
   },
   "templates": {
     "fullBodyA": "Full body A",
@@ -278,7 +280,9 @@
       "suggested": "proposée",
       "start": "Faire cette pré-séance",
       "adopt": "Ajouter la machine proposée à mes machines | Ajouter les {count} machines proposées à mes machines"
-    }
+    },
+    "seeCard": "Voir la fiche de {name}",
+    "seeMovement": "Voir le mouvement"
   },
   "availability": {
     "day": "Jour",

@@ -140,7 +140,9 @@
       "play": "Play the animation",
       "caption": "Illustration: {exercise} —",
       "source": "source"
-    }
+    },
+    "backToSession": "← Back to the session",
+    "session": "Session"
   },
   "templates": {
     "fullBodyA": "Full body A",
@@ -278,7 +280,9 @@
       "suggested": "suggested",
       "start": "Do this pre-session",
       "adopt": "Add the suggested machine to my machines | Add the {count} suggested machines to my machines"
-    }
+    },
+    "seeCard": "See the card of {name}",
+    "seeMovement": "See the movement"
   },
   "availability": {
     "day": "Day",
