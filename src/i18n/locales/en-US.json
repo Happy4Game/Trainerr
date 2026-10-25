@@ -275,13 +275,15 @@
     },
     "summary": {
       "title": "Workout finished",
-      "sets": "{count} set | {count} sets",
-      "workload": "Workload: {load}",
       "close": "Close",
       "record": "New record: {name}, {load} × {reps}.",
       "backToLevel": "You are back to your old level: {name}!",
       "streak": "{count} week on pace. Keep going! | {count} weeks in a row on pace. Keep going!",
-      "badge": "Badge earned: {badge}"
+      "badge": "Badge earned: {badge}",
+      "bravo": "Well done!",
+      "setsLabel": "set | sets",
+      "workloadLabel": "lifted in total",
+      "recordsLabel": "record | records"
     },
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",

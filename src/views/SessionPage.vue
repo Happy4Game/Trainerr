@@ -612,39 +612,60 @@ async function logWarmup(): Promise<void> {
       </template>
 
       <!-- Récap -->
-      <ion-card v-else-if="phase === 'finished' && summary">
-        <ion-card-header>
-          <ion-card-title>{{ t('session.summary.title') }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>{{ t('session.summary.sets', summary.sets) }}</p>
-          <p v-for="record in summary.records" :key="record.exerciseId" class="highlight">
-            {{
-              t('session.summary.record', {
-                name: nameOf(record.exerciseId),
-                load: kg(record.loadKg),
-                reps: n(record.reps),
-              })
-            }}
-          </p>
-          <p v-for="id in summary.backToLevel" :key="`b${id}`" class="highlight">
-            {{ t('session.summary.backToLevel', { name: nameOf(id) }) }}
-          </p>
-          <p v-if="summary.weeksOnPace >= 2">
-            {{ t('session.summary.streak', summary.weeksOnPace) }}
-          </p>
-          <p v-for="badge in summary.badges" :key="badge" class="highlight">
-            {{ t('session.summary.badge', { badge: t(`badges.${badge}`) }) }}
-          </p>
-          <p>{{ t('session.summary.workload', { load: kg(Math.round(summary.workloadKg)) }) }}</p>
-          <p v-if="summary.carryOver.length > 0">
-            {{ t('session.carryOver', { names: summary.carryOver.map(nameOf).join(', ') }) }}
-          </p>
-          <ion-button expand="block" @click="session.closeSummary()">{{
-            t('session.summary.close')
-          }}</ion-button>
-        </ion-card-content>
-      </ion-card>
+      <section
+        v-else-if="phase === 'finished' && summary"
+        class="summary"
+        :aria-label="t('session.summary.title')"
+      >
+        <div class="summary-hero">
+          <span class="check" aria-hidden="true">✓</span>
+          <h2>{{ t('session.summary.bravo') }}</h2>
+          <p>{{ t('session.summary.title') }}</p>
+        </div>
+        <div class="tiles">
+          <div
+            class="tile"
+            role="group"
+            :aria-label="`${n(summary.sets)} ${t('session.summary.setsLabel', summary.sets)}`"
+          >
+            <strong>{{ n(summary.sets) }}</strong>
+            <span>{{ t('session.summary.setsLabel', summary.sets) }}</span>
+          </div>
+          <div class="tile">
+            <strong>{{ kg(Math.round(summary.workloadKg)) }}</strong>
+            <span>{{ t('session.summary.workloadLabel') }}</span>
+          </div>
+          <div class="tile">
+            <strong>{{ n(summary.records.length) }}</strong>
+            <span>{{ t('session.summary.recordsLabel', summary.records.length) }}</span>
+          </div>
+        </div>
+        <p v-for="record in summary.records" :key="record.exerciseId" class="highlight">
+          🏆
+          {{
+            t('session.summary.record', {
+              name: nameOf(record.exerciseId),
+              load: kg(record.loadKg),
+              reps: n(record.reps),
+            })
+          }}
+        </p>
+        <p v-for="id in summary.backToLevel" :key="`b${id}`" class="highlight">
+          {{ t('session.summary.backToLevel', { name: nameOf(id) }) }}
+        </p>
+        <p v-for="badge in summary.badges" :key="badge" class="highlight">
+          🏅 {{ t('session.summary.badge', { badge: t(`badges.${badge}`) }) }}
+        </p>
+        <p v-if="summary.weeksOnPace >= 2" class="note-line">
+          🔥 {{ t('session.summary.streak', summary.weeksOnPace) }}
+        </p>
+        <p v-if="summary.carryOver.length > 0" class="note-line">
+          {{ t('session.carryOver', { names: summary.carryOver.map(nameOf).join(', ') }) }}
+        </p>
+        <ion-button expand="block" size="large" @click="session.closeSummary()">{{
+          t('session.summary.close')
+        }}</ion-button>
+      </section>
 
       <ion-modal :is-open="platesLoad !== undefined" @did-dismiss="platesLoad = undefined">
         <ion-header>
@@ -877,6 +898,67 @@ async function logWarmup(): Promise<void> {
 .logged-set:hover,
 .logged-set:focus-visible {
   background: var(--ion-color-light);
+}
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.summary-hero {
+  padding: 24px 16px;
+  border-radius: var(--app-radius);
+  background: var(--ion-color-success);
+  color: var(--ion-color-success-contrast);
+  text-align: center;
+}
+.summary-hero .check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 25%);
+  font-size: 2rem;
+  font-weight: 800;
+}
+.summary-hero h2 {
+  margin: 10px 0 2px;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.summary-hero p {
+  margin: 0;
+  opacity: 0.9;
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 6px;
+  border-radius: var(--app-radius-small);
+  background: var(--ion-card-background);
+  box-shadow: var(--app-shadow);
+  text-align: center;
+}
+.tile strong {
+  font-size: 1.3rem;
+}
+.tile span {
+  font-size: 0.8rem;
+  color: var(--ion-color-medium-shade);
+}
+.summary .highlight,
+.summary .note-line {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--app-radius-small);
+  background: var(--ion-card-background);
 }
 .go-back {
   margin-inline-start: -8px;

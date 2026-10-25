@@ -97,6 +97,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Séries validées corrigeables pendant la séance : « Dernière série : … · Corriger » sous le repos, et chaque série enregistrée s'ouvre pour corriger charge / reps / ressenti ou la supprimer (l'exercice se rouvre s'il manque alors des séries).
 
+- Design : thème indigo clair / sombre, fond teinté et cartes blanches, boutons en casse normale ; progression de séance sur une ligne ; plans de séance avec dessins ; écran Aujourd'hui « en un coup d'œil » ; fin de séance avec tuiles (séries, charge soulevée, records) ; textes d'aide de la série seulement pendant les deux premières séances.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

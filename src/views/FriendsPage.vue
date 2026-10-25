@@ -157,7 +157,9 @@ async function deleteAccount(): Promise<void> {
           inputmode="url"
           placeholder="https://"
         />
-        <ion-button expand="block" @click="saveServer">{{ t('friends.saveServer') }}</ion-button>
+        <ion-button expand="block" :disabled="!serverInput.trim()" @click="saveServer">{{
+          t('friends.saveServer')
+        }}</ion-button>
       </template>
 
       <template v-else-if="!settings?.account">
@@ -168,7 +170,7 @@ async function deleteAccount(): Promise<void> {
           label-placement="stacked"
           :maxlength="40"
         />
-        <ion-button expand="block" @click="createAccount">{{
+        <ion-button expand="block" :disabled="!pseudo.trim()" @click="createAccount">{{
           t('friends.createAccount')
         }}</ion-button>
       </template>

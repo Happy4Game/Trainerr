@@ -275,13 +275,15 @@
     },
     "summary": {
       "title": "Séance terminée",
-      "sets": "{count} série | {count} séries",
-      "workload": "Charge de travail : {load}",
       "close": "Fermer",
       "record": "Nouveau record : {name}, {load} × {reps}.",
       "backToLevel": "Tu as retrouvé ton niveau d'avant : {name} !",
       "streak": "{count} semaine au rythme. Continue ! | {count} semaines d'affilée au rythme. Continue !",
-      "badge": "Badge obtenu : {badge}"
+      "badge": "Badge obtenu : {badge}",
+      "bravo": "Bravo !",
+      "setsLabel": "série | séries",
+      "workloadLabel": "soulevés au total",
+      "recordsLabel": "record | records"
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",

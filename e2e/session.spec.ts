@@ -68,7 +68,7 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
 
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await expect(page.getByText('Séance terminée')).toBeVisible();
-  await expect(page.getByText('4 séries')).toBeVisible();
+  await expect(page.getByRole('group', { name: '4 séries' })).toBeVisible();
   await expect(page.getByText('Badge obtenu : Première séance')).toBeVisible();
   await page.getByRole('button', { name: 'Fermer' }).click();
 
