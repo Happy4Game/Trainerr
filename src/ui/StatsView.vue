@@ -8,6 +8,7 @@ import {
   IonItem,
   IonSelect,
   IonSelectOption,
+  IonToggle,
 } from '@ionic/vue';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -109,9 +110,42 @@ const pace = computed(() =>
     : undefined,
 );
 
+// Most recent records first: the ones that matter right now.
 const records = computed(() =>
-  [...personalRecords(sessions.value).entries()].sort((a, b) =>
-    nameOf(a[0]).localeCompare(nameOf(b[0]), locale.value),
+  [...personalRecords(sessions.value).entries()].sort(
+    (a, b) =>
+      b[1].bestLoad.date.localeCompare(a[1].bestLoad.date) ||
+      nameOf(a[0]).localeCompare(nameOf(b[0]), locale.value),
+  ),
+);
+
+/** The month at a glance, above the charts. */
+const kpis = computed(() => {
+  const since = addDays(todayIso(), -29);
+  const recent = sessions.value.filter((s) => s.date >= since);
+  const lastWeeks = workload.value.slice(-4);
+  const perWeek =
+    lastWeeks.length > 0 ? lastWeeks.reduce((sum, w) => sum + w.workload, 0) / lastWeeks.length : 0;
+  return [
+    { key: 'sessions', value: n(recent.length), label: t('stats.kpi.sessions', recent.length) },
+    {
+      key: 'pace',
+      value: n(pace.value?.current ?? 0),
+      label: t('stats.kpi.pace', pace.value?.current ?? 0),
+    },
+    {
+      key: 'records',
+      value: n(records.value.length),
+      label: t('stats.kpi.records', records.value.length),
+    },
+    { key: 'workload', value: load(Math.round(perWeek)), label: t('stats.kpi.workload') },
+  ];
+});
+const weekDays = computed(() =>
+  Array.from({ length: 7 }, (_, d) =>
+    new Intl.DateTimeFormat(locale.value, { weekday: 'narrow', timeZone: 'UTC' }).format(
+      new Date(`${addDays(thisWeek, d)}T00:00:00Z`),
+    ),
   ),
 );
 const muscleLabel = (m: MuscleId) => t(`muscles.${m}`);
@@ -148,13 +182,17 @@ async function shareRecap(): Promise<void> {
 <template>
   <p v-if="sessions.length === 0">{{ t('history.empty') }}</p>
   <template v-else>
-    <div class="recap">
-      <label class="toggle"
-        ><input v-model="showLoads" type="checkbox" /> {{ t('recap.showLoads') }}</label
+    <div class="kpis">
+      <div
+        v-for="k in kpis"
+        :key="k.key"
+        class="kpi"
+        role="group"
+        :aria-label="`${k.value} ${k.label}`"
       >
-      <ion-button expand="block" fill="outline" @click="shareRecap">{{
-        t('recap.share')
-      }}</ion-button>
+        <strong>{{ k.value }}</strong>
+        <span>{{ k.label }}</span>
+      </div>
     </div>
     <ion-card>
       <ion-card-header>
@@ -216,10 +254,19 @@ async function shareRecap(): Promise<void> {
         <ion-card-title>{{ t('stats.regularity.title') }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p v-if="pace">
-          {{ t('stats.regularity.pace', { current: pace.current, best: pace.best }) }}
+        <p v-if="pace" class="pace">
+          <strong
+            ><span v-if="pace.current > 0" aria-hidden="true">🔥 </span
+            >{{ t('stats.regularity.pace', pace.current) }}</strong
+          >
+          <span class="small">{{ t('stats.regularity.best', { best: pace.best }) }}</span>
         </p>
         <table class="heatmap" :aria-label="t('stats.regularity.calendar', { count: days.size })">
+          <thead>
+            <tr>
+              <th v-for="d in weekDays" :key="d" scope="col">{{ d }}</th>
+            </tr>
+          </thead>
           <tbody>
             <tr v-for="(week, w) in heatmap" :key="w">
               <td
@@ -259,29 +306,95 @@ async function shareRecap(): Promise<void> {
       </ion-card-header>
       <ion-card-content>
         <ul class="records">
-          <li v-for="[id, record] in records" :key="id">
-            <strong>{{ nameOf(id) }}</strong> :
-            {{
-              t('stats.records.load', {
-                load: load(record.bestLoad.loadKg),
-                reps: n(record.bestLoad.reps),
-                date: shortDate(record.bestLoad.date),
-              })
-            }}
-            ·
-            {{
-              t('stats.records.oneRepMax', { load: load(Math.round(record.bestOneRepMax.value)) })
-            }}
+          <li v-for="[id, record] in records" :key="id" class="record">
+            <span class="record-name">{{ nameOf(id) }}</span>
+            <span class="record-load">
+              {{ load(record.bestLoad.loadKg) }} × {{ n(record.bestLoad.reps) }}
+            </span>
+            <span class="record-detail">
+              {{ shortDate(record.bestLoad.date) }} ·
+              {{
+                t('stats.records.oneRepMax', {
+                  load: load(Math.round(record.bestOneRepMax.value)),
+                })
+              }}
+            </span>
           </li>
         </ul>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ t('recap.cardTitle') }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-toggle v-model="showLoads">{{ t('recap.showLoads') }}</ion-toggle>
+        <ion-button expand="block" fill="outline" class="ion-margin-top" @click="shareRecap">{{
+          t('recap.share')
+        }}</ion-button>
       </ion-card-content>
     </ion-card>
   </template>
 </template>
 
 <style scoped>
-.recap {
-  padding-inline: 16px;
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-block-end: 4px;
+}
+.kpi {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  border-radius: var(--app-radius);
+  background: var(--ion-card-background);
+  box-shadow: var(--app-shadow);
+}
+.kpi strong {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--ion-color-primary);
+}
+.kpi span {
+  font-size: 0.85rem;
+  color: var(--ion-color-medium-shade);
+}
+.pace {
+  display: flex;
+  flex-direction: column;
+  margin-block-start: 0;
+}
+.records {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.record {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  padding-block: 10px;
+  border-block-end: 1px solid var(--ion-color-light);
+}
+.record:last-child {
+  border-block-end: 0;
+}
+.record-name {
+  font-weight: 600;
+  color: var(--ion-text-color, #000);
+}
+.record-load {
+  font-weight: 800;
+  color: var(--ion-color-primary);
+  white-space: nowrap;
+}
+.record-detail {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: var(--ion-color-medium-shade);
 }
 .toggle {
   display: flex;
@@ -338,21 +451,24 @@ async function shareRecap(): Promise<void> {
   white-space: nowrap;
 }
 .heatmap {
-  border-spacing: 3px;
+  width: 100%;
+  border-spacing: 4px;
+  table-layout: fixed;
+}
+.heatmap th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ion-color-medium-shade);
 }
 .heatmap td {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  background: var(--ion-color-step-150, #ddd);
+  height: 22px;
+  border-radius: 6px;
+  background: var(--ion-color-light);
 }
 .heatmap td.on {
   background: var(--ion-color-success);
 }
 .heatmap td.future {
   opacity: 0.35;
-}
-.records {
-  padding-inline-start: 1em;
 }
 </style>

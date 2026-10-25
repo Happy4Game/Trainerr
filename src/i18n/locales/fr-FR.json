@@ -523,8 +523,9 @@
     },
     "regularity": {
       "title": "Régularité",
-      "pace": "{current} semaine(s) d'affilée au rythme · record : {best}",
-      "calendar": "{count} jours d'entraînement sur les 8 dernières semaines"
+      "pace": "{count} semaine d'affilée au rythme | {count} semaines d'affilée au rythme",
+      "calendar": "{count} jours d'entraînement sur les 8 dernières semaines",
+      "best": "Ton record : {best}"
     },
     "workload": {
       "title": "Charge de travail",
@@ -534,8 +535,13 @@
     },
     "records": {
       "title": "Records",
-      "load": "{load} × {reps} ({date})",
       "oneRepMax": "1RM estimé {load}"
+    },
+    "kpi": {
+      "sessions": "séance sur 30 jours | séances sur 30 jours",
+      "pace": "semaine au rythme | semaines au rythme",
+      "records": "record | records",
+      "workload": "soulevés par semaine (moyenne)"
     }
   },
   "body": {
@@ -885,7 +891,8 @@
     "days": "{count} jour d'entraînement | {count} jours d'entraînement",
     "workload": "{load} soulevés",
     "records": "{count} record battu | {count} records battus",
-    "footer": "Fait avec Trainerr"
+    "footer": "Fait avec Trainerr",
+    "cardTitle": "Partager mon mois"
   },
   "friends": {
     "title": "Défis entre amis",

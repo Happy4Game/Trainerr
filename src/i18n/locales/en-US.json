@@ -523,8 +523,9 @@
     },
     "regularity": {
       "title": "Consistency",
-      "pace": "{current} week(s) in a row on pace · best: {best}",
-      "calendar": "{count} training days over the last 8 weeks"
+      "pace": "{count} week in a row on pace | {count} weeks in a row on pace",
+      "calendar": "{count} training days over the last 8 weeks",
+      "best": "Your best: {best}"
     },
     "workload": {
       "title": "Workload",
@@ -534,8 +535,13 @@
     },
     "records": {
       "title": "Records",
-      "load": "{load} × {reps} ({date})",
       "oneRepMax": "Estimated 1RM {load}"
+    },
+    "kpi": {
+      "sessions": "session in 30 days | sessions in 30 days",
+      "pace": "week on pace | weeks on pace",
+      "records": "record | records",
+      "workload": "lifted per week (average)"
     }
   },
   "body": {
@@ -885,7 +891,8 @@
     "days": "{count} training day | {count} training days",
     "workload": "{load} lifted",
     "records": "{count} record beaten | {count} records beaten",
-    "footer": "Made with Trainerr"
+    "footer": "Made with Trainerr",
+    "cardTitle": "Share my month"
   },
   "friends": {
     "title": "Challenges with friends",

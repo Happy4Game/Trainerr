@@ -83,5 +83,6 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await page.locator('ion-segment-button', { hasText: 'Stats' }).click();
   await expect(page.getByText('Évolution de la force')).toBeVisible();
   await expect(page.getByRole('img', { name: /1RM estimé/ })).toBeVisible();
-  await expect(page.getByText('Records')).toBeVisible();
+  await expect(page.getByText('Records', { exact: true })).toBeVisible();
+  await expect(page.getByRole('group', { name: /séances? sur 30 jours/ })).toBeVisible();
 });

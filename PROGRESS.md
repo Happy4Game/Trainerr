@@ -107,6 +107,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Supersets optionnels : interrupteur « Enchaîner en supersets » avant de commencer (par défaut selon le réglage, plus jamais imposés, y compris en séance express) et bouton « Séparer » pendant la séance.
 
+- Onglet Stats : tuiles de synthèse (séances sur 30 jours, semaines au rythme, records, charge par semaine), régularité avec jours de la semaine, records les plus récents en premier avec la charge en évidence, partage du récap déplacé en bas.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.
