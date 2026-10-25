@@ -101,7 +101,14 @@
       "title": "Cues",
       "source": "Source: {source}",
       "review": "Cues to be proofread by a coach before the app is released.",
-      "englishOnly": "Instructions from free-exercise-db."
+      "englishOnly": "Instructions in English: no translation yet for this exercise.",
+      "machineTranslation": {
+        "fr": "Machine translation from English: it may contain mistakes.",
+        "en": "Machine translation from French: it may contain mistakes."
+      },
+      "originalShown": "Original text:",
+      "showOriginal": "See the original text",
+      "showTranslation": "See the translation"
     },
     "machine": {
       "title": "My machine",

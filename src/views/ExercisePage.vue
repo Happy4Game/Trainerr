@@ -18,12 +18,13 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { Star } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { MuscleId } from '@/domain/muscles';
 import { repRangeFor } from '@/domain/progression';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import ExerciseIllustration from '@/ui/ExerciseIllustration.vue';
+import { instructionsFor } from '@/data/catalog/instructions';
 import { useSession } from '@/ui/session/useSession';
 import ComebackCard from '@/ui/ComebackCard.vue';
 import ExerciseProgress from '@/ui/ExerciseProgress.vue';
@@ -72,8 +73,23 @@ const stepsForComeback = computed(() =>
       ? defaultStepsFor(exercise.value.equipment)
       : [],
 );
-const cuesFor = (cues: { fr: readonly string[]; en?: readonly string[] }) =>
-  french.value ? cues.fr : (cues.en ?? cues.fr);
+// Machine translations of the free-exercise-db steps (~400 kB): loaded with the card only.
+const frenchSteps = ref<Readonly<Record<string, readonly string[]>>>({});
+onMounted(async () => {
+  frenchSteps.value = (await import('@/data/catalog/instructions-fr.json')).default as Record<
+    string,
+    string[]
+  >;
+});
+const shown = computed(() =>
+  exercise.value
+    ? instructionsFor(exercise.value, french.value ? 'fr' : 'en', frenchSteps.value[props.id])
+    : undefined,
+);
+const showOriginal = ref(false);
+const displayed = computed(() =>
+  showOriginal.value && shown.value?.original ? shown.value.original : shown.value,
+);
 const illustration = computed(() => illustrationFor(props.id));
 const range = computed(() => (exercise.value ? repRangeFor(exercise.value) : undefined));
 
@@ -178,18 +194,39 @@ const muscleList = (muscles: readonly MuscleId[]) =>
             <ion-card-title>{{ t('exercise.cues.title') }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <template v-if="exercise.cues">
-              <ul>
-                <li v-for="cue in cuesFor(exercise.cues)" :key="cue">{{ cue }}</li>
-              </ul>
-              <p class="small">{{ t('exercise.cues.source', { source: exercise.cues.source }) }}</p>
-              <p class="small">{{ t('exercise.cues.review') }}</p>
-            </template>
-            <template v-else>
-              <ol lang="en">
-                <li v-for="(step, index) in exercise.instructionsEn" :key="index">{{ step }}</li>
-              </ol>
-              <p class="small">{{ t('exercise.cues.englishOnly') }}</p>
+            <template v-if="shown && displayed">
+              <p v-if="shown.translated" class="small translated">
+                {{
+                  showOriginal
+                    ? t('exercise.cues.originalShown')
+                    : t(`exercise.cues.machineTranslation.${shown.lang}`)
+                }}
+              </p>
+              <component :is="shown.numbered ? 'ol' : 'ul'" :lang="displayed.lang">
+                <li v-for="(line, index) in displayed.lines" :key="index">{{ line }}</li>
+              </component>
+              <ion-button
+                v-if="shown.original"
+                size="small"
+                fill="outline"
+                :aria-pressed="showOriginal"
+                @click="showOriginal = !showOriginal"
+              >
+                {{
+                  showOriginal
+                    ? t('exercise.cues.showTranslation')
+                    : t('exercise.cues.showOriginal')
+                }}
+              </ion-button>
+              <template v-if="exercise.cues">
+                <p class="small">
+                  {{ t('exercise.cues.source', { source: exercise.cues.source }) }}
+                </p>
+                <p class="small">{{ t('exercise.cues.review') }}</p>
+              </template>
+              <p v-else-if="shown.lang === 'en' && french" class="small">
+                {{ t('exercise.cues.englishOnly') }}
+              </p>
             </template>
           </ion-card-content>
         </ion-card>

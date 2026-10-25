@@ -39,3 +39,10 @@ Dans le navigateur, la toute dernière écriture peut être perdue si la page es
 - La fiche alterne les deux dessins pour montrer le geste (bouton pause ; côte à côte si le téléphone demande moins d'animations) et affiche sous l'image : exercice illustré, auteur, licence, lien vers la source. La page Crédits liste les auteurs et signale les modifications.
 - La démonstration animée maison (silhouette SVG) a été retirée à la demande de Thibaut, au profit de ces dessins.
 - Sans illustration pour l'instant : élévations latérales machine, rowing divergent, face pull, reverse fly machine, gainage (planche), et les exercices peu courants. Ils gardent la silhouette des muscles et les consignes.
+
+## Traduction des consignes (ajout du 2026-10-25)
+
+- Les consignes de free-exercise-db (448 exercices, environ 63 000 mots) sont traduites en français dans `src/data/catalog/instructions-fr.json`, livré avec l'appli : rien n'est envoyé à un service de traduction, l'appli reste hors ligne.
+- Traduction faite par une IA (Claude) pendant le développement, une phrase par étape, tutoiement, unités converties (pouces → cm, livres → kg). Un test vérifie que chaque exercice a sa traduction avec le même nombre d'étapes.
+- La fiche l'annonce (« Traduction automatique de l'anglais : elle peut contenir des erreurs ») et propose « Voir le texte original ». Une traduction dont le nombre d'étapes ne correspond plus à la source (mise à jour de free-exercise-db) n'est pas affichée : la fiche retombe sur l'anglais.
+- En anglais, les consignes écrites à la main en français affichent leur version anglaise, avec le français d'origine à la demande.

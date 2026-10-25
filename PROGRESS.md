@@ -83,6 +83,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - « + Ajouter un exercice » pendant la séance (sélecteur avec recherche, mes machines et machines populaires en premier) : l'exercice passe en premier.
 
+- Consignes traduites en français pour tous les exercices (traduction automatique livrée avec l'appli, mentionnée sur la fiche, texte original à la demande).
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.
@@ -122,7 +124,6 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - `npm audit` signale 3 failles « modérées » dans `uuid`, utilisé par l'outil iOS de `@capacitor/cli` (développement seulement, pas dans l'appli). Le correctif proposé rétrograde Capacitor : à revoir quand Capacitor publiera une mise à jour.
 - sql.js est figé en 1.12.0 pour rester compatible avec jeep-sqlite (voir [ADR 0002](docs/adr/0002-sqlite-local.md)).
-- Exercices hors des ~30 machines courantes : nom et instructions en anglais.
 - Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
 - Les exports se téléchargent dans le navigateur ; sur téléphone il faudra les plugins Filesystem / Share.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).

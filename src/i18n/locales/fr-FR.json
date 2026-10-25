@@ -101,7 +101,14 @@
       "title": "Consignes",
       "source": "Source : {source}",
       "review": "Consignes à relire par un coach avant la publication de l'appli.",
-      "englishOnly": "Instructions en anglais (free-exercise-db), traduction à venir."
+      "englishOnly": "Instructions en anglais : pas encore de traduction pour cet exercice.",
+      "machineTranslation": {
+        "fr": "Traduction automatique de l'anglais : elle peut contenir des erreurs.",
+        "en": "Traduction automatique du français : elle peut contenir des erreurs."
+      },
+      "originalShown": "Texte original :",
+      "showOriginal": "Voir le texte original",
+      "showTranslation": "Voir la traduction"
     },
     "machine": {
       "title": "Ma machine",

@@ -13,3 +13,4 @@ src/data/catalog/exercise-images.json
 src/data/content/licenses.json
 src/data/catalog/names-fr.json
 server/node_modules
+src/data/catalog/instructions-fr.json

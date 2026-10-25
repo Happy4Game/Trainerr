@@ -145,3 +145,15 @@ describe('exercise illustrations', () => {
     }
   });
 });
+
+describe('French instructions', () => {
+  it('translates every exercise without hand-written cues, one line per step', async () => {
+    const { default: french } = await import('@/data/catalog/instructions-fr.json');
+    const translations = french as Record<string, string[]>;
+    for (const exercise of buildCatalog().filter((e) => !e.cues && e.instructionsEn.length > 0)) {
+      const steps = translations[exercise.id];
+      expect(steps, exercise.id).toBeDefined();
+      expect(steps?.length, exercise.id).toBe(exercise.instructionsEn.length);
+    }
+  });
+});

@@ -104,3 +104,15 @@ test('a photo of the machine plate is kept with the machine', async ({ page }) =
     page.getByRole('img', { name: 'Plaque de la machine Écarté à la machine' }),
   ).toHaveCount(0);
 });
+
+test('instructions are machine-translated, with the original text on demand', async ({ page }) => {
+  await openCatalog(page);
+  await page.goto('/tabs/catalog/Arnold_Dumbbell_Press');
+  await expect(page.getByText(/Traduction automatique de l'anglais/)).toBeVisible();
+  await expect(page.getByText(/Monte les haltères en tournant les paumes/)).toBeVisible();
+
+  await page.getByRole('button', { name: 'Voir le texte original' }).click();
+  await expect(page.getByText(/raise the dumbbells as you rotate the palms/)).toBeVisible();
+  await page.getByRole('button', { name: 'Voir la traduction' }).click();
+  await expect(page.getByText(/Monte les haltères en tournant les paumes/)).toBeVisible();
+});
