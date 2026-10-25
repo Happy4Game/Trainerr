@@ -110,7 +110,7 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Supersets optionnels : interrupteur « Enchaîner en supersets » avant de commencer (par défaut selon le réglage, plus jamais imposés, y compris en séance express) et bouton « Séparer » pendant la séance.
 
 - Onglet Stats : tuiles de synthèse (séances sur 30 jours, semaines au rythme, records, charge par semaine), régularité avec jours de la semaine, records les plus récents en premier avec la charge en évidence, partage du récap déplacé en bas.
-
+  Logo : haltère Lucide (ISC) sur indigo, `npm run icons` génère icônes Android, splash et favicon.
 - Android : projet Capacitor dans `android/`, APK de debug avec `npm run android:apk` et construit par la CI (artefact `trainerr-debug-apk`) ; guide dans [docs/android.md](docs/android.md). Version Play Store : clé de signature et icône à fournir.
 - Documentation : README avec captures, CONTRIBUTING (déroulé, règles, tests, licences, accessibilité). Licence PolyForm Noncommercial 1.0.0 (ADR 0007).
 

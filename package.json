@@ -12,6 +12,7 @@
     "dev": "vite --host",
     "build": "node scripts/generate-licenses.mjs && vue-tsc --noEmit && vite build",
     "preview": "vite preview --host",
+    "icons": "node scripts/generate-icons.mjs",
     "android:sync": "npm run build && cap sync android",
     "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug",
     "android:export": "npm run android:apk && node scripts/export-apk.mjs",

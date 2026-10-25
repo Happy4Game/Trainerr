@@ -139,7 +139,7 @@ Tout ce que l'appli embarque a une licence connue ; la page **Crédits** de l'ap
 | [Everkinetic](https://github.com/everkinetic/data)              | Dessins du mouvement (départ et arrivée)  | CC BY-SA 4.0                            |
 | [wger](https://wger.de)                                         | Quelques dessins complémentaires          | CC BY-SA (auteur noté sur chaque fiche) |
 | [MuscleMapJS](https://github.com/abdofallah/MuscleMapJS)        | Silhouettes des muscles                   | MIT                                     |
-| [Lucide](https://lucide.dev)                                    | Icônes                                    | ISC                                     |
+| [Lucide](https://lucide.dev)                                    | Icônes et logo de l'appli (l'haltère)     | ISC                                     |
 | Ionic, Vue, Capacitor et les autres bibliothèques               | Code de l'appli                           | MIT, ISC, BSD, Apache 2.0               |
 
 Les règles d'entraînement (fourchettes de reps, volume par muscle, progression, repos) s'appuient sur des publications citées dans l'appli (onglet **Bien débuter**) et dans [SPEC.md](SPEC.md). Les consignes traduites sont une traduction automatique, signalée comme telle sur chaque fiche, avec le texte original à la demande.

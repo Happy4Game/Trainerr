@@ -74,7 +74,11 @@ Elle demande une **clé de signature** qui t'appartient et ne doit jamais être 
    ```
 
 2. Construire un bundle signé depuis Android Studio (**Build → Generate Signed App Bundle**), ou configurer `signingConfigs` dans `android/app/build.gradle` en lisant le mot de passe dans des variables d'environnement.
-3. Avant la publication : icône et écran de démarrage de l'appli, numéro de version (`versionCode`, `versionName`), fiche Play Store et politique de confidentialité.
+3. Avant la publication : numéro de version (`versionCode`, `versionName`), fiche Play Store et politique de confidentialité.
+
+## Icône et écran de démarrage
+
+Le logo est l'haltère de [Lucide](https://lucide.dev/license) (ISC) en blanc sur l'indigo du thème. `npm run icons` régénère toutes les tailles Android (icônes classique, ronde, adaptative et monochrome pour Android 13), les écrans de démarrage et le favicon du web. Il faut `rsvg-convert` (paquet `librsvg`) et ImageMagick.
 
 ## Bon à savoir
 
