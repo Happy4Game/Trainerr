@@ -31,7 +31,7 @@ export interface CustomExercise extends CuratedOverride {
 }
 
 /** Bumped whenever this file changes, so that phones re-import the catalog. */
-export const CURATED_VERSION = 2;
+export const CURATED_VERSION = 3;
 
 const FEDB = 'free-exercise-db (adapté)';
 const BENCH = 'BarBend, Eric Cressey';

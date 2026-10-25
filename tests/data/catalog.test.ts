@@ -48,8 +48,28 @@ describe('catalog built from free-exercise-db', () => {
     }
   });
 
+  it('gives every exercise a French name, translated by hand', () => {
+    for (const e of catalog) expect(e.name, e.id).not.toBe('');
+    expect(get('Cable_Crunch')).toMatchObject({
+      name: 'Crunch à la poulie',
+      nameEn: 'Cable Crunch',
+    });
+    expect(get('Romanian_Deadlift').name).toBe('Soulevé de terre roumain');
+  });
+
   it('falls back to the English name when there is no translation', () => {
-    expect(get('Cable_Crunch')).toMatchObject({ name: 'Cable Crunch', nameEn: 'Cable Crunch' });
+    expect(
+      mapFreeExercise({
+        id: 'New_Exercise',
+        name: 'New Exercise',
+        force: 'push',
+        mechanic: 'isolation',
+        equipment: 'machine',
+        primaryMuscles: ['chest'],
+        secondaryMuscles: [],
+        instructions: [],
+      })?.name,
+    ).toBe('New Exercise');
   });
 
   it('derives the push / pull / legs group from the muscles, not the source "force"', () => {

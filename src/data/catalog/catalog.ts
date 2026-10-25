@@ -2,6 +2,8 @@ import { CORE_MUSCLES, LEG_MUSCLES, PUSH_MUSCLES, type MuscleId } from '@/domain
 import type { Equipment, Exercise, ExerciseKind, PplGroup } from '@/domain/types';
 import { CURATED, CUSTOM_EXERCISES, type CuratedOverride } from './curated';
 import source from './free-exercise-db.json';
+// French names of the other exercises, translated by hand (docs/i18n.md).
+import namesFr from './names-fr.json';
 
 export interface CatalogExercise extends Exercise {
   /** French name when available, English otherwise. */
@@ -95,7 +97,7 @@ export function mapFreeExercise(raw: FreeExercise): CatalogExercise | undefined 
   ).filter((m) => !primaryMuscles.includes(m));
   return {
     id: raw.id,
-    name: curated?.nameFr ?? raw.name,
+    name: curated?.nameFr ?? (namesFr as Record<string, string>)[raw.id] ?? raw.name,
     nameEn: raw.name,
     ...(curated?.machineName ? { machineName: curated.machineName } : {}),
     aliases: curated?.aliases ?? [],
