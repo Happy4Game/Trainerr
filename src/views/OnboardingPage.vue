@@ -260,7 +260,7 @@ async function skip(): Promise<void> {
         <ion-button v-if="step > 0" slot="start" fill="clear" @click="step--">
           {{ t('onboarding.back') }}
         </ion-button>
-        <ion-button slot="end" :disabled="!canGoOn" @click="step++">
+        <ion-button slot="end" size="large" :disabled="!canGoOn" @click="step++">
           {{ t('onboarding.next') }}
         </ion-button>
       </ion-toolbar>
@@ -270,15 +270,30 @@ async function skip(): Promise<void> {
 
 <style scoped>
 h1 {
-  font-size: 1.5rem;
+  margin-block: 8px 16px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
 }
 h2 {
   margin-block-start: 24px;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
 }
+/* Choices as wide cards: white, thin border; the chosen one in the action colour. */
 .choices ion-button {
-  min-height: 52px;
+  --background: var(--ion-card-background);
+  --border-width: 1.5px;
+  --border-color: var(--ion-color-light-shade);
+  --color: var(--ion-text-color, #000);
+  min-height: 60px;
   margin-block: 8px;
+  font-size: 1.05rem;
+}
+.choices ion-button[aria-pressed='true'] {
+  --background: var(--ion-color-primary);
+  --border-color: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
 }
 .row {
   display: flex;
@@ -286,13 +301,26 @@ h2 {
   gap: 8px;
 }
 .row ion-button {
-  min-width: 56px;
+  min-width: 60px;
+  min-height: 56px;
+  font-size: 1.2rem;
 }
 .hint {
-  color: var(--ion-color-medium);
+  color: var(--ion-color-medium-shade);
 }
 .ai {
   margin-block-start: 24px;
   font-size: 0.85rem;
+}
+ion-footer ion-toolbar {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+ion-footer ion-button[slot='end'] {
+  min-width: 140px;
+  min-height: 52px;
+  font-size: 1.05rem;
 }
 </style>
