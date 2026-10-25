@@ -1,4 +1,4 @@
-Required Notice: Copyright 2026 Thibaut (Trainerr)
+Required Notice: Copyright 2026 Thibaut DUFEUTREL (Trainerr)
 
 # PolyForm Noncommercial License 1.0.0
 
