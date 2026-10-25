@@ -36,7 +36,12 @@ import {
 import { defaultStepsFor } from '@/domain/loadSteps';
 import { nextTemplate } from '@/domain/planning';
 import { nextSetProposal, REST_SECONDS, repRangeFor, startingProposal } from '@/domain/progression';
-import { buildSession, exercisesPerSession, setsPerExercise } from '@/domain/sessionBuilder';
+import {
+  buildSession,
+  exercisesPerSession,
+  readyMadeSession,
+  setsPerExercise,
+} from '@/domain/sessionBuilder';
 import { afterSupersetSet, proposeSupersets, supersetPairs } from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
@@ -46,6 +51,8 @@ import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/doma
 import { weeksOnPace } from '@/domain/stats';
 import { addBadges } from '@/data/repositories/badgeRepository';
 import { rescheduleNotifications } from '@/ui/notifications';
+import { isPopular } from '@/data/catalog/curated';
+import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
 
 export interface Proposal {
@@ -75,7 +82,7 @@ const summary = ref<{
   weeksOnPace: number;
 }>();
 
-const { entries, state: catalogState } = useCatalog();
+const { entries, state: catalogState, toggleFavorite } = useCatalog();
 
 function today(): string {
   const now = new Date();
@@ -218,6 +225,35 @@ const expressPreview = computed<Exercise[]>(() => {
   });
 });
 
+/**
+ * Pre-session: when the favorites do not fill the session, popular machines
+ * (illustrated ones first) complete it. Empty when the favorites are enough.
+ */
+const readyMade = computed(() => {
+  if (!settings.value || !template.value) return undefined;
+  const count = exercisesPerSession(settings.value.sessionMinutes);
+  if (preview.value.length >= count) return undefined;
+  const popular = entries.value
+    .filter((e) => isPopular(e.exercise.id))
+    .map((e) => e.exercise)
+    .sort((a, b) => Number(!!illustrationFor(b.id)) - Number(!!illustrationFor(a.id)));
+  const session = readyMadeSession({
+    template: template.value,
+    favorites: favorites.value.map((e) => e.exercise),
+    popular,
+    count,
+    ...(settings.value.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
+  });
+  return session.suggestedIds.length > 0 ? session : undefined;
+});
+
+/** Stars the machines of the pre-session: the next sessions will use them. */
+async function adoptReadyMade(): Promise<void> {
+  for (const id of readyMade.value?.suggestedIds ?? []) {
+    if (!entryOf(id)?.favorite) await toggleFavorite(id);
+  }
+}
+
 /** Home workout: any catalog exercise doable with the equipment at home. */
 const homePreview = computed<Exercise[]>(() => {
   if (!settings.value || !template.value) return [];
@@ -235,12 +271,16 @@ const cycle = computed(() =>
   cycleWeek(settings.value?.programStart ?? history.value[0]?.date ?? today(), today()),
 );
 
-async function start(options: { express?: boolean; home?: boolean } = {}): Promise<void> {
+async function start(
+  options: { express?: boolean; home?: boolean; readyMade?: boolean } = {},
+): Promise<void> {
   const exercises = options.express
     ? expressPreview.value
     : options.home
       ? homePreview.value
-      : preview.value;
+      : options.readyMade
+        ? (readyMade.value?.exercises ?? [])
+        : preview.value;
   if (!template.value || exercises.length === 0 || !settings.value) return;
   const sets = setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light);
   const pairs =
@@ -506,6 +546,8 @@ export function useSession() {
     template,
     expressPreview,
     homePreview,
+    readyMade,
+    adoptReadyMade,
     cycle,
     supersetPartner: (id: string) =>
       active.value?.plan.supersets?.find((p) => p.includes(id))?.find((other) => other !== id),

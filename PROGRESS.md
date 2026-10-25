@@ -73,6 +73,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - **Notifications locales** : rappel 1 h avant, relance douce, 1 par jour au plus, jamais en heures de silence ni en créneau bloqué (plugin Local Notifications, aucun serveur).
 - Les réglages (disponibilités, autre sport, reprise, notifications) sont stockés en JSON dans `app_meta` plutôt que dans la table `availability` : plus simple tant qu'il n'y a qu'une salle (à revoir avec « Plusieurs salles »).
 
+- **Pré-séance** : avec trop peu de machines en favori, l'écran Séance propose une séance complétée avec des machines populaires (dessinées d'abord), à lancer telle quelle ou à ajouter à mes machines en un geste.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

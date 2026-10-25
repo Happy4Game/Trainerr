@@ -270,7 +270,15 @@
     "notePlaceholder": "Ex. mal dormi, salle bondée",
     "express": "Séance express (20–30 min)",
     "superset": "Superset avec {name} : enchaîne sans repos.",
-    "home": "Séance à la maison"
+    "home": "Séance à la maison",
+    "readyMade": {
+      "title": "Pré-séance proposée",
+      "introNone": "Tu n'as aucune machine en favori pour cette séance : voici une séance avec des machines courantes.",
+      "intro": "Tu n'as qu'une machine en favori pour cette séance : elle est complétée avec des machines courantes. | Tu n'as que {count} machines en favori pour cette séance : elles sont complétées avec des machines courantes.",
+      "suggested": "proposée",
+      "start": "Faire cette pré-séance",
+      "adopt": "Ajouter la machine proposée à mes machines | Ajouter les {count} machines proposées à mes machines"
+    }
   },
   "availability": {
     "day": "Jour",

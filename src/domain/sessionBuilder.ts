@@ -42,6 +42,8 @@ export function buildSession(input: {
   protectedZone?: ProtectedZone;
   /** Machines that complement the user's other sport, shown first. */
   priorityIds?: ReadonlySet<string>;
+  /** Muscles already worked by other exercises of the session. */
+  alreadyWorked?: readonly MuscleId[];
 }): Exercise[] {
   const { template, count, protectedZone, priorityIds } = input;
   const spared = protectedZone ? PROTECTED_ZONE_MUSCLES[protectedZone] : [];
@@ -59,7 +61,7 @@ export function buildSession(input: {
   const isolations = forVariant(eligible.filter((e) => e.kind === 'isolation'));
 
   const compoundTarget = Math.min(MAX_COMPOUNDS, Math.ceil(count * 0.6), compounds.length);
-  const covered = new Set<MuscleId>();
+  const covered = new Set<MuscleId>(input.alreadyWorked);
   const chosen = pickCovering(compounds, compoundTarget, covered);
   chosen.push(...pickCovering(isolations, count - chosen.length, covered));
   if (chosen.length < count) {
@@ -72,6 +74,40 @@ export function buildSession(input: {
       (a, b) => KIND_ORDER.indexOf(a.e.kind) - KIND_ORDER.indexOf(b.e.kind) || a.index - b.index,
     )
     .map(({ e }) => e);
+}
+
+/**
+ * "Pre-session" when the favorites are too few: my machines first, completed
+ * with popular machines (given in order of preference) for the muscles not
+ * worked yet. The suggested ones are listed apart so the screen can offer to
+ * add them to my machines.
+ */
+export function readyMadeSession(input: {
+  template: SessionTemplate;
+  favorites: readonly Exercise[];
+  popular: readonly Exercise[];
+  count: number;
+  protectedZone?: ProtectedZone;
+}): { exercises: Exercise[]; suggestedIds: string[] } {
+  const { template, count, protectedZone } = input;
+  const zone = protectedZone ? { protectedZone } : {};
+  const mine = buildSession({ template, favorites: input.favorites, count, ...zone });
+  if (mine.length >= count) return { exercises: mine, suggestedIds: [] };
+
+  const suggested = buildSession({
+    template,
+    favorites: input.popular.filter((e) => !mine.some((m) => m.id === e.id)),
+    count: count - mine.length,
+    alreadyWorked: mine.flatMap((e) => e.primaryMuscles),
+    ...zone,
+  });
+  const exercises = [...mine, ...suggested]
+    .map((e, index) => ({ e, index }))
+    .sort(
+      (a, b) => KIND_ORDER.indexOf(a.e.kind) - KIND_ORDER.indexOf(b.e.kind) || a.index - b.index,
+    )
+    .map(({ e }) => e);
+  return { exercises, suggestedIds: suggested.map((e) => e.id) };
 }
 
 function pickCovering(candidates: readonly Exercise[], count: number, covered: Set<MuscleId>) {

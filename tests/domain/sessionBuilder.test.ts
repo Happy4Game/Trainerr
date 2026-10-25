@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildSession, exercisesPerSession, setsPerExercise } from '@/domain/sessionBuilder';
+import {
+  buildSession,
+  exercisesPerSession,
+  readyMadeSession,
+  setsPerExercise,
+} from '@/domain/sessionBuilder';
 import { TRAINING_MODELS } from '@/domain/trainingModels';
 import { allExercises, ex } from '../fixtures/exercises';
 
@@ -77,5 +82,63 @@ describe('building a session from the favorites', () => {
   it('returns fewer exercises when there are not enough favorites', () => {
     const session = buildSession({ template: pushA, favorites: [ex.pecFly], count: 5 });
     expect(ids(session)).toEqual(['pec-fly']);
+  });
+});
+
+describe('ready-made session when there are not enough favorites', () => {
+  it('keeps my machines and completes with popular ones for the missing muscles', () => {
+    const session = readyMadeSession({
+      template: pushA,
+      favorites: [ex.pecFly],
+      popular: allExercises,
+      count: 4,
+    });
+    expect(session.exercises).toHaveLength(4);
+    expect(ids(session.exercises)).toContain('pec-fly');
+    expect(session.suggestedIds).not.toContain('pec-fly');
+    expect(session.suggestedIds).toHaveLength(3);
+    // The pec deck already works the chest: the shoulders come in, and the session stays varied.
+    expect(session.suggestedIds).toContain('shoulder-press');
+    const muscles = new Set(session.exercises.flatMap((e) => e.primaryMuscles));
+    expect(muscles.size).toBeGreaterThanOrEqual(3);
+    // Compounds first, as in any session.
+    expect(session.exercises[0]?.kind).not.toBe('isolation');
+  });
+
+  it('builds the whole session from popular machines without any favorite', () => {
+    const session = readyMadeSession({
+      template: legsA,
+      favorites: [],
+      popular: allExercises,
+      count: 4,
+    });
+    expect(session.exercises).toHaveLength(4);
+    expect(session.suggestedIds).toEqual(ids(session.exercises));
+    for (const exercise of session.exercises) expect(['legs', 'core']).toContain(exercise.group);
+  });
+
+  it('suggests nothing when the favorites are enough', () => {
+    const session = readyMadeSession({
+      template: pushA,
+      favorites: allExercises,
+      popular: allExercises,
+      count: 5,
+    });
+    expect(session.suggestedIds).toEqual([]);
+    expect(ids(session.exercises)).toEqual(
+      ids(buildSession({ template: pushA, favorites: allExercises, count: 5 })),
+    );
+  });
+
+  it('respects the protected zone in the suggestions', () => {
+    const session = readyMadeSession({
+      template: pushB,
+      favorites: [],
+      popular: allExercises,
+      count: 5,
+      protectedZone: 'shoulders',
+    });
+    expect(ids(session.exercises)).not.toContain('shoulder-press');
+    expect(ids(session.exercises)).not.toContain('lateral-raise');
   });
 });

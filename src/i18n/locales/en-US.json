@@ -270,7 +270,15 @@
     "notePlaceholder": "E.g. slept badly, crowded gym",
     "express": "Express workout (20–30 min)",
     "superset": "Superset with {name}: go straight on, no rest.",
-    "home": "Home workout"
+    "home": "Home workout",
+    "readyMade": {
+      "title": "Suggested pre-session",
+      "introNone": "You have no favorite machine for this session: here is a session with common machines.",
+      "intro": "You have only one favorite machine for this session: it is completed with common machines. | You have only {count} favorite machines for this session: they are completed with common machines.",
+      "suggested": "suggested",
+      "start": "Do this pre-session",
+      "adopt": "Add the suggested machine to my machines | Add the {count} suggested machines to my machines"
+    }
   },
   "availability": {
     "day": "Day",

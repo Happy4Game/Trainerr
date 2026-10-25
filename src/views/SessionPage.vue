@@ -37,7 +37,8 @@ import { todayIso } from '@/ui/useWeekPlan';
 
 const { t, n, locale } = useI18n();
 const session = useSession();
-const { phase, template, preview, active, step, warmup, restEndsAt, summary, crowded } = session;
+const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, summary, crowded } =
+  session;
 
 const busyFor = ref<string>();
 const reportingDiscomfort = ref(false);
@@ -185,12 +186,41 @@ async function logWarmup(): Promise<void> {
                 {{ t('session.express') }}
               </ion-button>
             </template>
-            <template v-else>
+            <template v-else-if="!readyMade">
               <p>{{ t('session.noFavorites', { template: t(`templates.${template.id}`) }) }}</p>
               <ion-button expand="block" fill="outline" router-link="/tabs/catalog">
                 {{ t('session.goToCatalog') }}
               </ion-button>
             </template>
+            <!-- Not enough favorites: a ready-made session with popular machines. -->
+            <section v-if="readyMade" class="ready-made" :aria-label="t('session.readyMade.title')">
+              <h3>{{ t('session.readyMade.title') }}</h3>
+              <p class="muted">
+                {{
+                  preview.length === 0
+                    ? t('session.readyMade.introNone')
+                    : t('session.readyMade.intro', preview.length)
+                }}
+              </p>
+              <ol class="plan">
+                <li v-for="e in readyMade.exercises" :key="e.id">
+                  {{ exerciseName(e) }}
+                  <span v-if="readyMade.suggestedIds.includes(e.id)" class="tag">{{
+                    t('session.readyMade.suggested')
+                  }}</span>
+                  <span class="muted"> · {{ kg(session.proposalFor(e.id)?.loadKg ?? 0) }}</span>
+                </li>
+              </ol>
+              <ion-button expand="block" size="large" @click="session.start({ readyMade: true })">
+                {{ t('session.readyMade.start') }}
+              </ion-button>
+              <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
+                {{ t('session.readyMade.adopt', readyMade.suggestedIds.length) }}
+              </ion-button>
+              <ion-button expand="block" fill="clear" router-link="/tabs/catalog">
+                {{ t('session.goToCatalog') }}
+              </ion-button>
+            </section>
             <!-- At home, any exercise doable with the declared equipment: no favorite needed. -->
             <ion-button
               v-if="session.homePreview.value.length > 0"
@@ -409,6 +439,21 @@ async function logWarmup(): Promise<void> {
 }
 .plan li {
   margin-block: 4px;
+}
+.ready-made {
+  margin-block-start: 12px;
+}
+.ready-made h3 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+.tag {
+  margin-inline-start: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--ion-color-light);
+  color: var(--ion-color-light-contrast);
+  font-size: 0.75rem;
 }
 .muted {
   color: var(--ion-color-medium);
