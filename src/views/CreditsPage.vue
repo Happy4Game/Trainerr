@@ -61,8 +61,12 @@ const spdx = (license: string) =>
           — {{ t('credits.data.freeExerciseDb') }}
         </li>
         <li>
+          <a href="https://github.com/everkinetic/data" target="_blank" rel="noopener"
+            >Everkinetic</a
+          >
+          {{ t('credits.data.and') }}
           <a href="https://wger.de" target="_blank" rel="noopener">wger.de</a> —
-          {{ t('credits.data.wger') }}
+          {{ t('credits.data.images') }}
           <ul>
             <li v-for="[author, info] in imageAuthors" :key="author">
               {{ author }} (<a :href="info.licenseUrl" target="_blank" rel="noopener">{{

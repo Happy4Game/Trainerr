@@ -133,7 +133,8 @@
       "label": "Illustration du mouvement : {name}",
       "pause": "Mettre l'animation en pause",
       "play": "Reprendre l'animation",
-      "caption": "Illustration : {exercise} —"
+      "caption": "Illustration : {exercise} —",
+      "source": "source"
     }
   },
   "templates": {
@@ -563,10 +564,10 @@
     "data": {
       "title": "Données et images",
       "freeExerciseDb": "catalogue d'exercices, domaine public (Unlicense).",
-      "wger": "illustrations des mouvements, non modifiées :",
       "and": "et",
       "muscleMap": "silhouettes musculaires, licence MIT.",
-      "lucide": "icônes, licence ISC."
+      "lucide": "icônes, licence ISC.",
+      "images": "illustrations des mouvements (départ et arrivée), redimensionnées et passées en niveaux de gris :"
     },
     "sources": {
       "title": "Sources scientifiques",
@@ -656,13 +657,6 @@
       "kg": "kg",
       "lb": "lb"
     }
-  },
-  "demo": {
-    "label": "Démonstration animée du mouvement : {name}",
-    "caption": "Démonstration du mouvement (schéma animé).",
-    "approximate": "Mouvement approché à partir du muscle principal : regarde aussi les consignes.",
-    "pause": "Mettre la démonstration en pause",
-    "play": "Reprendre la démonstration"
   },
   "common": {
     "back": "Retour"

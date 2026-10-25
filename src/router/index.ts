@@ -6,9 +6,6 @@ import { loadSettings } from '@/ui/useSettings';
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/tabs/today' },
   { path: '/onboarding', component: () => import('@/views/OnboardingPage.vue') },
-  ...(import.meta.env.DEV
-    ? [{ path: '/dev/demos', component: () => import('@/views/DemoGalleryPage.vue') }]
-    : []),
   {
     path: '/tabs/',
     component: TabsLayout,

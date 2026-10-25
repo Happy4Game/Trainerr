@@ -133,11 +133,12 @@ describe('exercise illustrations', () => {
     const { existsSync } = await import('node:fs');
     const { allIllustrations } = await import('@/data/catalog/exerciseImages');
     const illustrations = Object.entries(allIllustrations());
-    expect(illustrations.length).toBeGreaterThan(10);
+    expect(illustrations.length).toBeGreaterThan(200);
     for (const [id, illustration] of illustrations) {
       expect(byId.has(id), id).toBe(true);
       for (const image of illustration.images) {
         expect(['Everkinetic', 'wger.de']).toContain(image.author);
+        expect(['Everkinetic', 'wger.de']).toContain(illustration.source);
         expect(image.license).toMatch(/^CC (BY|BY-SA) \d\.\d$|^CC0 1\.0$/);
         expect(existsSync(`public/exercise-images/${image.file}`), image.file).toBe(true);
       }

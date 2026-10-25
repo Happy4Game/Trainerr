@@ -23,8 +23,6 @@ import { useI18n } from 'vue-i18n';
 import type { MuscleId } from '@/domain/muscles';
 import { repRangeFor } from '@/domain/progression';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
-import ExerciseDemo from '@/ui/demo/ExerciseDemo.vue';
-import { movementFor } from '@/ui/demo/movementFor';
 import ExerciseIllustration from '@/ui/ExerciseIllustration.vue';
 import ComebackCard from '@/ui/ComebackCard.vue';
 import ExerciseProgress from '@/ui/ExerciseProgress.vue';
@@ -73,7 +71,6 @@ const stepsForComeback = computed(() =>
 );
 const cuesFor = (cues: { fr: readonly string[]; en?: readonly string[] }) =>
   french.value ? cues.fr : (cues.en ?? cues.fr);
-const demo = computed(() => (exercise.value ? movementFor(exercise.value) : undefined));
 const illustration = computed(() => illustrationFor(props.id));
 const range = computed(() => (exercise.value ? repRangeFor(exercise.value) : undefined));
 
@@ -124,15 +121,6 @@ const muscleList = (muscles: readonly MuscleId[]) =>
           />
           {{ t(entry.favorite ? 'exercise.favorite.remove' : 'exercise.favorite.add') }}
         </ion-button>
-
-        <ExerciseDemo
-          v-if="demo"
-          :movement="demo.id"
-          :equipment="exercise.equipment"
-          :name="title"
-          :approximate="demo.approximate"
-          class="ion-margin-top"
-        />
 
         <ExerciseIllustration
           v-if="illustration"

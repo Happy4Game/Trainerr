@@ -9,8 +9,10 @@ export interface ExerciseImage {
 }
 
 export interface ExerciseIllustration {
-  /** Name of the illustrated exercise on wger, shown in the caption. */
-  readonly wgerName: string;
+  /** Name of the illustrated exercise at the source, shown in the caption. */
+  readonly sourceName: string;
+  /** Everkinetic, or wger.de for the few machines Everkinetic does not draw. */
+  readonly source: string;
   readonly sourceUrl: string;
   /** Start and end of the movement when there are two. */
   readonly images: readonly ExerciseImage[];

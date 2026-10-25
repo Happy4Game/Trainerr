@@ -29,9 +29,13 @@ Date : 2026-10-24 · Statut : accepté
 
 Dans le navigateur, la toute dernière écriture peut être perdue si la page est rechargée pendant l'enregistrement (voir ADR 0002 pour le correctif qui évite de perdre toute la base). L'écran affiche « Paliers enregistrés » une fois l'écriture terminée. Sur téléphone, la base SQLite native n'a pas ce problème.
 
-## Illustrations (ajout du 2026-10-24)
+## Illustrations (mise à jour du 2026-10-25)
 
-- Source : images de [wger.de](https://wger.de) avec licence et auteur connus. `scripts/update-exercise-images.mjs` associe à la main chaque machine courante à un exercice wger, télécharge au plus 2 images (départ et arrivée du mouvement) et note licence, auteur et lien dans `src/data/catalog/exercise-images.json`.
-- **Auteurs retenus : Everkinetic (illustrations publiées sous CC BY-SA) et wger.de.** Les images envoyées par d'autres utilisateurs de wger sont écartées : l'une porte un filigrane « © HOIST Fitness Systems », d'autres ressemblent à des visuels commerciaux. Elles pourront être ajoutées après vérification une à une (Chest Press, Triceps Pushdown, Lat Pulldown, Seated Row, Leg Press, Leg Extension, Squat, Hip Abduction/Adduction, Calf Raise, Plank, machines divergentes…).
-- Les images générées par IA sont exclues.
-- La fiche alterne les deux images (bouton pause ; images côte à côte si le téléphone demande moins d'animations) et affiche sous l'image : nom de l'exercice illustré, auteur, licence, lien wger. CC BY-SA impose cette attribution ; les images ne sont pas modifiées.
+- **Source principale : [Everkinetic](https://github.com/everkinetic/data)** (CC BY-SA 4.0), figé au commit `446bb9a`. Dessins au trait du départ et de l'arrivée du mouvement. `scripts/update-exercise-images.mjs` associe à la main chaque fiche du catalogue à un exercice Everkinetic qui montre le même geste (environ 210 associations, vérifiées dessin par dessin).
+- Le dépôt Everkinetic range à part 99 images d'**origine inconnue** (`src/images-png-unknown`) : les 4 exercices concernés sont écartés. Les dessins vectoriels sont pris en priorité, sinon les images de l'ancien site everkinetic.com (même projet, même licence).
+- **Modifications** (à signaler selon CC BY-SA) : redimensionnés à 480 px, passés en 8 niveaux de gris (≈ 10 Ko par image, 4,7 Mo en tout). Les images modifiées restent sous CC BY-SA 4.0.
+- **Secours : wger.de**, pour les machines qu'Everkinetic ne dessine pas. Seuls les auteurs Everkinetic et wger.de sont retenus : les envois d'autres utilisateurs de wger contiennent parfois des visuels commerciaux (filigrane « © HOIST Fitness Systems »).
+- Exclus : images générées par IA ; ExerciseDB (conditions payantes, code AGPL), MuscleWiki (droits réservés), Gymvisual (licence payante).
+- La fiche alterne les deux dessins pour montrer le geste (bouton pause ; côte à côte si le téléphone demande moins d'animations) et affiche sous l'image : exercice illustré, auteur, licence, lien vers la source. La page Crédits liste les auteurs et signale les modifications.
+- La démonstration animée maison (silhouette SVG) a été retirée à la demande de Thibaut, au profit de ces dessins.
+- Sans illustration pour l'instant : élévations latérales machine, rowing divergent, face pull, reverse fly machine, gainage (planche), et les exercices peu courants. Ils gardent la silhouette des muscles et les consignes.

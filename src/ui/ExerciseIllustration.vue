@@ -58,7 +58,7 @@ const authors = computed(() => [
       <Play v-else :size="20" aria-hidden="true" />
     </button>
     <figcaption>
-      {{ t('exercise.illustration.caption', { exercise: illustration.wgerName }) }}
+      {{ t('exercise.illustration.caption', { exercise: illustration.sourceName }) }}
       <template v-for="(image, index) in authors" :key="image.file">
         <span v-if="index > 0">, </span>
         <a v-if="image.authorUrl" :href="image.authorUrl" target="_blank" rel="noopener">{{
@@ -69,7 +69,9 @@ const authors = computed(() => [
         >)
       </template>
       —
-      <a :href="illustration.sourceUrl" target="_blank" rel="noopener">wger.de</a>
+      <a :href="illustration.sourceUrl" target="_blank" rel="noopener">{{
+        t('exercise.illustration.source')
+      }}</a>
     </figcaption>
   </figure>
 </template>

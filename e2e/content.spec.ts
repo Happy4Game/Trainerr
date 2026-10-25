@@ -22,6 +22,7 @@ test('settings lead to the getting started, about and credits pages', async ({ p
   await page.getByRole('link', { name: 'Voir les crédits et les sources' }).click();
 
   await expect(page.getByRole('link', { name: 'free-exercise-db' })).toBeVisible();
-  await expect(page.getByText('Everkinetic')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Everkinetic' })).toBeVisible();
+  await expect(page.getByText(/passées en niveaux de gris/)).toBeVisible();
   await expect(page.getByText(/bibliothèques libres embarquées/)).toBeVisible();
 });

@@ -133,7 +133,8 @@
       "label": "Movement illustration: {name}",
       "pause": "Pause the animation",
       "play": "Play the animation",
-      "caption": "Illustration: {exercise} —"
+      "caption": "Illustration: {exercise} —",
+      "source": "source"
     }
   },
   "templates": {
@@ -563,10 +564,10 @@
     "data": {
       "title": "Data and images",
       "freeExerciseDb": "exercise catalog, public domain (Unlicense).",
-      "wger": "movement illustrations, unmodified:",
       "and": "and",
       "muscleMap": "muscle silhouettes, MIT license.",
-      "lucide": "icons, ISC license."
+      "lucide": "icons, ISC license.",
+      "images": "movement illustrations (start and end), resized and converted to greyscale:"
     },
     "sources": {
       "title": "Scientific sources",
@@ -656,13 +657,6 @@
       "kg": "kg",
       "lb": "lb"
     }
-  },
-  "demo": {
-    "label": "Animated demonstration of the movement: {name}",
-    "caption": "Movement demonstration (animated diagram).",
-    "approximate": "Movement approximated from the main muscle: check the cues too.",
-    "pause": "Pause the demonstration",
-    "play": "Play the demonstration"
   },
   "common": {
     "back": "Back"
