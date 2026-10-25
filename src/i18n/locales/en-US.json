@@ -298,7 +298,6 @@
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",
     "express": "Express workout (20–30 min)",
-    "superset": "Superset with {name}: go straight on, no rest.",
     "home": "Home workout",
     "readyMade": {
       "title": "Suggested pre-session",
@@ -373,7 +372,14 @@
     "supersetToggle": "Pair exercises in supersets",
     "supersetToggleHelp": "Two exercises for opposite muscles back to back, rest after the second: shorter session. Optional.",
     "split": "Split",
-    "splitNamed": "Split the superset with {name}"
+    "splitNamed": "Split the superset with {name}",
+    "supersetPlace": "Superset {place}/2 ·",
+    "supersetThen": "then {name} right away, no rest.",
+    "supersetLast": "with {name}: rest after this set.",
+    "supersetGroup": "Superset: {first} and {second}",
+    "supersetTitle": "Superset",
+    "supersetRest": "back to back, rest after the second",
+    "supersetNone": "No superset possible for this session: the exercises work the same muscles or are heavy lifts. They stay as straight sets."
   },
   "availability": {
     "day": "Day",

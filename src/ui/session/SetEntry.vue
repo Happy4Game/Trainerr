@@ -159,7 +159,16 @@ function listen(): void {
       </ion-button>
     </div>
     <div v-if="partnerName" class="superset" role="note">
-      <span>{{ t('session.superset', { name: partnerName }) }}</span>
+      <span>
+        <strong>{{
+          t('session.supersetPlace', { place: session.supersetPlace(exerciseId) })
+        }}</strong>
+        {{
+          session.supersetPlace(exerciseId) === 1
+            ? t('session.supersetThen', { name: partnerName })
+            : t('session.supersetLast', { name: partnerName })
+        }}
+      </span>
       <ion-button
         size="small"
         fill="outline"

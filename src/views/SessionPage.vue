@@ -29,7 +29,7 @@ import MobilityCard from '@/ui/MobilityCard.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
-import ExerciseRow from '@/ui/ExerciseRow.vue';
+import SessionPlanList from '@/ui/session/SessionPlanList.vue';
 import SessionOverview from '@/ui/session/SessionOverview.vue';
 import SetEditModal from '@/ui/session/SetEditModal.vue';
 import { Pencil } from 'lucide-vue-next';
@@ -153,6 +153,10 @@ const musclesOf = (e: Exercise) => e.primaryMuscles.map((m) => t(`muscles.${m}`)
 const planDetail = (id: string) =>
   `${t('session.nextMachine.plan', session.plannedSets(id))} · ${kg(session.proposalFor(id)?.loadKg ?? 0)}`;
 /** Card of a machine; a banner there leads back to the session. */
+const suggestedBadge = (id: string) =>
+  preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
+    ? t('session.readyMade.suggested')
+    : undefined;
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
 
@@ -260,16 +264,13 @@ async function logWarmup(): Promise<void> {
               </ion-toggle>
             </ion-item>
             <template v-if="preview.length > 0">
-              <ol class="plan">
-                <li v-for="e in preview" :key="e.id">
-                  <ExerciseRow
-                    :exercise-id="e.id"
-                    :name="exerciseName(e)"
-                    :detail="planDetail(e.id)"
-                    :to="cardLink(e.id)"
-                  />
-                </li>
-              </ol>
+              <SessionPlanList
+                :exercises="preview"
+                :supersets="useSupersets"
+                :name="exerciseName"
+                :detail="planDetail"
+                :to="cardLink"
+              />
               <ion-button
                 expand="block"
                 size="large"
@@ -302,24 +303,14 @@ async function logWarmup(): Promise<void> {
                     : t('session.readyMade.intro', preview.length)
                 }}
               </p>
-              <ol class="plan">
-                <li v-for="e in readyMade.exercises" :key="e.id">
-                  <ExerciseRow
-                    :exercise-id="e.id"
-                    :name="exerciseName(e)"
-                    :detail="planDetail(e.id)"
-                    :to="cardLink(e.id)"
-                  >
-                    <template #badge>
-                      <span
-                        v-if="preview.length > 0 && readyMade.suggestedIds.includes(e.id)"
-                        class="tag"
-                        >{{ t('session.readyMade.suggested') }}</span
-                      >
-                    </template>
-                  </ExerciseRow>
-                </li>
-              </ol>
+              <SessionPlanList
+                :exercises="readyMade.exercises"
+                :supersets="useSupersets"
+                :name="exerciseName"
+                :detail="planDetail"
+                :to="cardLink"
+                :badge="suggestedBadge"
+              />
               <ion-button
                 expand="block"
                 size="large"
@@ -741,28 +732,12 @@ async function logWarmup(): Promise<void> {
 </template>
 
 <style scoped>
-.plan {
-  margin: 8px 0 12px;
-  padding: 0;
-  list-style: none;
-}
-.plan li + li {
-  border-block-start: 1px solid var(--ion-color-light);
-}
 .ready-made {
   margin-block-start: 12px;
 }
 .ready-made h3 {
   margin: 0 0 4px;
   font-size: 1.05rem;
-}
-.tag {
-  margin-inline-end: 6px;
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: var(--ion-color-light);
-  color: var(--ion-color-light-contrast);
-  font-size: 0.75rem;
 }
 .progress {
   display: grid;

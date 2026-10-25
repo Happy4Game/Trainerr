@@ -50,7 +50,12 @@ import {
   MAX_SETS,
   setsPerExercise,
 } from '@/domain/sessionBuilder';
-import { afterSupersetSet, proposeSupersets, supersetPairs } from '@/domain/supersets';
+import {
+  afterSupersetSet,
+  proposeSupersets,
+  supersetPairs,
+  type SessionBlock,
+} from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupSet } from '@/domain/warmup';
@@ -298,6 +303,12 @@ const cycle = computed(() =>
   cycleWeek(settings.value?.programStart ?? history.value[0]?.date ?? today(), today()),
 );
 
+/** The exercises as they would be done in supersets, with the user's spared zone. */
+function supersetBlocks<E extends Exercise>(exercises: readonly E[]): SessionBlock[] {
+  const zone = settings.value?.protectedZone;
+  return proposeSupersets(exercises, zone ? { protectedZone: zone } : {});
+}
+
 async function start(
   options: {
     express?: boolean;
@@ -326,15 +337,7 @@ async function start(
   if (!template.value || exercises.length === 0 || !settings.value) return;
   const sets = setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light);
   const pairs =
-    (options.supersets ?? settings.value.supersets)
-      ? supersetPairs(
-          proposeSupersets(exercises, {
-            ...(settings.value.protectedZone
-              ? { protectedZone: settings.value.protectedZone }
-              : {}),
-          }),
-        )
-      : [];
+    (options.supersets ?? settings.value.supersets) ? supersetPairs(supersetBlocks(exercises)) : [];
   // Partners side by side in the order.
   const ids: string[] = [];
   for (const e of exercises) {
@@ -697,6 +700,12 @@ export function useSession() {
     cycle,
     supersetPartner: (id: string) =>
       active.value?.plan.supersets?.find((p) => p.includes(id))?.find((other) => other !== id),
+    /** 1 or 2: place of the exercise in its superset, undefined outside one. */
+    supersetPlace: (id: string) => {
+      const pair = active.value?.plan.supersets?.find((p) => p.includes(id));
+      return pair ? (pair[0] === id ? 1 : 2) : undefined;
+    },
+    supersetBlocks,
     lastDoneTemplateId,
     history,
     preview,

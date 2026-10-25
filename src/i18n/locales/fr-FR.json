@@ -298,7 +298,6 @@
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",
     "express": "Séance express (20–30 min)",
-    "superset": "Superset avec {name} : enchaîne sans repos.",
     "home": "Séance à la maison",
     "readyMade": {
       "title": "Pré-séance proposée",
@@ -373,7 +372,14 @@
     "supersetToggle": "Enchaîner en supersets",
     "supersetToggleHelp": "Deux exercices de muscles opposés à la suite, repos après le second : séance plus courte. Facultatif.",
     "split": "Séparer",
-    "splitNamed": "Séparer le superset avec {name}"
+    "splitNamed": "Séparer le superset avec {name}",
+    "supersetPlace": "Superset {place}/2 ·",
+    "supersetThen": "puis {name} tout de suite, sans repos.",
+    "supersetLast": "avec {name} : repos après cette série.",
+    "supersetGroup": "Superset : {first} et {second}",
+    "supersetTitle": "Superset",
+    "supersetRest": "enchaînés, repos après le second",
+    "supersetNone": "Pas de superset possible pour cette séance : les exercices travaillent les mêmes muscles ou sont des exercices lourds. Ils restent en séries classiques."
   },
   "availability": {
     "day": "Jour",
