@@ -49,3 +49,10 @@ export function highlightedParts(
   }
   return parts;
 }
+
+/** Muscles of the app drawn on a zone of the silhouette (to search by body part). */
+export function musclesAt(view: BodyView, slug: string): MuscleId[] {
+  return (Object.entries(MUSCLE_SLUGS) as [MuscleId, readonly BodyPart[]][])
+    .filter(([, parts]) => parts.some((p) => p.view === view && p.slug === slug))
+    .map(([muscle]) => muscle);
+}

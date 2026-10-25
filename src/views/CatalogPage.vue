@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonItem,
@@ -15,7 +16,9 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { Dumbbell, Star } from 'lucide-vue-next';
+import { Dumbbell, PersonStanding, Star, X } from 'lucide-vue-next';
+import type { MuscleId } from '@/domain/muscles';
+import BodyPicker from '@/ui/muscleMap/BodyPicker.vue';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
@@ -44,6 +47,12 @@ const { load: kg } = useUnits();
 
 /** Load lifted on each machine: last session or noted by hand, editable from here. */
 const noting = ref<{ id: string; name: string }>();
+
+/** Search by body part: muscles of the zone touched on the silhouette. */
+const showBody = ref(false);
+const zoneMuscles = ref<MuscleId[]>([]);
+const zoneLabel = computed(() => zoneMuscles.value.map((m) => t(`muscles.${m}`)).join(', '));
+watch(zoneMuscles, () => (shown.value = PAGE_SIZE));
 const loadOf = (entry: CatalogEntry) => session.myLoadFor(entry.exercise.id);
 const loadText = (entry: CatalogEntry) => {
   const l = loadOf(entry);
@@ -87,6 +96,11 @@ const matching = computed<Row[]>(() => {
       return entry.exercise.group === filter.value;
     })
     .filter((entry) => matchesSearch(searchTexts(entry), query.value))
+    .filter(
+      (entry) =>
+        zoneMuscles.value.length === 0 ||
+        entry.exercise.primaryMuscles.some((m) => zoneMuscles.value.includes(m)),
+    )
     .map((entry) => {
       const image = illustrationFor(entry.exercise.id)?.images[0];
       return {
@@ -136,6 +150,16 @@ function onFilter(value: unknown): void {
           :placeholder="t('catalog.search')"
           :aria-label="t('catalog.search')"
         />
+        <ion-buttons slot="end">
+          <ion-button
+            :fill="showBody ? 'solid' : 'clear'"
+            :aria-pressed="showBody"
+            :aria-label="t('catalog.body.toggle')"
+            @click="showBody = !showBody"
+          >
+            <PersonStanding :size="24" aria-hidden="true" />
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
       <ion-toolbar>
         <ion-segment :value="filter" scrollable @ion-change="onFilter($event.detail.value)">
@@ -154,6 +178,21 @@ function onFilter(value: unknown): void {
         {{ t('catalog.error', { message: state.message }) }}
       </p>
       <template v-else>
+        <section v-if="showBody" class="body-search" :aria-label="t('catalog.body.title')">
+          <p class="body-help">{{ t('catalog.body.help') }}</p>
+          <BodyPicker :selected="zoneMuscles" @pick="zoneMuscles = $event" />
+        </section>
+        <div v-if="zoneMuscles.length > 0" class="zone-chip">
+          <span>{{ t('catalog.body.zone', { muscles: zoneLabel }) }}</span>
+          <ion-button
+            size="small"
+            fill="clear"
+            :aria-label="t('catalog.body.clear')"
+            @click="zoneMuscles = []"
+          >
+            <X :size="18" aria-hidden="true" />
+          </ion-button>
+        </div>
         <p class="ion-padding-horizontal count" role="status">
           {{ t('catalog.count', matching.length) }}
         </p>
@@ -229,6 +268,30 @@ function onFilter(value: unknown): void {
 </template>
 
 <style scoped>
+.body-search {
+  margin: 8px 16px;
+  padding: 12px;
+  border-radius: var(--app-radius);
+  background: var(--ion-card-background);
+  box-shadow: var(--app-shadow);
+}
+.body-help {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium-shade);
+  text-align: center;
+}
+.zone-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 16px 0;
+  padding: 2px 4px 2px 14px;
+  border-radius: 999px;
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+  color: var(--ion-color-primary);
+  font-weight: 700;
+}
 .my-load {
   display: inline-flex;
   align-items: center;

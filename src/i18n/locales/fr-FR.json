@@ -85,6 +85,13 @@
       "favorites": "Mes machines",
       "popular": "Machines populaires",
       "others": "Autres exercices"
+    },
+    "body": {
+      "toggle": "Chercher par zone du corps",
+      "title": "Recherche par zone du corps",
+      "help": "Touche une zone pour voir les exercices qui la travaillent.",
+      "zone": "Zone : {muscles}",
+      "clear": "Retirer la zone"
     }
   },
   "exercise": {
@@ -546,7 +553,9 @@
       "help": "Une photo par mois, même lumière, même angle : plus parlant que le miroir. Elle reste sur ton téléphone.",
       "take": "Prendre la photo du mois",
       "alt": "Photo du {date}"
-    }
+    },
+    "front": "Face",
+    "back": "Dos"
   },
   "settings": {
     "title": "Réglages",

@@ -85,6 +85,13 @@
       "favorites": "My machines",
       "popular": "Popular machines",
       "others": "Other exercises"
+    },
+    "body": {
+      "toggle": "Search by body part",
+      "title": "Search by body part",
+      "help": "Touch a zone to see the exercises that work it.",
+      "zone": "Zone: {muscles}",
+      "clear": "Clear the zone"
     }
   },
   "exercise": {
@@ -546,7 +553,9 @@
       "help": "One photo a month, same light, same angle: it tells more than the mirror. It stays on your phone.",
       "take": "Take this month's photo",
       "alt": "Photo of {date}"
-    }
+    },
+    "front": "Front",
+    "back": "Back"
   },
   "settings": {
     "title": "Settings",

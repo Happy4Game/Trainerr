@@ -103,6 +103,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - « Tout voir » ouvre le programme de la séance : chaque machine avec dessin, état, séries faites / prévues, charge, et « Maintenant » / « Rouvrir » pour changer l'ordre. Ligne compacte « Précédent : … · ← Revenir · +1 série ».
 
+- Recherche par zone du corps dans le catalogue : silhouette face / dos, toucher une zone filtre les exercices qui la travaillent (combinable avec la recherche et les onglets), utilisable au clavier.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

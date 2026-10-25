@@ -166,3 +166,17 @@ test('the load can be noted on any exercise, even not in my machines', async ({ 
     page.getByRole('button', { name: /Ma charge sur Curl marteau : 14\s*kg × 12/ }),
   ).toBeVisible();
 });
+
+test('exercises can be found by touching a body part', async ({ page }) => {
+  await openCatalog(page);
+  await page.getByRole('button', { name: 'Chercher par zone du corps' }).click();
+  await page.getByRole('button', { name: 'Biceps', exact: true }).locator('path').first().click();
+  await expect(page.getByText('Zone : Biceps')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Curl marteau', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Développé couché barre', exact: true }),
+  ).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Retirer la zone' }).click();
+  await expect(page.getByRole('status')).toHaveText('480 exercices');
+});
