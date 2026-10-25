@@ -1,0 +1,16 @@
+{
+  "name": "trainerr-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Serveur optionnel de Trainerr : défis entre amis et conseils par IA.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/index.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0"
+  }
+}

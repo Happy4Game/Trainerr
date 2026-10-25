@@ -8,3 +8,5 @@ public/assets/sql-wasm.wasm
 !.vscode/extensions.json
 playwright-report
 test-results
+server/node_modules
+server/*.sqlite

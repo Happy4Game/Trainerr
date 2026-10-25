@@ -18,9 +18,14 @@ export function loadSettings(): Promise<Settings> {
   return loading;
 }
 
-export async function updateSettings(patch: Partial<Settings>): Promise<Settings> {
+/** A value set to undefined removes the setting (e.g. the server account). */
+export type SettingsPatch = { [K in keyof Settings]?: Settings[K] | undefined };
+
+export async function updateSettings(patch: SettingsPatch): Promise<Settings> {
   const current = await loadSettings();
-  const next = { ...current, ...patch } as Settings;
+  const next = Object.fromEntries(
+    Object.entries({ ...current, ...patch }).filter(([, value]) => value !== undefined),
+  ) as unknown as Settings;
   const { db } = await openAppDatabase();
   await saveSettings(db, next);
   settings.value = next;

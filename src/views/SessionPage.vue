@@ -32,6 +32,8 @@ import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
 import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
 import { useSession } from '@/ui/session/useSession';
+import { syncStats } from '@/ui/friends';
+import { todayIso } from '@/ui/useWeekPlan';
 
 const { t, n, locale } = useI18n();
 const session = useSession();
@@ -76,6 +78,16 @@ const nameOf = (id: string) => {
 };
 const exerciseName = (e: Exercise) => nameOf(e.id);
 const { load: kg } = useUnits();
+
+/** Ends the session, then updates the challenges in the background: offline is fine. */
+async function finishSession(): Promise<void> {
+  await session.finish();
+  if (!appSettings.value) return;
+  syncStats(appSettings.value, session.history.value, todayIso(), {
+    exerciseName: nameOf,
+    load: kg,
+  }).catch(() => undefined);
+}
 const currentId = computed(() =>
   step.value?.kind === 'exercise' ? step.value.exerciseId : undefined,
 );
@@ -333,7 +345,7 @@ async function logWarmup(): Promise<void> {
           color="dark"
           fill="outline"
           class="finish"
-          @click="session.finish()"
+          @click="finishSession"
         >
           {{ t('session.finish') }}
         </ion-button>

@@ -31,6 +31,13 @@ export interface Settings {
   readonly homeEquipment: readonly Equipment[];
   /** First day of the current program: cycles and the "change program" reminder count from it. */
   readonly programStart?: string;
+  /** Optional Trainerr server (challenges, AI advice); nothing is sent without it. */
+  readonly serverUrl?: string;
+  readonly account?: { readonly name: string; readonly token: string };
+  /** Loads are hidden from friends by default. */
+  readonly shareRecords: boolean;
+  /** The user agreed to send the summary of their week to the AI coach. */
+  readonly aiConsent: boolean;
   readonly language: LanguagePreference;
   readonly weightUnit: WeightUnit;
   /** Set once the first-launch questionnaire is done or skipped. */
@@ -56,6 +63,8 @@ export const DEFAULT_SETTINGS: Settings = {
   notifications: { ...DEFAULT_NOTIFICATION_PREFS, enabled: false },
   currentGymId: 'default',
   homeEquipment: ['dumbbell', 'bodyweight'],
+  shareRecords: false,
+  aiConsent: false,
   language: 'system',
   weightUnit: 'kg',
   onboarded: false,

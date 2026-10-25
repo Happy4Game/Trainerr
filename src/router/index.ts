@@ -22,6 +22,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'settings', component: () => import('@/views/SettingsPage.vue') },
       { path: 'settings/tips', component: () => import('@/views/TipsPage.vue') },
       { path: 'settings/credits', component: () => import('@/views/CreditsPage.vue') },
+      { path: 'settings/friends', component: () => import('@/views/FriendsPage.vue') },
       { path: 'settings/about', component: () => import('@/views/AboutPage.vue') },
       { path: 'planning', component: () => import('@/views/PlanningPage.vue') },
     ],

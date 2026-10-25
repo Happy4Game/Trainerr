@@ -777,5 +777,52 @@
     "workload": "{load} soulevés",
     "records": "{count} record battu | {count} records battus",
     "footer": "Fait avec Trainerr"
+  },
+  "friends": {
+    "title": "Défis entre amis",
+    "privacy": "Optionnel. Seuls ton pseudo, ton nombre de séances de la semaine et ta régularité sont envoyés au serveur. Tes charges restent sur ton téléphone, sauf si tu choisis de partager tes records.",
+    "serverHelp": "Pour défier tes amis, indique l'adresse du serveur Trainerr de votre groupe.",
+    "server": "Adresse du serveur",
+    "saveServer": "Enregistrer le serveur",
+    "pseudo": "Pseudo",
+    "createAccount": "Créer mon compte",
+    "code": "Code à partager : {code}",
+    "sessions": "{count} séance | {count} séances",
+    "weeks": "{count} semaine au rythme | {count} semaines au rythme",
+    "noGroup": "Tu n'es dans aucun groupe pour l'instant.",
+    "groupName": "Nom du nouveau groupe",
+    "create": "Créer",
+    "joinCode": "Code d'un groupe",
+    "join": "Rejoindre",
+    "shareRecords": "Partager mes records (charges) avec mes groupes",
+    "refresh": "Actualiser",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteConfirm": "Ton compte, tes groupes vides et tes statistiques seront effacés du serveur. Tes séances restent sur ton téléphone.",
+    "deleteYes": "Oui, supprimer",
+    "errors": {
+      "network": "Serveur injoignable. Vérifie ta connexion ou l'adresse du serveur.",
+      "unknown_code": "Aucun groupe ne correspond à ce code.",
+      "invalid_name": "Le nom doit faire entre 1 et 40 caractères.",
+      "url": "L'adresse doit commencer par http:// ou https://.",
+      "other": "Le serveur a renvoyé une erreur. Réessaie plus tard."
+    }
+  },
+  "advice": {
+    "title": "Conseil du coach IA",
+    "consent": "Pour te répondre, le résumé de tes 7 derniers jours (exercices, charges, gênes signalées) sera envoyé à ton serveur Trainerr, puis à Claude, l'IA d'Anthropic. Ni ton nom ni tes mensurations ne sont envoyés.",
+    "seeSummary": "Voir ce qui sera envoyé",
+    "agree": "J'accepte d'envoyer ce résumé",
+    "question": "Ta question (facultatif)",
+    "ask": "Demander un conseil",
+    "loading": "Le coach réfléchit…",
+    "warning": "Conseil généré par une IA : il peut se tromper et ne remplace pas un professionnel de santé.",
+    "withdraw": "Retirer mon accord",
+    "errors": {
+      "network": "Serveur injoignable. Réessaie quand tu as du réseau.",
+      "daily_limit": "Tu as atteint le nombre de conseils du jour. Reviens demain !",
+      "refused": "Le coach ne peut pas répondre à cette question. Reformule-la ou demande à un professionnel.",
+      "unavailable": "Le coach IA est indisponible pour le moment. Réessaie plus tard.",
+      "other": "Une erreur est survenue. Réessaie plus tard."
+    }
   }
 }

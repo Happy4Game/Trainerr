@@ -86,9 +86,13 @@ Illustrations des mouvements : 12 machines, dessins Everkinetic / wger.de (CC BY
 - Crédits : données, auteurs des images, sources scientifiques, et les 104 bibliothèques embarquées avec le texte de leur licence (générés au build ; le build échoue sur une licence hors de la liste du cahier des charges).
 - À propos : le texte du cahier des charges. **Le bouton « Signaler une erreur » attend ton choix** (formulaire, e-mail ou page du projet).
 
-## Étape 8 — Connecté (en attente)
+## Étape 8 — Connecté (sans la montre)
 
-Défis entre amis (serveur et comptes), montre connectée, conseils en langage naturel par une API d'IA : ces fonctions demandent des comptes, un serveur et l'envoi de données hors du téléphone. À décider avec Thibaut avant de les coder.
+- Serveur optionnel `server/` (Node 24, SQLite) : comptes sans e-mail, groupes avec code à 6 caractères, classement à la régularité, records partagés seulement si l'utilisateur l'accepte, suppression du compte. Voir [server/README.md](server/README.md) et [ADR 0006](docs/adr/0006-serveur-optionnel.md).
+- Page **Défis entre amis** (Réglages) ; synchronisation en arrière-plan à la fin de chaque séance.
+- Carte **Conseil du coach IA** sur Aujourd'hui : accord explicite et retirable, texte exact visible avant l'envoi, question facultative, mention « conseil généré par une IA », limite quotidienne. Claude Opus 5.5 côté serveur, la clé de l'API ne quitte pas le serveur.
+- Montre connectée : reportée (demande de Thibaut).
+- **À décider** : où héberger le serveur, et qui paie la clé de l'API Claude.
 
 ## Étape 9 — Finition (en partie)
 
@@ -97,8 +101,7 @@ Défis entre amis (serveur et comptes), montre connectée, conseils en langage n
 
 ## Reste à faire (fonctions du cahier des charges)
 
-- Séance : supersets affichés ensemble dans la séance (règles prêtes dans `supersets.ts`), séance express.
-- Fonctions complémentaires : badges, image récap à partager, cycles, partage avec un coach, plusieurs salles, widget, montre, mode maison, échauffement articulaire, import depuis d'autres applis, sauvegarde chiffrée.
+- Fonctions complémentaires : widget, montre.
 - Notifications : record battu, régularité, retour au niveau, conseil de la semaine (types prévus dans les réglages, pas encore déclenchés).
 
 ## Problèmes connus

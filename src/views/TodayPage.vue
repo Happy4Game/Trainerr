@@ -18,6 +18,7 @@ import { openAppDatabase } from '@/data/appDatabase';
 import { listBadges, type EarnedBadge } from '@/data/repositories/badgeRepository';
 import { useI18n } from 'vue-i18n';
 import { weeksOnPace } from '@/domain/stats';
+import AdviceCard from '@/ui/AdviceCard.vue';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
 
@@ -104,23 +105,9 @@ const streak = computed(() =>
             }}</ion-button>
           </ion-card-content>
         </ion-card>
-      </template>
 
-      <style scoped>
-        .badges {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          margin-block: 8px;
-        }
-        .badge {
-          padding: 4px 10px;
-          border-radius: 999px;
-          background: var(--ion-color-light);
-          color: var(--ion-color-light-contrast);
-          font-size: 0.85rem;
-        }
-      </style>
+        <AdviceCard />
+      </template>
     </ion-content>
   </ion-page>
 </template>

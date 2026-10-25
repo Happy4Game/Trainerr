@@ -88,6 +88,9 @@ async function redoQuestionnaire(): Promise<void> {
         <ion-item router-link="/tabs/settings/tips" detail>
           <ion-label>{{ t('tips.title') }}</ion-label>
         </ion-item>
+        <ion-item router-link="/tabs/settings/friends" detail>
+          <ion-label>{{ t('friends.title') }}</ion-label>
+        </ion-item>
         <ion-item router-link="/tabs/settings/about" detail>
           <ion-label>{{ t('about.title') }}</ion-label>
         </ion-item>
