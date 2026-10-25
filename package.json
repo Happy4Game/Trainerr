@@ -13,6 +13,7 @@
     "preview": "vite preview --host",
     "android:sync": "npm run build && cap sync android",
     "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug",
+    "android:export": "npm run android:apk && node scripts/export-apk.mjs",
     "typecheck": "vue-tsc --noEmit && tsc -p server/tsconfig.json",
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",

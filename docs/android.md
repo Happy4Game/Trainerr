@@ -31,7 +31,9 @@ echo "sdk.dir=$ANDROID_HOME" > android/local.properties
 ### Construire
 
 ```sh
-npm run android:apk
+npm run android:export   # APK copié dans exports/trainerr-<version>-debug.apk
+# ou
+npm run android:apk      # APK laissé dans android/app/build/outputs/apk/debug/
 ```
 
 La commande compile l'appli web, la copie dans le projet Android (`cap sync`) puis construit l'APK de debug :

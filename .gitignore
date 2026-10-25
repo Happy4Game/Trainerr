@@ -10,3 +10,4 @@ playwright-report
 test-results
 server/node_modules
 server/*.sqlite
+exports/

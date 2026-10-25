@@ -63,9 +63,38 @@ Vite affiche deux adresses :
 - **Local** (`http://localhost:5173`) pour l'ordinateur ;
 - **Network** (par exemple `http://192.168.1.20:5173`) pour le **téléphone**, connecté au même Wi-Fi. Ouvre-la dans Chrome ou Safari.
 
-### Sur Android
+## 📱 Générer l'APK Android
 
-Voir [docs/android.md](docs/android.md) pour construire l'APK et l'installer sur un téléphone.
+**Sans rien installer** : chaque push sur `main` déclenche le workflow GitHub **Android APK** ; l'APK se télécharge dans l'onglet **Actions**, artefact `trainerr-debug-apk`.
+
+**Sur ton ordinateur** :
+
+1. Installe le **JDK 21** ([Temurin](https://adoptium.net)) et le **SDK Android 36** (via [Android Studio](https://developer.android.com/studio), ou les outils en ligne de commande : voir [docs/android.md](docs/android.md)).
+2. Indique où ils sont :
+
+   ```sh
+   export JAVA_HOME=~/.local/jdk-21        # dossier du JDK 21
+   export ANDROID_HOME=~/Android/Sdk       # dossier du SDK Android
+   echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+   ```
+
+3. Génère l'APK :
+
+   ```sh
+   npm run android:export
+   ```
+
+   La commande compile l'appli, la copie dans le projet Android, construit l'APK et le dépose dans **`exports/trainerr-<version>-debug.apk`**.
+
+4. Installe-le sur le téléphone : envoie le fichier (mail, cloud, câble) et ouvre-le en autorisant l'installation depuis cette source, ou, téléphone branché en débogage USB :
+
+   ```sh
+   $ANDROID_HOME/platform-tools/adb install -r exports/trainerr-*-debug.apk
+   ```
+
+Autres commandes : `npm run android:apk` (APK dans `android/app/build/outputs/apk/debug/`), `npm run android:sync` (met à jour le projet Android après un changement), `npx cap open android` (ouvre Android Studio).
+
+> C'est un APK **de test**, signé avec une clé de debug. Pour le Play Store, il faut une clé de signature personnelle : la marche à suivre est dans [docs/android.md](docs/android.md#version-de-production-play-store).
 
 ## 🧪 Tests et qualité
 
