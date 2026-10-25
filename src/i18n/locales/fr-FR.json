@@ -195,20 +195,20 @@
     "start": "Commencer la séance",
     "noFavorites": "Aucune machine favorite pour la séance {template}. Mets une étoile sur les machines de ta salle dans le catalogue.",
     "goToCatalog": "Ouvrir le catalogue",
-    "setNumber": "Série {current} / {total}",
+    "setNumber": "Série {current} sur {total}",
     "reason": {
-      "aboveRange": "au-dessus de la fourchette, on monte",
-      "easy": "série facile, on monte",
-      "inRange": "même charge, vise le haut de la fourchette",
-      "hard": "série limite, même charge",
-      "belowRange": "sous la fourchette, on baisse",
-      "failure": "échec, on baisse",
-      "incompleteReps": "reps incomplètes, on baisse",
-      "missingStep": "palier suivant trop lourd, ajoute des reps",
-      "noHeavierStep": "palier le plus lourd atteint",
-      "progression": "d'après tes dernières séances",
-      "comeback": "reprise : charge réduite",
-      "testSet": "première fois : série test légère"
+      "aboveRange": "Tu as dépassé le haut de ta fourchette de reps : tu es prêt à monter.",
+      "easy": "La série précédente était facile.",
+      "inRange": "Tu es dans ta fourchette : même charge, une rep de plus si tu peux.",
+      "hard": "La série précédente était limite : on garde la charge.",
+      "belowRange": "Tu es sous ta fourchette de reps : on allège un peu.",
+      "failure": "Échec à la série précédente : on allège.",
+      "incompleteReps": "Reps incomplètes : on allège pour garder l'amplitude complète.",
+      "missingStep": "Le palier suivant de la machine est trop lourd : ajoute plutôt des reps.",
+      "noHeavierStep": "Tu es au palier le plus lourd de la machine.",
+      "progression": "D'après tes dernières séances.",
+      "comeback": "Reprise après une pause : charge réduite pour repartir sans te blesser.",
+      "testSet": "Première fois : série test légère pour trouver ta charge."
     },
     "reminder": {
       "rangeOfMotion": "Amplitude complète : une rep incomplète ne compte pas.",
@@ -223,7 +223,7 @@
     "halfRep": "Ajouter une demi-rep",
     "incomplete": "Reps incomplètes",
     "slowTempo": "Tempo lent",
-    "howWasIt": "Comment était cette série ?",
+    "howWasIt": "Comment c'était ?",
     "busy": "Machine occupée",
     "busyTitle": "{name} est occupée",
     "busyHelp": "Fais autre chose en attendant, l'appli te repropose la machine après l'exercice suivant.",
@@ -296,7 +296,31 @@
       "label": "Ajouter une série à cet exercice",
       "previous": "+1 série sur : {name}"
     },
-    "addExercise": "+ Ajouter un exercice"
+    "addExercise": "+ Ajouter un exercice",
+    "moreOptions": "Préciser la série (reps incomplètes, tempo lent, dictée)",
+    "coach": {
+      "lastTime": "La dernière fois : {sets}",
+      "noHistory": "Première fois sur cet exercice.",
+      "advice": {
+        "moreLoad": "Monte la charge : {load} × {reps}",
+        "moreReps": "Vise une rep de plus : {load} × {reps}",
+        "same": "Garde la charge : {load} × {reps}",
+        "lighter": "Allège : {load} × {reps}",
+        "first": "Commence à {load} × {reps}",
+        "comeback": "Reprise en douceur : {load} × {reps}"
+      }
+    },
+    "steps": {
+      "do": "Fais ta série",
+      "doHelp": "La charge et les reps conseillées sont déjà remplies. Change-les seulement si tu as fait autre chose.",
+      "feelHelp": "Un appui enregistre la série et lance le repos."
+    },
+    "difficultyHint": {
+      "easy": "3 reps ou plus en réserve",
+      "ok": "1 ou 2 en réserve",
+      "hard": "plus rien en réserve",
+      "fail": "pas pu finir"
+    }
   },
   "availability": {
     "day": "Jour",

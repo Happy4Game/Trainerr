@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import { stepDown, stepUp } from '@/domain/loadSteps';
 import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
+import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
 import { useSession } from './useSession';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
@@ -73,6 +74,23 @@ function changeReps(delta: number): void {
   reps.value = Math.max(0, reps.value + delta);
 }
 
+// Last session with this exercise, and the advice for this set compared with the previous one.
+const lastTime = computed(() => session.lastTimeSets(props.exerciseId));
+const lastTimeText = computed(() =>
+  lastTime.value.map((set) => `${kg(set.loadKg)} × ${n(set.reps)}`).join(', '),
+);
+const advice = computed<SetAdvice>(() =>
+  proposal.value ? setAdvice(proposal.value, session.previousFor(props.exerciseId)) : 'first',
+);
+const ADVICE_ICON: Record<SetAdvice, string> = {
+  moreLoad: '↑',
+  moreReps: '↗',
+  same: '=',
+  lighter: '↓',
+  first: '★',
+  comeback: '↺',
+};
+
 const DIFFICULTIES: { value: Difficulty; color: string }[] = [
   { value: 'easy', color: 'success' },
   { value: 'ok', color: 'primary' },
@@ -116,8 +134,11 @@ function listen(): void {
         <span class="hint">{{ t('session.seeMovement') }} ›</span>
       </span>
     </router-link>
-    <p class="meta">
-      {{ t('session.setNumber', { current: Math.min(done + 1, target), total: target }) }}
+
+    <div class="set-number">
+      <strong>{{
+        t('session.setNumber', { current: Math.min(done + 1, target), total: target })
+      }}</strong>
       <ion-button
         v-if="session.canAddSet(exerciseId)"
         size="small"
@@ -128,11 +149,28 @@ function listen(): void {
       >
         {{ t('session.extraSet.short') }}
       </ion-button>
-      · {{ t(`session.reason.${proposal.reason}`) }}
-    </p>
+    </div>
     <p v-if="partnerName" class="superset" role="note">
       {{ t('session.superset', { name: partnerName }) }}
     </p>
+
+    <!-- What was done before, and what to do now -->
+    <div class="coach" :class="advice" role="note">
+      <p v-if="lastTime.length > 0" class="before">
+        {{ t('session.coach.lastTime', { sets: lastTimeText }) }}
+      </p>
+      <p v-else class="before">{{ t('session.coach.noHistory') }}</p>
+      <p class="advice">
+        <span class="arrow" aria-hidden="true">{{ ADVICE_ICON[advice] }}</span>
+        {{
+          t(`session.coach.advice.${advice}`, {
+            load: kg(proposal.loadKg),
+            reps: n(proposal.targetReps),
+          })
+        }}
+      </p>
+      <p class="why">{{ t(`session.reason.${proposal.reason}`) }}</p>
+    </div>
     <p v-if="proposal.reminders.includes('rangeOfMotion')" class="reminder" role="note">
       {{ t('session.reminder.rangeOfMotion') }}
     </p>
@@ -140,6 +178,8 @@ function listen(): void {
       {{ t('session.reminder.technique') }}
     </p>
 
+    <h3 class="step"><span class="badge">1</span> {{ t('session.steps.do') }}</h3>
+    <p class="help">{{ t('session.steps.doHelp') }}</p>
     <div class="stepper">
       <span class="stepper-label">{{ t('session.load') }}</span>
       <ion-button fill="outline" :aria-label="t('session.lighter')" @click="lighter">
@@ -164,40 +204,57 @@ function listen(): void {
       </ion-button>
     </div>
 
-    <div class="flags">
-      <ion-chip
-        :outline="!incomplete"
-        v-bind="incomplete ? { color: 'warning' } : {}"
-        role="switch"
-        :aria-checked="incomplete"
-        @click="incomplete = !incomplete"
-      >
-        <ion-label>{{ t('session.incomplete') }}</ion-label>
-      </ion-chip>
-      <ion-chip
-        :outline="!slowTempo"
-        v-bind="slowTempo ? { color: 'tertiary' } : {}"
-        role="switch"
-        :aria-checked="slowTempo"
-        @click="slowTempo = !slowTempo"
-      >
-        <ion-label>{{ t('session.slowTempo') }}</ion-label>
-      </ion-chip>
-    </div>
-
-    <p class="prompt">{{ t('session.howWasIt') }}</p>
+    <h3 class="step"><span class="badge">2</span> {{ t('session.howWasIt') }}</h3>
+    <p class="help">{{ t('session.steps.feelHelp') }}</p>
     <div class="difficulties">
       <ion-button
         v-for="d in DIFFICULTIES"
         :key="d.value"
         :color="d.color"
         :fill="heard && heard !== d.value ? 'outline' : 'solid'"
-        size="large"
+        :aria-label="t(`difficulty.${d.value}`)"
         @click="validate(d.value)"
       >
-        {{ t(`difficulty.${d.value}`) }}
+        <span class="difficulty">
+          <span class="difficulty-name">{{ t(`difficulty.${d.value}`) }}</span>
+          <span class="difficulty-hint">{{ t(`session.difficultyHint.${d.value}`) }}</span>
+        </span>
       </ion-button>
     </div>
+
+    <details class="more">
+      <summary>{{ t('session.moreOptions') }}</summary>
+      <div class="flags">
+        <ion-chip
+          :outline="!incomplete"
+          v-bind="incomplete ? { color: 'warning' } : {}"
+          role="switch"
+          :aria-checked="incomplete"
+          @click="incomplete = !incomplete"
+        >
+          <ion-label>{{ t('session.incomplete') }}</ion-label>
+        </ion-chip>
+        <ion-chip
+          :outline="!slowTempo"
+          v-bind="slowTempo ? { color: 'tertiary' } : {}"
+          role="switch"
+          :aria-checked="slowTempo"
+          @click="slowTempo = !slowTempo"
+        >
+          <ion-label>{{ t('session.slowTempo') }}</ion-label>
+        </ion-chip>
+      </div>
+      <ion-button
+        v-if="voiceSupported()"
+        fill="outline"
+        color="medium"
+        :disabled="listening"
+        @click="listen"
+      >
+        <Mic :size="18" aria-hidden="true" class="icon" />
+        {{ listening ? t('session.voice.listening') : t('session.voice.start') }}
+      </ion-button>
+    </details>
 
     <div class="tools">
       <ion-button fill="outline" color="medium" @click="emit('busy')">
@@ -210,16 +267,6 @@ function listen(): void {
         @click="emit('plates', load)"
       >
         {{ t('session.plates.open') }}
-      </ion-button>
-      <ion-button
-        v-if="voiceSupported()"
-        fill="outline"
-        color="medium"
-        :disabled="listening"
-        @click="listen"
-      >
-        <Mic :size="18" aria-hidden="true" class="icon" />
-        {{ listening ? t('session.voice.listening') : t('session.voice.start') }}
       </ion-button>
     </div>
   </section>
@@ -260,9 +307,96 @@ h2 {
   margin-block: 0 4px;
   font-size: 1.4rem;
 }
-.meta {
-  margin-block: 0 8px;
+.set-number {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block: 8px;
+  font-size: 1.1rem;
+}
+.coach {
+  margin-block: 8px 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border-inline-start: 6px solid var(--ion-color-medium);
+  background: var(--ion-color-light);
+  color: var(--ion-color-light-contrast);
+}
+.coach.moreLoad,
+.coach.moreReps {
+  border-inline-start-color: var(--ion-color-success);
+}
+.coach.lighter {
+  border-inline-start-color: var(--ion-color-warning);
+}
+.coach.first,
+.coach.comeback {
+  border-inline-start-color: var(--ion-color-primary);
+}
+.coach p {
+  margin: 0;
+}
+.before,
+.why {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium-shade);
+}
+.coach .advice {
+  margin-block: 4px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.arrow {
+  display: inline-block;
+  width: 1.4em;
+  text-align: center;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block: 16px 0;
+  font-size: 1.05rem;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  font-size: 0.9rem;
+}
+.help {
+  margin-block: 2px 6px;
+  font-size: 0.85rem;
   color: var(--ion-color-medium);
+}
+.difficulty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.difficulty-name {
+  font-size: 1.05rem;
+}
+.difficulty-hint {
+  font-size: 0.75rem;
+  text-transform: none;
+  font-weight: 400;
+}
+.more {
+  margin-block-start: 12px;
+}
+.more summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--ion-color-primary);
 }
 .superset {
   padding: 6px 10px;
@@ -300,10 +434,6 @@ h2 {
 .flags {
   display: flex;
   flex-wrap: wrap;
-}
-.prompt {
-  margin-block: 12px 4px;
-  font-weight: 600;
 }
 .difficulties {
   display: grid;

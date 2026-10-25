@@ -85,6 +85,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Consignes traduites en français pour tous les exercices (traduction automatique livrée avec l'appli, mentionnée sur la fiche, texte original à la demande).
 
+- Écran de série simplifié : « La dernière fois : … », conseil en clair (monte la charge, vise une rep de plus, garde, allège) avec sa raison, puis deux étapes numérotées (① ta série, déjà remplie ; ② ton ressenti, qui enregistre). Les options rares sont rangées dans « Préciser la série ».
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

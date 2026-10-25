@@ -25,7 +25,7 @@ test('an exercise added by hand during the session is done now', async ({ page }
     .first()
     .click();
   await expect(page.getByRole('region', { name: /Presse à cuisses/ })).toBeVisible();
-  await expect(page.getByText('Série 1 / 3')).toBeVisible();
+  await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 });
 
 test('a past session can be corrected, completed and deleted', async ({ page }) => {

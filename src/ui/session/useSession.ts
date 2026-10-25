@@ -146,6 +146,21 @@ function workSetsInSession(exerciseId: string): SetLog[] {
   return setsInSession(exerciseId).filter((s) => !s.warmup);
 }
 
+/** Work sets of the last finished session with this exercise ("last time"). */
+function lastTimeSets(exerciseId: string): SetLog[] {
+  return (historyFor(exerciseId).at(-1) ?? []).filter((s) => !s.warmup);
+}
+
+/**
+ * What the next set is compared with: the previous set of today, or the set
+ * with the same number last time.
+ */
+function previousFor(exerciseId: string): SetLog | undefined {
+  const today = workSetsInSession(exerciseId);
+  if (today.length > 0) return today.at(-1);
+  return lastTimeSets(exerciseId)[0];
+}
+
 /** Load and reps to pre-fill for the next set of an exercise. */
 function proposalFor(exerciseId: string): Proposal | undefined {
   const entry = entryOf(exerciseId);
@@ -616,6 +631,8 @@ export function useSession() {
     entryOf,
     stepsOf,
     proposalFor,
+    lastTimeSets,
+    previousFor,
     plannedSets,
     setsInSession,
     workSetsInSession,

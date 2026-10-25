@@ -195,20 +195,20 @@
     "start": "Start the workout",
     "noFavorites": "No favorite machine for the {template} workout. Star the machines of your gym in the catalog.",
     "goToCatalog": "Open the catalog",
-    "setNumber": "Set {current} / {total}",
+    "setNumber": "Set {current} of {total}",
     "reason": {
-      "aboveRange": "above the range, going up",
-      "easy": "easy set, going up",
-      "inRange": "same load, aim for the top of the range",
-      "hard": "hard set, same load",
-      "belowRange": "below the range, going down",
-      "failure": "failed, going down",
-      "incompleteReps": "incomplete reps, going down",
-      "missingStep": "next step too heavy, add reps",
-      "noHeavierStep": "heaviest step reached",
-      "progression": "from your last workouts",
-      "comeback": "comeback: reduced load",
-      "testSet": "first time: light test set"
+      "aboveRange": "You went past the top of your rep range: you are ready to go up.",
+      "easy": "The previous set was easy.",
+      "inRange": "You are in your range: same load, one more rep if you can.",
+      "hard": "The previous set was hard: keep the load.",
+      "belowRange": "You are below your rep range: a bit lighter.",
+      "failure": "Failure on the previous set: lighter.",
+      "incompleteReps": "Incomplete reps: lighter, to keep the full range of motion.",
+      "missingStep": "The next step of the machine is too heavy: add reps instead.",
+      "noHeavierStep": "You are at the heaviest step of the machine.",
+      "progression": "Based on your last sessions.",
+      "comeback": "Coming back after a break: reduced load to restart safely.",
+      "testSet": "First time: light test set to find your load."
     },
     "reminder": {
       "rangeOfMotion": "Full range of motion: an incomplete rep does not count.",
@@ -223,7 +223,7 @@
     "halfRep": "Add a half rep",
     "incomplete": "Incomplete reps",
     "slowTempo": "Slow tempo",
-    "howWasIt": "How was this set?",
+    "howWasIt": "How was it?",
     "busy": "Machine taken",
     "busyTitle": "{name} is taken",
     "busyHelp": "Do something else meanwhile, the app asks again after the next exercise.",
@@ -296,7 +296,31 @@
       "label": "Add a set to this exercise",
       "previous": "+1 set on: {name}"
     },
-    "addExercise": "+ Add an exercise"
+    "addExercise": "+ Add an exercise",
+    "moreOptions": "Add details (incomplete reps, slow tempo, voice)",
+    "coach": {
+      "lastTime": "Last time: {sets}",
+      "noHistory": "First time on this exercise.",
+      "advice": {
+        "moreLoad": "Go heavier: {load} × {reps}",
+        "moreReps": "Aim for one more rep: {load} × {reps}",
+        "same": "Keep the load: {load} × {reps}",
+        "lighter": "Go lighter: {load} × {reps}",
+        "first": "Start at {load} × {reps}",
+        "comeback": "Easy comeback: {load} × {reps}"
+      }
+    },
+    "steps": {
+      "do": "Do your set",
+      "doHelp": "The advised load and reps are already filled in. Only change them if you did something else.",
+      "feelHelp": "One tap saves the set and starts the rest."
+    },
+    "difficultyHint": {
+      "easy": "3+ reps left",
+      "ok": "1 or 2 left",
+      "hard": "nothing left",
+      "fail": "could not finish"
+    }
   },
   "availability": {
     "day": "Day",

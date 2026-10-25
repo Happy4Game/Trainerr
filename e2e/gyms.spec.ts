@@ -36,5 +36,5 @@ test('home workout and joint warm-up, without any favorite machine', async ({ pa
   await expect(page.getByText('Cercles de bras')).toBeVisible();
   await expect(page.getByText(/Cycle 1, semaine 1 sur 5/)).toBeVisible();
   await page.getByRole('button', { name: 'Séance à la maison' }).click();
-  await expect(page.getByText('Série 1 / 3')).toBeVisible();
+  await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 });

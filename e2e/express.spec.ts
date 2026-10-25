@@ -23,7 +23,7 @@ test('express workout: 3 exercises, curl and pushdown in a superset', async ({ p
 
   const first = page.getByRole('region').filter({ hasText: /Superset avec/ });
   await expect(first).toBeVisible();
-  const firstName = await first.getByRole('heading').innerText();
+  const firstName = await first.getByRole('heading', { level: 2 }).innerText();
   await correct();
   // Straight to the partner, no rest timer between the two.
   await expect(page.getByRole('region', { name: firstName })).toHaveCount(0);

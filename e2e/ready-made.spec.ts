@@ -14,7 +14,7 @@ test('no favorite machine: a pre-session with popular machines can be started', 
   await expect(readyMade.getByRole('listitem')).toHaveCount(5);
 
   await readyMade.getByRole('button', { name: 'Faire cette pré-séance' }).click();
-  await expect(page.getByText('Série 1 / 3')).toBeVisible();
+  await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 });
 
 test('one favorite: the pre-session keeps it, and the suggestions can be added to my machines', async ({
@@ -45,7 +45,7 @@ test('during a session, the machine card opens and leads back to the session', a
   await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
   await page.getByRole('button', { name: 'Correct', exact: true }).click();
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
-  await expect(page.getByText('Série 2 / 3')).toBeVisible();
+  await expect(page.getByText('Série 2 sur 3')).toBeVisible();
   const current = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
 
   await page.getByRole('link', { name: `Voir la fiche de ${current}` }).click();
@@ -56,7 +56,7 @@ test('during a session, the machine card opens and leads back to the session', a
 
   await page.getByRole('link', { name: '← Revenir à la séance' }).click();
   await expect(page.getByRole('region', { name: current })).toBeVisible();
-  await expect(page.getByText('Série 2 / 3')).toBeVisible();
+  await expect(page.getByText('Série 2 sur 3')).toBeVisible();
 });
 
 test('an exercise skipped too fast can be reopened', async ({ page }) => {
@@ -70,7 +70,7 @@ test('an exercise skipped too fast can be reopened', async ({ page }) => {
 
   await page.getByRole('button', { name: `← Revenir à : ${first}` }).click();
   await expect(page.getByRole('region', { name: first })).toBeVisible();
-  await expect(page.getByText('Série 1 / 3')).toBeVisible();
+  await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 });
 
 test('more sets than planned: during the exercise or right after it', async ({ page }) => {
@@ -81,7 +81,7 @@ test('more sets than planned: during the exercise or right after it', async ({ p
   const first = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
 
   await page.getByRole('button', { name: 'Ajouter une série à cet exercice' }).click();
-  await expect(page.getByText('Série 1 / 4')).toBeVisible();
+  await expect(page.getByText('Série 1 sur 4')).toBeVisible();
   for (let set = 1; set <= 4; set++) {
     await page.getByRole('button', { name: 'Correct', exact: true }).click();
     if (set < 4) await page.getByRole('button', { name: 'Passer', exact: true }).click();
@@ -91,6 +91,6 @@ test('more sets than planned: during the exercise or right after it', async ({ p
   // A fifth one, right after: the exercise comes back, rest timer kept.
   await page.getByRole('button', { name: `+1 série sur : ${first}` }).click();
   await expect(page.getByRole('region', { name: first })).toBeVisible();
-  await expect(page.getByText('Série 5 / 5')).toBeVisible();
+  await expect(page.getByText('Série 5 sur 5')).toBeVisible();
   await expect(page.getByRole('timer')).toBeVisible();
 });
