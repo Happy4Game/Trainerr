@@ -8,6 +8,8 @@ export interface BodyMeasurement {
   readonly weightKg?: number;
   /** In cm: arm, waist… */
   readonly measurements: Readonly<Record<string, number>>;
+  /** Monthly photo (JPEG data URL), on the phone only. */
+  readonly photo?: string;
 }
 
 /** Body data stays on the phone only, never synced (SPEC.md, privacy). */
@@ -17,8 +19,14 @@ export async function addMeasurement(
 ): Promise<BodyMeasurement> {
   const id = newId();
   await db.run(
-    'INSERT INTO body_measurement (id, date, weight_kg, measurements) VALUES (?, ?, ?, ?)',
-    [id, input.date, input.weightKg ?? null, JSON.stringify(input.measurements)],
+    'INSERT INTO body_measurement (id, date, weight_kg, measurements, photo_path) VALUES (?, ?, ?, ?, ?)',
+    [
+      id,
+      input.date,
+      input.weightKg ?? null,
+      JSON.stringify(input.measurements),
+      input.photo ?? null,
+    ],
   );
   return { id, ...input };
 }
@@ -33,11 +41,15 @@ export async function listMeasurements(db: SqlDatabase): Promise<BodyMeasurement
     date: string;
     weight_kg: number | null;
     measurements: string;
-  }>('SELECT id, date, weight_kg, measurements FROM body_measurement ORDER BY date, rowid');
+    photo_path: string | null;
+  }>(
+    'SELECT id, date, weight_kg, measurements, photo_path FROM body_measurement ORDER BY date, rowid',
+  );
   return rows.map((r) => ({
     id: r.id,
     date: r.date,
     ...(r.weight_kg !== null ? { weightKg: r.weight_kg } : {}),
     measurements: JSON.parse(r.measurements) as Record<string, number>,
+    ...(r.photo_path ? { photo: r.photo_path } : {}),
   }));
 }

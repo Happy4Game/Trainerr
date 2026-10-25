@@ -437,6 +437,12 @@
       "title": "Protéines",
       "target": "Cible : environ {grams} g de protéines par jour (1,6 g par kg de poids de corps).",
       "source": "Source : Morton et al. 2018, voir les Crédits."
+    },
+    "photo": {
+      "title": "Photo du mois",
+      "help": "Une photo par mois, même lumière, même angle : plus parlant que le miroir. Elle reste sur ton téléphone.",
+      "take": "Prendre la photo du mois",
+      "alt": "Photo du {date}"
     }
   },
   "settings": {
@@ -598,7 +604,14 @@
     "confirmTitle": "Confirmer la suppression",
     "confirm": "Séances, séries, mesures, réglages : tout sera effacé de ce téléphone. Ce n'est pas réversible. Exporte une sauvegarde avant si tu veux la garder.",
     "confirmYes": "Oui, tout supprimer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "encryptedTitle": "Sauvegarde chiffrée",
+    "encryptedHelp": "Protégée par un mot de passe (8 caractères au moins), tu peux la ranger sur ton propre cloud (Google Drive…) via le menu Partager. Sans le mot de passe, personne ne peut la lire, pas même toi : note-le bien.",
+    "password": "Mot de passe",
+    "exportEncrypted": "Exporter une sauvegarde chiffrée",
+    "passwordTooShort": "Le mot de passe doit faire au moins 8 caractères.",
+    "encryptedFile": "Cette sauvegarde est chiffrée : entre son mot de passe.",
+    "unlock": "Déchiffrer et restaurer"
   },
   "discomfort": {
     "open": "Ça tire",
@@ -742,5 +755,27 @@
     "skip": "Ne pas importer",
     "confirm": "Importer {count} séance | Importer {count} séances",
     "done": "{count} séance importée. | {count} séances importées."
+  },
+  "coach": {
+    "section": "Partager avec un coach",
+    "share": "Envoyer mon programme et mon historique",
+    "title": "Mon programme d'entraînement",
+    "program": "Programme",
+    "history": "Historique des séances",
+    "goal": "Objectif",
+    "duration": "Durée d'une séance",
+    "zone": "Zone à ménager",
+    "note": "Généré par Trainerr. Les charges proposées suivent les règles décrites dans l'appli ; merci pour tes corrections !"
+  },
+  "recap": {
+    "share": "Partager mon récap du mois",
+    "showLoads": "Afficher les charges",
+    "title": "Mon mois de {month}",
+    "sessions": "{count} séance | {count} séances",
+    "sets": "{count} série | {count} séries",
+    "days": "{count} jour d'entraînement | {count} jours d'entraînement",
+    "workload": "{load} soulevés",
+    "records": "{count} record battu | {count} records battus",
+    "footer": "Fait avec Trainerr"
   }
 }

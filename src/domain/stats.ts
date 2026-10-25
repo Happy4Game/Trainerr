@@ -148,3 +148,18 @@ export function personalRecords(sessions: readonly SessionLog[]): Map<string, Pe
 function sortByDate(sessions: readonly SessionLog[]): SessionLog[] {
   return [...sessions].sort((a, b) => a.date.localeCompare(b.date));
 }
+
+/** Summary of a calendar month, for the shareable recap card. */
+export function monthSummary(
+  sessions: readonly SessionLog[],
+  month: string,
+): { sessions: number; sets: number; workloadKg: number; trainingDays: number } {
+  const inMonth = sessions.filter((s) => s.date.startsWith(month));
+  const work = inMonth.flatMap((s) => s.sets.filter((set) => !set.warmup));
+  return {
+    sessions: inMonth.length,
+    sets: work.length,
+    workloadKg: work.reduce((total, set) => total + set.loadKg * set.reps, 0),
+    trainingDays: new Set(inMonth.map((s) => s.date)).size,
+  };
+}

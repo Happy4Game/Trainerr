@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -13,6 +14,7 @@ import { useI18n } from 'vue-i18n';
 import { addDays, startOfWeek } from '@/domain/dates';
 import { MUSCLES, type MuscleId } from '@/domain/muscles';
 import {
+  monthSummary,
   personalRecords,
   strengthCurve,
   trainingDays,
@@ -25,6 +27,8 @@ import {
 import { detectStagnation, pushPullBalance } from '@/domain/tracking';
 import type { Exercise } from '@/domain/types';
 import LineChart from '@/ui/charts/LineChart.vue';
+import { drawRecap } from '@/ui/recapImage';
+import { shareOrDownload } from '@/ui/shareFile';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso } from '@/ui/useWeekPlan';
 import { useSettings } from '@/ui/useSettings';
@@ -111,11 +115,47 @@ const records = computed(() =>
   ),
 );
 const muscleLabel = (m: MuscleId) => t(`muscles.${m}`);
+
+// Shareable recap of the current month, loads hidden unless asked.
+const showLoads = ref(false);
+async function shareRecap(): Promise<void> {
+  const month = todayIso().slice(0, 7);
+  const summary = monthSummary(sessions.value, month);
+  const monthName = new Intl.DateTimeFormat(locale.value, {
+    month: 'long',
+    timeZone: 'UTC',
+  }).format(new Date(`${month}-15T00:00:00Z`));
+  const recordsThisMonth = [...personalRecords(sessions.value).values()].filter((r) =>
+    r.bestLoad.date.startsWith(month),
+  ).length;
+  const blob = await drawRecap({
+    title: t('recap.title', { month: monthName }),
+    lines: [
+      t('recap.sessions', summary.sessions),
+      t('recap.sets', summary.sets),
+      t('recap.days', summary.trainingDays),
+      ...(showLoads.value
+        ? [t('recap.workload', { load: load(Math.round(summary.workloadKg)) })]
+        : []),
+      t('recap.records', recordsThisMonth),
+    ],
+    footer: t('recap.footer'),
+  });
+  await shareOrDownload(`trainerr-${month}.png`, blob, t('recap.share'));
+}
 </script>
 
 <template>
   <p v-if="sessions.length === 0">{{ t('history.empty') }}</p>
   <template v-else>
+    <div class="recap">
+      <label class="toggle"
+        ><input v-model="showLoads" type="checkbox" /> {{ t('recap.showLoads') }}</label
+      >
+      <ion-button expand="block" fill="outline" @click="shareRecap">{{
+        t('recap.share')
+      }}</ion-button>
+    </div>
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{ t('stats.strength.title') }}</ion-card-title>
@@ -240,6 +280,15 @@ const muscleLabel = (m: MuscleId) => t(`muscles.${m}`);
 </template>
 
 <style scoped>
+.recap {
+  padding-inline: 16px;
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
 .small {
   font-size: 0.85rem;
   color: var(--ion-color-medium);

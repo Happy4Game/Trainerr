@@ -125,3 +125,20 @@ describe('personal records', () => {
     });
   });
 });
+
+describe('month summary', () => {
+  it('counts the sessions, work sets and workload of the month', async () => {
+    const { monthSummary } = await import('@/domain/stats');
+    expect(monthSummary(octoberSessions, '2026-10')).toMatchObject({
+      sessions: 6,
+      trainingDays: 6,
+      sets: 21,
+    });
+    expect(monthSummary(octoberSessions, '2026-11')).toEqual({
+      sessions: 0,
+      sets: 0,
+      workloadKg: 0,
+      trainingDays: 0,
+    });
+  });
+});

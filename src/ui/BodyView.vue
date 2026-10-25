@@ -18,6 +18,7 @@ import {
 } from '@/data/repositories/bodyRepository';
 import { parseLoad } from '@/domain/loadSteps';
 import { proteinTargetGrams } from '@/domain/tracking';
+import { readPhoto } from '@/ui/photo';
 import { todayIso } from '@/ui/useWeekPlan';
 import { useUnits } from '@/ui/useUnits';
 
@@ -62,6 +63,23 @@ async function save(): Promise<void> {
   weight.value = arm.value = waist.value = '';
 }
 
+const photos = computed(() => measurements.value.filter((m) => m.photo));
+const comparison = computed(() =>
+  photos.value.length >= 2 ? [photos.value[0], photos.value.at(-1)] : [],
+);
+
+async function onPhoto(event: Event): Promise<void> {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+  const { db } = await openAppDatabase();
+  const saved = await addMeasurement(db, {
+    date: todayIso(),
+    measurements: {},
+    photo: await readPhoto(file),
+  });
+  measurements.value = [...measurements.value, saved];
+}
+
 async function remove(id: string): Promise<void> {
   const { db } = await openAppDatabase();
   await deleteMeasurement(db, id);
@@ -103,6 +121,25 @@ async function remove(id: string): Promise<void> {
     </ion-card-content>
   </ion-card>
 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ t('body.photo.title') }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p class="small">{{ t('body.photo.help') }}</p>
+      <label class="photo-button">
+        {{ t('body.photo.take') }}
+        <input type="file" accept="image/*" capture="user" @change="onPhoto" />
+      </label>
+      <div v-if="comparison.length === 2" class="compare">
+        <figure v-for="m in comparison" :key="m!.id">
+          <img :src="m!.photo" :alt="t('body.photo.alt', { date: shortDate(m!.date) })" />
+          <figcaption>{{ shortDate(m!.date) }}</figcaption>
+        </figure>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
   <ion-card v-if="lastWeight !== undefined">
     <ion-card-header>
       <ion-card-title>{{ t('body.protein.title') }}</ion-card-title>
@@ -138,6 +175,35 @@ async function remove(id: string): Promise<void> {
 </template>
 
 <style scoped>
+.photo-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 12px;
+  border: 1px solid var(--ion-color-primary);
+  border-radius: 8px;
+  color: var(--ion-color-primary);
+}
+.photo-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-block-start: 12px;
+}
+.compare img {
+  width: 100%;
+  border-radius: 8px;
+}
+.compare figure {
+  margin: 0;
+  text-align: center;
+}
 .inputs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
