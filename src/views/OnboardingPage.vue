@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Check } from 'lucide-vue-next';
 import {
   IonButton,
   IonContent,
@@ -123,6 +124,7 @@ async function skip(): Promise<void> {
             :aria-pressed="goal === g"
             @click="goal = g"
           >
+            <Check v-if="goal === g" :size="20" class="check" aria-hidden="true" />
             {{ t(`onboarding.goal.${g}`) }}
           </ion-button>
         </div>
@@ -139,6 +141,7 @@ async function skip(): Promise<void> {
             :aria-pressed="sessionsPerWeek === count"
             @click="sessionsPerWeek = count"
           >
+            <Check v-if="sessionsPerWeek === count" :size="20" class="check" aria-hidden="true" />
             {{ count }}
           </ion-button>
         </div>
@@ -162,6 +165,7 @@ async function skip(): Promise<void> {
             :aria-pressed="level === l"
             @click="level = l"
           >
+            <Check v-if="level === l" :size="20" class="check" aria-hidden="true" />
             {{ t(`onboarding.level.${l}`) }}
           </ion-button>
         </div>
@@ -176,6 +180,7 @@ async function skip(): Promise<void> {
               :aria-pressed="pause === p"
               @click="pause = p"
             >
+              <Check v-if="pause === p" :size="20" class="check" aria-hidden="true" />
               {{ t(`onboarding.pauses.${p}`) }}
             </ion-button>
           </div>
@@ -200,6 +205,7 @@ async function skip(): Promise<void> {
             :aria-pressed="sessionMinutes === d"
             @click="sessionMinutes = d"
           >
+            <Check v-if="sessionMinutes === d" :size="20" class="check" aria-hidden="true" />
             {{ t(`onboarding.duration.${d}`) }}
           </ion-button>
         </div>
@@ -216,6 +222,7 @@ async function skip(): Promise<void> {
             :aria-pressed="sport === s"
             @click="sport = s"
           >
+            <Check v-if="sport === s" :size="20" class="check" aria-hidden="true" />
             {{ t(`sports.${s}`) }}
           </ion-button>
         </div>
@@ -236,6 +243,7 @@ async function skip(): Promise<void> {
             :aria-pressed="zone === z"
             @click="zone = z"
           >
+            <Check v-if="zone === z" :size="20" class="check" aria-hidden="true" />
             {{ t(`zones.${z}`) }}
           </ion-button>
         </div>
@@ -290,10 +298,23 @@ h2 {
   margin-block: 8px;
   font-size: 1.05rem;
 }
-.choices ion-button[aria-pressed='true'] {
+.choices ion-button[aria-pressed='true'],
+.row ion-button[aria-pressed='true'] {
   --background: var(--ion-color-primary);
   --border-color: var(--ion-color-primary);
   --color: var(--ion-color-primary-contrast);
+  --box-shadow: 0 0 0 3px var(--ion-background-color), 0 0 0 6px var(--ion-color-primary);
+  transform: scale(1.02);
+  font-weight: 800;
+}
+.choices ion-button,
+.row ion-button {
+  transition:
+    transform 0.12s ease,
+    background-color 0.12s ease;
+}
+.check {
+  margin-inline-end: 8px;
 }
 .row {
   display: flex;
