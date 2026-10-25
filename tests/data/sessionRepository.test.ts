@@ -222,3 +222,42 @@ describe('badges', () => {
     ]);
   });
 });
+
+describe('import from another app', () => {
+  it('creates finished sessions with their sets, in one go', async () => {
+    const { importSessions } = await import('@/data/repositories/sessionRepository');
+    const count = await importSessions(db, DEFAULT_GYM_ID, [
+      {
+        date: '2026-10-15',
+        title: 'Push A',
+        sets: [
+          { exerciseId: 'Dumbbell_Bench_Press', loadKg: 8, reps: 15, warmup: true },
+          { exerciseId: 'Dumbbell_Bench_Press', loadKg: 16, reps: 12, warmup: false },
+        ],
+      },
+      { date: '2026-10-16', title: 'Vide', sets: [] },
+    ]);
+    expect(count).toBe(1);
+    const done = await listDoneSessions(db);
+    expect(done).toHaveLength(1);
+    expect(done[0]).toMatchObject({ date: '2026-10-15', templateId: 'imported', note: 'Push A' });
+    expect(done[0]?.sets).toEqual([
+      expect.objectContaining({ loadKg: 8, reps: 15, warmup: true }),
+      expect.objectContaining({ loadKg: 16, reps: 12 }),
+    ]);
+  });
+
+  it('imports nothing when an exercise is unknown', async () => {
+    const { importSessions } = await import('@/data/repositories/sessionRepository');
+    await expect(
+      importSessions(db, DEFAULT_GYM_ID, [
+        {
+          date: '2026-10-15',
+          title: 'X',
+          sets: [{ exerciseId: 'nope', loadKg: 1, reps: 1, warmup: false }],
+        },
+      ]),
+    ).rejects.toThrow();
+    expect(await listDoneSessions(db)).toEqual([]);
+  });
+});

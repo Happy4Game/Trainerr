@@ -166,7 +166,8 @@
     "back": "Back",
     "shoulders": "Shoulders",
     "arms": "Arms",
-    "legsDay": "Legs"
+    "legsDay": "Legs",
+    "imported": "Imported workout"
   },
   "difficulty": {
     "easy": "Easy",
@@ -726,5 +727,20 @@
     "addButton": "Add",
     "help": "Each gym has its own favorite machines, load steps and settings.",
     "home": "Equipment at home"
+  },
+  "importCsv": {
+    "title": "Import from another app",
+    "choose": "Choose a CSV file (Strong, Hevy)",
+    "found": "{sessions} workout(s) found in the {app} export.",
+    "apps": {
+      "strong": "Strong",
+      "hevy": "Hevy",
+      "trainerr": "Trainerr"
+    },
+    "unit": "Load unit in this file:",
+    "check": "Check which exercise each name matches:",
+    "skip": "Do not import",
+    "confirm": "Import {count} workout | Import {count} workouts",
+    "done": "{count} workout imported. | {count} workouts imported."
   }
 }

@@ -1,6 +1,7 @@
 import type { ExerciseQueue } from '@/domain/busyMachine';
 import type { Difficulty, IsoDate, SessionLog, SetLog } from '@/domain/types';
 import type { SqlDatabase } from '../sqlite/database';
+import { sqlLiteral as q } from '../sqlite/sqlLiteral';
 
 export interface PlannedExercise {
   readonly exerciseId: string;
@@ -33,10 +34,13 @@ export interface ActiveSession {
   readonly note?: string;
 }
 
+let counter = 0;
+
 export function newId(): string {
   // crypto.randomUUID only exists in secure contexts; the dev server on the
-  // local network is plain http.
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  // local network is plain http. The counter keeps ids unique within a millisecond.
+  counter = (counter + 1) % 1_000_000;
+  return `${Date.now().toString(36)}-${counter.toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
 export async function startSession(
@@ -179,4 +183,32 @@ export async function listDoneSessions(
     plan: JSON.parse(row.plan) as Partial<SessionPlan>,
     ...(row.note ? { note: row.note } : {}),
   }));
+}
+
+/** Sessions coming from another app, imported in one transaction (all or nothing). */
+export async function importSessions(
+  db: SqlDatabase,
+  gymId: string,
+  sessions: readonly {
+    date: IsoDate;
+    title: string;
+    sets: readonly { exerciseId: string; loadKg: number; reps: number; warmup: boolean }[];
+  }[],
+): Promise<number> {
+  const statements: string[] = [];
+  for (const session of sessions) {
+    if (session.sets.length === 0) continue;
+    const id = newId();
+    statements.push(
+      `INSERT INTO session (id, date, template, status, gym_id, note, plan) VALUES (${q(id)}, ${q(session.date)}, 'imported', 'done', ${q(gymId)}, ${q(session.title || null)}, '{}');`,
+    );
+    session.sets.forEach((set, index) => {
+      statements.push(
+        `INSERT INTO set_log (id, session_id, exercise_id, position, load_kg, reps, difficulty, warmup) VALUES (${q(newId())}, ${q(id)}, ${q(set.exerciseId)}, ${index + 1}, ${q(set.loadKg)}, ${q(set.reps)}, 'ok', ${set.warmup ? 1 : 0});`,
+      );
+    });
+  }
+  if (statements.length === 0) return 0;
+  await db.executeScript(statements.join('\n'));
+  return sessions.filter((s) => s.sets.length > 0).length;
 }

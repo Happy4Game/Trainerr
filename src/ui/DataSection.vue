@@ -10,6 +10,7 @@ import {
   importBackup,
   type Backup,
 } from '@/data/repositories/backupRepository';
+import ImportCsv from '@/ui/ImportCsv.vue';
 import { todayIso } from '@/ui/useWeekPlan';
 
 const { t } = useI18n();
@@ -88,6 +89,9 @@ async function deleteAll(): Promise<void> {
     />
     <p v-if="message" role="alert">{{ message }}</p>
 
+    <h3 class="sub">{{ t('importCsv.title') }}</h3>
+    <ImportCsv />
+
     <ion-button
       v-if="!confirming"
       expand="block"
@@ -113,6 +117,10 @@ async function deleteAll(): Promise<void> {
 .actions {
   padding-inline: 16px;
   padding-block-end: 24px;
+}
+.sub {
+  margin-block: 16px 0;
+  font-size: 1rem;
 }
 .confirm {
   padding: 12px;

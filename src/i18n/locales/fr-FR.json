@@ -166,7 +166,8 @@
     "back": "Dos",
     "shoulders": "Épaules",
     "arms": "Bras",
-    "legsDay": "Jambes"
+    "legsDay": "Jambes",
+    "imported": "Séance importée"
   },
   "difficulty": {
     "easy": "Facile",
@@ -726,5 +727,20 @@
     "addButton": "Ajouter",
     "help": "Chaque salle a ses machines favorites, ses paliers et ses réglages.",
     "home": "Matériel à la maison"
+  },
+  "importCsv": {
+    "title": "Importer depuis une autre appli",
+    "choose": "Choisir un fichier CSV (Strong, Hevy)",
+    "found": "{sessions} séance(s) trouvée(s) dans l'export {app}.",
+    "apps": {
+      "strong": "Strong",
+      "hevy": "Hevy",
+      "trainerr": "Trainerr"
+    },
+    "unit": "Unité des charges dans ce fichier :",
+    "check": "Vérifie à quel exercice correspond chaque nom :",
+    "skip": "Ne pas importer",
+    "confirm": "Importer {count} séance | Importer {count} séances",
+    "done": "{count} séance importée. | {count} séances importées."
   }
 }
