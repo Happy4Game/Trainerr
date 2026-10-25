@@ -3,12 +3,14 @@ import { IonButton } from '@ionic/vue';
 import { Minus, Plus } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useUnits } from '@/ui/useUnits';
 import { adjacentLoads, DEFAULT_PLATE_CONFIG, platesFor, type BarLoading } from '@/domain/plates';
 
 const props = defineProps<{ loadKg: number }>();
 const emit = defineEmits<{ change: [loadKg: number] }>();
 
 const { t, n } = useI18n();
+const { load } = useUnits();
 const config = DEFAULT_PLATE_CONFIG;
 const target = ref(props.loadKg);
 watch(
@@ -52,7 +54,7 @@ function move(to: number | undefined): void {
       >
         <Minus :size="22" aria-hidden="true" />
       </ion-button>
-      <strong class="total">{{ t('exercise.kg', { load: n(target) }) }}</strong>
+      <strong class="total">{{ load(target) }}</strong>
       <ion-button
         fill="outline"
         :disabled="neighbours.higher === undefined"
@@ -66,8 +68,8 @@ function move(to: number | undefined): void {
     <p v-if="!result.exact" role="status">
       {{
         t('session.plates.closest', {
-          below: result.below ? n(result.below.totalKg) : '—',
-          above: result.above ? n(result.above.totalKg) : '—',
+          below: result.below ? load(result.below.totalKg) : '—',
+          above: result.above ? load(result.above.totalKg) : '—',
         })
       }}
     </p>

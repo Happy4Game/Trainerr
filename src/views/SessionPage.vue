@@ -26,6 +26,7 @@ import PlateCalculator from '@/ui/session/PlateCalculator.vue';
 import RestTimer from '@/ui/session/RestTimer.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
+import { useUnits } from '@/ui/useUnits';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
 import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
@@ -73,7 +74,7 @@ const nameOf = (id: string) => {
   return locale.value.startsWith('fr') ? entry.exercise.name : entry.exercise.nameEn;
 };
 const exerciseName = (e: Exercise) => nameOf(e.id);
-const kg = (value: number) => t('exercise.kg', { load: n(value) });
+const { load: kg } = useUnits();
 const currentId = computed(() =>
   step.value?.kind === 'exercise' ? step.value.exerciseId : undefined,
 );
@@ -319,7 +320,7 @@ async function logWarmup(): Promise<void> {
         </ion-card-header>
         <ion-card-content>
           <p>{{ t('session.summary.sets', summary.sets) }}</p>
-          <p>{{ t('session.summary.workload', { kg: n(Math.round(summary.workloadKg)) }) }}</p>
+          <p>{{ t('session.summary.workload', { load: kg(Math.round(summary.workloadKg)) }) }}</p>
           <p v-if="summary.carryOver.length > 0">
             {{ t('session.carryOver', { names: summary.carryOver.map(nameOf).join(', ') }) }}
           </p>

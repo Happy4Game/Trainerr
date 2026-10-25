@@ -13,11 +13,13 @@ import { useI18n } from 'vue-i18n';
 import { comebackStartLoad, returnToLevel, type PauseLength } from '@/domain/comeback';
 import { parseLoad, type LoadSteps } from '@/domain/loadSteps';
 import { useSession } from '@/ui/session/useSession';
+import { useUnits } from '@/ui/useUnits';
 
 const props = defineProps<{ exerciseId: string; pause: PauseLength; steps: LoadSteps }>();
 
-const { t, n } = useI18n();
+const { t } = useI18n();
 const session = useSession();
+const { load, symbol, fromInput, toDisplay } = useUnits();
 
 const reference = computed(() =>
   session.references.value.find((r) => r.exerciseId === props.exerciseId),
@@ -27,7 +29,7 @@ const repsText = ref('');
 watch(
   reference,
   (r) => {
-    loadText.value = r ? String(r.loadKg) : '';
+    loadText.value = r ? String(toDisplay(r.loadKg)) : '';
     repsText.value = r ? String(r.reps) : '';
   },
   { immediate: true },
@@ -50,10 +52,10 @@ const gauge = computed(() =>
 );
 
 async function save(): Promise<void> {
-  const load = parseLoad(loadText.value);
+  const typed = parseLoad(loadText.value);
   const reps = parseLoad(repsText.value);
-  if (load === undefined || reps === undefined) return;
-  await session.saveReference(props.exerciseId, load, reps);
+  if (typed === undefined || reps === undefined) return;
+  await session.saveReference(props.exerciseId, fromInput(typed), reps);
 }
 </script>
 
@@ -68,7 +70,7 @@ async function save(): Promise<void> {
         <ion-input
           v-model="loadText"
           fill="outline"
-          :label="t('comeback.load')"
+          :label="t('comeback.load', { unit: symbol })"
           label-placement="stacked"
           inputmode="decimal"
         />
@@ -82,14 +84,14 @@ async function save(): Promise<void> {
         <ion-button @click="save">{{ t('comeback.save') }}</ion-button>
       </div>
       <p v-if="startLoad !== undefined">
-        {{ t('comeback.start', { load: n(startLoad) }) }}
+        {{ t('comeback.start', { load: load(startLoad) }) }}
       </p>
       <template v-if="gauge && reference">
         <p>
           {{
             t('comeback.gauge', {
-              current: n(best ?? 0),
-              reference: n(reference.loadKg),
+              current: load(best ?? 0),
+              reference: load(reference.loadKg),
               percent: gauge.percent,
             })
           }}

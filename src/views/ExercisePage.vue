@@ -56,6 +56,8 @@ const stepsForComeback = computed(() =>
       ? defaultStepsFor(exercise.value.equipment)
       : [],
 );
+const cuesFor = (cues: { fr: readonly string[]; en?: readonly string[] }) =>
+  french.value ? cues.fr : (cues.en ?? cues.fr);
 const illustration = computed(() => illustrationFor(props.id));
 const range = computed(() => (exercise.value ? repRangeFor(exercise.value) : undefined));
 
@@ -147,7 +149,7 @@ const muscleList = (muscles: readonly MuscleId[]) =>
           <ion-card-content>
             <template v-if="exercise.cues">
               <ul>
-                <li v-for="cue in exercise.cues.fr" :key="cue">{{ cue }}</li>
+                <li v-for="cue in cuesFor(exercise.cues)" :key="cue">{{ cue }}</li>
               </ul>
               <p class="small">{{ t('exercise.cues.source', { source: exercise.cues.source }) }}</p>
               <p class="small">{{ t('exercise.cues.review') }}</p>

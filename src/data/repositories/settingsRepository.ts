@@ -2,6 +2,8 @@ import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
 import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
 import type { SportId, WeeklySlot } from '@/domain/planning';
+import type { WeightUnit } from '@/domain/units';
+import type { LanguagePreference } from '@/i18n';
 import type { Goal, SessionMinutes } from '@/domain/sessionBuilder';
 import { recommendModel, type TrainingModelId } from '@/domain/trainingModels';
 import type { SqlDatabase } from '../sqlite/database';
@@ -22,6 +24,8 @@ export interface Settings {
   readonly notifications: NotificationPrefs;
   /** Discomforts reported during sessions: repeated ones change the advice, and stop nudges. */
   readonly discomforts?: readonly { readonly date: string; readonly zone: string }[];
+  readonly language: LanguagePreference;
+  readonly weightUnit: WeightUnit;
   /** Set once the first-launch questionnaire is done or skipped. */
   readonly onboarded: boolean;
 }
@@ -43,6 +47,8 @@ export const DEFAULT_SETTINGS: Settings = {
   freeSlots: DEFAULT_FREE_SLOTS,
   blockedSlots: [],
   notifications: { ...DEFAULT_NOTIFICATION_PREFS, enabled: false },
+  language: 'system',
+  weightUnit: 'kg',
   onboarded: false,
 };
 

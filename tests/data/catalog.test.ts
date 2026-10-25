@@ -42,6 +42,12 @@ describe('catalog built from free-exercise-db', () => {
     expect(get('Triceps_Pushdown').aliases).toContain('poulie haute');
   });
 
+  it('every curated card has as many cues in English as in French', () => {
+    for (const e of catalog.filter((c) => c.cues)) {
+      expect(e.cues?.en?.length, e.id).toBe(e.cues?.fr.length);
+    }
+  });
+
   it('falls back to the English name when there is no translation', () => {
     expect(get('Cable_Crunch')).toMatchObject({ name: 'Cable Crunch', nameEn: 'Cable Crunch' });
   });
@@ -79,6 +85,7 @@ describe('catalog built from free-exercise-db', () => {
   it('carries the technique cues and their source', () => {
     expect(get('Wide-Grip_Lat_Pulldown').cues).toEqual({
       fr: expect.arrayContaining(['Épaules basses, loin des oreilles']),
+      en: expect.arrayContaining(['Shoulders down, away from the ears']),
       source: expect.stringContaining('octobre 2026'),
     });
     expect(get('Cable_Crunch').cues).toBeUndefined();

@@ -107,12 +107,12 @@
       "title": "Paliers de charge",
       "help": "Les charges proposées seront arrondies à ces paliers.",
       "defaults": "Paliers par défaut, à remplacer par ceux de ta machine : {steps}…",
-      "add": "Ajouter un palier (kg)",
+      "add": "Ajouter un palier ({unit})",
       "addButton": "Ajouter",
-      "remove": "Retirer {load} kg",
+      "remove": "Retirer {load}",
       "invalid": "Charge invalide",
       "generate": {
-        "title": "Générer une série de paliers (en kg)",
+        "title": "Générer une série de paliers (en {unit})",
         "first": "Départ",
         "increment": "Écart",
         "last": "Fin",
@@ -125,7 +125,6 @@
       "trainerr": "Fiche rédigée pour Trainerr.",
       "user": "Exercice ajouté par toi."
     },
-    "kg": "{load} kg",
     "illustration": {
       "label": "Illustration du mouvement : {name}",
       "pause": "Mettre l'animation en pause",
@@ -242,14 +241,14 @@
       "close": "Fermer",
       "lighter": "Charge réalisable plus légère",
       "heavier": "Charge réalisable plus lourde",
-      "closest": "Charge exacte impossible : {below} kg ou {above} kg",
+      "closest": "Charge exacte impossible : {below} ou {above}",
       "perSide": "Par côté : {plates} kg",
       "bar": "barre de {kg} kg"
     },
     "summary": {
       "title": "Séance terminée",
       "sets": "{count} série | {count} séries",
-      "workload": "Charge de travail : {kg} kg",
+      "workload": "Charge de travail : {load}",
       "close": "Fermer"
     },
     "note": "Note de séance",
@@ -361,7 +360,7 @@
   },
   "history": {
     "empty": "Pas encore de séance terminée.",
-    "workload": "Charge de travail : {kg} kg",
+    "workload": "Charge de travail : {load}",
     "views": {
       "sessions": "Séances",
       "stats": "Stats",
@@ -371,18 +370,18 @@
   "comeback": {
     "title": "Avant ma pause",
     "help": "Note ta meilleure série d'avant la pause : l'appli repartira d'une charge réduite, puis remontera dès que les séries sont faciles.",
-    "load": "Charge (kg)",
+    "load": "Charge ({unit})",
     "reps": "Reps",
     "save": "Enregistrer",
-    "start": "Charge de départ proposée : {load} kg",
-    "gauge": "Retour à l'ancien niveau : {current} / {reference} kg = {percent} %",
+    "start": "Charge de départ proposée : {load}",
+    "gauge": "Retour à l'ancien niveau : {current} / {reference} = {percent} %",
     "reached": "Tu as retrouvé ton niveau d'avant !"
   },
   "stats": {
     "strength": {
       "title": "Évolution de la force",
       "exercise": "Exercice",
-      "unit": "1RM estimé (kg), formule d'Epley",
+      "unit": "1RM estimé ({unit}), formule d'Epley",
       "none": "Pas encore de série comparable (les séries d'échauffement et en tempo lent sont exclues).",
       "description": "1RM estimé {exercise} : {change} % sur {sessions} séances",
       "stagnation": "Pas de progrès sur les 3 dernières séances : essaie une variante de l'exercice ou une semaine plus légère."
@@ -402,29 +401,28 @@
     },
     "workload": {
       "title": "Charge de travail",
-      "unit": "kg soulevés par semaine (charge × reps)",
+      "unit": "{unit} soulevés par semaine (charge × reps)",
       "description": "Charge de travail sur {weeks} semaines",
-      "single": "{kg} kg cette semaine"
+      "single": "{load} cette semaine"
     },
     "records": {
       "title": "Records",
-      "load": "{load} kg × {reps} ({date})",
-      "oneRepMax": "1RM estimé {value} kg"
+      "load": "{load} × {reps} ({date})",
+      "oneRepMax": "1RM estimé {load}"
     }
   },
   "body": {
     "title": "Suivi du corps",
-    "weight": "Poids (kg)",
+    "weight": "Poids ({unit})",
     "arm": "Bras (cm)",
     "waist": "Taille (cm)",
     "save": "Enregistrer",
     "privacy": "Ces données restent sur ton téléphone et ne sont jamais synchronisées.",
-    "kg": "{value} kg",
     "cm": "{value} cm",
     "delete": "Supprimer cette mesure",
     "protein": {
       "title": "Protéines",
-      "target": "Cible : environ {grams} g de protéines par jour ({weight} kg × 1,6 g).",
+      "target": "Cible : environ {grams} g de protéines par jour (1,6 g par kg de poids de corps).",
       "source": "Source : Morton et al. 2018, voir les Crédits."
     }
   },
@@ -444,7 +442,23 @@
       "backToLevel": "Retour au niveau",
       "tip": "Conseil de la semaine"
     },
-    "quietHours": "Jamais de notification entre {start} et {end}, ni pendant tes créneaux bloqués."
+    "quietHours": "Jamais de notification entre {start} et {end}, ni pendant tes créneaux bloqués.",
+    "language": {
+      "title": "Langue et unités",
+      "label": "Langue",
+      "options": {
+        "system": "Langue du téléphone",
+        "fr-FR": "Français",
+        "en-US": "English"
+      }
+    },
+    "unit": {
+      "label": "Unité de poids",
+      "options": {
+        "kg": "Kilogrammes (kg)",
+        "lb": "Livres (lb)"
+      }
+    }
   },
   "tips": {
     "title": "Bien débuter",
@@ -607,6 +621,14 @@
       "stopAndConsult": "Arrête la séance maintenant et consulte un médecin ou un kiné.",
       "callEmergency": "Arrête tout et appelle le 15 (SAMU) maintenant.",
       "sorenessVsPain": "Une courbature est diffuse et passe en 2 à 3 jours : tu peux garder ton programme."
+    }
+  },
+  "units": {
+    "kg": "{value} kg",
+    "lb": "{value} lb",
+    "symbol": {
+      "kg": "kg",
+      "lb": "lb"
     }
   }
 }

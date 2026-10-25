@@ -16,6 +16,7 @@ import { useI18n } from 'vue-i18n';
 import { sessionWorkload } from '@/domain/stats';
 import BodyView from '@/ui/BodyView.vue';
 import { useSession } from '@/ui/session/useSession';
+import { useUnits } from '@/ui/useUnits';
 import StatsView from '@/ui/StatsView.vue';
 
 const VIEWS = ['sessions', 'stats', 'body'] as const;
@@ -23,6 +24,7 @@ const view = ref<(typeof VIEWS)[number]>('sessions');
 
 const { t, n, locale } = useI18n();
 const session = useSession();
+const { load, toDisplay } = useUnits();
 
 const sessions = computed(() => [...session.history.value].reverse());
 const dateLabel = (date: string) =>
@@ -45,7 +47,7 @@ function lines(
   for (const set of sets) {
     if (set.warmup) continue;
     const list = byExercise.get(set.exerciseId) ?? [];
-    list.push(`${n(set.loadKg)} × ${n(set.reps)}`);
+    list.push(`${n(toDisplay(set.loadKg))} × ${n(set.reps)}`);
     byExercise.set(set.exerciseId, list);
   }
   return [...byExercise.entries()].map(([id, sets]) => `${nameOf(id)} : ${sets.join(', ')}`);
@@ -77,7 +79,7 @@ function lines(
         <ion-item v-for="s in sessions" :key="s.id">
           <ion-label class="ion-text-wrap">
             <h2>{{ t(`templates.${s.templateId}`) }} · {{ dateLabel(s.date) }}</h2>
-            <p>{{ t('history.workload', { kg: n(Math.round(sessionWorkload(s))) }) }}</p>
+            <p>{{ t('history.workload', { load: load(Math.round(sessionWorkload(s))) }) }}</p>
             <p v-for="line in lines(s.sets)" :key="line">{{ line }}</p>
             <p v-if="s.note" class="note">« {{ s.note }} »</p>
           </ion-label>

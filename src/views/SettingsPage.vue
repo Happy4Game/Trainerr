@@ -9,6 +9,8 @@ import {
   IonList,
   IonListHeader,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonToggle,
   IonTitle,
   IonToolbar,
@@ -17,6 +19,8 @@ import {
 import { useI18n } from 'vue-i18n';
 import DataSection from '@/ui/DataSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
+import type { WeightUnit } from '@/domain/units';
+import type { LanguagePreference } from '@/i18n';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { useSettings } from '@/ui/useSettings';
@@ -25,6 +29,9 @@ const { t } = useI18n();
 const router = useIonRouter();
 const { settings, updateSettings } = useSettings();
 const session = useSession();
+
+const LANGUAGES: LanguagePreference[] = ['system', 'fr-FR', 'en-US'];
+const UNITS: WeightUnit[] = ['kg', 'lb'];
 
 const KINDS: NotificationKind[] = [
   'sessionReminder',
@@ -83,6 +90,32 @@ async function redoQuestionnaire(): Promise<void> {
         </ion-item>
         <ion-item router-link="/tabs/settings/credits" detail>
           <ion-label>{{ t('credits.title') }}</ion-label>
+        </ion-item>
+
+        <ion-list-header>{{ t('settings.language.title') }}</ion-list-header>
+        <ion-item>
+          <ion-select
+            :label="t('settings.language.label')"
+            :value="settings.language"
+            interface="action-sheet"
+            @ion-change="updateSettings({ language: $event.detail.value })"
+          >
+            <ion-select-option v-for="l in LANGUAGES" :key="l" :value="l">
+              {{ t(`settings.language.options.${l}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select
+            :label="t('settings.unit.label')"
+            :value="settings.weightUnit"
+            interface="action-sheet"
+            @ion-change="updateSettings({ weightUnit: $event.detail.value })"
+          >
+            <ion-select-option v-for="u in UNITS" :key="u" :value="u">
+              {{ t(`settings.unit.options.${u}`) }}
+            </ion-select-option>
+          </ion-select>
         </ion-item>
 
         <ion-list-header>{{ t('settings.workout') }}</ion-list-header>

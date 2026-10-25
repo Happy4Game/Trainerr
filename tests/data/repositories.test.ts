@@ -45,6 +45,7 @@ describe('catalog seeding', () => {
     const legExtension = entries.find((e) => e.exercise.id === 'Leg_Extensions')?.exercise;
     expect(legExtension?.repRange).toEqual({ min: 8, max: 10 });
     expect(legExtension?.cues?.fr).toHaveLength(3);
+    expect(legExtension?.cues?.en?.[0]).toMatch(/Pad just above the ankles/);
   });
 
   it('skips the import when the catalog version did not change', async () => {

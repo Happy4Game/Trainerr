@@ -8,6 +8,7 @@ import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { useSession } from './useSession';
 import { createRecognition, voiceSupported } from './voice';
+import { useUnits } from '@/ui/useUnits';
 
 const props = defineProps<{ exerciseId: string }>();
 const emit = defineEmits<{ busy: []; plates: [loadKg: number] }>();
@@ -49,7 +50,7 @@ const name = computed(() =>
       : entry.value.exercise.nameEn
     : '',
 );
-const kg = (value: number) => t('exercise.kg', { load: n(value) });
+const { load: kg, fromInput } = useUnits();
 
 function lighter(): void {
   load.value = stepDown(steps.value, load.value) ?? load.value;
@@ -85,7 +86,8 @@ function listen(): void {
   listening.value = true;
   recognition.onresult = (event) => {
     const heardSet = parseVoiceSet(event.results[0]?.[0]?.transcript ?? '');
-    if (heardSet.loadKg !== undefined) load.value = heardSet.loadKg;
+    // Spoken numbers are in the user's unit.
+    if (heardSet.loadKg !== undefined) load.value = fromInput(heardSet.loadKg);
     if (heardSet.reps !== undefined) reps.value = heardSet.reps;
     heard.value = heardSet.difficulty;
   };

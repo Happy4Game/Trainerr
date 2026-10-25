@@ -28,11 +28,13 @@ import LineChart from '@/ui/charts/LineChart.vue';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso } from '@/ui/useWeekPlan';
 import { useSettings } from '@/ui/useSettings';
+import { useUnits } from '@/ui/useUnits';
 
 const { t, n, locale } = useI18n();
 const session = useSession();
 const { settings } = useSettings();
 const sessions = session.history;
+const { load, symbol, toDisplay } = useUnits();
 
 const nameOf = (id: string) => {
   const e = session.entryOf(id)?.exercise;
@@ -132,9 +134,9 @@ const muscleLabel = (m: MuscleId) => t(`muscles.${m}`);
         </ion-item>
         <LineChart
           v-if="curve.length > 0"
-          :points="curve.map((p) => ({ label: shortDate(p.date), value: p.oneRepMax }))"
+          :points="curve.map((p) => ({ label: shortDate(p.date), value: toDisplay(p.oneRepMax) }))"
           :description="curveDescription"
-          :unit="t('stats.strength.unit')"
+          :unit="t('stats.strength.unit', { unit: symbol })"
         />
         <p v-else>{{ t('stats.strength.none') }}</p>
         <p v-if="stagnating" class="note" role="note">{{ t('stats.strength.stagnation') }}</p>
@@ -199,12 +201,14 @@ const muscleLabel = (m: MuscleId) => t(`muscles.${m}`);
       <ion-card-content>
         <LineChart
           v-if="workload.length > 1"
-          :points="workload.map((w) => ({ label: shortDate(w.weekStart), value: w.workload }))"
+          :points="
+            workload.map((w) => ({ label: shortDate(w.weekStart), value: toDisplay(w.workload) }))
+          "
           :description="t('stats.workload.description', { weeks: workload.length })"
-          :unit="t('stats.workload.unit')"
+          :unit="t('stats.workload.unit', { unit: symbol })"
         />
         <p v-else-if="workload[0]">
-          {{ t('stats.workload.single', { kg: n(Math.round(workload[0].workload)) }) }}
+          {{ t('stats.workload.single', { load: load(Math.round(workload[0].workload)) }) }}
         </p>
       </ion-card-content>
     </ion-card>
@@ -219,13 +223,15 @@ const muscleLabel = (m: MuscleId) => t(`muscles.${m}`);
             <strong>{{ nameOf(id) }}</strong> :
             {{
               t('stats.records.load', {
-                load: n(record.bestLoad.loadKg),
+                load: load(record.bestLoad.loadKg),
                 reps: n(record.bestLoad.reps),
                 date: shortDate(record.bestLoad.date),
               })
             }}
             ·
-            {{ t('stats.records.oneRepMax', { value: n(Math.round(record.bestOneRepMax.value)) }) }}
+            {{
+              t('stats.records.oneRepMax', { load: load(Math.round(record.bestOneRepMax.value)) })
+            }}
           </li>
         </ul>
       </ion-card-content>

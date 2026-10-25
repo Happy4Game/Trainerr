@@ -143,6 +143,13 @@ export const migrations: readonly Migration[] = [
       ALTER TABLE session ADD COLUMN plan TEXT NOT NULL DEFAULT '{}';
     `,
   },
+  {
+    version: 4,
+    description: 'Technique cues in English',
+    sql: `
+      ALTER TABLE exercise ADD COLUMN cues_en TEXT;
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;

@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import { getSettings, saveSettings, type Settings } from '@/data/repositories/settingsRepository';
+import { applyLanguage } from '@/i18n';
 
 const settings = ref<Settings>();
 let loading: Promise<Settings> | undefined;
@@ -10,6 +11,7 @@ export function loadSettings(): Promise<Settings> {
   loading ??= (async () => {
     const { db } = await openAppDatabase();
     settings.value = await getSettings(db);
+    applyLanguage(settings.value.language);
     return settings.value;
   })();
   loading.catch(() => (loading = undefined));
@@ -22,6 +24,7 @@ export async function updateSettings(patch: Partial<Settings>): Promise<Settings
   const { db } = await openAppDatabase();
   await saveSettings(db, next);
   settings.value = next;
+  applyLanguage(next.language);
   loading = Promise.resolve(next);
   return next;
 }

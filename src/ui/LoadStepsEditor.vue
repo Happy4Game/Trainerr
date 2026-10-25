@@ -5,12 +5,13 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { defaultStepsFor, parseLoad, uniformSteps } from '@/domain/loadSteps';
 import type { Equipment } from '@/domain/types';
+import { useUnits } from '@/ui/useUnits';
 
 const props = defineProps<{ steps: readonly number[]; equipment: Equipment }>();
 const emit = defineEmits<{ change: [steps: number[]] }>();
 
-const { t, n } = useI18n();
-const kg = (load: number) => t('exercise.kg', { load: n(load) });
+const { t } = useI18n();
+const { load: kg, symbol, fromInput } = useUnits();
 
 const newStep = ref('');
 const invalid = ref(false);
@@ -21,10 +22,10 @@ const last = ref('');
 const defaults = computed(() => defaultStepsFor(props.equipment).slice(0, 6).map(kg).join(', '));
 
 function add(): void {
-  const load = parseLoad(newStep.value);
-  invalid.value = load === undefined;
-  if (load === undefined) return;
-  emit('change', [...props.steps, load]);
+  const typed = parseLoad(newStep.value);
+  invalid.value = typed === undefined;
+  if (typed === undefined) return;
+  emit('change', [...props.steps, fromInput(typed)]);
   newStep.value = '';
 }
 
@@ -39,7 +40,7 @@ const generated = computed(() => {
   const [a, step, b] = [first.value, increment.value, last.value].map(parseLoad);
   if (a === undefined || step === undefined || b === undefined || b < a) return undefined;
   const steps = uniformSteps(a, b, step);
-  return steps.length <= 200 ? steps : undefined;
+  return steps.length <= 200 ? steps.map(fromInput) : undefined;
 });
 
 function generate(): void {
@@ -61,7 +62,7 @@ function generate(): void {
         <button
           type="button"
           class="remove"
-          :aria-label="t('exercise.steps.remove', { load: n(load) })"
+          :aria-label="t('exercise.steps.remove', { load: kg(load) })"
           @click="remove(load)"
         >
           <X :size="18" aria-hidden="true" />
@@ -71,7 +72,7 @@ function generate(): void {
     <ion-item>
       <ion-input
         v-model="newStep"
-        :label="t('exercise.steps.add')"
+        :label="t('exercise.steps.add', { unit: symbol })"
         label-placement="stacked"
         inputmode="decimal"
         enterkeyhint="done"
@@ -83,7 +84,7 @@ function generate(): void {
     </ion-item>
     <ion-item>
       <ion-label>
-        <h3>{{ t('exercise.steps.generate.title') }}</h3>
+        <h3>{{ t('exercise.steps.generate.title', { unit: symbol }) }}</h3>
       </ion-label>
     </ion-item>
     <div class="generator">

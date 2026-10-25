@@ -41,7 +41,7 @@ export async function seedCatalog(
   );
   for (const e of catalog) {
     statements.push(`INSERT INTO exercise (id, name, machine_name, aliases, ppl_group, kind, equipment,
-        rep_range_min, rep_range_max, name_en, cues, cues_source, instructions_en, source)
+        rep_range_min, rep_range_max, name_en, cues, cues_en, cues_source, instructions_en, source)
       VALUES (${[
         e.id,
         e.name,
@@ -54,6 +54,7 @@ export async function seedCatalog(
         e.repRange?.max ?? null,
         e.nameEn,
         e.cues ? JSON.stringify(e.cues.fr) : null,
+        e.cues?.en ? JSON.stringify(e.cues.en) : null,
         e.cues?.source ?? null,
         JSON.stringify(e.instructionsEn),
         e.source,
@@ -63,7 +64,7 @@ export async function seedCatalog(
       ON CONFLICT (id) DO UPDATE SET name = excluded.name, machine_name = excluded.machine_name,
         aliases = excluded.aliases, ppl_group = excluded.ppl_group, kind = excluded.kind,
         equipment = excluded.equipment, rep_range_min = excluded.rep_range_min,
-        rep_range_max = excluded.rep_range_max, name_en = excluded.name_en, cues = excluded.cues,
+        rep_range_max = excluded.rep_range_max, name_en = excluded.name_en, cues = excluded.cues, cues_en = excluded.cues_en,
         cues_source = excluded.cues_source, instructions_en = excluded.instructions_en,
         source = excluded.source;`);
     statements.push(`DELETE FROM exercise_muscle WHERE exercise_id = ${q(e.id)};`);
@@ -96,6 +97,7 @@ interface ExerciseRow {
   rep_range_max: number | null;
   name_en: string;
   cues: string | null;
+  cues_en: string | null;
   cues_source: string | null;
   instructions_en: string;
   source: CatalogExercise['source'];
@@ -138,7 +140,13 @@ export async function listCatalog(db: SqlDatabase, gymId: string): Promise<Catal
         ? { repRange: { min: row.rep_range_min, max: row.rep_range_max } }
         : {}),
       ...(row.cues
-        ? { cues: { fr: JSON.parse(row.cues) as string[], source: row.cues_source ?? '' } }
+        ? {
+            cues: {
+              fr: JSON.parse(row.cues) as string[],
+              ...(row.cues_en ? { en: JSON.parse(row.cues_en) as string[] } : {}),
+              source: row.cues_source ?? '',
+            },
+          }
         : {}),
       instructionsEn: JSON.parse(row.instructions_en) as string[],
       source: row.source,

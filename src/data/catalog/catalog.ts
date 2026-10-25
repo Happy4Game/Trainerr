@@ -10,7 +10,11 @@ export interface CatalogExercise extends Exercise {
   /** Name printed on the machine (e.g. "Seated Row"). */
   readonly machineName?: string;
   readonly aliases: readonly string[];
-  readonly cues?: { readonly fr: readonly string[]; readonly source: string };
+  readonly cues?: {
+    readonly fr: readonly string[];
+    readonly en?: readonly string[];
+    readonly source: string;
+  };
   readonly instructionsEn: readonly string[];
   readonly source: 'free-exercise-db' | 'trainerr' | 'user';
 }
@@ -101,7 +105,9 @@ export function mapFreeExercise(raw: FreeExercise): CatalogExercise | undefined 
     primaryMuscles,
     secondaryMuscles,
     ...(curated?.repRange ? { repRange: curated.repRange } : {}),
-    ...(curated ? { cues: { fr: curated.cues, source: curated.cuesSource } } : {}),
+    ...(curated
+      ? { cues: { fr: curated.cues, en: curated.cuesEn, source: curated.cuesSource } }
+      : {}),
     instructionsEn: raw.instructions,
     source: 'free-exercise-db',
   };
@@ -124,7 +130,7 @@ export function buildCatalog(): CatalogExercise[] {
     primaryMuscles: e.primaryMuscles,
     secondaryMuscles: e.secondaryMuscles,
     ...(e.repRange ? { repRange: e.repRange } : {}),
-    cues: { fr: e.cues, source: e.cuesSource },
+    cues: { fr: e.cues, en: e.cuesEn, source: e.cuesSource },
     instructionsEn: [],
     source: 'trainerr',
   }));

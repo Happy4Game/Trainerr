@@ -19,8 +19,10 @@ import {
 import { parseLoad } from '@/domain/loadSteps';
 import { proteinTargetGrams } from '@/domain/tracking';
 import { todayIso } from '@/ui/useWeekPlan';
+import { useUnits } from '@/ui/useUnits';
 
 const { t, n, locale } = useI18n();
+const { load, symbol, fromInput } = useUnits();
 const measurements = ref<BodyMeasurement[]>([]);
 const weight = ref('');
 const arm = ref('');
@@ -43,7 +45,8 @@ const shortDate = (date: string) =>
   }).format(new Date(`${date}T00:00:00Z`));
 
 async function save(): Promise<void> {
-  const weightKg = parseLoad(weight.value);
+  const typed = parseLoad(weight.value);
+  const weightKg = typed === undefined ? undefined : fromInput(typed);
   const values = { arm: parseLoad(arm.value), waist: parseLoad(waist.value) };
   const measured = Object.fromEntries(
     Object.entries(values).filter((entry): entry is [string, number] => entry[1] !== undefined),
@@ -76,7 +79,7 @@ async function remove(id: string): Promise<void> {
         <ion-input
           v-model="weight"
           fill="outline"
-          :label="t('body.weight')"
+          :label="t('body.weight', { unit: symbol })"
           label-placement="stacked"
           inputmode="decimal"
         />
@@ -106,9 +109,7 @@ async function remove(id: string): Promise<void> {
     </ion-card-header>
     <ion-card-content>
       <p>
-        {{
-          t('body.protein.target', { grams: proteinTargetGrams(lastWeight), weight: n(lastWeight) })
-        }}
+        {{ t('body.protein.target', { grams: proteinTargetGrams(lastWeight) }) }}
       </p>
       <p class="small">{{ t('body.protein.source') }}</p>
     </ion-card-content>
@@ -118,9 +119,7 @@ async function remove(id: string): Promise<void> {
     <li v-for="m in [...measurements].reverse()" :key="m.id">
       <span>
         {{ shortDate(m.date) }} ·
-        <template v-if="m.weightKg !== undefined">{{
-          t('body.kg', { value: n(m.weightKg) })
-        }}</template>
+        <template v-if="m.weightKg !== undefined">{{ load(m.weightKg) }}</template>
         <template v-for="(value, key) in m.measurements" :key="key">
           · {{ t(`body.${key}`) }} {{ t('body.cm', { value: n(value) }) }}
         </template>
