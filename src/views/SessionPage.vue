@@ -16,7 +16,8 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import type { Alternative } from '@/domain/busyMachine';
 import { crowdedFallback } from '@/domain/busyMachine';
@@ -43,6 +44,53 @@ const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, s
 const { previousExercise } = session;
 
 const busyFor = ref<string>();
+const content = ref<{ $el: { scrollToTop: (duration?: number) => Promise<void> } }>();
+
+/** Exercises of the session in order: done, current, then the ones to come. */
+const progress = computed(() => {
+  const queue = active.value?.plan.queue;
+  if (!queue) return [];
+  const current = step.value?.kind === 'exercise' ? step.value.exerciseId : undefined;
+  const ids = [
+    ...new Set([...queue.done, ...queue.pending, ...queue.waiting.map((w) => w.exerciseId)]),
+  ];
+  return ids.map((id) => ({
+    id,
+    name: nameOf(id),
+    status: queue.done.includes(id) ? 'done' : id === current ? 'current' : 'next',
+  }));
+});
+const currentIndex = computed(() => progress.value.findIndex((e) => e.status === 'current'));
+
+/**
+ * Between two machines, a screen says it clearly: the exercise just finished,
+ * the next machine, and a button once there. Not inside a superset.
+ */
+const arrivedAt = ref<string>();
+const nextMachine = computed(() => {
+  const s = step.value;
+  const queue = active.value?.plan.queue;
+  if (s?.kind !== 'exercise' || !queue || queue.done.length === 0) return undefined;
+  if (s.exerciseId === arrivedAt.value) return undefined;
+  if (session.setsInSession(s.exerciseId).length > 0) return undefined;
+  const partner = session.supersetPartner(s.exerciseId);
+  if (partner && session.setsInSession(partner).length > 0) return undefined;
+  const image = illustrationFor(s.exerciseId)?.images[0];
+  return {
+    id: s.exerciseId,
+    finished: queue.done.at(-1),
+    sets: session.plannedSets(s.exerciseId),
+    loadKg: session.proposalFor(s.exerciseId)?.loadKg,
+    ...(image ? { thumbnail: `${import.meta.env.BASE_URL}exercise-images/${image.file}` } : {}),
+  };
+});
+// A new exercise starts at the top of the screen.
+watch(
+  () => (step.value?.kind === 'exercise' ? step.value.exerciseId : undefined),
+  (id, previous) => {
+    if (id && previous && id !== previous) void content.value?.$el.scrollToTop(300);
+  },
+);
 const pickingExercise = ref(false);
 async function addExercise(id: string): Promise<void> {
   pickingExercise.value = false;
@@ -154,7 +202,7 @@ async function logWarmup(): Promise<void> {
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content ref="content" class="ion-padding">
       <p v-if="phase === 'loading' || session.catalogState.value.kind !== 'ready'" role="status">
         {{ t('catalog.loading') }}
       </p>
@@ -329,7 +377,67 @@ async function logWarmup(): Promise<void> {
           @close="reportingDiscomfort = false"
         />
 
-        <template v-if="step?.kind === 'exercise'">
+        <nav v-if="progress.length > 1" class="progress" :aria-label="t('session.progress.label')">
+          <p class="progress-title">
+            {{
+              currentIndex >= 0
+                ? t('session.progress.title', {
+                    current: currentIndex + 1,
+                    total: progress.length,
+                  })
+                : t('session.progress.done', progress.filter((e) => e.status === 'done').length)
+            }}
+          </p>
+          <ol class="progress-list">
+            <li
+              v-for="e in progress"
+              :key="e.id"
+              :class="e.status"
+              :aria-current="e.status === 'current' ? 'step' : undefined"
+            >
+              <span class="mark" aria-hidden="true">{{
+                e.status === 'done' ? '✓' : e.status === 'current' ? '●' : '○'
+              }}</span>
+              <span class="visually-hidden">{{ t(`session.progress.status.${e.status}`) }}</span>
+              {{ e.name }}
+            </li>
+          </ol>
+        </nav>
+
+        <section
+          v-if="nextMachine"
+          class="next-machine"
+          :aria-label="t('session.nextMachine.title')"
+        >
+          <p v-if="nextMachine.finished" class="finished" role="status">
+            ✓ {{ t('session.nextMachine.finished', { name: nameOf(nextMachine.finished) }) }}
+          </p>
+          <p class="label">{{ t('session.nextMachine.title') }}</p>
+          <img
+            v-if="nextMachine.thumbnail"
+            :src="nextMachine.thumbnail"
+            alt=""
+            class="next-thumb"
+          />
+          <h2>{{ nameOf(nextMachine.id) }}</h2>
+          <p class="plan-line">
+            {{ t('session.nextMachine.plan', nextMachine.sets) }}
+            <template v-if="nextMachine.loadKg !== undefined">
+              · {{ kg(nextMachine.loadKg) }}
+            </template>
+          </p>
+          <ion-button expand="block" size="large" @click="arrivedAt = nextMachine.id">
+            {{ t('session.nextMachine.go') }}
+          </ion-button>
+          <ion-button expand="block" fill="clear" :router-link="cardLink(nextMachine.id)">
+            {{ t('session.seeMovement') }}
+          </ion-button>
+          <ion-button expand="block" fill="clear" color="medium" @click="onBusy">
+            {{ t('session.busy') }}
+          </ion-button>
+        </section>
+
+        <template v-else-if="step?.kind === 'exercise'">
           <ion-card v-if="warmup" class="warmup">
             <ion-card-content>
               <p>
@@ -498,6 +606,83 @@ async function logWarmup(): Promise<void> {
   background: var(--ion-color-light);
   color: var(--ion-color-light-contrast);
   font-size: 0.75rem;
+}
+.progress {
+  margin-block: 4px 12px;
+}
+.progress-title {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.progress-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.progress-list li {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--ion-color-light);
+  color: var(--ion-color-medium-shade);
+}
+.progress-list li.done {
+  text-decoration: line-through;
+}
+.progress-list li.current {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  font-weight: 700;
+}
+.mark {
+  margin-inline-end: 4px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.next-machine {
+  margin-block: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 2px solid var(--ion-color-primary);
+  text-align: center;
+}
+.next-machine .finished {
+  margin: 0 0 12px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--ion-color-success);
+  color: var(--ion-color-success-contrast);
+  font-weight: 600;
+}
+.next-machine .label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+  color: var(--ion-color-primary);
+}
+.next-machine h2 {
+  margin-block: 4px;
+  font-size: 1.5rem;
+}
+.next-thumb {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+}
+.plan-line {
+  margin-block: 0 12px;
+  color: var(--ion-color-medium-shade);
 }
 .go-back {
   margin-inline-start: -8px;

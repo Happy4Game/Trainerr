@@ -89,6 +89,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Fiche machine : « Ma charge sur cette machine » est visible sur toutes les fiches (elle n'apparaissait qu'en mode reprise). La première séance part de cette charge au lieu d'une série test ; en mode reprise, elle devient « Avant ma pause ».
 
+- Changement de machine visible : « Exercice 2 sur 5 » avec la liste des machines (faites, en cours, à venir), et entre deux exercices un écran « ✓ … terminé · Machine suivante » (dessin, séries, charge, « Je suis sur la machine »). Pas d'interruption au milieu d'un superset ; l'écran remonte en haut à chaque nouvel exercice.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

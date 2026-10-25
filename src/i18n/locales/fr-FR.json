@@ -322,6 +322,22 @@
       "ok": "1 ou 2 en réserve",
       "hard": "plus rien en réserve",
       "fail": "pas pu finir"
+    },
+    "progress": {
+      "label": "Progression de la séance",
+      "title": "Exercice {current} sur {total}",
+      "done": "{count} exercice fait | {count} exercices faits",
+      "status": {
+        "done": "fait",
+        "current": "en cours",
+        "next": "à venir"
+      }
+    },
+    "nextMachine": {
+      "title": "Machine suivante",
+      "finished": "{name} terminé",
+      "plan": "{count} série | {count} séries",
+      "go": "Je suis sur la machine"
     }
   },
   "availability": {

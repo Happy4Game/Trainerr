@@ -21,6 +21,12 @@ test('express workout: 3 exercises, curl and pushdown in a superset', async ({ p
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   for (let i = 0; i < 3; i++) await correct();
 
+  // The change of machine is announced, then confirmed once on it.
+  const next = page.getByRole('region', { name: 'Machine suivante' });
+  await expect(next.getByText('✓ Développé épaules machine terminé')).toBeVisible();
+  await expect(page.getByText('Exercice 2 sur 3')).toBeVisible();
+  await next.getByRole('button', { name: 'Je suis sur la machine' }).click();
+
   const first = page.getByRole('region').filter({ hasText: /Superset avec/ });
   await expect(first).toBeVisible();
   const firstName = await first.getByRole('heading', { level: 2 }).innerText();

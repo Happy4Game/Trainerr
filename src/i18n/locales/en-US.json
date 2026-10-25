@@ -322,6 +322,22 @@
       "ok": "1 or 2 left",
       "hard": "nothing left",
       "fail": "could not finish"
+    },
+    "progress": {
+      "label": "Session progress",
+      "title": "Exercise {current} of {total}",
+      "done": "{count} exercise done | {count} exercises done",
+      "status": {
+        "done": "done",
+        "current": "in progress",
+        "next": "to come"
+      }
+    },
+    "nextMachine": {
+      "title": "Next machine",
+      "finished": "{name} done",
+      "plan": "{count} set | {count} sets",
+      "go": "I'm on the machine"
     }
   },
   "availability": {
