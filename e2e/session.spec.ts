@@ -79,7 +79,7 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
 
   // History and stats show the workout.
   await tab(page, 'Historique');
-  await expect(page.getByText(/Haut du corps A ·/)).toBeVisible();
+  await expect(page.getByRole('heading', { level: 3, name: 'Haut du corps A' })).toBeVisible();
   await page.locator('ion-segment-button', { hasText: 'Stats' }).click();
   await expect(page.getByText('Évolution de la force')).toBeVisible();
   await expect(page.getByRole('img', { name: /1RM estimé/ })).toBeVisible();

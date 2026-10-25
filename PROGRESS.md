@@ -62,6 +62,7 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Calculateur de disques (dessin SVG, − / +), saisie vocale (« 16 kilos, 10 reps, limite »), reprise de la séance après fermeture de l'appli.
 - Migration v3 (plan de séance), récap de fin de séance.
 - Notes de séance (« mal dormi », « salle bondée »), affichées dans l'historique.
+- Historique lisible : séances groupées par mois (avec leur nombre), une carte par séance (date, nom, exercices · séries · charge soulevée), une ligne par exercice avec ses séries en pastilles « 90 kg × 12 ».
 - Bouton **« Ça tire »** : zone + signaux d'alerte ; avant de l'épaule → exercices de poussée restants retirés ; signaux d'alerte → arrêt de la séance ; douleur thoracique + essoufflement → appeler le 15 ; même gêne 2 fois dans la semaine → conseil kiné.
 
 ## Étape 5 — Parcours utilisateur

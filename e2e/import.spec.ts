@@ -22,6 +22,13 @@ test('imports a Strong export after checking the exercise matches', async ({ pag
   await expect(page.getByText('2 séances importées.')).toBeVisible();
 
   await page.goto('/tabs/history');
-  await expect(page.getByText(/Séance importée ·/)).toHaveCount(2, { timeout: 20_000 });
-  await expect(page.getByText(/Presse à cuisses : 90 × 12/)).toBeVisible();
+  await expect(page.getByRole('heading', { level: 3, name: 'Séance importée' })).toHaveCount(2, {
+    timeout: 20_000,
+  });
+  await expect(
+    page
+      .getByRole('list', { name: 'Exercices de Séance importée' })
+      .getByRole('listitem')
+      .filter({ hasText: 'Presse à cuisses' }),
+  ).toContainText('90 kg × 12');
 });

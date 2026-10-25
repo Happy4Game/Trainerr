@@ -495,13 +495,16 @@
   },
   "history": {
     "empty": "No finished workout yet.",
-    "workload": "Workload: {load}",
     "views": {
       "sessions": "Workouts",
       "stats": "Stats",
       "body": "Body"
     },
-    "edit": "Edit {session}"
+    "edit": "Edit {session}",
+    "sessions": "{count} session | {count} sessions",
+    "sets": "{count} set | {count} sets",
+    "exercisesOf": "Exercises of {session}",
+    "lifted": "{load} lifted"
   },
   "comeback": {
     "load": "Load ({unit})",

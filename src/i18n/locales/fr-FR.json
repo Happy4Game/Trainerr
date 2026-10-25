@@ -495,13 +495,16 @@
   },
   "history": {
     "empty": "Pas encore de séance terminée.",
-    "workload": "Charge de travail : {load}",
     "views": {
       "sessions": "Séances",
       "stats": "Stats",
       "body": "Corps"
     },
-    "edit": "Modifier {session}"
+    "edit": "Modifier {session}",
+    "sessions": "{count} séance | {count} séances",
+    "sets": "{count} série | {count} séries",
+    "exercisesOf": "Exercices de {session}",
+    "lifted": "{load} soulevés"
   },
   "comeback": {
     "load": "Charge ({unit})",

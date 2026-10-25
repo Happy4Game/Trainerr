@@ -59,8 +59,16 @@ test('a past session can be corrected, completed and deleted', async ({ page }) 
   await expect(page.getByRole('group', { name: /Série 1 : Presse à cuisses/ })).toBeVisible();
 
   await page.getByRole('button', { name: 'Retour' }).click();
-  await expect(page.getByText(new RegExp(`${first} : .*× 8, .*× 8`))).toBeVisible();
-  await expect(page.getByText(/Presse à cuisses :/)).toBeVisible();
+  // The list: the month, then one card per session, one line per exercise.
+  await expect(page.getByRole('heading', { level: 2, name: /\d{4}/ })).toBeVisible();
+  const exercises = page.getByRole('list', { name: 'Exercices de Haut du corps A' });
+  await expect(exercises.getByRole('listitem').filter({ hasText: first })).toContainText(
+    /× 8.*× 8/,
+  );
+  await expect(
+    exercises.getByRole('listitem').filter({ hasText: 'Presse à cuisses' }),
+  ).toBeVisible();
+  await expect(page.getByText(/^2 exercices · /)).toBeVisible();
 
   await page.getByRole('link', { name: /Modifier Haut du corps A/ }).click();
   await page.getByRole('button', { name: 'Supprimer cette séance' }).click();
