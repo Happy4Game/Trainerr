@@ -105,6 +105,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Recherche par zone du corps dans le catalogue : silhouette face / dos, toucher une zone filtre les exercices qui la travaillent (combinable avec la recherche et les onglets), utilisable au clavier.
 
+- Supersets optionnels : interrupteur « Enchaîner en supersets » avant de commencer (par défaut selon le réglage, plus jamais imposés, y compris en séance express) et bouton « Séparer » pendant la séance.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

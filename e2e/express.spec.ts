@@ -15,6 +15,8 @@ test('express workout: 3 exercises, curl and pushdown in a superset', async ({ p
   await star(page, 'curl haltères', 'Curl biceps haltères');
 
   await page.getByRole('tab', { name: 'Séance' }).click();
+  // Supersets are an option: off by default, switched on for this session.
+  await page.getByRole('switch', { name: /Enchaîner en supersets/ }).click();
   await page.getByRole('button', { name: 'Séance express (20–30 min)' }).click();
 
   const correct = () => page.getByRole('button', { name: 'Correct', exact: true }).click();
@@ -39,4 +41,21 @@ test('express workout: 3 exercises, curl and pushdown in a superset', async ({ p
   // Rest after the second exercise of the pair, then back to the first one.
   await expect(page.getByRole('timer')).toBeVisible();
   await expect(page.getByRole('region', { name: firstName })).toBeVisible();
+});
+
+test('an express session without supersets, and a superset split on the spot', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await star(page, 'poulie haute', 'Extension triceps à la poulie');
+  await star(page, 'curl haltères', 'Curl biceps haltères');
+  await page.getByRole('tab', { name: 'Séance' }).click();
+
+  await page.getByRole('switch', { name: /Enchaîner en supersets/ }).click();
+  await page.getByRole('button', { name: 'Commencer la séance' }).click();
+  await expect(page.getByText(/Superset avec/)).toBeVisible();
+  await page.getByRole('button', { name: /Séparer le superset avec/ }).click();
+  await expect(page.getByText(/Superset avec/)).toHaveCount(0);
+  // Rest after each set again.
+  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await expect(page.getByRole('timer')).toBeVisible();
 });

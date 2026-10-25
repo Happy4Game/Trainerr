@@ -156,9 +156,18 @@ function listen(): void {
         {{ t('session.extraSet.short') }}
       </ion-button>
     </div>
-    <p v-if="partnerName" class="superset" role="note">
-      {{ t('session.superset', { name: partnerName }) }}
-    </p>
+    <div v-if="partnerName" class="superset" role="note">
+      <span>{{ t('session.superset', { name: partnerName }) }}</span>
+      <ion-button
+        size="small"
+        fill="outline"
+        color="light"
+        :aria-label="t('session.splitNamed', { name: partnerName })"
+        @click="session.splitSuperset(exerciseId)"
+      >
+        {{ t('session.split') }}
+      </ion-button>
+    </div>
 
     <!-- What was done before, and what to do now -->
     <div class="coach" :class="advice" role="note">
@@ -415,10 +424,19 @@ h2 {
   color: var(--ion-color-primary);
 }
 .superset {
-  padding: 6px 10px;
-  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-block: 6px;
+  padding: 8px 10px;
+  border-radius: var(--app-radius-small);
   background: var(--ion-color-tertiary);
   color: var(--ion-color-tertiary-contrast);
+}
+.superset ion-button {
+  margin: 0;
 }
 .reminder {
   padding: 8px 12px;

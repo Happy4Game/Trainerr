@@ -366,7 +366,11 @@
       "nowShort": "Now"
     },
     "previous": "Previous: {name}",
-    "goBackShort": "← Back"
+    "goBackShort": "← Back",
+    "supersetToggle": "Pair exercises in supersets",
+    "supersetToggleHelp": "Two exercises for opposite muscles back to back, rest after the second: shorter session. Optional.",
+    "split": "Split",
+    "splitNamed": "Split the superset with {name}"
   },
   "availability": {
     "day": "Day",

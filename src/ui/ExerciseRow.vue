@@ -57,6 +57,7 @@ const thumbnail = computed(() => {
 }
 .name {
   font-weight: 600;
+  color: var(--ion-text-color, #000);
 }
 .detail {
   font-size: 0.85rem;

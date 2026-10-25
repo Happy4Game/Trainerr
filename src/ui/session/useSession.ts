@@ -299,7 +299,14 @@ const cycle = computed(() =>
 );
 
 async function start(
-  options: { express?: boolean; home?: boolean; readyMade?: boolean; custom?: string } = {},
+  options: {
+    express?: boolean;
+    home?: boolean;
+    readyMade?: boolean;
+    custom?: string;
+    /** Chosen on the screen for this session; the setting otherwise. Never forced. */
+    supersets?: boolean;
+  } = {},
 ): Promise<void> {
   // A custom session: the exercises chosen by the user, in their order.
   const custom = options.custom
@@ -319,7 +326,7 @@ async function start(
   if (!template.value || exercises.length === 0 || !settings.value) return;
   const sets = setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light);
   const pairs =
-    settings.value.supersets || options.express
+    (options.supersets ?? settings.value.supersets)
       ? supersetPairs(
           proposeSupersets(exercises, {
             ...(settings.value.protectedZone
@@ -559,6 +566,14 @@ async function editHistory(change: (db: SqlDatabase) => Promise<unknown>): Promi
   history.value = await listDoneSessions(db);
 }
 
+/** Supersets are an option: a pair can be split at any time, sets then follow as usual. */
+async function splitSuperset(exerciseId: string): Promise<void> {
+  if (!active.value) return;
+  const supersets = (active.value.plan.supersets ?? []).filter((p) => !p.includes(exerciseId));
+  const { supersets: _old, ...rest } = active.value.plan;
+  await updatePlan(supersets.length > 0 ? { ...rest, supersets } : rest);
+}
+
 /** Back to the previous exercise, e.g. skipped too fast. Sets already logged stay. */
 async function goBack(): Promise<void> {
   if (!active.value) return;
@@ -712,6 +727,7 @@ export function useSession() {
     machineStillBusy,
     skipExercise,
     goBack,
+    splitSuperset,
     addExerciseNow,
     editHistory,
     extraSet,

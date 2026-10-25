@@ -12,6 +12,7 @@ import {
   IonModal,
   IonPage,
   IonTextarea,
+  IonToggle,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
@@ -104,6 +105,9 @@ async function addExercise(id: string): Promise<void> {
 }
 const reportingDiscomfort = ref(false);
 const { settings: appSettings } = useSettings();
+// Supersets are offered, never imposed: on by default only if chosen in the settings.
+const supersetChoice = ref<boolean>();
+const useSupersets = computed(() => supersetChoice.value ?? appSettings.value?.supersets ?? false);
 const customSessions = computed(() => appSettings.value?.customSessions ?? []);
 
 const remainingExercises = computed(() => {
@@ -246,6 +250,15 @@ async function logWarmup(): Promise<void> {
                   : t('cycle.week', session.cycle.value)
               }}
             </p>
+            <ion-item lines="none" class="superset-choice">
+              <ion-toggle
+                :checked="useSupersets"
+                @ion-change="supersetChoice = $event.detail.checked"
+              >
+                <span class="toggle-title">{{ t('session.supersetToggle') }}</span>
+                <span class="toggle-help">{{ t('session.supersetToggleHelp') }}</span>
+              </ion-toggle>
+            </ion-item>
             <template v-if="preview.length > 0">
               <ol class="plan">
                 <li v-for="e in preview" :key="e.id">
@@ -257,14 +270,18 @@ async function logWarmup(): Promise<void> {
                   />
                 </li>
               </ol>
-              <ion-button expand="block" size="large" @click="session.start()">
+              <ion-button
+                expand="block"
+                size="large"
+                @click="session.start({ supersets: useSupersets })"
+              >
                 {{ t('session.start') }}
               </ion-button>
               <ion-button
                 v-if="session.expressPreview.value.length > 0"
                 expand="block"
                 fill="outline"
-                @click="session.start({ express: true })"
+                @click="session.start({ express: true, supersets: useSupersets })"
               >
                 {{ t('session.express') }}
               </ion-button>
@@ -303,7 +320,11 @@ async function logWarmup(): Promise<void> {
                   </ExerciseRow>
                 </li>
               </ol>
-              <ion-button expand="block" size="large" @click="session.start({ readyMade: true })">
+              <ion-button
+                expand="block"
+                size="large"
+                @click="session.start({ readyMade: true, supersets: useSupersets })"
+              >
                 {{ t('session.readyMade.start') }}
               </ion-button>
               <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
@@ -318,7 +339,7 @@ async function logWarmup(): Promise<void> {
               v-if="session.homePreview.value.length > 0"
               expand="block"
               fill="clear"
-              @click="session.start({ home: true })"
+              @click="session.start({ home: true, supersets: useSupersets })"
             >
               {{ t('session.home') }}
             </ion-button>
@@ -345,7 +366,7 @@ async function logWarmup(): Promise<void> {
             <ion-button
               size="small"
               :aria-label="t('customSession.startNamed', { name: c.name })"
-              @click="session.start({ custom: c.id })"
+              @click="session.start({ custom: c.id, supersets: useSupersets })"
             >
               {{ t('customSession.start') }}
             </ion-button>
@@ -997,6 +1018,21 @@ async function logWarmup(): Promise<void> {
   margin: 0;
   --padding-start: 10px;
   --padding-end: 10px;
+}
+.superset-choice {
+  --background: transparent;
+  --padding-start: 0;
+  margin-block: 4px;
+}
+.toggle-title {
+  display: block;
+  font-weight: 600;
+}
+.toggle-help {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ion-color-medium-shade);
+  white-space: normal;
 }
 .go-back {
   margin-inline-start: -8px;

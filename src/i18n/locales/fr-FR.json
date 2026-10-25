@@ -366,7 +366,11 @@
       "nowShort": "Maintenant"
     },
     "previous": "Précédent : {name}",
-    "goBackShort": "← Revenir"
+    "goBackShort": "← Revenir",
+    "supersetToggle": "Enchaîner en supersets",
+    "supersetToggleHelp": "Deux exercices de muscles opposés à la suite, repos après le second : séance plus courte. Facultatif.",
+    "split": "Séparer",
+    "splitNamed": "Séparer le superset avec {name}"
   },
   "availability": {
     "day": "Jour",
