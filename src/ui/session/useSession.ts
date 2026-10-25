@@ -38,6 +38,7 @@ import { defaultStepsFor } from '@/domain/loadSteps';
 import { nextTemplate } from '@/domain/planning';
 import { nextSetProposal, REST_SECONDS, repRangeFor, startingProposal } from '@/domain/progression';
 import { buildSession, exercisesPerSession, setsPerExercise } from '@/domain/sessionBuilder';
+import { afterSupersetSet, proposeSupersets, supersetPairs } from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupSet } from '@/domain/warmup';
@@ -192,13 +193,46 @@ async function updatePlan(plan: SessionPlan): Promise<void> {
   if (active.value?.id === session.id) active.value = { ...active.value, plan };
 }
 
-async function start(): Promise<void> {
-  if (!template.value || preview.value.length === 0 || !settings.value) return;
+/** Express session: 3 exercises (compounds kept), isolation paired in supersets. */
+const EXPRESS_EXERCISES = 3;
+
+const expressPreview = computed<Exercise[]>(() => {
+  if (!settings.value || !template.value) return [];
+  return buildSession({
+    template: template.value,
+    favorites: favorites.value.map((e) => e.exercise),
+    count: EXPRESS_EXERCISES,
+    ...(settings.value.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
+  });
+});
+
+async function start(options: { express?: boolean } = {}): Promise<void> {
+  const exercises = options.express ? expressPreview.value : preview.value;
+  if (!template.value || exercises.length === 0 || !settings.value) return;
   const sets = setsPerExercise(settings.value.goal);
-  const ids = preview.value.map((e) => e.id);
+  const pairs =
+    settings.value.supersets || options.express
+      ? supersetPairs(
+          proposeSupersets(exercises, {
+            ...(settings.value.protectedZone
+              ? { protectedZone: settings.value.protectedZone }
+              : {}),
+          }),
+        )
+      : [];
+  // Partners side by side in the order.
+  const ids: string[] = [];
+  for (const e of exercises) {
+    if (ids.includes(e.id)) continue;
+    ids.push(e.id);
+    const pair = pairs.find((p) => p[0] === e.id);
+    if (pair) ids.push(pair[1]);
+  }
   const plan: SessionPlan = {
     exercises: ids.map((exerciseId) => ({ exerciseId, sets })),
     queue: startQueue(ids),
+    ...(pairs.length > 0 ? { supersets: pairs } : {}),
+    ...(options.express ? { express: true } : {}),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -232,14 +266,16 @@ async function logSet(set: SetLog): Promise<void> {
       steps: stepsOf(entry),
       isLastSet: isLast,
     });
-  if (isLast || rule?.action === 'stop') {
-    await updatePlan({
-      ...active.value.plan,
-      queue: completeExercise(active.value.plan.queue, set.exerciseId),
-    });
-  }
+  let queue = active.value.plan.queue;
+  if (isLast || rule?.action === 'stop') queue = completeExercise(queue, set.exerciseId);
+  // Superset: straight to the partner, rest after the second exercise only.
+  const superset = afterSupersetSet(active.value.plan.supersets ?? [], set.exerciseId, (id) =>
+    queue.pending.includes(id),
+  );
+  if (superset.next) queue = startNow(queue, superset.next);
+  if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
   const kind = entry?.exercise.kind ?? 'isolation';
-  restEndsAt.value = Date.now() + REST_SECONDS[kind].max * 1000;
+  restEndsAt.value = superset.rest ? Date.now() + REST_SECONDS[kind].max * 1000 : undefined;
 }
 
 async function undoLastSet(): Promise<void> {
@@ -391,6 +427,9 @@ export function useSession() {
     catalogState,
     settings,
     template,
+    expressPreview,
+    supersetPartner: (id: string) =>
+      active.value?.plan.supersets?.find((p) => p.includes(id))?.find((other) => other !== id),
     lastDoneTemplateId,
     history,
     preview,

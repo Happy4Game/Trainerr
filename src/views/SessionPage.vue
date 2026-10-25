@@ -156,6 +156,14 @@ async function logWarmup(): Promise<void> {
               <ion-button expand="block" size="large" @click="session.start()">
                 {{ t('session.start') }}
               </ion-button>
+              <ion-button
+                v-if="session.expressPreview.value.length > 0"
+                expand="block"
+                fill="outline"
+                @click="session.start({ express: true })"
+              >
+                {{ t('session.express') }}
+              </ion-button>
             </template>
             <template v-else>
               <p>{{ t('session.noFavorites', { template: t(`templates.${template.id}`) }) }}</p>

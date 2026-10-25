@@ -252,7 +252,9 @@
       "close": "Fermer"
     },
     "note": "Note de séance",
-    "notePlaceholder": "Ex. mal dormi, salle bondée"
+    "notePlaceholder": "Ex. mal dormi, salle bondée",
+    "express": "Séance express (20–30 min)",
+    "superset": "Superset avec {name} : enchaîne sans repos."
   },
   "availability": {
     "day": "Jour",

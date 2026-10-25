@@ -13,6 +13,10 @@ export interface SessionPlan {
   readonly queue: ExerciseQueue;
   /** Machines still taken at the end, moved to the next session of the same type. */
   readonly carryOver?: readonly string[];
+  /** Exercises done back to back, rest after the second one. */
+  readonly supersets?: readonly (readonly [string, string])[];
+  /** Short 20–30 min version of the session of the day. */
+  readonly express?: boolean;
 }
 
 export interface StoredSet extends SetLog {

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { proposeSupersets, supersetsSuggestedFor } from '@/domain/supersets';
+import {
+  afterSupersetSet,
+  proposeSupersets,
+  supersetPairs,
+  supersetsSuggestedFor,
+} from '@/domain/supersets';
 import { ex } from '../fixtures/exercises';
 
 describe('supersets', () => {
@@ -60,5 +65,35 @@ describe('supersets', () => {
     });
     expect(blocks.every((block) => block.kind === 'single')).toBe(true);
     expect(proposeSupersets([ex.shoulderPress, ex.rearDelt])[0]?.kind).toBe('superset');
+  });
+});
+
+describe('supersets during the workout', () => {
+  const pairs: [string, string][] = [['leg-extension', 'leg-curl']];
+  const todo = new Set(['leg-extension', 'leg-curl']);
+
+  it('lists the pairs of the blocks', () => {
+    expect(supersetPairs(proposeSupersets([ex.legExtension, ex.legCurl, ex.dbBench]))).toEqual(
+      pairs,
+    );
+  });
+
+  it('goes straight to the partner after the first exercise, without rest', () => {
+    expect(afterSupersetSet(pairs, 'leg-extension', (id) => todo.has(id))).toEqual({
+      next: 'leg-curl',
+      rest: false,
+    });
+  });
+
+  it('rests after the second exercise, then back to the first', () => {
+    expect(afterSupersetSet(pairs, 'leg-curl', (id) => todo.has(id))).toEqual({
+      next: 'leg-extension',
+      rest: true,
+    });
+  });
+
+  it('behaves normally once the partner is done, or outside a superset', () => {
+    expect(afterSupersetSet(pairs, 'leg-extension', () => false)).toEqual({ rest: true });
+    expect(afterSupersetSet(pairs, 'db-bench', () => true)).toEqual({ rest: true });
   });
 });

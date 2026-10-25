@@ -252,7 +252,9 @@
       "close": "Close"
     },
     "note": "Workout note",
-    "notePlaceholder": "E.g. slept badly, crowded gym"
+    "notePlaceholder": "E.g. slept badly, crowded gym",
+    "express": "Express workout (20–30 min)",
+    "superset": "Superset with {name}: go straight on, no rest."
   },
   "availability": {
     "day": "Day",

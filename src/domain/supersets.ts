@@ -85,3 +85,27 @@ function pairType(a: Exercise, b: Exercise, options: SupersetOptions): SupersetT
   if (options.allowUpperLower && isLower(a) !== isLower(b)) return 'upperLower';
   return undefined;
 }
+
+/** Pairs of exercise ids from the blocks, in session order. */
+export function supersetPairs(blocks: readonly SessionBlock[]): [string, string][] {
+  return blocks.flatMap((block) =>
+    block.kind === 'superset' ? [[block.first.id, block.second.id] as [string, string]] : [],
+  );
+}
+
+/**
+ * After a set inside a superset: go straight to the partner (no rest after the
+ * first exercise of the pair), rest only after the second one.
+ */
+export function afterSupersetSet(
+  pairs: readonly (readonly [string, string])[],
+  exerciseId: string,
+  stillToDo: (exerciseId: string) => boolean,
+): { next?: string; rest: boolean } {
+  const pair = pairs.find((p) => p.includes(exerciseId));
+  if (!pair) return { rest: true };
+  const partner = pair[0] === exerciseId ? pair[1] : pair[0];
+  const isFirst = pair[0] === exerciseId;
+  if (!stillToDo(partner)) return { rest: true };
+  return { next: partner, rest: !isFirst };
+}

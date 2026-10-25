@@ -43,6 +43,11 @@ watch(
   { immediate: true },
 );
 
+const partnerName = computed(() => {
+  const id = session.supersetPartner(props.exerciseId);
+  const e = id ? session.entryOf(id)?.exercise : undefined;
+  return e ? (locale.value.startsWith('fr') ? e.name : e.nameEn) : undefined;
+});
 const name = computed(() =>
   entry.value
     ? locale.value.startsWith('fr')
@@ -102,6 +107,9 @@ function listen(): void {
     <p class="meta">
       {{ t('session.setNumber', { current: Math.min(done + 1, target), total: target }) }}
       · {{ t(`session.reason.${proposal.reason}`) }}
+    </p>
+    <p v-if="partnerName" class="superset" role="note">
+      {{ t('session.superset', { name: partnerName }) }}
     </p>
     <p v-if="proposal.reminders.includes('rangeOfMotion')" class="reminder" role="note">
       {{ t('session.reminder.rangeOfMotion') }}
@@ -203,6 +211,12 @@ h2 {
 .meta {
   margin-block: 0 8px;
   color: var(--ion-color-medium);
+}
+.superset {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--ion-color-tertiary);
+  color: var(--ion-color-tertiary-contrast);
 }
 .reminder {
   padding: 8px 12px;
