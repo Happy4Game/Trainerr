@@ -41,8 +41,12 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
   ).toBeVisible();
 
   await page.getByRole('tab', { name: 'Planning' }).click();
+  await expect(
+    page.getByRole('region', { name: 'Prochaine séance' }).getByRole('heading', { level: 2 }),
+  ).toBeVisible();
   const week = page.getByRole('list').first();
-  await expect(week.getByText(/Push A · 18:00–19:00/)).toBeVisible();
+  const push = week.getByRole('listitem').filter({ hasText: 'Push A' });
+  await expect(push).toContainText('18:00–19:00');
   await expect(week.getByText(/Legs/)).toHaveCount(2);
   // Cycling on Wednesday: no Legs on Wednesday nor Thursday.
   for (const day of ['mercredi', 'jeudi']) {

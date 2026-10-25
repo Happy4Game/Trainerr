@@ -473,7 +473,14 @@
     "program": "Mon programme",
     "model": "Modèle",
     "sessionsPerWeek": "Séances par semaine",
-    "frequencyNote": "Avec ce réglage, chaque muscle n'est travaillé qu'une fois par semaine. Deux fois par semaine donne de meilleurs résultats à volume égal (Schoenfeld, 2016)."
+    "frequencyNote": "Avec ce réglage, chaque muscle n'est travaillé qu'une fois par semaine. Deux fois par semaine donne de meilleurs résultats à volume égal (Schoenfeld, 2016).",
+    "next": "Prochaine séance",
+    "today": "Aujourd'hui",
+    "done": "Faite",
+    "start": "C'est parti",
+    "weekDone": "Semaine bouclée, bravo !",
+    "noneLeft": "Plus de séance prévue cette semaine.",
+    "progress": "{done} sur {count} séance cette semaine | {done} sur {count} séances cette semaine"
   },
   "notifications": {
     "reminder": "{template} à {time} aujourd'hui. Ta séance t'attend !",

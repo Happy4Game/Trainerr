@@ -15,11 +15,11 @@ export function useWeekPlan() {
   const { settings } = useSettings();
   const session = useSession();
 
-  const plan = computed(() => {
+  const planFrom = (weekStart: string) => {
     const s = settings.value;
     if (!s) return undefined;
     return planWeek({
-      weekStart: startOfWeek(todayIso()),
+      weekStart,
       rotation: rotationFor(s.model),
       ...(session.lastDoneTemplateId.value
         ? { lastDoneTemplateId: session.lastDoneTemplateId.value }
@@ -30,7 +30,10 @@ export function useWeekPlan() {
       blockedSlots: s.blockedSlots,
       otherSports: s.otherSport ? [s.otherSport] : [],
     });
-  });
+  };
+  const plan = computed(() => planFrom(startOfWeek(todayIso())));
+  /** First session of next week, for when this week has nothing left. */
+  const nextWeekFirst = computed(() => planFrom(addDays(startOfWeek(todayIso()), 7))?.sessions[0]);
 
   const days = computed(() =>
     Array.from({ length: 7 }, (_, i) => {
@@ -45,5 +48,5 @@ export function useWeekPlan() {
       : false,
   );
 
-  return { settings, plan, days, frequencyNote };
+  return { settings, plan, days, frequencyNote, nextWeekFirst };
 }

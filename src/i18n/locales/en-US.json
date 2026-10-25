@@ -473,7 +473,14 @@
     "program": "My program",
     "model": "Model",
     "sessionsPerWeek": "Workouts per week",
-    "frequencyNote": "With this setting, each muscle is trained only once a week. Twice a week gives better results at equal volume (Schoenfeld, 2016)."
+    "frequencyNote": "With this setting, each muscle is trained only once a week. Twice a week gives better results at equal volume (Schoenfeld, 2016).",
+    "next": "Next session",
+    "today": "Today",
+    "done": "Done",
+    "start": "Let's go",
+    "weekDone": "Week complete, well done!",
+    "noneLeft": "No more sessions planned this week.",
+    "progress": "{done} of {count} session this week | {done} of {count} sessions this week"
   },
   "notifications": {
     "reminder": "{template} at {time} today. Your workout is waiting!",

@@ -67,7 +67,7 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 ## Étape 5 — Parcours utilisateur
 
 - Questionnaire du premier lancement (7 questions + notifications), bouton « Passer » avec les valeurs par défaut.
-- Écran **Planning** : semaine générée, grille de disponibilités, modèle et nombre de séances, note « 1 fois par semaine ».
+- Écran **Planning** : prochaine séance en tête (avec la semaine suivante si celle-ci est finie), progression de la semaine, frise des jours (faite, aujourd'hui, à venir, repos), grille de disponibilités, modèle et nombre de séances, note « 1 fois par semaine ».
 - Écran **Aujourd'hui** : séance du jour, compteur de la semaine, régularité, accès aux réglages.
 - **Mode reprise** : anciennes charges sur chaque fiche, départ réduit (90 / 80 / 70 %), jauge de retour à l'ancien niveau.
 - **Notifications locales** : rappel 1 h avant, relance douce, 1 par jour au plus, jamais en heures de silence ni en créneau bloqué (plugin Local Notifications, aucun serveur).

@@ -9,15 +9,15 @@ import {
   IonContent,
   IonHeader,
   IonItem,
-  IonLabel,
-  IonList,
   IonPage,
   IonSelect,
   IonSelectOption,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
+import { CalendarClock, Check, Dumbbell } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { suggestProgramChange } from '@/domain/cycles';
 import { useI18n } from 'vue-i18n';
 import type { WeeklySlot } from '@/domain/planning';
@@ -27,11 +27,19 @@ import { rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings } from '@/ui/useSettings';
 import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
+import { weekOverview } from '@/domain/weekOverview';
 
 const { t, locale } = useI18n();
 const templateLabel = useTemplateName();
-const { settings, plan, days, frequencyNote } = useWeekPlan();
+const { settings, plan, days, frequencyNote, nextWeekFirst } = useWeekPlan();
 const session = useSession();
+const router = useRouter();
+
+const week = computed(() =>
+  weekOverview({ days: days.value, done: session.history.value, today: todayIso() }),
+);
+const upcoming = computed(() => week.value.next ?? nextWeekFirst.value);
+const target = computed(() => settings.value?.sessionsPerWeek ?? 0);
 
 const editing = ref(false);
 const freeSlots = ref<WeeklySlot[]>([]);
@@ -41,13 +49,13 @@ watch(
   { immediate: true },
 );
 
+const formatDay = (date: string, options: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat(locale.value, { ...options, timeZone: 'UTC' }).format(
+    new Date(`${date}T00:00:00Z`),
+  );
 const dayLabel = (date: string) =>
-  new Intl.DateTimeFormat(locale.value, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    timeZone: 'UTC',
-  }).format(new Date(`${date}T00:00:00Z`));
+  formatDay(date, { weekday: 'long', day: 'numeric', month: 'long' });
+const nextDay = (date: string) => (date === todayIso() ? t('planning.today') : dayLabel(date));
 
 async function save(patch: Parameters<typeof updateSettings>[0]): Promise<void> {
   const saved = await updateSettings(patch);
@@ -78,27 +86,80 @@ const changeSuggested = computed(() =>
     </ion-header>
     <ion-content class="ion-padding">
       <template v-if="settings && plan">
+        <section class="hero" :aria-label="t('planning.next')">
+          <p v-if="!week.next" class="eyebrow">
+            {{ week.doneCount >= target ? t('planning.weekDone') : t('planning.noneLeft') }}
+          </p>
+          <template v-if="upcoming">
+            <span class="eyebrow next">{{ t('planning.next') }}</span>
+            <h2>{{ templateLabel(upcoming.templateId) }}</h2>
+            <p class="when">
+              {{ nextDay(upcoming.date) }} · {{ upcoming.start }}–{{ upcoming.end }}
+            </p>
+            <ion-button
+              v-if="upcoming.date === todayIso()"
+              expand="block"
+              @click="router.push('/tabs/session')"
+            >
+              <Dumbbell :size="20" aria-hidden="true" class="icon" />
+              {{ t('planning.start') }}
+            </ion-button>
+          </template>
+          <div class="progress">
+            <span
+              v-for="i in Math.max(target, week.doneCount)"
+              :key="i"
+              class="segment"
+              :class="{ filled: i <= week.doneCount }"
+              aria-hidden="true"
+            />
+          </div>
+          <p class="count">
+            {{ t('planning.progress', { done: week.doneCount, count: target }, target) }}
+          </p>
+        </section>
+
         <h2 class="section">{{ t('planning.week') }}</h2>
-        <ion-list>
-          <ion-item v-for="day in days" :key="day.date" :class="{ today: day.date === todayIso() }">
-            <ion-label>
-              <h3>{{ dayLabel(day.date) }}</h3>
-              <p v-if="day.session">
-                {{ templateLabel(day.session.templateId) }} · {{ day.session.start }}–{{
-                  day.session.end
-                }}
-              </p>
-              <p v-else>{{ t('planning.rest') }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
+        <ul class="week">
+          <li
+            v-for="day in week.days"
+            :key="day.date"
+            :class="[day.status, { 'is-today': day.date === todayIso() }]"
+          >
+            <span class="visually-hidden">{{ dayLabel(day.date) }}</span>
+            <div class="date" aria-hidden="true">
+              <span class="weekday">{{ formatDay(day.date, { weekday: 'short' }) }}</span>
+              <span class="number">{{ formatDay(day.date, { day: 'numeric' }) }}</span>
+            </div>
+            <div v-if="day.status === 'rest'" class="body">
+              <span class="rest">{{ t('planning.rest') }}</span>
+            </div>
+            <div v-else class="body">
+              <strong class="name">
+                {{ templateLabel(day.doneTemplateId ?? day.session?.templateId ?? '') }}
+              </strong>
+              <span v-if="day.session" class="time">
+                {{ day.session.start }}–{{ day.session.end }}
+              </span>
+            </div>
+            <span v-if="day.status === 'done'" class="badge done">
+              <Check :size="16" aria-hidden="true" />{{ t('planning.done') }}
+            </span>
+            <span v-else-if="day.status === 'today'" class="badge today">
+              {{ t('planning.today') }}
+            </span>
+          </li>
+        </ul>
         <p v-if="plan.unplaced > 0" class="warning" role="note">
           {{ t('planning.unplaced', plan.unplaced) }}
         </p>
 
         <ion-card>
           <ion-card-header>
-            <ion-card-title>{{ t('planning.availability') }}</ion-card-title>
+            <ion-card-title>
+              <CalendarClock :size="22" aria-hidden="true" class="icon" />
+              {{ t('planning.availability') }}
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <template v-if="editing">
@@ -119,7 +180,10 @@ const changeSuggested = computed(() =>
 
         <ion-card>
           <ion-card-header>
-            <ion-card-title>{{ t('planning.program') }}</ion-card-title>
+            <ion-card-title>
+              <Dumbbell :size="22" aria-hidden="true" class="icon" />
+              {{ t('planning.program') }}
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-item>
@@ -165,13 +229,178 @@ const changeSuggested = computed(() =>
 </template>
 
 <style scoped>
+.hero {
+  margin-block-end: 20px;
+  padding: 20px;
+  border-radius: var(--app-radius);
+  background: var(--ion-color-primary);
+  box-shadow: var(--app-shadow);
+  color: var(--ion-color-primary-contrast);
+}
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+.eyebrow.next {
+  margin: 0;
+}
+.hero h2 {
+  margin: 2px 0 4px;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+.when {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.when::first-letter {
+  text-transform: uppercase;
+}
+.hero ion-button {
+  --background: var(--ion-color-primary-contrast);
+  --color: var(--ion-color-primary);
+  margin-block-start: 14px;
+  font-weight: 700;
+}
+.progress {
+  display: flex;
+  gap: 6px;
+  margin-block-start: 16px;
+}
+.segment {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 25%);
+}
+.segment.filled {
+  background: var(--ion-color-primary-contrast);
+}
+.count {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
 .section {
   margin-block: 0 8px;
   font-size: 1.1rem;
+  font-weight: 700;
 }
-.today {
-  --background: var(--ion-color-light);
+/* The week as a timeline: sessions as cards, rest days quiet. */
+.week {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.week li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1.5px solid transparent;
+  border-radius: var(--app-radius-small);
+  background: var(--ion-card-background);
+  box-shadow: var(--app-shadow);
+}
+.week li.rest {
+  padding-block: 4px;
+  background: transparent;
+  box-shadow: none;
+}
+.week li.today {
+  border-color: var(--ion-color-primary);
+}
+.week li.missed {
+  opacity: 0.55;
+}
+.date {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--ion-color-light);
+  line-height: 1.05;
+}
+.rest .date {
+  height: 40px;
+  background: transparent;
+  color: var(--ion-color-medium-shade);
+}
+.is-today .date {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+.done .date {
+  background: rgba(var(--ion-color-success-rgb), 0.16);
+  color: var(--ion-color-success-shade);
+}
+.weekday {
+  font-size: 0.72rem;
   font-weight: 600;
+  text-transform: capitalize;
+}
+.number {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.name {
+  font-size: 1.05rem;
+}
+.time {
+  color: var(--ion-color-medium-shade);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.rest .rest {
+  color: var(--ion-color-medium-shade);
+}
+.badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.badge.done {
+  background: rgba(var(--ion-color-success-rgb), 0.16);
+  color: var(--ion-color-success-shade);
+}
+.badge.today {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+}
+.icon {
+  flex: none;
+  color: var(--ion-color-primary);
+}
+.hero .icon {
+  margin-inline-end: 8px;
+  color: inherit;
 }
 .note {
   padding: 8px 12px;
@@ -183,5 +412,13 @@ const changeSuggested = computed(() =>
   border-radius: 8px;
   background: var(--ion-color-warning);
   color: var(--ion-color-warning-contrast);
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 </style>
