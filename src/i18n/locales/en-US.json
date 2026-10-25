@@ -249,7 +249,11 @@
       "title": "Workout finished",
       "sets": "{count} set | {count} sets",
       "workload": "Workload: {load}",
-      "close": "Close"
+      "close": "Close",
+      "record": "New record: {name}, {load} × {reps}.",
+      "backToLevel": "You are back to your old level: {name}!",
+      "streak": "{count} week on pace. Keep going! | {count} weeks in a row on pace. Keep going!",
+      "badge": "Badge earned: {badge}"
     },
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",
@@ -358,7 +362,8 @@
   },
   "notifications": {
     "reminder": "{template} at {time} today. Your workout is waiting!",
-    "nudge": "It's been {days} days. A short 30-minute workout?"
+    "nudge": "It's been {days} days. A short 30-minute workout?",
+    "tip": "Did you know? {title}"
   },
   "history": {
     "empty": "No finished workout yet.",
@@ -642,5 +647,14 @@
   },
   "common": {
     "back": "Back"
+  },
+  "badges": {
+    "firstSession": "First workout",
+    "tenSessions": "10 workouts",
+    "fiftySessions": "50 workouts",
+    "firstWeekOnPace": "First week on pace",
+    "fourWeeksOnPace": "4 weeks on pace",
+    "firstRecord": "First record",
+    "backToLevel": "Back to your old level"
   }
 }

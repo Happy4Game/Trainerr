@@ -328,6 +328,24 @@ async function logWarmup(): Promise<void> {
         </ion-card-header>
         <ion-card-content>
           <p>{{ t('session.summary.sets', summary.sets) }}</p>
+          <p v-for="record in summary.records" :key="record.exerciseId" class="highlight">
+            {{
+              t('session.summary.record', {
+                name: nameOf(record.exerciseId),
+                load: kg(record.loadKg),
+                reps: n(record.reps),
+              })
+            }}
+          </p>
+          <p v-for="id in summary.backToLevel" :key="`b${id}`" class="highlight">
+            {{ t('session.summary.backToLevel', { name: nameOf(id) }) }}
+          </p>
+          <p v-if="summary.weeksOnPace >= 2">
+            {{ t('session.summary.streak', summary.weeksOnPace) }}
+          </p>
+          <p v-for="badge in summary.badges" :key="badge" class="highlight">
+            {{ t('session.summary.badge', { badge: t(`badges.${badge}`) }) }}
+          </p>
           <p>{{ t('session.summary.workload', { load: kg(Math.round(summary.workloadKg)) }) }}</p>
           <p v-if="summary.carryOver.length > 0">
             {{ t('session.carryOver', { names: summary.carryOver.map(nameOf).join(', ') }) }}
@@ -381,6 +399,10 @@ async function logWarmup(): Promise<void> {
 .logged ol {
   padding-inline-start: 1.2em;
   margin-block: 0;
+}
+.highlight {
+  font-weight: 600;
+  color: var(--ion-color-success-shade);
 }
 .finish {
   margin-block-start: 24px;

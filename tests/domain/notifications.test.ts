@@ -101,6 +101,23 @@ describe('motivation notifications', () => {
     ).toEqual([]);
   });
 
+  it('sends the tip of the week on Sunday evening, unless Sunday already has one', () => {
+    expect(
+      planNotifications(
+        input({ plannedSessions: [], lastSessionDate: '2026-10-25', tipId: 'protein' }),
+      ).notifications,
+    ).toEqual([{ date: '2026-11-01', time: '18:00', kind: 'tip', tipId: 'protein' }]);
+    expect(
+      planNotifications(
+        input({
+          plannedSessions: [{ date: '2026-11-01', start: '10:00', templateId: 'pushA' }],
+          lastSessionDate: '2026-10-25',
+          tipId: 'protein',
+        }),
+      ).notifications.map((n) => n.kind),
+    ).toEqual(['sessionReminder']);
+  });
+
   it('ignores sessions in the past', () => {
     const plan = planNotifications(
       input({ plannedSessions: [{ date: '2026-10-25', start: '21:00', templateId: 'pushA' }] }),

@@ -1,4 +1,4 @@
-import { daysBetween, isoWeekday, minutesToTime, timeToMinutes } from './dates';
+import { addDays, daysBetween, isoWeekday, minutesToTime, timeToMinutes } from './dates';
 import type { WeeklySlot } from './planning';
 import type { IsoDate } from './types';
 
@@ -32,7 +32,12 @@ export const MAX_IGNORED_NUDGES = 5;
 
 export type PlannedNotification =
   | { date: IsoDate; time: string; kind: 'sessionReminder'; templateId: string }
-  | { date: IsoDate; time: string; kind: 'nudge'; daysSince: number };
+  | { date: IsoDate; time: string; kind: 'nudge'; daysSince: number }
+  | { date: IsoDate; time: string; kind: 'tip'; tipId: string };
+
+/** The tip of the week goes out on Sunday evening, so at most once a week. */
+export const TIP_WEEKDAY = 7;
+export const TIP_TIME = '18:00';
 
 export interface NotificationInput {
   readonly today: IsoDate;
@@ -45,6 +50,8 @@ export interface NotificationInput {
   readonly recentDiscomfort: boolean;
   /** Nudges in a row that were not followed by a session. */
   readonly ignoredNudges: number;
+  /** "Bien débuter" card to push this week. */
+  readonly tipId?: string;
 }
 
 /**
@@ -101,6 +108,15 @@ export function planNotifications(input: NotificationInput): {
     const at = timeToMinutes(NUDGE_TIME);
     if (daysSince >= pace + NUDGE_EXTRA_DAYS && allowed(input.today, at)) {
       result.push({ date: input.today, time: NUDGE_TIME, kind: 'nudge', daysSince });
+    }
+  }
+
+  if (prefs.kinds.tip && input.tipId) {
+    const sunday = Array.from({ length: 7 }, (_, i) => addDays(input.today, i)).find(
+      (date) => isoWeekday(date) === TIP_WEEKDAY,
+    ) as IsoDate;
+    if (allowed(sunday, timeToMinutes(TIP_TIME))) {
+      result.push({ date: sunday, time: TIP_TIME, kind: 'tip', tipId: input.tipId });
     }
   }
 

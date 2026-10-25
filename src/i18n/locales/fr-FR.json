@@ -249,7 +249,11 @@
       "title": "Séance terminée",
       "sets": "{count} série | {count} séries",
       "workload": "Charge de travail : {load}",
-      "close": "Fermer"
+      "close": "Fermer",
+      "record": "Nouveau record : {name}, {load} × {reps}.",
+      "backToLevel": "Tu as retrouvé ton niveau d'avant : {name} !",
+      "streak": "{count} semaine au rythme. Continue ! | {count} semaines d'affilée au rythme. Continue !",
+      "badge": "Badge obtenu : {badge}"
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",
@@ -358,7 +362,8 @@
   },
   "notifications": {
     "reminder": "{template} à {time} aujourd'hui. Ta séance t'attend !",
-    "nudge": "Ça fait {days} jours. Une séance courte de 30 min, ça te dit ?"
+    "nudge": "Ça fait {days} jours. Une séance courte de 30 min, ça te dit ?",
+    "tip": "Le savais-tu ? {title}"
   },
   "history": {
     "empty": "Pas encore de séance terminée.",
@@ -642,5 +647,14 @@
   },
   "common": {
     "back": "Retour"
+  },
+  "badges": {
+    "firstSession": "Première séance",
+    "tenSessions": "10 séances",
+    "fiftySessions": "50 séances",
+    "firstWeekOnPace": "Première semaine au rythme",
+    "fourWeeksOnPace": "4 semaines au rythme",
+    "firstRecord": "Premier record",
+    "backToLevel": "Retour au niveau d'avant"
   }
 }

@@ -2,10 +2,11 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 import { openAppDatabase } from '@/data/appDatabase';
 import { listDoneSessions } from '@/data/repositories/sessionRepository';
 import type { Settings } from '@/data/repositories/settingsRepository';
-import { addDays, startOfWeek } from '@/domain/dates';
+import { addDays, daysBetween, startOfWeek } from '@/domain/dates';
 import { planNotifications } from '@/domain/notifications';
 import { planWeek } from '@/domain/planning';
 import { rotationFor } from '@/domain/trainingModels';
+import { TIPS } from '@/data/content/tips';
 import { i18n } from '@/i18n';
 
 /** Asked after the questionnaire only, with a sentence explaining what they are for. */
@@ -62,8 +63,11 @@ export async function rescheduleNotifications(settings: Settings): Promise<void>
       blockedSlots: [...settings.blockedSlots, ...(settings.otherSport?.slots ?? [])],
       ...(last ? { lastSessionDate: last.date } : {}),
       sessionsPerWeek: settings.sessionsPerWeek,
-      recentDiscomfort: false,
+      // Rest comes first: no nudge in the 3 days after a reported discomfort.
+      recentDiscomfort: (settings.discomforts ?? []).some((d) => daysBetween(d.date, date) <= 3),
       ignoredNudges: 0,
+      // A different card each week.
+      tipId: TIPS[Math.floor(Date.parse(date) / (7 * 86_400_000)) % TIPS.length]?.id ?? 'protein',
     });
     const t = i18n.global.t;
     await LocalNotifications.schedule({
@@ -76,7 +80,9 @@ export async function rescheduleNotifications(settings: Settings): Promise<void>
                 template: t(`templates.${n.templateId}`),
                 time: addMinutes(n.time, 60),
               })
-            : t('notifications.nudge', { days: n.daysSince }),
+            : n.kind === 'nudge'
+              ? t('notifications.nudge', { days: n.daysSince })
+              : t('notifications.tip', { title: t(`tips.items.${n.tipId}.title`) }),
         schedule: { at: new Date(`${n.date}T${n.time}:00`) },
       })),
     });

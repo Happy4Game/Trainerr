@@ -42,6 +42,10 @@ import { afterSupersetSet, proposeSupersets, supersetPairs } from '@/domain/supe
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupSet } from '@/domain/warmup';
+import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/domain/achievements';
+import { weeksOnPace } from '@/domain/stats';
+import { addBadges } from '@/data/repositories/badgeRepository';
+import { rescheduleNotifications } from '@/ui/notifications';
 import { useCatalog } from '@/ui/useCatalog';
 
 export interface Proposal {
@@ -61,7 +65,15 @@ const history = ref<(SessionLog & { plan: Partial<SessionPlan>; note?: string })
 const references = ref<ReferenceLoad[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
-const summary = ref<{ sets: number; workloadKg: number; carryOver: readonly string[] }>();
+const summary = ref<{
+  sets: number;
+  workloadKg: number;
+  carryOver: readonly string[];
+  records: readonly NewRecord[];
+  backToLevel: readonly string[];
+  badges: readonly BadgeCode[];
+  weeksOnPace: number;
+}>();
 
 const { entries, state: catalogState } = useCatalog();
 
@@ -384,15 +396,59 @@ async function finish(): Promise<void> {
   } else {
     const { carryOver } = endSession(active.value.plan.queue);
     await finishSession(db, active.value.id, { ...active.value.plan, carryOver });
+    const finished: SessionLog = {
+      id: active.value.id,
+      date: active.value.date,
+      templateId: active.value.templateId,
+      sets: active.value.sets,
+    };
+    const records = newRecords(history.value, finished);
+    const all = [...history.value, finished];
+    // Back to the old level: the pre-break reference is replaced by the new best.
+    const backToLevel: string[] = [];
+    if (settings.value?.comeback) {
+      for (const reference of references.value) {
+        const best = Math.max(
+          0,
+          ...finished.sets
+            .filter(
+              (s) => s.exerciseId === reference.exerciseId && !s.warmup && s.completeReps !== false,
+            )
+            .map((s) => s.loadKg),
+        );
+        if (best >= reference.loadKg) {
+          backToLevel.push(reference.exerciseId);
+          await setReference(db, { ...reference, loadKg: best, date: finished.date });
+        }
+      }
+      references.value = await listReferences(db);
+    }
+    const perWeek = settings.value?.sessionsPerWeek ?? 3;
+    const badges = await addBadges(
+      db,
+      earnedBadges({
+        sessions: all,
+        sessionsPerWeek: perWeek,
+        today: finished.date,
+        recordsBeaten: records.length,
+        backToLevelReached: backToLevel.length > 0,
+      }),
+      finished.date,
+    );
     summary.value = {
       sets: work.length,
       workloadKg: work.reduce((total, s) => total + s.loadKg * s.reps, 0),
       carryOver,
+      records,
+      backToLevel,
+      badges,
+      weeksOnPace: weeksOnPace(all, perWeek, finished.date).current,
     };
   }
   active.value = undefined;
   restEndsAt.value = undefined;
   history.value = await listDoneSessions(db);
+  if (settings.value) await rescheduleNotifications(settings.value);
   phase.value = summary.value ? 'finished' : 'idle';
 }
 

@@ -13,7 +13,9 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { Settings } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { openAppDatabase } from '@/data/appDatabase';
+import { listBadges, type EarnedBadge } from '@/data/repositories/badgeRepository';
 import { useI18n } from 'vue-i18n';
 import { weeksOnPace } from '@/domain/stats';
 import { useSession } from '@/ui/session/useSession';
@@ -23,6 +25,14 @@ const { t } = useI18n();
 const session = useSession();
 const { settings, days } = useWeekPlan();
 const { phase, template, active, history } = session;
+
+const badges = ref<EarnedBadge[]>([]);
+async function loadBadges(): Promise<void> {
+  const { db } = await openAppDatabase();
+  badges.value = await listBadges(db);
+}
+onMounted(loadBadges);
+watch(history, loadBadges);
 
 const today = computed(() => days.value.find((d) => d.date === todayIso()));
 const doneThisWeek = computed(
@@ -84,12 +94,49 @@ const streak = computed(() =>
             <p v-if="streak && streak.current > 0">
               {{ t('today.streak', streak.current) }}
             </p>
+            <p v-if="badges.length > 0" class="badges">
+              <span v-for="badge in badges" :key="badge.code" class="badge">
+                <span aria-hidden="true">🏅</span> {{ t(`badges.${badge.code}`) }}
+              </span>
+            </p>
             <ion-button fill="clear" router-link="/tabs/planning">{{
               t('today.seePlanning')
             }}</ion-button>
           </ion-card-content>
         </ion-card>
       </template>
+
+      <style scoped>
+        .badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin-block: 8px;
+        }
+        .badge {
+          padding: 4px 10px;
+          border-radius: 999px;
+          background: var(--ion-color-light);
+          color: var(--ion-color-light-contrast);
+          font-size: 0.85rem;
+        }
+      </style>
     </ion-content>
   </ion-page>
 </template>
+
+<style scoped>
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-block: 8px;
+}
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ion-color-light);
+  color: var(--ion-color-light-contrast);
+  font-size: 0.85rem;
+}
+</style>

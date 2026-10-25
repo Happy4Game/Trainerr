@@ -208,3 +208,17 @@ describe('body measurements', () => {
     expect(await listMeasurements(db)).toHaveLength(1);
   });
 });
+
+describe('badges', () => {
+  it('stores each badge once, with the day it was earned', async () => {
+    const { addBadges, listBadges } = await import('@/data/repositories/badgeRepository');
+    expect(await addBadges(db, ['firstSession'], '2026-10-15')).toEqual(['firstSession']);
+    expect(await addBadges(db, ['firstSession', 'firstRecord'], '2026-10-24')).toEqual([
+      'firstRecord',
+    ]);
+    expect(await listBadges(db)).toEqual([
+      { code: 'firstSession', earnedOn: '2026-10-15' },
+      { code: 'firstRecord', earnedOn: '2026-10-24' },
+    ]);
+  });
+});

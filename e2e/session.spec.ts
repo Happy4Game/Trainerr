@@ -65,10 +65,13 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await expect(page.getByText('Séance terminée')).toBeVisible();
   await expect(page.getByText('4 séries')).toBeVisible();
+  await expect(page.getByText('Badge obtenu : Première séance')).toBeVisible();
   await page.getByRole('button', { name: 'Fermer' }).click();
 
   // The rotation goes on.
   await expect(page.getByText('Séance du jour : Bas du corps A')).toBeVisible();
+  await page.getByRole('tab', { name: "Aujourd'hui" }).click();
+  await expect(page.getByText('Première séance')).toBeVisible();
 
   // History and stats show the workout.
   await tab(page, 'Historique');
