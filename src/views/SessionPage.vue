@@ -401,8 +401,13 @@ async function logWarmup(): Promise<void> {
             {{ t('session.extraSet.short') }}
           </ion-button>
         </div>
-        <RestTimer v-if="restEndsAt" :ends-at="restEndsAt" @done="session.endRest()" />
-        <p v-if="lastLogged" class="just-logged" role="status">
+        <RestTimer
+          v-if="restEndsAt"
+          :ends-at="restEndsAt"
+          @done="session.endRest()"
+          @adjust="session.adjustRest($event)"
+        />
+        <p v-if="lastLogged" :key="lastLogged.id" class="just-logged" role="status">
           ✓ {{ t('setEdit.last', { set: lastLogged.label }) }}
           <button type="button" class="link" @click="editing = lastLogged">
             {{ t('setEdit.fix') }}
@@ -879,7 +884,19 @@ async function logWarmup(): Promise<void> {
   flex-wrap: wrap;
   margin-inline-start: -6px;
 }
+@media (prefers-reduced-motion: reduce) {
+  .just-logged {
+    animation: none;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
 .just-logged {
+  animation: pop-in 0.3s ease-out;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

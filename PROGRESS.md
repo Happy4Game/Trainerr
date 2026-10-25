@@ -112,6 +112,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Android : projet Capacitor dans `android/`, APK de debug avec `npm run android:apk` et construit par la CI (artefact `trainerr-debug-apk`) ; guide dans [docs/android.md](docs/android.md). Version Play Store : clé de signature et icône à fournir.
 - Documentation : README avec captures, CONTRIBUTING (déroulé, règles, tests, licences, accessibilité).
 
+- Finitions : barre d'onglets avec pastille sur l'onglet actif et point vert « séance en cours » ; repos avec anneau et −15 s / +30 s ; petite vibration et animation à chaque série enregistrée ; écrans vides illustrés avec une action (historique, stats, mes machines).
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

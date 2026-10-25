@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import EmptyState from '@/ui/EmptyState.vue';
 import {
   IonButton,
   IonButtons,
@@ -196,9 +197,14 @@ function onFilter(value: unknown): void {
         <p class="ion-padding-horizontal count" role="status">
           {{ t('catalog.count', matching.length) }}
         </p>
-        <p v-if="filter === 'favorites' && matching.length === 0 && !query" class="ion-padding">
-          {{ t('catalog.noFavorites') }}
-        </p>
+        <EmptyState
+          v-if="filter === 'favorites' && matching.length === 0 && !query"
+          :icon="Star"
+          :title="t('emptyStates.favorites')"
+          :text="t('catalog.noFavorites')"
+          :action="t('emptyStates.seeAll')"
+          @act="filter = 'all'"
+        />
         <p v-else-if="matching.length === 0" class="ion-padding">{{ t('catalog.empty') }}</p>
 
         <ion-list>

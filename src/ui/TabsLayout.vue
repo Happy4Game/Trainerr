@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/vue';
 import { BookOpen, CalendarDays, Dumbbell, History, Sun } from 'lucide-vue-next';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useSession } from '@/ui/session/useSession';
 
 const { t } = useI18n();
+const { active } = useSession();
+/** A session in progress is always one tap away: a dot on its tab. */
+const inProgress = computed(() => active.value !== undefined);
 
 const tabs = [
   { name: 'today', href: '/tabs/today', icon: Sun },
@@ -20,10 +25,75 @@ const tabs = [
       <ion-router-outlet />
       <ion-tab-bar slot="bottom">
         <ion-tab-button v-for="tab in tabs" :key="tab.name" :tab="tab.name" :href="tab.href">
-          <component :is="tab.icon" :size="24" aria-hidden="true" />
-          <ion-label>{{ t(`tabs.${tab.name}`) }}</ion-label>
+          <span class="icon-pill">
+            <component :is="tab.icon" :size="22" aria-hidden="true" />
+            <span v-if="tab.name === 'session' && inProgress" class="dot" aria-hidden="true" />
+          </span>
+          <ion-label>
+            {{ t(`tabs.${tab.name}`) }}
+            <span v-if="tab.name === 'session' && inProgress" class="visually-hidden">
+              · {{ t('tabs.inProgress') }}
+            </span>
+          </ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>
 </template>
+
+<style scoped>
+ion-tab-bar {
+  --border: 0;
+  box-shadow: 0 -1px 0 var(--ion-color-light);
+  padding-block: 4px;
+}
+ion-tab-button {
+  --color: var(--ion-color-medium-shade);
+  --color-selected: var(--ion-color-primary);
+  --padding-start: 0;
+  --padding-end: 0;
+  min-width: 0;
+}
+ion-tab-button ion-label {
+  max-width: 100%;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.tab-selected ion-label {
+  font-weight: 800;
+}
+.icon-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 30px;
+  margin-block-end: 2px;
+  border-radius: 999px;
+  transition: background-color 0.2s;
+}
+.tab-selected .icon-pill {
+  background: rgba(var(--ion-color-primary-rgb), 0.14);
+}
+.dot {
+  position: absolute;
+  top: 2px;
+  right: 12px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ion-color-success);
+  box-shadow: 0 0 0 2px var(--ion-tab-bar-background, #fff);
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+</style>

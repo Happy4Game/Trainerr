@@ -105,6 +105,8 @@ const DIFFICULTIES: { value: Difficulty; color: string }[] = [
 ];
 
 async function validate(difficulty: Difficulty): Promise<void> {
+  // A short buzz: the set is saved, no need to look at the screen.
+  navigator.vibrate?.(35);
   await session.logSet({
     exerciseId: props.exerciseId,
     loadKg: load.value,

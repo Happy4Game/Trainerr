@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ChartLine } from 'lucide-vue-next';
+import EmptyState from '@/ui/EmptyState.vue';
 import {
   IonButton,
   IonCard,
@@ -180,7 +182,14 @@ async function shareRecap(): Promise<void> {
 </script>
 
 <template>
-  <p v-if="sessions.length === 0">{{ t('history.empty') }}</p>
+  <EmptyState
+    v-if="sessions.length === 0"
+    :icon="ChartLine"
+    :title="t('emptyStates.stats')"
+    :text="t('emptyStates.statsText')"
+    :action="t('emptyStates.start')"
+    to="/tabs/session"
+  />
   <template v-else>
     <div class="kpis">
       <div

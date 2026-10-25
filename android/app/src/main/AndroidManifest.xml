@@ -38,4 +38,6 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Short buzz when a set is saved and at the end of the rest. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 </manifest>

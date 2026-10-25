@@ -4,7 +4,8 @@
     "session": "Séance",
     "catalog": "Catalogue",
     "history": "Historique",
-    "planning": "Planning"
+    "planning": "Planning",
+    "inProgress": "séance en cours"
   },
   "today": {
     "plannedAt": "Prévue aujourd'hui à {start}.",
@@ -264,7 +265,9 @@
     "rest": {
       "title": "Repos",
       "label": "Repos : {time} restant",
-      "skip": "Passer"
+      "skip": "Passer",
+      "less": " (raccourcir le repos)",
+      "more": " (allonger le repos)"
     },
     "voice": {
       "start": "Dicter",
@@ -1001,5 +1004,13 @@
     "start": "Commencer",
     "startNamed": "Commencer {name}",
     "deleted": "Séance perso"
+  },
+  "emptyStates": {
+    "history": "Aucune séance pour l'instant",
+    "stats": "Tes stats arrivent",
+    "statsText": "Elles se remplissent dès ta première séance terminée : régularité, force, records.",
+    "start": "Commencer une séance",
+    "favorites": "Aucune machine dans ta salle",
+    "seeAll": "Voir toutes les machines"
   }
 }

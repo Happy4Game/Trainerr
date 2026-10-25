@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { CalendarCheck } from 'lucide-vue-next';
+import EmptyState from '@/ui/EmptyState.vue';
 import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonContent,
@@ -76,7 +78,14 @@ function lines(
     <ion-content class="ion-padding">
       <StatsView v-if="view === 'stats'" />
       <BodyView v-else-if="view === 'body'" />
-      <p v-else-if="sessions.length === 0">{{ t('history.empty') }}</p>
+      <EmptyState
+        v-else-if="sessions.length === 0"
+        :icon="CalendarCheck"
+        :title="t('emptyStates.history')"
+        :text="t('history.empty')"
+        :action="t('emptyStates.start')"
+        to="/tabs/session"
+      />
       <ion-list v-else>
         <ion-item
           v-for="s in sessions"

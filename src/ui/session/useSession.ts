@@ -744,6 +744,11 @@ export function useSession() {
     myLoadFor,
     bestSinceComeback,
     endRest: () => (restEndsAt.value = undefined),
+    /** A longer or shorter rest, without skipping it (never below now). */
+    adjustRest: (seconds: number) => {
+      if (restEndsAt.value === undefined) return;
+      restEndsAt.value = Math.max(Date.now() + 1000, restEndsAt.value + seconds * 1000);
+    },
     reload: load,
   };
 }

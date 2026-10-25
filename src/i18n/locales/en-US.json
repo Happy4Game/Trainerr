@@ -4,7 +4,8 @@
     "session": "Workout",
     "catalog": "Catalog",
     "history": "History",
-    "planning": "Planning"
+    "planning": "Planning",
+    "inProgress": "session in progress"
   },
   "today": {
     "plannedAt": "Planned today at {start}.",
@@ -264,7 +265,9 @@
     "rest": {
       "title": "Rest",
       "label": "Rest: {time} left",
-      "skip": "Skip"
+      "skip": "Skip",
+      "less": " (shorter rest)",
+      "more": " (longer rest)"
     },
     "voice": {
       "start": "Dictate",
@@ -1001,5 +1004,13 @@
     "start": "Start",
     "startNamed": "Start {name}",
     "deleted": "Custom session"
+  },
+  "emptyStates": {
+    "history": "No session yet",
+    "stats": "Your stats are coming",
+    "statsText": "They fill up from your first finished session: regularity, strength, records.",
+    "start": "Start a session",
+    "favorites": "No machine in your gym",
+    "seeAll": "See all machines"
   }
 }
