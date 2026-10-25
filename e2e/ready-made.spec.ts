@@ -72,3 +72,25 @@ test('an exercise skipped too fast can be reopened', async ({ page }) => {
   await expect(page.getByRole('region', { name: first })).toBeVisible();
   await expect(page.getByText('Série 1 / 3')).toBeVisible();
 });
+
+test('more sets than planned: during the exercise or right after it', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  const first = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
+
+  await page.getByRole('button', { name: 'Ajouter une série à cet exercice' }).click();
+  await expect(page.getByText('Série 1 / 4')).toBeVisible();
+  for (let set = 1; set <= 4; set++) {
+    await page.getByRole('button', { name: 'Correct', exact: true }).click();
+    if (set < 4) await page.getByRole('button', { name: 'Passer', exact: true }).click();
+  }
+  await expect(page.getByRole('region', { name: first })).toHaveCount(0);
+
+  // A fifth one, right after: the exercise comes back, rest timer kept.
+  await page.getByRole('button', { name: `+1 série sur : ${first}` }).click();
+  await expect(page.getByRole('region', { name: first })).toBeVisible();
+  await expect(page.getByText('Série 5 / 5')).toBeVisible();
+  await expect(page.getByRole('timer')).toBeVisible();
+});

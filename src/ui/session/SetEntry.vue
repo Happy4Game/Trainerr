@@ -118,6 +118,16 @@ function listen(): void {
     </router-link>
     <p class="meta">
       {{ t('session.setNumber', { current: Math.min(done + 1, target), total: target }) }}
+      <ion-button
+        v-if="session.canAddSet(exerciseId)"
+        size="small"
+        fill="outline"
+        class="extra-set"
+        :aria-label="t('session.extraSet.label')"
+        @click="session.extraSet(exerciseId)"
+      >
+        {{ t('session.extraSet.short') }}
+      </ion-button>
       · {{ t(`session.reason.${proposal.reason}`) }}
     </p>
     <p v-if="partnerName" class="superset" role="note">
@@ -216,6 +226,12 @@ function listen(): void {
 </template>
 
 <style scoped>
+.extra-set {
+  margin-inline: 4px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  text-transform: none;
+}
 .header {
   display: flex;
   align-items: center;

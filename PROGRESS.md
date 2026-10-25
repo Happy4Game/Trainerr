@@ -79,6 +79,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - « ← Revenir à : … » rouvre l'exercice précédent (passé trop vite ou terminé), les séries déjà faites sont gardées.
 
+- Séries en plus : « +1 série » pendant l'exercice, ou « +1 série sur : … » juste après la dernière série (le repos continue), jusqu'à 10 séries.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

@@ -251,6 +251,15 @@ async function logWarmup(): Promise<void> {
         >
           {{ t('session.goBack', { name: nameOf(previousExercise) }) }}
         </ion-button>
+        <ion-button
+          v-if="previousExercise && session.canAddSet(previousExercise)"
+          fill="clear"
+          size="small"
+          class="go-back"
+          @click="session.extraSet(previousExercise)"
+        >
+          {{ t('session.extraSet.previous', { name: nameOf(previousExercise) }) }}
+        </ion-button>
         <RestTimer v-if="restEndsAt" :ends-at="restEndsAt" @done="session.endRest()" />
 
         <div v-if="crowded" class="banner" role="note">

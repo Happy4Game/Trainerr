@@ -283,7 +283,12 @@
     },
     "seeCard": "See the card of {name}",
     "seeMovement": "See the movement",
-    "goBack": "← Back to: {name}"
+    "goBack": "← Back to: {name}",
+    "extraSet": {
+      "short": "+1 set",
+      "label": "Add a set to this exercise",
+      "previous": "+1 set on: {name}"
+    }
   },
   "availability": {
     "day": "Day",

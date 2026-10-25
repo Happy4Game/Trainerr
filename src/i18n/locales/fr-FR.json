@@ -283,7 +283,12 @@
     },
     "seeCard": "Voir la fiche de {name}",
     "seeMovement": "Voir le mouvement",
-    "goBack": "← Revenir à : {name}"
+    "goBack": "← Revenir à : {name}",
+    "extraSet": {
+      "short": "+1 série",
+      "label": "Ajouter une série à cet exercice",
+      "previous": "+1 série sur : {name}"
+    }
   },
   "availability": {
     "day": "Jour",

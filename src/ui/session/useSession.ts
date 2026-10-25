@@ -42,6 +42,8 @@ import {
   buildSession,
   exercisesPerSession,
   readyMadeSession,
+  withExtraSet,
+  MAX_SETS,
   setsPerExercise,
 } from '@/domain/sessionBuilder';
 import { afterSupersetSet, proposeSupersets, supersetPairs } from '@/domain/supersets';
@@ -450,6 +452,22 @@ async function skipExercise(exerciseId: string): Promise<void> {
   });
 }
 
+/**
+ * One more set than planned. On the exercise just finished, it is reopened
+ * so the extra set comes right now.
+ */
+async function extraSet(exerciseId: string): Promise<void> {
+  if (!active.value) return;
+  const plan = active.value.plan;
+  const queue =
+    previousInQueue(plan.queue) === exerciseId ? reopenPrevious(plan.queue) : plan.queue;
+  await updatePlan({
+    ...plan,
+    exercises: withExtraSet(plan.exercises, exerciseId, plannedSets(exerciseId)),
+    queue,
+  });
+}
+
 /** Back to the previous exercise, e.g. skipped too fast. Sets already logged stay. */
 async function goBack(): Promise<void> {
   if (!active.value) return;
@@ -586,6 +604,8 @@ export function useSession() {
     machineStillBusy,
     skipExercise,
     goBack,
+    extraSet,
+    canAddSet: (id: string) => plannedSets(id) < MAX_SETS,
     previousExercise: computed(() =>
       active.value ? previousInQueue(active.value.plan.queue) : undefined,
     ),

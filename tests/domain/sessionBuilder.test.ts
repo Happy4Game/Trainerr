@@ -3,6 +3,7 @@ import {
   buildSession,
   exercisesPerSession,
   readyMadeSession,
+  withExtraSet,
   setsPerExercise,
 } from '@/domain/sessionBuilder';
 import { TRAINING_MODELS } from '@/domain/trainingModels';
@@ -140,5 +141,29 @@ describe('ready-made session when there are not enough favorites', () => {
     });
     expect(ids(session.exercises)).not.toContain('shoulder-press');
     expect(ids(session.exercises)).not.toContain('lateral-raise');
+  });
+});
+
+describe('extra sets', () => {
+  const plan = [
+    { exerciseId: 'a', sets: 3 },
+    { exerciseId: 'b', sets: 3 },
+  ];
+
+  it('adds one set to the chosen exercise only', () => {
+    expect(withExtraSet(plan, 'a')).toEqual([
+      { exerciseId: 'a', sets: 4 },
+      { exerciseId: 'b', sets: 3 },
+    ]);
+  });
+
+  it('adds the exercise when it was not planned (alternative machine)', () => {
+    expect(withExtraSet(plan, 'c', 3)).toContainEqual({ exerciseId: 'c', sets: 4 });
+  });
+
+  it('stops at 10 sets', () => {
+    expect(withExtraSet([{ exerciseId: 'a', sets: 10 }], 'a')).toEqual([
+      { exerciseId: 'a', sets: 10 },
+    ]);
   });
 });

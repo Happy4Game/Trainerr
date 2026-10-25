@@ -137,3 +137,23 @@ function priority(exercise: Exercise, priorityIds: ReadonlySet<string> | undefin
 function rotate<T>(list: readonly T[], by: number): T[] {
   return [...list.slice(by), ...list.slice(0, by)];
 }
+
+/** More sets than planned stay reasonable: beyond 10, better do another exercise. */
+export const MAX_SETS = 10;
+
+/**
+ * One more set than planned on an exercise. An exercise missing from the plan
+ * (alternative machine) starts from the usual number of sets.
+ */
+export function withExtraSet(
+  exercises: readonly { readonly exerciseId: string; readonly sets: number }[],
+  exerciseId: string,
+  usualSets = 3,
+): { exerciseId: string; sets: number }[] {
+  if (!exercises.some((e) => e.exerciseId === exerciseId)) {
+    return [...exercises, { exerciseId, sets: Math.min(MAX_SETS, usualSets + 1) }];
+  }
+  return exercises.map((e) =>
+    e.exerciseId === exerciseId ? { ...e, sets: Math.min(MAX_SETS, e.sets + 1) } : e,
+  );
+}
