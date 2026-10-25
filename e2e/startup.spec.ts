@@ -33,3 +33,15 @@ test('the questionnaire is not shown again after a reload', async ({ page }) => 
     timeout: 20_000,
   });
 });
+
+test('the tab bar stays above the Android navigation bar', async ({ page }) => {
+  await skipOnboarding(page);
+  // Capacitor injects the height of the system bars as CSS variables.
+  await page.evaluate(() =>
+    document.documentElement.style.setProperty('--safe-area-inset-bottom', '48px'),
+  );
+  const tabBar = page.locator('ion-tab-bar');
+  await expect
+    .poll(() => tabBar.evaluate((bar) => parseFloat(getComputedStyle(bar).paddingBottom)))
+    .toBeGreaterThanOrEqual(48);
+});

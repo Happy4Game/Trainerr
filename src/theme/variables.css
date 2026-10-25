@@ -8,6 +8,12 @@
 :root {
   --ion-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
+  /* Barres système Android : Capacitor injecte leur taille, env() sert ailleurs. */
+  --ion-safe-area-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --ion-safe-area-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  --ion-safe-area-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --ion-safe-area-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+
   /* Indigo : texte blanc dessus à 8:1. */
   --ion-color-primary: #4338ca;
   --ion-color-primary-rgb: 67, 56, 202;

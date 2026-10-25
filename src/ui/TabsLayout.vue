@@ -45,7 +45,9 @@ const tabs = [
 ion-tab-bar {
   --border: 0;
   box-shadow: 0 -1px 0 var(--ion-color-light);
-  padding-block: 4px;
+  /* Keeps Ionic's room for the system navigation bar. */
+  padding-top: 4px;
+  padding-bottom: calc(4px + var(--ion-safe-area-bottom, 0px));
 }
 ion-tab-button {
   --color: var(--ion-color-medium-shade);
