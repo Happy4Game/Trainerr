@@ -7,15 +7,19 @@
     "planning": "Planning"
   },
   "today": {
-    "inProgress": "Workout in progress: {template}",
     "plannedAt": "Planned today at {start}.",
     "restDay": "No workout planned today: rest, or an extra workout if you feel like it.",
-    "go": "See the workout",
+    "go": "Start",
     "resume": "Resume the workout",
     "week": "This week",
-    "weekCount": "{done} of {target} workouts",
+    "weekCount": "{done} sessions done out of {target} this week",
     "streak": "{count} week on pace | {count} weeks in a row on pace",
-    "seePlanning": "See the planning"
+    "seePlanning": "See the planning",
+    "next": "Next session",
+    "inProgressShort": "Session in progress",
+    "noPlan": "Next session",
+    "weekSessions": "session | sessions",
+    "exercises": "{count} exercise | {count} exercises"
   },
   "gym": {
     "defaultName": "My gym"
@@ -313,7 +317,8 @@
         "first": "Start at {load} × {reps}",
         "comeback": "Easy comeback: {load} × {reps}"
       },
-      "usual": "Your usual load: {set}"
+      "usual": "Your usual load: {set}",
+      "previousSet": "Previous set: {set}"
     },
     "steps": {
       "do": "Do your set",
@@ -334,7 +339,8 @@
         "done": "done",
         "current": "in progress",
         "next": "to come"
-      }
+      },
+      "seeAll": "See all"
     },
     "nextMachine": {
       "title": "Next machine",

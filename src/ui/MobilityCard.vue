@@ -33,7 +33,8 @@ const minutes = computed(() =>
   margin-block: 12px;
   padding: 8px 12px;
   border-radius: 12px;
-  background: var(--ion-color-step-50, #f4f5f8);
+  background: var(--ion-color-light);
+  color: var(--ion-color-light-contrast);
 }
 summary {
   min-height: 44px;

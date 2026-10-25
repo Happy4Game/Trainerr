@@ -7,15 +7,19 @@
     "planning": "Planning"
   },
   "today": {
-    "inProgress": "Séance en cours : {template}",
     "plannedAt": "Prévue aujourd'hui à {start}.",
     "restDay": "Pas de séance prévue aujourd'hui : repos, ou une séance en plus si tu en as envie.",
-    "go": "Voir la séance",
+    "go": "Commencer",
     "resume": "Reprendre la séance",
     "week": "Cette semaine",
-    "weekCount": "{done} séance(s) sur {target} visées",
+    "weekCount": "{done} séances faites sur {target} cette semaine",
     "streak": "{count} semaine au rythme | {count} semaines d'affilée au rythme",
-    "seePlanning": "Voir le planning"
+    "seePlanning": "Voir le planning",
+    "next": "Prochaine séance",
+    "inProgressShort": "Séance en cours",
+    "noPlan": "Prochaine séance",
+    "weekSessions": "séance | séances",
+    "exercises": "{count} exercice | {count} exercices"
   },
   "gym": {
     "defaultName": "Ma salle"
@@ -313,7 +317,8 @@
         "first": "Commence à {load} × {reps}",
         "comeback": "Reprise en douceur : {load} × {reps}"
       },
-      "usual": "Ta charge habituelle : {set}"
+      "usual": "Ta charge habituelle : {set}",
+      "previousSet": "Série précédente : {set}"
     },
     "steps": {
       "do": "Fais ta série",
@@ -334,7 +339,8 @@
         "done": "fait",
         "current": "en cours",
         "next": "à venir"
-      }
+      },
+      "seeAll": "Tout voir"
     },
     "nextMachine": {
       "title": "Machine suivante",

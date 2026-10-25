@@ -27,6 +27,7 @@ import MobilityCard from '@/ui/MobilityCard.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
+import ExerciseRow from '@/ui/ExerciseRow.vue';
 import { useUnits } from '@/ui/useUnits';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
@@ -136,6 +137,9 @@ const thumbnailOf = (id: string) => {
   return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
 };
 const musclesOf = (e: Exercise) => e.primaryMuscles.map((m) => t(`muscles.${m}`)).join(', ');
+/** "3 sets · 20 kg" under an exercise of the plan. */
+const planDetail = (id: string) =>
+  `${t('session.nextMachine.plan', session.plannedSets(id))} · ${kg(session.proposalFor(id)?.loadKg ?? 0)}`;
 /** Card of a machine; a banner there leads back to the session. */
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
@@ -230,8 +234,12 @@ async function logWarmup(): Promise<void> {
             <template v-if="preview.length > 0">
               <ol class="plan">
                 <li v-for="e in preview" :key="e.id">
-                  <router-link :to="cardLink(e.id)">{{ exerciseName(e) }}</router-link>
-                  <span class="muted"> · {{ kg(session.proposalFor(e.id)?.loadKg ?? 0) }}</span>
+                  <ExerciseRow
+                    :exercise-id="e.id"
+                    :name="exerciseName(e)"
+                    :detail="planDetail(e.id)"
+                    :to="cardLink(e.id)"
+                  />
                 </li>
               </ol>
               <ion-button expand="block" size="large" @click="session.start()">
@@ -264,13 +272,20 @@ async function logWarmup(): Promise<void> {
               </p>
               <ol class="plan">
                 <li v-for="e in readyMade.exercises" :key="e.id">
-                  <router-link :to="cardLink(e.id)">{{ exerciseName(e) }}</router-link>
-                  <span
-                    v-if="preview.length > 0 && readyMade.suggestedIds.includes(e.id)"
-                    class="tag"
-                    >{{ t('session.readyMade.suggested') }}</span
+                  <ExerciseRow
+                    :exercise-id="e.id"
+                    :name="exerciseName(e)"
+                    :detail="planDetail(e.id)"
+                    :to="cardLink(e.id)"
                   >
-                  <span class="muted"> · {{ kg(session.proposalFor(e.id)?.loadKg ?? 0) }}</span>
+                    <template #badge>
+                      <span
+                        v-if="preview.length > 0 && readyMade.suggestedIds.includes(e.id)"
+                        class="tag"
+                        >{{ t('session.readyMade.suggested') }}</span
+                      >
+                    </template>
+                  </ExerciseRow>
                 </li>
               </ol>
               <ion-button expand="block" size="large" @click="session.start({ readyMade: true })">
@@ -403,17 +418,23 @@ async function logWarmup(): Promise<void> {
           @close="reportingDiscomfort = false"
         />
 
-        <nav v-if="progress.length > 1" class="progress" :aria-label="t('session.progress.label')">
-          <p class="progress-title">
-            {{
-              currentIndex >= 0
-                ? t('session.progress.title', {
-                    current: currentIndex + 1,
-                    total: progress.length,
-                  })
-                : t('session.progress.done', progress.filter((e) => e.status === 'done').length)
-            }}
-          </p>
+        <details v-if="progress.length > 1" class="progress">
+          <summary :aria-label="t('session.progress.label')">
+            <span class="progress-title">
+              {{
+                currentIndex >= 0
+                  ? t('session.progress.title', {
+                      current: currentIndex + 1,
+                      total: progress.length,
+                    })
+                  : t('session.progress.done', progress.filter((e) => e.status === 'done').length)
+              }}
+            </span>
+            <span class="segments" aria-hidden="true">
+              <span v-for="e in progress" :key="e.id" class="segment" :class="e.status" />
+            </span>
+            <span class="see-all">{{ t('session.progress.seeAll') }}</span>
+          </summary>
           <ol class="progress-list">
             <li
               v-for="e in progress"
@@ -428,7 +449,7 @@ async function logWarmup(): Promise<void> {
               {{ e.name }}
             </li>
           </ol>
-        </nav>
+        </details>
 
         <section
           v-if="nextMachine"
@@ -613,10 +634,12 @@ async function logWarmup(): Promise<void> {
 
 <style scoped>
 .plan {
-  padding-inline-start: 1.2em;
+  margin: 8px 0 12px;
+  padding: 0;
+  list-style: none;
 }
-.plan li {
-  margin-block: 4px;
+.plan li + li {
+  border-block-start: 1px solid var(--ion-color-light);
 }
 .ready-made {
   margin-block-start: 12px;
@@ -626,7 +649,7 @@ async function logWarmup(): Promise<void> {
   font-size: 1.05rem;
 }
 .tag {
-  margin-inline-start: 6px;
+  margin-inline-end: 6px;
   padding: 1px 8px;
   border-radius: 999px;
   background: var(--ion-color-light);
@@ -636,11 +659,47 @@ async function logWarmup(): Promise<void> {
 .progress {
   margin-block: 4px 12px;
 }
+.progress summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+}
+.progress summary::-webkit-details-marker {
+  display: none;
+}
 .progress-title {
-  margin: 0 0 6px;
   font-weight: 700;
+  white-space: nowrap;
+}
+.segments {
+  display: flex;
+  gap: 4px;
+}
+.segment {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--ion-color-light);
+}
+.segment.done {
+  background: var(--ion-color-success);
+}
+.segment.current {
+  background: var(--ion-color-primary);
+}
+.see-all {
+  font-size: 0.85rem;
+  color: var(--ion-color-primary);
+}
+.progress[open] .see-all {
+  visibility: hidden;
 }
 .progress-list {
+  margin-block-start: 8px !important;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;

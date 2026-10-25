@@ -25,7 +25,11 @@ test('the five tabs are reachable', async ({ page }) => {
 test('the questionnaire is not shown again after a reload', async ({ page }) => {
   await skipOnboarding(page);
   await page.goto('/tabs/today');
-  await expect(page.getByText(/Séance du jour/)).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByRole('region', { name: 'Prochaine séance' })).toBeVisible({
+    timeout: 20_000,
+  });
   await page.reload();
-  await expect(page.getByText(/Séance du jour/)).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByRole('region', { name: 'Prochaine séance' })).toBeVisible({
+    timeout: 20_000,
+  });
 });

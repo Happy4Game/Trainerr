@@ -36,7 +36,9 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
   await page.getByRole('button', { name: 'Plus tard' }).click();
 
   await expect(page).toHaveURL(/\/tabs\/today$/);
-  await expect(page.getByText('Séance du jour : Push A')).toBeVisible();
+  await expect(
+    page.getByRole('region', { name: 'Prochaine séance' }).getByRole('heading', { name: 'Push A' }),
+  ).toBeVisible();
 
   await page.getByRole('tab', { name: 'Planning' }).click();
   const week = page.getByRole('list').first();

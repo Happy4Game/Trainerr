@@ -75,6 +75,9 @@ function changeReps(delta: number): void {
 }
 
 // Last session with this exercise, and the advice for this set compared with the previous one.
+const previousToday = computed(() => session.workSetsInSession(props.exerciseId).at(-1));
+/** Help lines for the first two sessions only: then the screen stays short. */
+const learning = computed(() => session.history.value.length < 2);
 const lastTime = computed(() => session.lastTimeSets(props.exerciseId));
 const usual = computed(() =>
   session.references.value.find((r) => r.exerciseId === props.exerciseId),
@@ -159,7 +162,14 @@ function listen(): void {
 
     <!-- What was done before, and what to do now -->
     <div class="coach" :class="advice" role="note">
-      <p v-if="lastTime.length > 0" class="before">
+      <p v-if="previousToday" class="before">
+        {{
+          t('session.coach.previousSet', {
+            set: `${kg(previousToday.loadKg)} × ${n(previousToday.reps)}`,
+          })
+        }}
+      </p>
+      <p v-else-if="lastTime.length > 0" class="before">
         {{ t('session.coach.lastTime', { sets: lastTimeText }) }}
       </p>
       <p v-else-if="usual" class="before">
@@ -185,7 +195,7 @@ function listen(): void {
     </p>
 
     <h3 class="step"><span class="badge">1</span> {{ t('session.steps.do') }}</h3>
-    <p class="help">{{ t('session.steps.doHelp') }}</p>
+    <p v-if="learning" class="help">{{ t('session.steps.doHelp') }}</p>
     <div class="stepper">
       <span class="stepper-label">{{ t('session.load') }}</span>
       <ion-button fill="outline" :aria-label="t('session.lighter')" @click="lighter">
@@ -211,7 +221,7 @@ function listen(): void {
     </div>
 
     <h3 class="step"><span class="badge">2</span> {{ t('session.howWasIt') }}</h3>
-    <p class="help">{{ t('session.steps.feelHelp') }}</p>
+    <p v-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
     <div class="difficulties">
       <ion-button
         v-for="d in DIFFICULTIES"
