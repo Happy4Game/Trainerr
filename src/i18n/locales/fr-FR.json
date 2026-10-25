@@ -282,7 +282,8 @@
       "adopt": "Ajouter la machine proposée à mes machines | Ajouter les {count} machines proposées à mes machines"
     },
     "seeCard": "Voir la fiche de {name}",
-    "seeMovement": "Voir le mouvement"
+    "seeMovement": "Voir le mouvement",
+    "goBack": "← Revenir à : {name}"
   },
   "availability": {
     "day": "Jour",

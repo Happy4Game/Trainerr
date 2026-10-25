@@ -7,6 +7,8 @@ import {
   isCrowded,
   markBusy,
   nextStep,
+  previousExercise,
+  reopenPrevious,
   startNow,
   startQueue,
   stillBusy,
@@ -115,5 +117,34 @@ describe('waiting queue', () => {
       { replaces: ex.pecFly, with: ex.cableFly },
       { replaces: ex.lateralRaise, with: ex.dumbbellLateralRaise },
     ]);
+  });
+});
+
+describe('going back to the previous exercise', () => {
+  it('reopens the last exercise done or skipped, in front of the queue', () => {
+    let queue = startQueue(['db-bench', 'chest-press', 'pec-fly']);
+    queue = completeExercise(queue, 'db-bench');
+    queue = completeExercise(queue, 'chest-press'); // skipped too fast
+    expect(previousExercise(queue)).toBe('chest-press');
+    queue = reopenPrevious(queue);
+    expect(nextStep(queue)).toEqual({ kind: 'exercise', exerciseId: 'chest-press' });
+    expect(queue.done).toEqual(['db-bench']);
+    expect(queue.pending).toEqual(['chest-press', 'pec-fly']);
+    // Again: back to the bench press.
+    queue = reopenPrevious(queue);
+    expect(queue.pending).toEqual(['db-bench', 'chest-press', 'pec-fly']);
+    expect(previousExercise(queue)).toBeUndefined();
+  });
+
+  it('works from the end of the session', () => {
+    let queue = startQueue(['a']);
+    queue = completeExercise(queue, 'a');
+    expect(nextStep(queue).kind).toBe('finished');
+    expect(nextStep(reopenPrevious(queue))).toEqual({ kind: 'exercise', exerciseId: 'a' });
+  });
+
+  it('does nothing at the start of the session', () => {
+    const queue = startQueue(['a']);
+    expect(reopenPrevious(queue)).toEqual(queue);
   });
 });

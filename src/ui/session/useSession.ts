@@ -28,6 +28,8 @@ import {
   isCrowded,
   markBusy,
   nextStep,
+  previousExercise as previousInQueue,
+  reopenPrevious,
   startNow,
   startQueue,
   stillBusy,
@@ -448,6 +450,13 @@ async function skipExercise(exerciseId: string): Promise<void> {
   });
 }
 
+/** Back to the previous exercise, e.g. skipped too fast. Sets already logged stay. */
+async function goBack(): Promise<void> {
+  if (!active.value) return;
+  await updatePlan({ ...active.value.plan, queue: reopenPrevious(active.value.plan.queue) });
+  restEndsAt.value = undefined;
+}
+
 async function finish(): Promise<void> {
   if (!active.value) return;
   const { db } = await openAppDatabase();
@@ -576,6 +585,10 @@ export function useSession() {
     machineFree,
     machineStillBusy,
     skipExercise,
+    goBack,
+    previousExercise: computed(() =>
+      active.value ? previousInQueue(active.value.plan.queue) : undefined,
+    ),
     saveNote,
     removeExercises,
     finish,

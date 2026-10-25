@@ -282,7 +282,8 @@
       "adopt": "Add the suggested machine to my machines | Add the {count} suggested machines to my machines"
     },
     "seeCard": "See the card of {name}",
-    "seeMovement": "See the movement"
+    "seeMovement": "See the movement",
+    "goBack": "← Back to: {name}"
   },
   "availability": {
     "day": "Day",

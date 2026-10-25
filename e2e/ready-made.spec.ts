@@ -58,3 +58,17 @@ test('during a session, the machine card opens and leads back to the session', a
   await expect(page.getByRole('region', { name: current })).toBeVisible();
   await expect(page.getByText('Série 2 / 3')).toBeVisible();
 });
+
+test('an exercise skipped too fast can be reopened', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  const first = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
+  await page.getByRole('button', { name: 'Passer cet exercice' }).click();
+  await expect(page.getByRole('region', { name: first })).toHaveCount(0);
+
+  await page.getByRole('button', { name: `← Revenir à : ${first}` }).click();
+  await expect(page.getByRole('region', { name: first })).toBeVisible();
+  await expect(page.getByText('Série 1 / 3')).toBeVisible();
+});

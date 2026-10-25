@@ -91,6 +91,18 @@ export function completeExercise(queue: ExerciseQueue, exerciseId: string): Exer
   };
 }
 
+/** Last exercise done or skipped, that the user can go back to. */
+export function previousExercise(queue: ExerciseQueue): string | undefined {
+  return queue.done.at(-1);
+}
+
+/** Back to the previous exercise (skipped too fast): it comes first again. */
+export function reopenPrevious(queue: ExerciseQueue): ExerciseQueue {
+  const previous = previousExercise(queue);
+  if (previous === undefined) return queue;
+  return startNow({ ...queue, done: queue.done.slice(0, -1) }, previous);
+}
+
 export function nextStep(queue: ExerciseQueue): QueueStep {
   const due = queue.waiting.find((w) => queue.done.length > w.since);
   if (due) return { kind: 'askIfFree', exerciseId: due.exerciseId };

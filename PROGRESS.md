@@ -77,6 +77,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Pendant la séance, la machine du moment montre son dessin ; un geste ouvre sa fiche dans l'onglet Séance, et « Revenir à la séance » ramène à la série en cours (bandeau visible sur toutes les fiches tant qu'une séance est en cours).
 
+- « ← Revenir à : … » rouvre l'exercice précédent (passé trop vite ou terminé), les séries déjà faites sont gardées.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

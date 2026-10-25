@@ -39,6 +39,7 @@ const { t, n, locale } = useI18n();
 const session = useSession();
 const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, summary, crowded } =
   session;
+const { previousExercise } = session;
 
 const busyFor = ref<string>();
 const reportingDiscomfort = ref(false);
@@ -241,6 +242,15 @@ async function logWarmup(): Promise<void> {
 
       <!-- Pendant la séance -->
       <template v-else-if="phase === 'active' && active">
+        <ion-button
+          v-if="previousExercise"
+          fill="clear"
+          size="small"
+          class="go-back"
+          @click="session.goBack()"
+        >
+          {{ t('session.goBack', { name: nameOf(previousExercise) }) }}
+        </ion-button>
         <RestTimer v-if="restEndsAt" :ends-at="restEndsAt" @done="session.endRest()" />
 
         <div v-if="crowded" class="banner" role="note">
@@ -462,6 +472,10 @@ async function logWarmup(): Promise<void> {
   background: var(--ion-color-light);
   color: var(--ion-color-light-contrast);
   font-size: 0.75rem;
+}
+.go-back {
+  margin-inline-start: -8px;
+  text-transform: none;
 }
 .muted {
   color: var(--ion-color-medium);
