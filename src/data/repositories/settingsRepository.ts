@@ -2,6 +2,7 @@ import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
 import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
 import type { SportId, WeeklySlot } from '@/domain/planning';
+import type { Equipment } from '@/domain/types';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
 import type { Goal, SessionMinutes } from '@/domain/sessionBuilder';
@@ -24,6 +25,12 @@ export interface Settings {
   readonly notifications: NotificationPrefs;
   /** Discomforts reported during sessions: repeated ones change the advice, and stop nudges. */
   readonly discomforts?: readonly { readonly date: string; readonly zone: string }[];
+  /** Gym whose machines, steps and favorites are used. */
+  readonly currentGymId: string;
+  /** Equipment available at home, for the home workout. */
+  readonly homeEquipment: readonly Equipment[];
+  /** First day of the current program: cycles and the "change program" reminder count from it. */
+  readonly programStart?: string;
   readonly language: LanguagePreference;
   readonly weightUnit: WeightUnit;
   /** Set once the first-launch questionnaire is done or skipped. */
@@ -47,6 +54,8 @@ export const DEFAULT_SETTINGS: Settings = {
   freeSlots: DEFAULT_FREE_SLOTS,
   blockedSlots: [],
   notifications: { ...DEFAULT_NOTIFICATION_PREFS, enabled: false },
+  currentGymId: 'default',
+  homeEquipment: ['dumbbell', 'bodyweight'],
   language: 'system',
   weightUnit: 'kg',
   onboarded: false,

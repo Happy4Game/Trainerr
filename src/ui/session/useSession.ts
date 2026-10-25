@@ -2,7 +2,6 @@ import { computed, ref } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
-import { DEFAULT_GYM_ID } from '@/data/repositories/gymRepository';
 import {
   abandonSession,
   addSet,
@@ -42,6 +41,7 @@ import { afterSupersetSet, proposeSupersets, supersetPairs } from '@/domain/supe
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupSet } from '@/domain/warmup';
+import { cycleWeek, setsForWeek } from '@/domain/cycles';
 import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/domain/achievements';
 import { weeksOnPace } from '@/domain/stats';
 import { addBadges } from '@/data/repositories/badgeRepository';
@@ -218,10 +218,31 @@ const expressPreview = computed<Exercise[]>(() => {
   });
 });
 
-async function start(options: { express?: boolean } = {}): Promise<void> {
-  const exercises = options.express ? expressPreview.value : preview.value;
+/** Home workout: any catalog exercise doable with the equipment at home. */
+const homePreview = computed<Exercise[]>(() => {
+  if (!settings.value || !template.value) return [];
+  const available = new Set(settings.value.homeEquipment);
+  return buildSession({
+    template: template.value,
+    favorites: entries.value.map((e) => e.exercise).filter((e) => available.has(e.equipment)),
+    count: exercisesPerSession(settings.value.sessionMinutes),
+    ...(settings.value.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
+  });
+});
+
+/** Where we are in the training block (4 normal weeks, then a lighter one). */
+const cycle = computed(() =>
+  cycleWeek(settings.value?.programStart ?? history.value[0]?.date ?? today(), today()),
+);
+
+async function start(options: { express?: boolean; home?: boolean } = {}): Promise<void> {
+  const exercises = options.express
+    ? expressPreview.value
+    : options.home
+      ? homePreview.value
+      : preview.value;
   if (!template.value || exercises.length === 0 || !settings.value) return;
-  const sets = setsPerExercise(settings.value.goal);
+  const sets = setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light);
   const pairs =
     settings.value.supersets || options.express
       ? supersetPairs(
@@ -250,7 +271,7 @@ async function start(options: { express?: boolean } = {}): Promise<void> {
   await startSession(db, {
     date: today(),
     templateId: template.value.id,
-    gymId: DEFAULT_GYM_ID,
+    gymId: settings.value.currentGymId,
     plan,
   });
   active.value = await getActiveSession(db);
@@ -484,6 +505,8 @@ export function useSession() {
     settings,
     template,
     expressPreview,
+    homePreview,
+    cycle,
     supersetPartner: (id: string) =>
       active.value?.plan.supersets?.find((p) => p.includes(id))?.find((other) => other !== id),
     lastDoneTemplateId,

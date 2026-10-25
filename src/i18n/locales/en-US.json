@@ -262,7 +262,8 @@
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",
     "express": "Express workout (20–30 min)",
-    "superset": "Superset with {name}: go straight on, no rest."
+    "superset": "Superset with {name}: go straight on, no rest.",
+    "home": "Home workout"
   },
   "availability": {
     "day": "Day",
@@ -667,5 +668,63 @@
     "best": "Best estimated 1RM: {load}",
     "forReps": "How much for X reps?",
     "target": "{reps} reps: {load}"
+  },
+  "cycle": {
+    "week": "Cycle {cycle}, week {week} of 5",
+    "light": "Cycle {cycle}, week {week} of 5: lighter week, one set less per exercise to recover.",
+    "change": "Several cycles on this program: you can try another model, or keep this one if you like it."
+  },
+  "mobility": {
+    "title": "Joint warm-up (≈ {minutes} min)",
+    "seconds": "{seconds} s",
+    "review": "Content to be validated by a coach or a physiotherapist.",
+    "moves": {
+      "armCircles": {
+        "name": "Arm circles",
+        "how": "Arms out to the side, small then big circles, both ways."
+      },
+      "wallSlides": {
+        "name": "Wall slides",
+        "how": "Back and arms against the wall, raise and lower the arms keeping contact."
+      },
+      "thoracicRotations": {
+        "name": "Thoracic rotations",
+        "how": "On all fours, one hand behind the head, open the elbow towards the ceiling."
+      },
+      "wristCircles": {
+        "name": "Wrist circles",
+        "how": "Hands together, rotate the wrists slowly both ways."
+      },
+      "catCow": {
+        "name": "Cat-cow",
+        "how": "On all fours, alternate rounded and arched back while breathing."
+      },
+      "hipCircles": {
+        "name": "Hip circles",
+        "how": "Standing, hands on hips, big circles both ways."
+      },
+      "legSwings": {
+        "name": "Leg swings",
+        "how": "Holding a support, swing one leg back and forth, then the other."
+      },
+      "bodyweightSquats": {
+        "name": "Bodyweight squats",
+        "how": "Go down slowly, heels down, come up smoothly."
+      },
+      "ankleRocks": {
+        "name": "Ankle rocks",
+        "how": "One foot forward, push the knee over the toes without lifting the heel."
+      }
+    }
+  },
+  "gyms": {
+    "title": "My gyms",
+    "choose": "Choose {name}",
+    "rename": "Name of the gym {name}",
+    "add": "Add a gym",
+    "addPlaceholder": "E.g. holiday gym",
+    "addButton": "Add",
+    "help": "Each gym has its own favorite machines, load steps and settings.",
+    "home": "Equipment at home"
   }
 }

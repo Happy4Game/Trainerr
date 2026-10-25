@@ -31,11 +31,27 @@ const pseudo =
 const messages: Record<string, MessageSchema> = { 'fr-FR': frFR, 'en-US': enUS };
 if (pseudo) messages.pseudo = pseudoMessages(frFR) as MessageSchema;
 
+/**
+ * Plural forms from the language rules (CLDR, through Intl.PluralRules), not
+ * from vue-i18n's English default: in French, 0 is singular ("0 exercice").
+ * Messages have two forms, "one | other".
+ */
+function cldrPlural(locale: string) {
+  const rules = new Intl.PluralRules(locale);
+  return (choice: number, choicesLength: number) =>
+    choicesLength < 2 ? 0 : rules.select(Math.abs(choice)) === 'one' ? 0 : 1;
+}
+
 export const i18n = createI18n({
   legacy: false,
   locale: pseudo ? 'pseudo' : pickLocale(phoneLanguages()),
   fallbackLocale: 'fr-FR',
   messages,
+  pluralRules: {
+    'fr-FR': cldrPlural('fr-FR'),
+    'en-US': cldrPlural('en-US'),
+    pseudo: cldrPlural('fr-FR'),
+  },
 });
 
 /** Applies the language chosen in the settings, without restarting the app. */

@@ -16,7 +16,8 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { suggestProgramChange } from '@/domain/cycles';
 import { useI18n } from 'vue-i18n';
 import type { WeeklySlot } from '@/domain/planning';
 import { TRAINING_MODELS, type TrainingModelId } from '@/domain/trainingModels';
@@ -58,6 +59,12 @@ async function saveAvailability(): Promise<void> {
 }
 
 const MODELS = Object.keys(TRAINING_MODELS) as TrainingModelId[];
+const changeSuggested = computed(() =>
+  suggestProgramChange(
+    settings.value?.programStart ?? session.history.value[0]?.date ?? todayIso(),
+    todayIso(),
+  ),
+);
 </script>
 
 <template>
@@ -118,7 +125,7 @@ const MODELS = Object.keys(TRAINING_MODELS) as TrainingModelId[];
                 :label="t('planning.model')"
                 :value="settings.model"
                 interface="action-sheet"
-                @ion-change="save({ model: $event.detail.value })"
+                @ion-change="save({ model: $event.detail.value, programStart: todayIso() })"
               >
                 <ion-select-option v-for="m in MODELS" :key="m" :value="m">
                   {{ t(`models.${m}`) }}
@@ -140,6 +147,14 @@ const MODELS = Object.keys(TRAINING_MODELS) as TrainingModelId[];
             <p v-if="frequencyNote" class="warning" role="note">
               {{ t('planning.frequencyNote') }}
             </p>
+            <p>
+              {{
+                session.cycle.value.light
+                  ? t('cycle.light', session.cycle.value)
+                  : t('cycle.week', session.cycle.value)
+              }}
+            </p>
+            <p v-if="changeSuggested" class="note" role="note">{{ t('cycle.change') }}</p>
           </ion-card-content>
         </ion-card>
       </template>
@@ -155,6 +170,11 @@ const MODELS = Object.keys(TRAINING_MODELS) as TrainingModelId[];
 .today {
   --background: var(--ion-color-light);
   font-weight: 600;
+}
+.note {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--ion-color-light);
 }
 .warning {
   padding: 8px 12px;

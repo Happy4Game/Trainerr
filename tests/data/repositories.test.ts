@@ -135,3 +135,22 @@ describe('machine plate photo', () => {
     expect((await find())?.platePhoto).toBeUndefined();
   });
 });
+
+describe('several gyms', () => {
+  it('keeps favorites and steps per gym', async () => {
+    const { addGym, listGyms, renameGym } = await import('@/data/repositories/gymRepository');
+    await seedCatalog(db, catalog, 'v1');
+    await addGym(db, 'holiday', 'Salle en vacances');
+    await renameGym(db, 'default', 'Basic-Fit');
+    expect(await listGyms(db)).toEqual([
+      { id: DEFAULT_GYM_ID, name: 'Basic-Fit' },
+      { id: 'holiday', name: 'Salle en vacances' },
+    ]);
+    await setFavorite(db, DEFAULT_GYM_ID, 'Butterfly', true);
+    await setLoadSteps(db, 'holiday', 'Butterfly', [40, 50]);
+    const at = async (gym: string) =>
+      (await listCatalog(db, gym)).find((e) => e.exercise.id === 'Butterfly');
+    expect(await at(DEFAULT_GYM_ID)).toMatchObject({ favorite: true, loadSteps: [] });
+    expect(await at('holiday')).toMatchObject({ favorite: false, loadSteps: [40, 50] });
+  });
+});

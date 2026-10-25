@@ -262,7 +262,8 @@
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",
     "express": "Séance express (20–30 min)",
-    "superset": "Superset avec {name} : enchaîne sans repos."
+    "superset": "Superset avec {name} : enchaîne sans repos.",
+    "home": "Séance à la maison"
   },
   "availability": {
     "day": "Jour",
@@ -667,5 +668,63 @@
     "best": "Meilleur 1RM estimé : {load}",
     "forReps": "Combien pour X reps ?",
     "target": "{reps} reps : {load}"
+  },
+  "cycle": {
+    "week": "Cycle {cycle}, semaine {week} sur 5",
+    "light": "Cycle {cycle}, semaine {week} sur 5 : semaine allégée, une série de moins par exercice pour récupérer.",
+    "change": "Cela fait plusieurs cycles sur ce programme : tu peux essayer un autre modèle, ou garder celui-ci s'il te plaît."
+  },
+  "mobility": {
+    "title": "Échauffement articulaire (≈ {minutes} min)",
+    "seconds": "{seconds} s",
+    "review": "Contenu à faire valider par un coach ou un kiné.",
+    "moves": {
+      "armCircles": {
+        "name": "Cercles de bras",
+        "how": "Bras tendus sur le côté, petits puis grands cercles, dans les deux sens."
+      },
+      "wallSlides": {
+        "name": "Glissés au mur",
+        "how": "Dos et bras contre le mur, monter et descendre les bras en gardant le contact."
+      },
+      "thoracicRotations": {
+        "name": "Rotations du buste",
+        "how": "À quatre pattes, une main derrière la tête, ouvrir le coude vers le plafond."
+      },
+      "wristCircles": {
+        "name": "Cercles des poignets",
+        "how": "Mains jointes, faire tourner les poignets lentement dans les deux sens."
+      },
+      "catCow": {
+        "name": "Chat-vache",
+        "how": "À quatre pattes, alterner dos rond et dos creux en respirant."
+      },
+      "hipCircles": {
+        "name": "Cercles de hanches",
+        "how": "Debout, mains sur les hanches, grands cercles dans les deux sens."
+      },
+      "legSwings": {
+        "name": "Balanciers de jambe",
+        "how": "En appui sur un support, balancer une jambe d'avant en arrière, puis l'autre."
+      },
+      "bodyweightSquats": {
+        "name": "Squats au poids du corps",
+        "how": "Descendre lentement, talons au sol, remonter sans à-coup."
+      },
+      "ankleRocks": {
+        "name": "Bascules de chevilles",
+        "how": "Un pied devant, avancer le genou au-dessus des orteils sans décoller le talon."
+      }
+    }
+  },
+  "gyms": {
+    "title": "Mes salles",
+    "choose": "Choisir {name}",
+    "rename": "Nom de la salle {name}",
+    "add": "Ajouter une salle",
+    "addPlaceholder": "Ex. salle en vacances",
+    "addButton": "Ajouter",
+    "help": "Chaque salle a ses machines favorites, ses paliers et ses réglages.",
+    "home": "Matériel à la maison"
   }
 }

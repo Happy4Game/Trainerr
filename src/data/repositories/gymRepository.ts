@@ -11,6 +11,23 @@ export interface GymMachine {
   readonly note?: string;
 }
 
+export interface Gym {
+  readonly id: string;
+  readonly name: string;
+}
+
+export async function listGyms(db: SqlDatabase): Promise<Gym[]> {
+  return db.query<Gym>('SELECT id, name FROM gym ORDER BY rowid');
+}
+
+export async function addGym(db: SqlDatabase, id: string, name: string): Promise<void> {
+  await db.run('INSERT INTO gym (id, name) VALUES (?, ?)', [id, name.trim()]);
+}
+
+export async function renameGym(db: SqlDatabase, id: string, name: string): Promise<void> {
+  await db.run('UPDATE gym SET name = ? WHERE id = ?', [name.trim(), id]);
+}
+
 export async function ensureDefaultGym(db: SqlDatabase, name: string): Promise<void> {
   await db.run('INSERT OR IGNORE INTO gym (id, name) VALUES (?, ?)', [DEFAULT_GYM_ID, name]);
 }

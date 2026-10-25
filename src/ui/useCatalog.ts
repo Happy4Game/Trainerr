@@ -2,13 +2,16 @@ import { computed, ref } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import { listCatalog, type CatalogEntry } from '@/data/repositories/catalogRepository';
 import {
-  DEFAULT_GYM_ID,
   setFavorite,
   setLoadSteps,
   setMachineNote,
   setPlatePhoto,
 } from '@/data/repositories/gymRepository';
 import { normalizeSteps } from '@/domain/loadSteps';
+import { loadSettings } from '@/ui/useSettings';
+
+/** Favorites, steps and photos belong to the gym chosen in the settings. */
+const gymId = async () => (await loadSettings()).currentGymId;
 
 type LoadState = { kind: 'idle' | 'loading' | 'ready' } | { kind: 'error'; message: string };
 
@@ -21,7 +24,7 @@ async function load(): Promise<void> {
   state.value = { kind: 'loading' };
   try {
     const { db } = await openAppDatabase();
-    entries.value = await listCatalog(db, DEFAULT_GYM_ID);
+    entries.value = await listCatalog(db, await gymId());
     state.value = { kind: 'ready' };
   } catch (error) {
     state.value = {
@@ -39,14 +42,14 @@ async function toggleFavorite(id: string): Promise<void> {
   const favorite = !entries.value.find((e) => e.exercise.id === id)?.favorite;
   update(id, (entry) => ({ ...entry, favorite }));
   const { db } = await openAppDatabase();
-  await setFavorite(db, DEFAULT_GYM_ID, id, favorite);
+  await setFavorite(db, await gymId(), id, favorite);
 }
 
 async function saveLoadSteps(id: string, steps: readonly number[]): Promise<void> {
   const loadSteps = normalizeSteps(steps);
   update(id, (entry) => ({ ...entry, loadSteps }));
   const { db } = await openAppDatabase();
-  await setLoadSteps(db, DEFAULT_GYM_ID, id, loadSteps);
+  await setLoadSteps(db, await gymId(), id, loadSteps);
 }
 
 async function saveNote(id: string, note: string): Promise<void> {
@@ -55,16 +58,22 @@ async function saveNote(id: string, note: string): Promise<void> {
     return note.trim() ? { ...rest, note: note.trim() } : rest;
   });
   const { db } = await openAppDatabase();
-  await setMachineNote(db, DEFAULT_GYM_ID, id, note);
+  await setMachineNote(db, await gymId(), id, note);
 }
 
 async function savePlatePhoto(id: string, photo: string | undefined): Promise<void> {
   const { db } = await openAppDatabase();
-  await setPlatePhoto(db, DEFAULT_GYM_ID, id, photo ?? null);
+  await setPlatePhoto(db, await gymId(), id, photo ?? null);
   update(id, (entry) => {
     const { platePhoto: _previous, ...rest } = entry;
     return photo ? { ...rest, platePhoto: photo } : rest;
   });
+}
+
+/** Reads the catalog again, e.g. after switching gym. */
+export async function reloadCatalog(): Promise<void> {
+  state.value = { kind: 'idle' };
+  await load();
 }
 
 export function useCatalog() {

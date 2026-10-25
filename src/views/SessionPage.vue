@@ -24,6 +24,7 @@ import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { Exercise } from '@/domain/types';
 import PlateCalculator from '@/ui/session/PlateCalculator.vue';
 import RestTimer from '@/ui/session/RestTimer.vue';
+import MobilityCard from '@/ui/MobilityCard.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import { useUnits } from '@/ui/useUnits';
@@ -146,6 +147,13 @@ async function logWarmup(): Promise<void> {
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <p class="muted">
+              {{
+                session.cycle.value.light
+                  ? t('cycle.light', session.cycle.value)
+                  : t('cycle.week', session.cycle.value)
+              }}
+            </p>
             <template v-if="preview.length > 0">
               <ol class="plan">
                 <li v-for="e in preview" :key="e.id">
@@ -171,6 +179,16 @@ async function logWarmup(): Promise<void> {
                 {{ t('session.goToCatalog') }}
               </ion-button>
             </template>
+            <!-- At home, any exercise doable with the declared equipment: no favorite needed. -->
+            <ion-button
+              v-if="session.homePreview.value.length > 0"
+              expand="block"
+              fill="clear"
+              @click="session.start({ home: true })"
+            >
+              {{ t('session.home') }}
+            </ion-button>
+            <MobilityCard :muscles="template.muscles" />
           </ion-card-content>
         </ion-card>
       </template>

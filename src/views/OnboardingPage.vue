@@ -83,6 +83,7 @@ async function finish(withNotifications: boolean): Promise<void> {
   const saved = await updateSettings({
     ...answers(),
     notifications: { ...DEFAULT_SETTINGS.notifications, enabled: granted },
+    programStart: new Date().toISOString().slice(0, 10),
     onboarded: true,
   });
   await rescheduleNotifications(saved);
