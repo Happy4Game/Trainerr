@@ -27,6 +27,8 @@ import ExerciseDemo from '@/ui/demo/ExerciseDemo.vue';
 import { movementFor } from '@/ui/demo/movementFor';
 import ExerciseIllustration from '@/ui/ExerciseIllustration.vue';
 import ComebackCard from '@/ui/ComebackCard.vue';
+import ExerciseProgress from '@/ui/ExerciseProgress.vue';
+import { readPhoto } from '@/ui/photo';
 import LoadStepsEditor from '@/ui/LoadStepsEditor.vue';
 import { useSettings } from '@/ui/useSettings';
 import { defaultStepsFor } from '@/domain/loadSteps';
@@ -36,7 +38,18 @@ import { useCatalog } from '@/ui/useCatalog';
 const props = defineProps<{ id: string }>();
 
 const { t, locale } = useI18n();
-const { state, entry: entryOf, toggleFavorite, saveLoadSteps, saveNote } = useCatalog();
+const {
+  state,
+  entry: entryOf,
+  toggleFavorite,
+  saveLoadSteps,
+  saveNote,
+  savePlatePhoto,
+} = useCatalog();
+async function onPhoto(event: Event): Promise<void> {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file) await savePlatePhoto(props.id, await readPhoto(file));
+}
 const entry = entryOf(props.id);
 const exercise = computed(() => entry.value?.exercise);
 
@@ -189,6 +202,30 @@ const muscleList = (muscles: readonly MuscleId[]) =>
             <p class="small" role="status">
               {{ stepsSaved ? t('exercise.steps.saved') : '' }}
             </p>
+            <div class="photo">
+              <img
+                v-if="entry.platePhoto"
+                :src="entry.platePhoto"
+                :alt="t('exercise.machine.photoAlt', { name: title })"
+              />
+              <label class="photo-button">
+                {{
+                  entry.platePhoto
+                    ? t('exercise.machine.photoReplace')
+                    : t('exercise.machine.photo')
+                }}
+                <input type="file" accept="image/*" capture="environment" @change="onPhoto" />
+              </label>
+              <ion-button
+                v-if="entry.platePhoto"
+                fill="clear"
+                color="medium"
+                size="small"
+                @click="savePlatePhoto(exercise.id, undefined)"
+              >
+                {{ t('exercise.machine.photoDelete') }}
+              </ion-button>
+            </div>
             <ion-item lines="none">
               <ion-textarea
                 :model-value="entry.note ?? ''"
@@ -202,6 +239,8 @@ const muscleList = (muscles: readonly MuscleId[]) =>
             </ion-item>
           </ion-card-content>
         </ion-card>
+
+        <ExerciseProgress :exercise-id="exercise.id" :name="title" :steps="stepsForComeback" />
 
         <ComebackCard
           v-if="settings?.comeback"
@@ -238,6 +277,30 @@ const muscleList = (muscles: readonly MuscleId[]) =>
 .section {
   margin-block: 0;
   font-size: 1.05rem;
+}
+.photo {
+  margin-block: 12px;
+}
+.photo img {
+  display: block;
+  max-width: 100%;
+  border-radius: 8px;
+  margin-block-end: 8px;
+}
+.photo-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 12px;
+  border: 1px solid var(--ion-color-primary);
+  border-radius: 8px;
+  color: var(--ion-color-primary);
+}
+.photo-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
 .small {
   font-size: 0.85rem;

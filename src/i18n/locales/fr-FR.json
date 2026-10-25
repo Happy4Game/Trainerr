@@ -101,7 +101,11 @@
     "machine": {
       "title": "Ma machine",
       "note": "Réglages (siège, dossier, poignée…)",
-      "notePlaceholder": "Ex. siège cran 4"
+      "notePlaceholder": "Ex. siège cran 4",
+      "photo": "Photographier la plaque de la machine",
+      "photoReplace": "Remplacer la photo",
+      "photoDelete": "Supprimer la photo",
+      "photoAlt": "Plaque de la machine {name}"
     },
     "steps": {
       "title": "Paliers de charge",
@@ -656,5 +660,12 @@
     "fourWeeksOnPace": "4 semaines au rythme",
     "firstRecord": "Premier record",
     "backToLevel": "Retour au niveau d'avant"
+  },
+  "progress": {
+    "title": "Ma progression",
+    "description": "1RM estimé {name} sur {sessions} séances",
+    "best": "Meilleur 1RM estimé : {load}",
+    "forReps": "Combien pour X reps ?",
+    "target": "{reps} reps : {load}"
   }
 }

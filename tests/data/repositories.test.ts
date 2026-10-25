@@ -122,3 +122,16 @@ describe('gym machines', () => {
     );
   });
 });
+
+describe('machine plate photo', () => {
+  it('is stored with the machine and can be removed', async () => {
+    const { setPlatePhoto } = await import('@/data/repositories/gymRepository');
+    await seedCatalog(db, catalog, 'v1');
+    await setPlatePhoto(db, DEFAULT_GYM_ID, 'Butterfly', 'data:image/jpeg;base64,AAAA');
+    const find = async () =>
+      (await listCatalog(db, DEFAULT_GYM_ID)).find((e) => e.exercise.id === 'Butterfly');
+    expect((await find())?.platePhoto).toBe('data:image/jpeg;base64,AAAA');
+    await setPlatePhoto(db, DEFAULT_GYM_ID, 'Butterfly', null);
+    expect((await find())?.platePhoto).toBeUndefined();
+  });
+});

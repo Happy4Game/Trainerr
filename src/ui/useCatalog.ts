@@ -6,6 +6,7 @@ import {
   setFavorite,
   setLoadSteps,
   setMachineNote,
+  setPlatePhoto,
 } from '@/data/repositories/gymRepository';
 import { normalizeSteps } from '@/domain/loadSteps';
 
@@ -57,6 +58,15 @@ async function saveNote(id: string, note: string): Promise<void> {
   await setMachineNote(db, DEFAULT_GYM_ID, id, note);
 }
 
+async function savePlatePhoto(id: string, photo: string | undefined): Promise<void> {
+  const { db } = await openAppDatabase();
+  await setPlatePhoto(db, DEFAULT_GYM_ID, id, photo ?? null);
+  update(id, (entry) => {
+    const { platePhoto: _previous, ...rest } = entry;
+    return photo ? { ...rest, platePhoto: photo } : rest;
+  });
+}
+
 export function useCatalog() {
   void load();
   return {
@@ -66,5 +76,6 @@ export function useCatalog() {
     toggleFavorite,
     saveLoadSteps,
     saveNote,
+    savePlatePhoto,
   };
 }

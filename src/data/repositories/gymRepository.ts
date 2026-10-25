@@ -48,6 +48,16 @@ export async function setMachineNote(
   await upsertMachine(db, gymId, exerciseId, 'settings', note.trim() || null);
 }
 
+/** Photo of the machine plate (JPEG data URL), kept on the phone only. */
+export async function setPlatePhoto(
+  db: SqlDatabase,
+  gymId: string,
+  exerciseId: string,
+  photo: string | null,
+): Promise<void> {
+  await upsertMachine(db, gymId, exerciseId, 'plate_photo', photo);
+}
+
 export async function getMachine(
   db: SqlDatabase,
   gymId: string,
@@ -66,7 +76,7 @@ export async function getMachine(
   };
 }
 
-type MachineColumn = 'favorite' | 'load_steps_kg' | 'settings';
+type MachineColumn = 'favorite' | 'load_steps_kg' | 'settings' | 'plate_photo';
 
 async function upsertMachine(
   db: SqlDatabase,

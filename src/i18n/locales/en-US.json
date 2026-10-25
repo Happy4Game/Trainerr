@@ -101,7 +101,11 @@
     "machine": {
       "title": "My machine",
       "note": "Settings (seat, backrest, handle…)",
-      "notePlaceholder": "E.g. seat notch 4"
+      "notePlaceholder": "E.g. seat notch 4",
+      "photo": "Take a photo of the machine plate",
+      "photoReplace": "Replace the photo",
+      "photoDelete": "Delete the photo",
+      "photoAlt": "Plate of the {name} machine"
     },
     "steps": {
       "title": "Load steps",
@@ -656,5 +660,12 @@
     "fourWeeksOnPace": "4 weeks on pace",
     "firstRecord": "First record",
     "backToLevel": "Back to your old level"
+  },
+  "progress": {
+    "title": "My progress",
+    "description": "Estimated 1RM {name} over {sessions} workouts",
+    "best": "Best estimated 1RM: {load}",
+    "forReps": "How much for X reps?",
+    "target": "{reps} reps: {load}"
   }
 }

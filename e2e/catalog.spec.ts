@@ -85,3 +85,24 @@ test('the machine card shows the muscles and keeps the load steps', async ({ pag
   await page.getByRole('button', { name: 'Retirer 52 kg' }).click();
   await expect(page.getByTestId('load-steps')).not.toHaveText(/52/);
 });
+
+test('a photo of the machine plate is kept with the machine', async ({ page }) => {
+  await openCatalog(page);
+  await search(page, 'pec deck');
+  await page.getByRole('heading', { name: 'Écarté à la machine' }).click();
+  // 1×1 PNG: enough to go through the resize and the storage.
+  const png = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+    'base64',
+  );
+  await page
+    .locator('input[type=file][accept="image/*"]')
+    .setInputFiles({ name: 'plaque.png', mimeType: 'image/png', buffer: png });
+  await expect(
+    page.getByRole('img', { name: 'Plaque de la machine Écarté à la machine' }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Supprimer la photo' }).click();
+  await expect(
+    page.getByRole('img', { name: 'Plaque de la machine Écarté à la machine' }),
+  ).toHaveCount(0);
+});

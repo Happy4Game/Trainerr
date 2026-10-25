@@ -9,6 +9,7 @@ export interface CatalogEntry {
   readonly favorite: boolean;
   readonly loadSteps: readonly number[];
   readonly note?: string;
+  readonly platePhoto?: string;
 }
 
 const VERSION_KEY = 'catalog_version';
@@ -104,12 +105,13 @@ interface ExerciseRow {
   favorite: number | null;
   load_steps_kg: string | null;
   settings: string | null;
+  plate_photo: string | null;
 }
 
 /** Every exercise, with this gym's favorite flag, load steps and note. */
 export async function listCatalog(db: SqlDatabase, gymId: string): Promise<CatalogEntry[]> {
   const rows = await db.query<ExerciseRow>(
-    `SELECT e.*, gm.favorite, gm.load_steps_kg, gm.settings
+    `SELECT e.*, gm.favorite, gm.load_steps_kg, gm.settings, gm.plate_photo
        FROM exercise e
        LEFT JOIN gym_machine gm ON gm.exercise_id = e.id AND gm.gym_id = ?`,
     [gymId],
@@ -156,6 +158,7 @@ export async function listCatalog(db: SqlDatabase, gymId: string): Promise<Catal
       favorite: row.favorite === 1,
       loadSteps: row.load_steps_kg ? (JSON.parse(row.load_steps_kg) as number[]) : [],
       ...(row.settings ? { note: row.settings } : {}),
+      ...(row.plate_photo ? { platePhoto: row.plate_photo } : {}),
     };
   });
 }
