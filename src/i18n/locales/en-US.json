@@ -230,7 +230,10 @@
     "busyHelp": "Do something else meanwhile, the app asks again after the next exercise.",
     "alternative": {
       "substitute": "Same muscles",
-      "swap": "Next exercise of the workout"
+      "swap": "Next exercise of the workout",
+      "take": "I'll take this one",
+      "choose": "Take {name}",
+      "none": "No other machine for these muscles in your favorites: wait a bit or move on."
     },
     "continue": "Go on with the rest",
     "isFree": "Is {name} free?",

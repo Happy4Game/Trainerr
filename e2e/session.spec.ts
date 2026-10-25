@@ -38,7 +38,11 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   // The machine gets taken: the next exercise is offered, and the machine comes back after it.
   await page.getByRole('button', { name: 'Machine occupée' }).click();
   await expect(page.getByText('Développé épaules machine est occupée')).toBeVisible();
-  await page.getByRole('button', { name: /Écarté à la machine/ }).click();
+  // Each machine offered comes with a preview: drawing, muscles, load, movement.
+  const offer = page.getByRole('listitem').filter({ hasText: 'Écarté à la machine' });
+  await expect(offer.getByText(/Pectoraux/)).toBeVisible();
+  await expect(offer.getByRole('link', { name: 'Voir le mouvement' })).toBeVisible();
+  await offer.getByRole('button', { name: 'Prendre Écarté à la machine' }).click();
   await expect(page.getByRole('region', { name: 'Écarté à la machine' })).toBeVisible();
 
   // Survives a reload in the middle of the workout.

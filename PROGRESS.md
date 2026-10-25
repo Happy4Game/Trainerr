@@ -91,6 +91,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Changement de machine visible : « Exercice 2 sur 5 » avec la liste des machines (faites, en cours, à venir), et entre deux exercices un écran « ✓ … terminé · Machine suivante » (dessin, séries, charge, « Je suis sur la machine »). Pas d'interruption au milieu d'un superset ; l'écran remonte en haut à chaque nouvel exercice.
 
+- « Machine occupée » : chaque machine proposée a un aperçu (dessin, muscles, charge prévue, « Voir le mouvement ») et un bouton « Je prends celle-ci ».
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

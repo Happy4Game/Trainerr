@@ -230,7 +230,10 @@
     "busyHelp": "Fais autre chose en attendant, l'appli te repropose la machine après l'exercice suivant.",
     "alternative": {
       "substitute": "Mêmes muscles",
-      "swap": "Exercice suivant de la séance"
+      "swap": "Exercice suivant de la séance",
+      "take": "Je prends celle-ci",
+      "choose": "Prendre {name}",
+      "none": "Pas d'autre machine pour ces muscles dans tes favoris : attends un peu ou passe à la suite."
     },
     "continue": "Continuer avec la suite",
     "isFree": "{name} est libre ?",

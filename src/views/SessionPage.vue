@@ -8,8 +8,6 @@ import {
   IonContent,
   IonHeader,
   IonItem,
-  IonLabel,
-  IonList,
   IonModal,
   IonPage,
   IonTextarea,
@@ -133,6 +131,11 @@ const nameOf = (id: string) => {
   return locale.value.startsWith('fr') ? entry.exercise.name : entry.exercise.nameEn;
 };
 const exerciseName = (e: Exercise) => nameOf(e.id);
+const thumbnailOf = (id: string) => {
+  const image = illustrationFor(id)?.images[0];
+  return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
+};
+const musclesOf = (e: Exercise) => e.primaryMuscles.map((m) => t(`muscles.${m}`)).join(', ');
 /** Card of a machine; a banner there leads back to the session. */
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
@@ -341,28 +344,51 @@ async function logWarmup(): Promise<void> {
           </ion-card-header>
           <ion-card-content>
             <p>{{ t('session.busyHelp') }}</p>
-            <ion-list>
-              <ion-item
+            <ul class="alternatives">
+              <li
                 v-for="alternative in busyAlternatives"
                 :key="alternative.exercise.id"
-                button
-                @click="choose(alternative)"
+                class="alternative"
               >
-                <ion-label class="ion-text-wrap">
+                <img
+                  v-if="thumbnailOf(alternative.exercise.id)"
+                  :src="thumbnailOf(alternative.exercise.id)"
+                  alt=""
+                  class="alt-thumb"
+                />
+                <div class="alt-body">
                   <h3>{{ exerciseName(alternative.exercise) }}</h3>
-                  <p>
-                    {{ t(`session.alternative.${alternative.kind}`) }}
+                  <p class="alt-kind">{{ t(`session.alternative.${alternative.kind}`) }}</p>
+                  <p class="alt-detail">
+                    {{ musclesOf(alternative.exercise) }}
                     <template v-if="alternative.loadKg !== undefined">
                       · {{ kg(alternative.loadKg) }}
                     </template>
-                    ·
-                    <router-link :to="cardLink(alternative.exercise.id)" @click.stop>{{
-                      t('session.seeMovement')
-                    }}</router-link>
                   </p>
-                </ion-label>
-              </ion-item>
-            </ion-list>
+                  <div class="alt-actions">
+                    <ion-button
+                      size="small"
+                      :aria-label="
+                        t('session.alternative.choose', {
+                          name: exerciseName(alternative.exercise),
+                        })
+                      "
+                      @click="choose(alternative)"
+                    >
+                      {{ t('session.alternative.take') }}
+                    </ion-button>
+                    <ion-button
+                      size="small"
+                      fill="clear"
+                      :router-link="cardLink(alternative.exercise.id)"
+                    >
+                      {{ t('session.seeMovement') }}
+                    </ion-button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <p v-if="busyAlternatives.length === 0">{{ t('session.alternative.none') }}</p>
             <ion-button fill="clear" @click="busyFor = undefined">{{
               t('session.continue')
             }}</ion-button>
@@ -683,6 +709,46 @@ async function logWarmup(): Promise<void> {
 .plan-line {
   margin-block: 0 12px;
   color: var(--ion-color-medium-shade);
+}
+.alternatives {
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+}
+.alternative {
+  display: flex;
+  gap: 12px;
+  padding-block: 10px;
+  border-block-end: 1px solid var(--ion-color-light);
+}
+.alt-thumb {
+  flex: none;
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+}
+.alt-body h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ion-text-color, #000);
+}
+.alt-kind {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--ion-color-primary);
+}
+.alt-detail {
+  margin: 2px 0 4px;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium-shade);
+}
+.alt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-inline-start: -6px;
 }
 .go-back {
   margin-inline-start: -8px;
