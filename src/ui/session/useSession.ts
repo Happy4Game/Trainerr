@@ -22,7 +22,8 @@ import {
   setReference,
   type ReferenceLoad,
 } from '@/data/repositories/referenceRepository';
-import { getSettings, type Settings } from '@/data/repositories/settingsRepository';
+import { CUSTOM_PREFIX, getSettings, type Settings } from '@/data/repositories/settingsRepository';
+import { loadSettings } from '@/ui/useSettings';
 import {
   addExercise,
   alternativesFor,
@@ -298,15 +299,23 @@ const cycle = computed(() =>
 );
 
 async function start(
-  options: { express?: boolean; home?: boolean; readyMade?: boolean } = {},
+  options: { express?: boolean; home?: boolean; readyMade?: boolean; custom?: string } = {},
 ): Promise<void> {
-  const exercises = options.express
-    ? expressPreview.value
-    : options.home
-      ? homePreview.value
-      : options.readyMade
-        ? (readyMade.value?.exercises ?? [])
-        : preview.value;
+  // A custom session: the exercises chosen by the user, in their order.
+  const custom = options.custom
+    ? (await loadSettings()).customSessions?.find((c) => c.id === options.custom)
+    : undefined;
+  const exercises = custom
+    ? custom.exerciseIds
+        .map((id) => entryOf(id)?.exercise)
+        .filter((e): e is CatalogExercise => e !== undefined)
+    : options.express
+      ? expressPreview.value
+      : options.home
+        ? homePreview.value
+        : options.readyMade
+          ? (readyMade.value?.exercises ?? [])
+          : preview.value;
   if (!template.value || exercises.length === 0 || !settings.value) return;
   const sets = setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light);
   const pairs =
@@ -336,7 +345,7 @@ async function start(
   const { db } = await openAppDatabase();
   await startSession(db, {
     date: today(),
-    templateId: template.value.id,
+    templateId: custom ? `${CUSTOM_PREFIX}${custom.id}` : template.value.id,
     gymId: settings.value.currentGymId,
     plan,
   });

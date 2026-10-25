@@ -947,5 +947,29 @@
     "open": "Corriger : {set}",
     "last": "Dernière série : {set}",
     "fix": "Corriger"
+  },
+  "customSession": {
+    "mine": "Mes séances",
+    "intro": "Compose tes propres séances avec les exercices de ton choix.",
+    "create": "+ Créer une séance",
+    "newTitle": "Nouvelle séance",
+    "editTitle": "Modifier la séance",
+    "name": "Nom de la séance",
+    "namePlaceholder": "Ex. Bras du vendredi",
+    "exercises": "{count} exercice | {count} exercices",
+    "empty": "Ajoute au moins un exercice.",
+    "add": "Ajouter un exercice",
+    "up": "Monter {name}",
+    "down": "Descendre {name}",
+    "remove": "Retirer {name}",
+    "save": "Enregistrer la séance",
+    "delete": "Supprimer cette séance",
+    "deleteConfirm": "La séance sera supprimée. Les séances déjà faites restent dans l'historique.",
+    "deleteYes": "Oui, supprimer",
+    "edit": "Modifier",
+    "editNamed": "Modifier {name}",
+    "start": "Commencer",
+    "startNamed": "Commencer {name}",
+    "deleted": "Séance perso"
   }
 }

@@ -9,6 +9,15 @@ import type { Goal, SessionMinutes } from '@/domain/sessionBuilder';
 import { recommendModel, type TrainingModelId } from '@/domain/trainingModels';
 import type { SqlDatabase } from '../sqlite/database';
 
+export interface CustomSession {
+  readonly id: string;
+  readonly name: string;
+  readonly exerciseIds: readonly string[];
+}
+
+/** Template id of a custom session in the history: "custom:<id>". */
+export const CUSTOM_PREFIX = 'custom:';
+
 export interface Settings {
   readonly goal: Goal;
   readonly sessionsPerWeek: number;
@@ -38,6 +47,8 @@ export interface Settings {
   readonly shareRecords: boolean;
   /** The user agreed to send the summary of their week to the AI coach. */
   readonly aiConsent: boolean;
+  /** Sessions built by the user: a name and exercises in order. */
+  readonly customSessions?: readonly CustomSession[];
   readonly language: LanguagePreference;
   readonly weightUnit: WeightUnit;
   /** Set once the first-launch questionnaire is done or skipped. */

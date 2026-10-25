@@ -13,6 +13,11 @@ const routes: RouteRecordRaw[] = [
       { path: '', redirect: '/tabs/today' },
       { path: 'today', component: () => import('@/views/TodayPage.vue') },
       { path: 'session', component: () => import('@/views/SessionPage.vue') },
+      {
+        path: 'session/custom/:id',
+        component: () => import('@/views/CustomSessionPage.vue'),
+        props: true,
+      },
       // Machine card opened from the session: stays in the Session tab.
       {
         path: 'session/exercise/:id',

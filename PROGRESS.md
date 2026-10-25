@@ -99,6 +99,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Design : thème indigo clair / sombre, fond teinté et cartes blanches, boutons en casse normale ; progression de séance sur une ligne ; plans de séance avec dessins ; écran Aujourd'hui « en un coup d'œil » ; fin de séance avec tuiles (séries, charge soulevée, records) ; textes d'aide de la série seulement pendant les deux premières séances.
 
+- Séances personnalisées : « Mes séances » dans l'onglet Séance ; créer, nommer, choisir et réordonner les exercices, commencer, modifier, supprimer. Elles gardent conseils de charge, transitions et historique (nom affiché partout).
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

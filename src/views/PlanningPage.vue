@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonButton,
   IonCard,
@@ -28,6 +29,7 @@ import { updateSettings } from '@/ui/useSettings';
 import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
 
 const { t, locale } = useI18n();
+const templateLabel = useTemplateName();
 const { settings, plan, days, frequencyNote } = useWeekPlan();
 const session = useSession();
 
@@ -82,7 +84,7 @@ const changeSuggested = computed(() =>
             <ion-label>
               <h3>{{ dayLabel(day.date) }}</h3>
               <p v-if="day.session">
-                {{ t(`templates.${day.session.templateId}`) }} · {{ day.session.start }}–{{
+                {{ templateLabel(day.session.templateId) }} · {{ day.session.start }}–{{
                   day.session.end
                 }}
               </p>

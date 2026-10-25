@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonButton,
   IonButtons,
@@ -24,6 +25,7 @@ import { useSession } from '@/ui/session/useSession';
 import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
 
 const { t } = useI18n();
+const templateLabel = useTemplateName();
 const session = useSession();
 const { settings, days } = useWeekPlan();
 const { phase, template, active, history, preview } = session;
@@ -90,8 +92,8 @@ const streak = computed(() =>
                   : t('today.noPlan')
             }}
           </p>
-          <h2 v-if="active">{{ t(`templates.${active.templateId}`) }}</h2>
-          <h2 v-else-if="template">{{ t(`templates.${template.id}`) }}</h2>
+          <h2 v-if="active">{{ templateLabel(active.templateId) }}</h2>
+          <h2 v-else-if="template">{{ templateLabel(template.id) }}</h2>
           <p v-if="!active && !today?.session" class="hint">{{ t('today.restDay') }}</p>
           <div v-if="thumbnails.length > 0" class="thumbs" aria-hidden="true">
             <img v-for="src in thumbnails" :key="src" :src="src" alt="" />

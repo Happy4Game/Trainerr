@@ -1,3 +1,4 @@
+import { templateName } from '@/domain/templateName';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { openAppDatabase } from '@/data/appDatabase';
 import { listDoneSessions } from '@/data/repositories/sessionRepository';
@@ -77,7 +78,11 @@ export async function rescheduleNotifications(settings: Settings): Promise<void>
         body:
           n.kind === 'sessionReminder'
             ? t('notifications.reminder', {
-                template: t(`templates.${n.templateId}`),
+                template: templateName(n.templateId, {
+                  translate: (key) => t(key),
+                  custom: settings.customSessions ?? [],
+                  fallback: t('customSession.deleted'),
+                }),
                 time: addMinutes(n.time, 60),
               })
             : n.kind === 'nudge'

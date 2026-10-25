@@ -947,5 +947,29 @@
     "open": "Fix: {set}",
     "last": "Last set: {set}",
     "fix": "Fix"
+  },
+  "customSession": {
+    "mine": "My sessions",
+    "intro": "Build your own sessions with the exercises you choose.",
+    "create": "+ Create a session",
+    "newTitle": "New session",
+    "editTitle": "Edit the session",
+    "name": "Session name",
+    "namePlaceholder": "E.g. Friday arms",
+    "exercises": "{count} exercise | {count} exercises",
+    "empty": "Add at least one exercise.",
+    "add": "Add an exercise",
+    "up": "Move {name} up",
+    "down": "Move {name} down",
+    "remove": "Remove {name}",
+    "save": "Save the session",
+    "delete": "Delete this session",
+    "deleteConfirm": "The session will be deleted. Sessions already done stay in the history.",
+    "deleteYes": "Yes, delete",
+    "edit": "Edit",
+    "editNamed": "Edit {name}",
+    "start": "Start",
+    "startNamed": "Start {name}",
+    "deleted": "Custom session"
   }
 }

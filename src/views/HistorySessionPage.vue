@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonBackButton,
   IonButton,
@@ -39,6 +40,7 @@ const props = defineProps<{ id: string }>();
 const DIFFICULTIES: readonly Difficulty[] = ['easy', 'ok', 'hard', 'fail'];
 
 const { t, locale } = useI18n();
+const templateLabel = useTemplateName();
 const session = useSession();
 const { symbol, toDisplay, fromInput } = useUnits();
 const router = useIonRouter();
@@ -112,7 +114,7 @@ async function remove() {
     <ion-content class="ion-padding">
       <p v-if="!past" role="status">{{ t('historyEdit.notFound') }}</p>
       <template v-else>
-        <h1 class="title">{{ t(`templates.${past.templateId}`) }}</h1>
+        <h1 class="title">{{ templateLabel(past.templateId) }}</h1>
         <ion-input
           type="date"
           fill="outline"

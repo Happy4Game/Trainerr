@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateName } from '@/ui/useTemplateName';
 import { IonButton, IonInput, IonItem, IonLabel, IonListHeader } from '@ionic/vue';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -26,6 +27,7 @@ import { useUnits } from '@/ui/useUnits';
 import { todayIso } from '@/ui/useWeekPlan';
 
 const { t, locale } = useI18n();
+const templateLabel = useTemplateName();
 const confirming = ref(false);
 const message = ref('');
 const fileInput = ref<HTMLInputElement>();
@@ -85,7 +87,7 @@ async function shareWithCoach(): Promise<void> {
     ],
     sessions: session.history.value,
     exerciseName: nameOf,
-    templateName: (id) => t(`templates.${id}`),
+    templateName: (id) => templateLabel(id),
     loadLabel: load,
     difficultyLabel: (d) => t(`difficulty.${d}`),
     texts: {

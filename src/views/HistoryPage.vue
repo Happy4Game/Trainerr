@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonContent,
   IonHeader,
@@ -23,6 +24,7 @@ const VIEWS = ['sessions', 'stats', 'body'] as const;
 const view = ref<(typeof VIEWS)[number]>('sessions');
 
 const { t, n, locale } = useI18n();
+const templateLabel = useTemplateName();
 const session = useSession();
 const { load, toDisplay } = useUnits();
 
@@ -83,12 +85,12 @@ function lines(
           detail
           :aria-label="
             t('history.edit', {
-              session: `${t(`templates.${s.templateId}`)} · ${dateLabel(s.date)}`,
+              session: `${templateLabel(s.templateId)} · ${dateLabel(s.date)}`,
             })
           "
         >
           <ion-label class="ion-text-wrap">
-            <h2>{{ t(`templates.${s.templateId}`) }} · {{ dateLabel(s.date) }}</h2>
+            <h2>{{ templateLabel(s.templateId) }} · {{ dateLabel(s.date) }}</h2>
             <p>{{ t('history.workload', { load: load(Math.round(sessionWorkload(s))) }) }}</p>
             <p v-for="line in lines(s.sets)" :key="line">{{ line }}</p>
             <p v-if="s.note" class="note">« {{ s.note }} »</p>

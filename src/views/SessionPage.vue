@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonButton,
   IonCard,
@@ -39,6 +40,7 @@ import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/useWeekPlan';
 
 const { t, n, locale } = useI18n();
+const templateLabel = useTemplateName();
 const session = useSession();
 const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, summary, crowded } =
   session;
@@ -99,6 +101,7 @@ async function addExercise(id: string): Promise<void> {
 }
 const reportingDiscomfort = ref(false);
 const { settings: appSettings } = useSettings();
+const customSessions = computed(() => appSettings.value?.customSessions ?? []);
 
 const remainingExercises = computed(() => {
   const s = active.value;
@@ -213,7 +216,7 @@ async function logWarmup(): Promise<void> {
       <ion-toolbar>
         <ion-title>
           {{ t('tabs.session') }}
-          <template v-if="active"> · {{ t(`templates.${active.templateId}`) }}</template>
+          <template v-if="active"> · {{ templateLabel(active.templateId) }}</template>
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -229,7 +232,7 @@ async function logWarmup(): Promise<void> {
         <ion-card>
           <ion-card-header>
             <ion-card-title>
-              {{ t('session.next', { template: t(`templates.${template.id}`) }) }}
+              {{ t('session.next', { template: templateLabel(template.id) }) }}
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -264,7 +267,7 @@ async function logWarmup(): Promise<void> {
               </ion-button>
             </template>
             <template v-else-if="!readyMade">
-              <p>{{ t('session.noFavorites', { template: t(`templates.${template.id}`) }) }}</p>
+              <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>
               <ion-button expand="block" fill="outline" router-link="/tabs/catalog">
                 {{ t('session.goToCatalog') }}
               </ion-button>
@@ -319,6 +322,35 @@ async function logWarmup(): Promise<void> {
             <MobilityCard :muscles="template.muscles" />
           </ion-card-content>
         </ion-card>
+
+        <section class="my-sessions" :aria-label="t('customSession.mine')">
+          <h2>{{ t('customSession.mine') }}</h2>
+          <p v-if="customSessions.length === 0" class="muted">{{ t('customSession.intro') }}</p>
+          <div v-for="c in customSessions" :key="c.id" class="custom">
+            <div class="custom-text">
+              <strong>{{ c.name }}</strong>
+              <span class="muted">{{ t('customSession.exercises', c.exerciseIds.length) }}</span>
+            </div>
+            <ion-button
+              fill="clear"
+              size="small"
+              :router-link="`/tabs/session/custom/${c.id}`"
+              :aria-label="t('customSession.editNamed', { name: c.name })"
+            >
+              {{ t('customSession.edit') }}
+            </ion-button>
+            <ion-button
+              size="small"
+              :aria-label="t('customSession.startNamed', { name: c.name })"
+              @click="session.start({ custom: c.id })"
+            >
+              {{ t('customSession.start') }}
+            </ion-button>
+          </div>
+          <ion-button expand="block" fill="outline" router-link="/tabs/session/custom/new">
+            {{ t('customSession.create') }}
+          </ion-button>
+        </section>
       </template>
 
       <!-- Pendant la séance -->
@@ -959,6 +991,30 @@ async function logWarmup(): Promise<void> {
   padding: 10px 12px;
   border-radius: var(--app-radius-small);
   background: var(--ion-card-background);
+}
+.my-sessions {
+  margin-block: 16px;
+}
+.my-sessions h2 {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.custom {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-block-end: 8px;
+  padding: 10px 8px 10px 14px;
+  border-radius: var(--app-radius);
+  background: var(--ion-card-background);
+  box-shadow: var(--app-shadow);
+}
+.custom-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
 }
 .go-back {
   margin-inline-start: -8px;
