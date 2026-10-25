@@ -9,7 +9,7 @@
 //
 // Usage : node scripts/update-exercise-images.mjs (demande rsvg-convert et ImageMagick)
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -304,8 +304,9 @@ const raw = `https://raw.githubusercontent.com/everkinetic/data/${EVERKINETIC_CO
 const json = async (url) => JSON.parse((await download(url)).toString('utf8'));
 const fileBase = (exerciseId) => exerciseId.replace(/[^\w-]/g, '_');
 
-rmSync(imageDir, { recursive: true, force: true });
+// Empty the folder without removing it: a running dev server keeps watching it.
 mkdirSync(imageDir, { recursive: true });
+for (const file of readdirSync(imageDir)) rmSync(resolve(imageDir, file));
 const output = {};
 
 /** Reduces a drawing to a light PNG: 480 px wide, 8 shades of grey. */
