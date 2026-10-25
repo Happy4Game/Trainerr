@@ -35,7 +35,7 @@ test('a past session can be corrected, completed and deleted', async ({ page }) 
 
   await page.getByRole('tab', { name: 'Historique' }).click();
   await page.getByRole('link', { name: /Modifier Haut du corps A/ }).click();
-  await expect(page.getByRole('heading', { name: 'Haut du corps A' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Haut du corps A' })).toBeVisible();
 
   // Wrong reps typed during the session.
   const set1 = page.getByRole('group', { name: `Série 1 : ${first}` });

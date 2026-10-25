@@ -71,8 +71,9 @@ test('challenges: account, group with a code, leaderboard, deletion', async ({ p
   await signUp(page);
 
   // Only regularity goes to the server: no loads by default.
-  const stats = sent.find((r) => r.path === '/v1/stats');
-  expect(stats?.body).toEqual({ weekStart: expect.any(String), sessions: 0, weeksOnPace: 0 });
+  await expect
+    .poll(() => sent.find((r) => r.path === '/v1/stats')?.body)
+    .toEqual({ weekStart: expect.any(String), sessions: 0, weeksOnPace: 0 });
 
   await page.getByLabel('Nom du nouveau groupe').fill('Les potes');
   await page.getByRole('button', { name: 'Créer', exact: true }).click();
