@@ -6,6 +6,9 @@ import { loadSettings } from '@/ui/useSettings';
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/tabs/today' },
   { path: '/onboarding', component: () => import('@/views/OnboardingPage.vue') },
+  ...(import.meta.env.DEV
+    ? [{ path: '/dev/demos', component: () => import('@/views/DemoGalleryPage.vue') }]
+    : []),
   {
     path: '/tabs/',
     component: TabsLayout,
@@ -32,7 +35,7 @@ export const router = createRouter({
 
 // First launch: the questionnaire comes before anything else.
 router.beforeEach(async (to) => {
-  if (to.path === '/onboarding') return true;
+  if (to.path === '/onboarding' || to.path.startsWith('/dev/')) return true;
   try {
     const settings = await loadSettings();
     return settings.onboarded ? true : '/onboarding';

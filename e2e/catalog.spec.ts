@@ -56,6 +56,12 @@ test('the machine card shows the muscles and keeps the load steps', async ({ pag
 
   await expect(page).toHaveURL(/\/tabs\/catalog\/Butterfly$/);
   await expect(page.getByRole('img', { name: 'Silhouette : Pectoraux' })).toBeVisible();
+  await expect(
+    page.getByRole('img', { name: 'Démonstration animée du mouvement : Écarté à la machine' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Mettre la démonstration en pause' }),
+  ).toBeVisible();
   await expect(page.getByText('Rapprocher les poignées en serrant les pectoraux')).toBeVisible();
 
   const stepInput = page.getByRole('textbox', {

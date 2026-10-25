@@ -630,5 +630,12 @@
       "kg": "kg",
       "lb": "lb"
     }
+  },
+  "demo": {
+    "label": "Démonstration animée du mouvement : {name}",
+    "caption": "Démonstration du mouvement (schéma animé).",
+    "approximate": "Mouvement approché à partir du muscle principal : regarde aussi les consignes.",
+    "pause": "Mettre la démonstration en pause",
+    "play": "Reprendre la démonstration"
   }
 }
