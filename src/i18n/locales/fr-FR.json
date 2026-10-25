@@ -935,5 +935,15 @@
     "edit": "Ma charge sur {name} : {load}. Modifier",
     "add": "Noter ma charge sur {name}",
     "addShort": "Noter ma charge"
+  },
+  "setEdit": {
+    "title": "Corriger la série",
+    "save": "Enregistrer la correction",
+    "delete": "Supprimer cette série",
+    "deleteConfirm": "La série sera retirée de la séance. Si l'exercice manque alors de séries, il est rouvert.",
+    "deleteYes": "Oui, supprimer",
+    "open": "Corriger : {set}",
+    "last": "Dernière série : {set}",
+    "fix": "Corriger"
   }
 }

@@ -7,6 +7,7 @@ import {
   abandonSession,
   addSet,
   deleteSet,
+  updateSet,
   finishSession,
   getActiveSession,
   listDoneSessions,
@@ -397,6 +398,43 @@ async function undoLastSet(): Promise<void> {
   restEndsAt.value = undefined;
 }
 
+/** Correction of a set validated too fast: load, reps or feeling. */
+async function editSessionSet(
+  setId: string,
+  values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'>,
+): Promise<void> {
+  if (!active.value) return;
+  const { db } = await openAppDatabase();
+  await updateSet(db, setId, values);
+  active.value = {
+    ...active.value,
+    sets: active.value.sets.map((s) => (s.id === setId ? { ...s, ...values } : s)),
+  };
+}
+
+/** A set logged by mistake: removed; its exercise reopens if it now lacks sets. */
+async function removeSessionSet(setId: string): Promise<void> {
+  const removed = active.value?.sets.find((s) => s.id === setId);
+  if (!active.value || !removed) return;
+  const { db } = await openAppDatabase();
+  await deleteSet(db, setId);
+  active.value = { ...active.value, sets: active.value.sets.filter((s) => s.id !== setId) };
+  const queue = active.value.plan.queue;
+  const lacking =
+    !removed.warmup &&
+    queue.done.includes(removed.exerciseId) &&
+    workSetsInSession(removed.exerciseId).length < plannedSets(removed.exerciseId);
+  if (lacking) {
+    await updatePlan({
+      ...active.value.plan,
+      queue: startNow(
+        { ...queue, done: queue.done.filter((id) => id !== removed.exerciseId) },
+        removed.exerciseId,
+      ),
+    });
+  }
+}
+
 function alternatives(exerciseId: string): Alternative[] {
   const busy = entryOf(exerciseId)?.exercise;
   if (!busy || !active.value) return [];
@@ -657,6 +695,8 @@ export function useSession() {
     start,
     logSet,
     undoLastSet,
+    editSessionSet,
+    removeSessionSet,
     markMachineBusy,
     chooseAlternative,
     machineFree,

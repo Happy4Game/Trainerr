@@ -67,3 +67,26 @@ test('a past session can be corrected, completed and deleted', async ({ page }) 
   await page.getByRole('button', { name: 'Oui, supprimer la séance' }).click();
   await expect(page.getByText('Pas encore de séance terminée.')).toBeVisible();
 });
+
+test('a set validated too fast can be fixed or deleted during the session', async ({ page }) => {
+  const first = await doOneSet(page);
+  // Right after validating: the last set is shown with a way to fix it.
+  await expect(page.getByText(/Dernière série : .*× 10/)).toBeVisible();
+  await page.getByRole('button', { name: 'Corriger', exact: true }).click();
+  await page.locator('ion-modal ion-button', { hasText: 'Une rep de moins' }).click();
+  await page.locator('ion-modal ion-button', { hasText: 'Une rep de moins' }).click();
+  await page.getByRole('button', { name: 'Enregistrer la correction' }).click();
+  await expect(page.getByText(/Dernière série : .*× 8/)).toBeVisible();
+
+  // Finish the exercise, then delete one of its sets: it reopens.
+  for (let i = 0; i < 2; i++) {
+    await page.getByRole('button', { name: 'Passer', exact: true }).click();
+    await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  }
+  await expect(page.getByRole('region', { name: 'Machine suivante' })).toBeVisible();
+  await page.getByRole('button', { name: new RegExp(`Corriger : ${first} .*× 8`) }).click();
+  await page.getByRole('button', { name: 'Supprimer cette série' }).click();
+  await page.getByRole('button', { name: 'Oui, supprimer' }).click();
+  await expect(page.getByRole('region', { name: first })).toBeVisible();
+  await expect(page.getByText('Série 3 sur 3')).toBeVisible();
+});

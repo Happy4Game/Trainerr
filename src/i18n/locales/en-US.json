@@ -935,5 +935,15 @@
     "edit": "My load on {name}: {load}. Edit",
     "add": "Note my load on {name}",
     "addShort": "Note my load"
+  },
+  "setEdit": {
+    "title": "Fix the set",
+    "save": "Save the fix",
+    "delete": "Delete this set",
+    "deleteConfirm": "The set will be removed from the session. If the exercise then lacks sets, it is reopened.",
+    "deleteYes": "Yes, delete",
+    "open": "Fix: {set}",
+    "last": "Last set: {set}",
+    "fix": "Fix"
   }
 }

@@ -95,6 +95,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Catalogue : la charge soulevée sur chaque machine (dernière séance, ou notée à la main si plus récente) s'affiche sous son nom ; un appui l'ouvre pour la noter ou la corriger, et elle sert de point de départ à la séance suivante.
 
+- Séries validées corrigeables pendant la séance : « Dernière série : … · Corriger » sous le repos, et chaque série enregistrée s'ouvre pour corriger charge / reps / ressenti ou la supprimer (l'exercice se rouvre s'il manque alors des séries).
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

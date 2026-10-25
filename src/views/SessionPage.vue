@@ -28,6 +28,8 @@ import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import ExerciseRow from '@/ui/ExerciseRow.vue';
+import SetEditModal from '@/ui/session/SetEditModal.vue';
+import { Pencil } from 'lucide-vue-next';
 import { useUnits } from '@/ui/useUnits';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
@@ -185,6 +187,13 @@ const loggedSets = computed(() =>
   })),
 );
 
+/** Set being corrected, and the last set logged (shown under the rest timer). */
+const editing = ref<(typeof loggedSets.value)[number]>();
+const lastLogged = computed(() => {
+  const last = loggedSets.value.at(-1);
+  return last && !last.warmup ? last : undefined;
+});
+
 async function logWarmup(): Promise<void> {
   const id = currentId.value;
   if (!id || !warmup.value) return;
@@ -333,6 +342,17 @@ async function logWarmup(): Promise<void> {
           {{ t('session.extraSet.previous', { name: nameOf(previousExercise) }) }}
         </ion-button>
         <RestTimer v-if="restEndsAt" :ends-at="restEndsAt" @done="session.endRest()" />
+        <p v-if="lastLogged" class="just-logged" role="status">
+          ✓ {{ t('setEdit.last', { set: lastLogged.label }) }}
+          <button type="button" class="link" @click="editing = lastLogged">
+            {{ t('setEdit.fix') }}
+          </button>
+        </p>
+        <SetEditModal
+          :set="editing"
+          :name="editing ? nameOf(editing.exerciseId) : ''"
+          @close="editing = undefined"
+        />
 
         <div v-if="crowded" class="banner" role="note">
           <p>{{ t('session.crowded') }}</p>
@@ -546,10 +566,21 @@ async function logWarmup(): Promise<void> {
           <h3>{{ t('session.logged') }}</h3>
           <ol>
             <li v-for="set in loggedSets" :key="set.id">
-              {{ set.label }}
-              <span class="muted">
-                · {{ set.warmup ? t('session.warmupShort') : t(`difficulty.${set.difficulty}`) }}
-              </span>
+              <button
+                type="button"
+                class="logged-set"
+                :aria-label="t('setEdit.open', { set: set.label })"
+                @click="editing = set"
+              >
+                <span>
+                  {{ set.label }}
+                  <span class="muted">
+                    ·
+                    {{ set.warmup ? t('session.warmupShort') : t(`difficulty.${set.difficulty}`) }}
+                  </span>
+                </span>
+                <Pencil :size="16" aria-hidden="true" />
+              </button>
             </li>
           </ol>
           <ion-button fill="clear" size="small" @click="session.undoLastSet()">
@@ -808,6 +839,44 @@ async function logWarmup(): Promise<void> {
   display: flex;
   flex-wrap: wrap;
   margin-inline-start: -6px;
+}
+.just-logged {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: -4px 0 12px;
+  font-size: 0.9rem;
+  color: var(--ion-color-medium-shade);
+}
+.link {
+  min-height: 36px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--ion-color-primary);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.logged-set {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--app-radius-small);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+.logged-set:hover,
+.logged-set:focus-visible {
+  background: var(--ion-color-light);
 }
 .go-back {
   margin-inline-start: -8px;
