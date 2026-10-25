@@ -81,11 +81,15 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Séries en plus : « +1 série » pendant l'exercice, ou « +1 série sur : … » juste après la dernière série (le repos continue), jusqu'à 10 séries.
 
+- « + Ajouter un exercice » pendant la séance (sélecteur avec recherche, mes machines et machines populaires en premier) : l'exercice passe en premier.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.
 - Stats : courbe du 1RM estimé par exercice, séries par muscle avec la zone 10–20, équilibre poussée / tirage, calendrier de régularité (8 semaines), charge de travail par semaine, records. Graphiques en SVG avec description textuelle.
 - Détection de stagnation (3 séances sans progrès), suivi du poids et des mensurations, cible de protéines (1,6 g/kg).
+
+- **Historique modifiable** : toucher une séance ouvre « Modifier la séance » : date, charge / reps / ressenti de chaque série, série ou exercice oublié, note, suppression de la séance (avec confirmation). Les badges déjà gagnés ne sont pas recalculés.
 
 ## Étape 7 — Pages de contenu
 
@@ -113,6 +117,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Notifications : record battu, régularité, retour au niveau, conseil de la semaine (types prévus dans les réglages, pas encore déclenchés).
 
 ## Problèmes connus
+
+- Dans la fenêtre du sélecteur d'exercice, Ionic n'applique pas le libellé d'accessibilité au champ de recherche (lu « search text », le texte indicatif reste lu) : à reprendre avec la passe accessibilité.
 
 - `npm audit` signale 3 failles « modérées » dans `uuid`, utilisé par l'outil iOS de `@capacitor/cli` (développement seulement, pas dans l'appli). Le correctif proposé rétrograde Capacitor : à revoir quand Capacitor publiera une mise à jour.
 - sql.js est figé en 1.12.0 pour rester compatible avec jeep-sqlite (voir [ADR 0002](docs/adr/0002-sqlite-local.md)).

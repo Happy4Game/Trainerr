@@ -76,7 +76,17 @@ function lines(
       <BodyView v-else-if="view === 'body'" />
       <p v-else-if="sessions.length === 0">{{ t('history.empty') }}</p>
       <ion-list v-else>
-        <ion-item v-for="s in sessions" :key="s.id">
+        <ion-item
+          v-for="s in sessions"
+          :key="s.id"
+          :router-link="`/tabs/history/${s.id}`"
+          detail
+          :aria-label="
+            t('history.edit', {
+              session: `${t(`templates.${s.templateId}`)} · ${dateLabel(s.date)}`,
+            })
+          "
+        >
           <ion-label class="ion-text-wrap">
             <h2>{{ t(`templates.${s.templateId}`) }} · {{ dateLabel(s.date) }}</h2>
             <p>{{ t('history.workload', { load: load(Math.round(sessionWorkload(s))) }) }}</p>

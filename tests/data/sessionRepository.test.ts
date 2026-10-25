@@ -5,13 +5,16 @@ import { DEFAULT_GYM_ID, ensureDefaultGym } from '@/data/repositories/gymReposit
 import {
   abandonSession,
   addSet,
+  deleteSession,
   deleteSet,
   finishSession,
   getActiveSession,
   listDoneSessions,
   savePlan,
+  setSessionDate,
   setSessionNote,
   startSession,
+  updateSet,
   type SessionPlan,
 } from '@/data/repositories/sessionRepository';
 import {
@@ -259,5 +262,58 @@ describe('import from another app', () => {
       ]),
     ).rejects.toThrow();
     expect(await listDoneSessions(db)).toEqual([]);
+  });
+});
+
+describe('editing the history', () => {
+  async function doneSession(date: string) {
+    const id = await startSession(db, { date, templateId: 'pushA', gymId: DEFAULT_GYM_ID, plan });
+    const first = await addSet(db, id, {
+      exerciseId: 'Dumbbell_Bench_Press',
+      loadKg: 18,
+      reps: 10,
+      difficulty: 'ok',
+    });
+    const second = await addSet(db, id, {
+      exerciseId: 'Dumbbell_Bench_Press',
+      loadKg: 18,
+      reps: 9,
+      difficulty: 'hard',
+    });
+    await finishSession(db, id, plan);
+    return { id, first, second };
+  }
+
+  it('corrects a set typed wrong', async () => {
+    const { first } = await doneSession('2026-10-20');
+    await updateSet(db, first.id, { loadKg: 20, reps: 8, difficulty: 'hard' });
+    const [session] = await listDoneSessions(db);
+    expect(session?.sets[0]).toMatchObject({ loadKg: 20, reps: 8, difficulty: 'hard' });
+    expect(session?.sets[1]).toMatchObject({ loadKg: 18, reps: 9 });
+  });
+
+  it('adds a forgotten set and removes an extra one, keeping the order', async () => {
+    const { id, first } = await doneSession('2026-10-20');
+    await deleteSet(db, first.id);
+    await addSet(db, id, { exerciseId: 'Butterfly', loadKg: 40, reps: 12, difficulty: 'ok' });
+    const [session] = await listDoneSessions(db);
+    expect(session?.sets.map((s) => [s.exerciseId, s.reps])).toEqual([
+      ['Dumbbell_Bench_Press', 9],
+      ['Butterfly', 12],
+    ]);
+  });
+
+  it('moves a session to another day, in date order', async () => {
+    const a = await doneSession('2026-10-20');
+    await doneSession('2026-10-22');
+    await setSessionDate(db, a.id, '2026-10-23');
+    expect((await listDoneSessions(db)).map((s) => s.date)).toEqual(['2026-10-22', '2026-10-23']);
+  });
+
+  it('deletes a whole session with its sets', async () => {
+    const { id } = await doneSession('2026-10-20');
+    await deleteSession(db, id);
+    expect(await listDoneSessions(db)).toEqual([]);
+    expect(await db.query('SELECT id FROM set_log')).toEqual([]);
   });
 });

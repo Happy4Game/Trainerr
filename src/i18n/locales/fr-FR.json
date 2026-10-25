@@ -288,7 +288,8 @@
       "short": "+1 série",
       "label": "Ajouter une série à cet exercice",
       "previous": "+1 série sur : {name}"
-    }
+    },
+    "addExercise": "+ Ajouter un exercice"
   },
   "availability": {
     "day": "Jour",
@@ -402,7 +403,8 @@
       "sessions": "Séances",
       "stats": "Stats",
       "body": "Corps"
-    }
+    },
+    "edit": "Modifier {session}"
   },
   "comeback": {
     "title": "Avant ma pause",
@@ -841,5 +843,24 @@
       "unavailable": "Le coach IA est indisponible pour le moment. Réessaie plus tard.",
       "other": "Une erreur est survenue. Réessaie plus tard."
     }
+  },
+  "picker": {
+    "cancel": "Annuler",
+    "mine": "Dans mes machines",
+    "popular": "Machine populaire"
+  },
+  "historyEdit": {
+    "title": "Modifier la séance",
+    "notFound": "Séance introuvable.",
+    "date": "Date",
+    "set": "Série {number} : {name}",
+    "reps": "Reps",
+    "difficulty": "Ressenti",
+    "deleteSet": "Supprimer cette série",
+    "addSet": "Ajouter une série",
+    "addExercise": "Ajouter un exercice",
+    "deleteSession": "Supprimer cette séance",
+    "deleteConfirm": "La séance et toutes ses séries seront effacées de l'historique.",
+    "deleteYes": "Oui, supprimer la séance"
   }
 }

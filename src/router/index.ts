@@ -22,6 +22,11 @@ const routes: RouteRecordRaw[] = [
       { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
       { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
       { path: 'history', component: () => import('@/views/HistoryPage.vue') },
+      {
+        path: 'history/:id',
+        component: () => import('@/views/HistorySessionPage.vue'),
+        props: true,
+      },
       { path: 'settings', component: () => import('@/views/SettingsPage.vue') },
       { path: 'settings/tips', component: () => import('@/views/TipsPage.vue') },
       { path: 'settings/credits', component: () => import('@/views/CreditsPage.vue') },

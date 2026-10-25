@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
+import type { SqlDatabase } from '@/data/sqlite/database';
 import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
 import {
@@ -22,6 +23,7 @@ import {
 } from '@/data/repositories/referenceRepository';
 import { getSettings, type Settings } from '@/data/repositories/settingsRepository';
 import {
+  addExercise,
   alternativesFor,
   completeExercise,
   endSession,
@@ -468,6 +470,29 @@ async function extraSet(exerciseId: string): Promise<void> {
   });
 }
 
+/** Exercise added by hand: done now, with the usual number of sets. */
+async function addExerciseNow(exerciseId: string): Promise<void> {
+  if (!active.value || !settings.value) return;
+  const plan = active.value.plan;
+  const exercises = plan.exercises.some((e) => e.exerciseId === exerciseId)
+    ? plan.exercises
+    : [
+        ...plan.exercises,
+        {
+          exerciseId,
+          sets: setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light),
+        },
+      ];
+  await updatePlan({ ...plan, exercises, queue: addExercise(plan.queue, exerciseId) });
+}
+
+/** Any change of a finished session (correction, forgotten set…), then the history again. */
+async function editHistory(change: (db: SqlDatabase) => Promise<unknown>): Promise<void> {
+  const { db } = await openAppDatabase();
+  await change(db);
+  history.value = await listDoneSessions(db);
+}
+
 /** Back to the previous exercise, e.g. skipped too fast. Sets already logged stay. */
 async function goBack(): Promise<void> {
   if (!active.value) return;
@@ -604,6 +629,8 @@ export function useSession() {
     machineStillBusy,
     skipExercise,
     goBack,
+    addExerciseNow,
+    editHistory,
     extraSet,
     canAddSet: (id: string) => plannedSets(id) < MAX_SETS,
     previousExercise: computed(() =>

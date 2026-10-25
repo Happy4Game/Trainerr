@@ -288,7 +288,8 @@
       "short": "+1 set",
       "label": "Add a set to this exercise",
       "previous": "+1 set on: {name}"
-    }
+    },
+    "addExercise": "+ Add an exercise"
   },
   "availability": {
     "day": "Day",
@@ -402,7 +403,8 @@
       "sessions": "Workouts",
       "stats": "Stats",
       "body": "Body"
-    }
+    },
+    "edit": "Edit {session}"
   },
   "comeback": {
     "title": "Before my break",
@@ -841,5 +843,24 @@
       "unavailable": "The AI coach is unavailable right now. Try again later.",
       "other": "Something went wrong. Try again later."
     }
+  },
+  "picker": {
+    "cancel": "Cancel",
+    "mine": "In my machines",
+    "popular": "Popular machine"
+  },
+  "historyEdit": {
+    "title": "Edit the session",
+    "notFound": "Session not found.",
+    "date": "Date",
+    "set": "Set {number}: {name}",
+    "reps": "Reps",
+    "difficulty": "Feeling",
+    "deleteSet": "Delete this set",
+    "addSet": "Add a set",
+    "addExercise": "Add an exercise",
+    "deleteSession": "Delete this session",
+    "deleteConfirm": "The session and all its sets will be erased from the history.",
+    "deleteYes": "Yes, delete the session"
   }
 }

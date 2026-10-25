@@ -91,6 +91,11 @@ export function completeExercise(queue: ExerciseQueue, exerciseId: string): Exer
   };
 }
 
+/** Exercise added by hand during the session: done now (reopened if already done). */
+export function addExercise(queue: ExerciseQueue, exerciseId: string): ExerciseQueue {
+  return startNow({ ...queue, done: queue.done.filter((id) => id !== exerciseId) }, exerciseId);
+}
+
 /** Last exercise done or skipped, that the user can go back to. */
 export function previousExercise(queue: ExerciseQueue): string | undefined {
   return queue.done.at(-1);

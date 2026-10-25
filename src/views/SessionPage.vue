@@ -27,6 +27,7 @@ import RestTimer from '@/ui/session/RestTimer.vue';
 import MobilityCard from '@/ui/MobilityCard.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
+import ExercisePicker from '@/ui/ExercisePicker.vue';
 import { useUnits } from '@/ui/useUnits';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
@@ -42,6 +43,11 @@ const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, s
 const { previousExercise } = session;
 
 const busyFor = ref<string>();
+const pickingExercise = ref(false);
+async function addExercise(id: string): Promise<void> {
+  pickingExercise.value = false;
+  await session.addExerciseNow(id);
+}
 const reportingDiscomfort = ref(false);
 const { settings: appSettings } = useSettings();
 
@@ -369,6 +375,17 @@ async function logWarmup(): Promise<void> {
             </p>
           </ion-card-content>
         </ion-card>
+
+        <ion-button expand="block" fill="outline" @click="pickingExercise = true">
+          {{ t('session.addExercise') }}
+        </ion-button>
+        <ExercisePicker
+          :open="pickingExercise"
+          :title="t('session.addExercise')"
+          :exclude="step?.kind === 'exercise' ? [step.exerciseId] : []"
+          @pick="addExercise"
+          @close="pickingExercise = false"
+        />
 
         <section v-if="loggedSets.length > 0" class="logged">
           <h3>{{ t('session.logged') }}</h3>

@@ -64,7 +64,8 @@ export async function addSet(db: SqlDatabase, sessionId: string, set: SetLog): P
   await db.run(
     `INSERT INTO set_log (id, session_id, exercise_id, position, load_kg, reps, difficulty,
        warmup, slow_tempo, complete_reps)
-     VALUES (?, ?, ?, (SELECT COUNT(*) + 1 FROM set_log WHERE session_id = ?), ?, ?, ?, ?, ?, ?)`,
+     VALUES (?, ?, ?, (SELECT COALESCE(MAX(position), 0) + 1 FROM set_log WHERE session_id = ?),
+       ?, ?, ?, ?, ?, ?)`,
     [
       id,
       sessionId,
@@ -87,6 +88,30 @@ export async function setSessionNote(db: SqlDatabase, sessionId: string, note: s
 
 export async function deleteSet(db: SqlDatabase, setId: string): Promise<void> {
   await db.run('DELETE FROM set_log WHERE id = ?', [setId]);
+}
+
+/** Correction of a set typed wrong, from the history. */
+export async function updateSet(
+  db: SqlDatabase,
+  setId: string,
+  values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'>,
+): Promise<void> {
+  await db.run('UPDATE set_log SET load_kg = ?, reps = ?, difficulty = ? WHERE id = ?', [
+    values.loadKg,
+    values.reps,
+    values.difficulty,
+    setId,
+  ]);
+}
+
+export async function setSessionDate(db: SqlDatabase, sessionId: string, date: IsoDate) {
+  await db.run('UPDATE session SET date = ? WHERE id = ?', [date, sessionId]);
+}
+
+/** A whole session removed from the history, its sets with it. */
+export async function deleteSession(db: SqlDatabase, sessionId: string): Promise<void> {
+  await db.run('DELETE FROM set_log WHERE session_id = ?', [sessionId]);
+  await db.run('DELETE FROM session WHERE id = ?', [sessionId]);
 }
 
 export async function finishSession(

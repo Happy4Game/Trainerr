@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  addExercise,
   alternativesFor,
   completeExercise,
   crowdedFallback,
@@ -146,5 +147,24 @@ describe('going back to the previous exercise', () => {
   it('does nothing at the start of the session', () => {
     const queue = startQueue(['a']);
     expect(reopenPrevious(queue)).toEqual(queue);
+  });
+});
+
+describe('adding an exercise by hand', () => {
+  it('puts it first, to do it now', () => {
+    const queue = addExercise(startQueue(['a', 'b']), 'c');
+    expect(nextStep(queue)).toEqual({ kind: 'exercise', exerciseId: 'c' });
+    expect(queue.pending).toEqual(['c', 'a', 'b']);
+  });
+
+  it('adds one after the end of the session', () => {
+    const queue = addExercise(completeExercise(startQueue(['a']), 'a'), 'b');
+    expect(nextStep(queue)).toEqual({ kind: 'exercise', exerciseId: 'b' });
+  });
+
+  it('reopens an exercise already done instead of doubling it', () => {
+    const queue = addExercise(completeExercise(startQueue(['a', 'b']), 'a'), 'a');
+    expect(queue.done).toEqual([]);
+    expect(queue.pending).toEqual(['a', 'b']);
   });
 });
