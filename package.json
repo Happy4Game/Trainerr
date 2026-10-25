@@ -2,6 +2,7 @@
   "name": "trainerr",
   "version": "0.1.0",
   "private": true,
+  "license": "PolyForm-Noncommercial-1.0.0",
   "type": "module",
   "description": "Coach de muscu de poche : séance du jour, charges proposées, suivi hors ligne.",
   "engines": {

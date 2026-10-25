@@ -9,7 +9,8 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 [Fonctionnalités](#-fonctionnalités) ·
 [Installer](#-installer-et-lancer) ·
 [Contribuer](CONTRIBUTING.md) ·
-[Sources et crédits](#-sources-et-crédits)
+[Sources et crédits](#-sources-et-crédits) ·
+[Licence](#-licence)
 
 <br>
 
@@ -148,3 +149,15 @@ Les captures d'écran ci-dessus contiennent des dessins Everkinetic (CC BY-SA 4.
 ## 🤝 Contribuer
 
 Les contributions sont les bienvenues : lis [CONTRIBUTING.md](CONTRIBUTING.md) pour l'installation, les règles de code, les tests attendus et le déroulé d'une pull request.
+
+## ⚖️ Licence
+
+Le code de Trainerr est publié sous la licence [PolyForm Noncommercial 1.0.0](LICENSE.md) :
+
+- ✅ tu peux **lire, utiliser, modifier et partager** le code, et faire un fork, pour un usage personnel, l'étude, la recherche, une association ou un établissement d'enseignement ;
+- ❌ tu ne peux **pas t'en servir commercialement** : vendre l'appli ou un fork, la publier payante ou avec de la publicité, l'intégrer à un produit ou un service payant ;
+- chaque copie doit garder le fichier [LICENSE.md](LICENSE.md) et sa ligne `Required Notice`.
+
+Ce n'est donc pas une licence « open source » au sens de l'OSI, mais un code ouvert à usage non commercial. Pour un usage commercial, contacte l'auteur.
+
+Les ressources tierces gardent leur propre licence (voir [Sources et crédits](#-sources-et-crédits)) : les dessins Everkinetic et wger restent sous CC BY-SA, le catalogue free-exercise-db dans le domaine public.

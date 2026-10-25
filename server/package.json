@@ -2,6 +2,7 @@
   "name": "trainerr-server",
   "version": "0.1.0",
   "private": true,
+  "license": "PolyForm-Noncommercial-1.0.0",
   "type": "module",
   "description": "Serveur optionnel de Trainerr : défis entre amis et conseils par IA.",
   "engines": {
