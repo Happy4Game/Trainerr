@@ -183,11 +183,13 @@ async function load(): Promise<void> {
   }
 }
 
+/** Saved first, shown second: the screen never shows a plan that a crash would lose. */
 async function updatePlan(plan: SessionPlan): Promise<void> {
-  if (!active.value) return;
-  active.value = { ...active.value, plan };
+  const session = active.value;
+  if (!session) return;
   const { db } = await openAppDatabase();
-  await savePlan(db, active.value.id, plan);
+  await savePlan(db, session.id, plan);
+  if (active.value?.id === session.id) active.value = { ...active.value, plan };
 }
 
 async function start(): Promise<void> {

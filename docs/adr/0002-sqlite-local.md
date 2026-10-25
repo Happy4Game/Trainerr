@@ -16,3 +16,9 @@ Date : 2026-10-24 · Statut : accepté
 ## Conséquences
 
 - Mettre à jour `jeep-sqlite` ou `sql.js` uniquement ensemble, puis relancer `npm run test:e2e`.
+
+## Correctif de jeep-sqlite (2026-10-25)
+
+Dans le navigateur, jeep-sqlite enregistrait la base en deux temps : suppression de l'ancienne copie dans IndexedDB, puis écriture de la nouvelle. Un rechargement de la page entre les deux faisait **perdre toute la base** (constaté par un test de bout en bout, environ 1 fois sur 5). Le fichier `patches/jeep-sqlite+2.8.0.patch` (appliqué par `patch-package` à chaque `npm install`) supprime l'étape de suppression : `setItem` remplace la valeur de façon atomique. Au pire, la toute dernière écriture est perdue, jamais la base. Sur téléphone, la base SQLite native n'utilise pas ce code. À signaler en amont (projet jeep-sqlite) et à retirer quand une version corrigée sortira.
+
+En complément, l'écran de séance n'affiche un changement du plan qu'une fois celui-ci enregistré.

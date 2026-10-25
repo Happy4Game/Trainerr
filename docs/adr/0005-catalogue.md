@@ -27,7 +27,7 @@ Date : 2026-10-24 · Statut : accepté
 
 ## Limite connue
 
-Dans le navigateur, une écriture interrompue par un rechargement immédiat de la page peut être perdue (la base est copiée dans IndexedDB après chaque écriture). L'écran affiche « Paliers enregistrés » une fois l'écriture terminée. Sur téléphone, la base SQLite native n'a pas ce problème.
+Dans le navigateur, la toute dernière écriture peut être perdue si la page est rechargée pendant l'enregistrement (voir ADR 0002 pour le correctif qui évite de perdre toute la base). L'écran affiche « Paliers enregistrés » une fois l'écriture terminée. Sur téléphone, la base SQLite native n'a pas ce problème.
 
 ## Illustrations (ajout du 2026-10-24)
 

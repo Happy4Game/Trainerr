@@ -45,7 +45,9 @@ const spdx = (license: string) =>
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="start"><ion-back-button default-href="/tabs/settings" /></ion-buttons>
+        <ion-buttons slot="start"
+          ><ion-back-button default-href="/tabs/settings" :text="t('common.back')"
+        /></ion-buttons>
         <ion-title>{{ t('credits.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>

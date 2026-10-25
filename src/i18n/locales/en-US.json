@@ -637,5 +637,8 @@
     "approximate": "Movement approximated from the main muscle: check the cues too.",
     "pause": "Pause the demonstration",
     "play": "Play the demonstration"
+  },
+  "common": {
+    "back": "Back"
   }
 }

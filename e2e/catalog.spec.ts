@@ -29,7 +29,7 @@ test('filters by muscle group', async ({ page }) => {
   await openCatalog(page);
   await pickFilter(page, 'Jambes');
   await search(page, 'presse');
-  await expect(page.getByRole('heading', { name: 'Presse à cuisses' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Presse à cuisses', exact: true })).toBeVisible();
   await search(page, 'pec deck');
   await expect(page.getByText('Aucun exercice ne correspond.')).toBeVisible();
 });

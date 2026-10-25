@@ -21,7 +21,7 @@
     "check:i18n": "node scripts/check-i18n.mjs",
     "check": "npm run lint && npm run typecheck && npm run check:i18n && npm run test:coverage && vite build",
     "copy:wasm": "node scripts/copy-sql-wasm.mjs",
-    "postinstall": "node scripts/copy-sql-wasm.mjs",
+    "postinstall": "patch-package && node scripts/copy-sql-wasm.mjs",
     "prepare": "husky"
   },
   "dependencies": {
@@ -52,6 +52,7 @@
     "globals": "17.13.0",
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
+    "patch-package": "8.0.1",
     "prettier": "3.9.9",
     "sql.js": "1.12.0",
     "typescript": "6.0.3",

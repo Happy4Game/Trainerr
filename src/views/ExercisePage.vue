@@ -81,7 +81,7 @@ const muscleList = (muscles: readonly MuscleId[]) =>
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/tabs/catalog" />
+          <ion-back-button default-href="/tabs/catalog" :text="t('common.back')" />
         </ion-buttons>
         <ion-title>{{ title }}</ion-title>
       </ion-toolbar>

@@ -75,7 +75,9 @@ async function redoQuestionnaire(): Promise<void> {
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="start"><ion-back-button default-href="/tabs/today" /></ion-buttons>
+        <ion-buttons slot="start"
+          ><ion-back-button default-href="/tabs/today" :text="t('common.back')"
+        /></ion-buttons>
         <ion-title>{{ t('settings.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>

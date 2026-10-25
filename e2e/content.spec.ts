@@ -9,7 +9,11 @@ test('settings lead to the getting started, about and credits pages', async ({ p
   await page.getByText('Bien débuter').click();
   await expect(page.getByText('La technique passe avant la charge')).toBeVisible();
   await expect(page.getByRole('link', { name: /Morton et al., 2018/ })).toBeVisible();
-  await page.goBack();
+  await page
+    .getByRole('banner')
+    .filter({ hasText: 'Bien débuter' })
+    .getByRole('button', { name: 'Retour' })
+    .click();
 
   await page.getByText('À propos').click();
   await expect(

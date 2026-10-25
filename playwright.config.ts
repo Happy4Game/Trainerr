@@ -13,6 +13,7 @@ export default defineConfig({
     baseURL: 'http://localhost:4173',
     ...devices['Pixel 7'],
     locale: 'fr-FR',
+    screenshot: 'only-on-failure',
     ...(executablePath ? { launchOptions: { executablePath } } : {}),
   },
   webServer: {

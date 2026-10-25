@@ -19,7 +19,9 @@ const paragraphs = ['p1', 'p2', 'p3', 'p4'] as const;
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="start"><ion-back-button default-href="/tabs/settings" /></ion-buttons>
+        <ion-buttons slot="start"
+          ><ion-back-button default-href="/tabs/settings" :text="t('common.back')"
+        /></ion-buttons>
         <ion-title>{{ t('about.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>
