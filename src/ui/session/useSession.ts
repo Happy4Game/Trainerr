@@ -52,6 +52,7 @@ import { afterSupersetSet, proposeSupersets, supersetPairs } from '@/domain/supe
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupSet } from '@/domain/warmup';
+import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
 import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/domain/achievements';
 import { weeksOnPace } from '@/domain/stats';
@@ -590,6 +591,19 @@ async function saveReference(exerciseId: string, loadKg: number, reps: number): 
   references.value = [...references.value.filter((r) => r.exerciseId !== exerciseId), reference];
 }
 
+/** Load lifted on a machine, for the catalog and the card. */
+function myLoadFor(exerciseId: string): MyLoad | undefined {
+  const reference = references.value.find((r) => r.exerciseId === exerciseId);
+  return myLoad({
+    sessions: history.value
+      .map((s) => ({ date: s.date, sets: s.sets.filter((set) => set.exerciseId === exerciseId) }))
+      .filter((s) => s.sets.length > 0),
+    ...(reference
+      ? { noted: { loadKg: reference.loadKg, reps: reference.reps, date: reference.date } }
+      : {}),
+  });
+}
+
 /** Heaviest complete work set since the comeback started, for the "back to level" gauge. */
 function bestSinceComeback(exerciseId: string): number | undefined {
   const since = settings.value?.comeback?.startedOn ?? '';
@@ -662,6 +676,7 @@ export function useSession() {
     closeSummary,
     references,
     saveReference,
+    myLoadFor,
     bestSinceComeback,
     endRest: () => (restEndsAt.value = undefined),
     reload: load,

@@ -927,5 +927,13 @@
     "deleteSession": "Supprimer cette séance",
     "deleteConfirm": "La séance et toutes ses séries seront effacées de l'historique.",
     "deleteYes": "Oui, supprimer la séance"
+  },
+  "myLoad": {
+    "title": "Ma charge",
+    "help": "La charge et les reps que tu fais sur cette machine. Elles s'affichent dans le catalogue et servent de point de départ à ta prochaine séance.",
+    "invalid": "Indique une charge et un nombre de reps.",
+    "edit": "Ma charge sur {name} : {load}. Modifier",
+    "add": "Noter ma charge sur {name}",
+    "addShort": "Noter ma charge"
   }
 }

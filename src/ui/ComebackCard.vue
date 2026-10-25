@@ -36,8 +36,10 @@ const reference = computed(() =>
 const loadText = ref('');
 const saved = ref(false);
 const repsText = ref('');
+// Out of comeback mode, the fields show the load currently lifted (last session or noted).
+const shown = computed(() => (props.pause ? reference.value : session.myLoadFor(props.exerciseId)));
 watch(
-  reference,
+  shown,
   (r) => {
     loadText.value = r ? String(toDisplay(r.loadKg)) : '';
     repsText.value = r ? String(r.reps) : '';

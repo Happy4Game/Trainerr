@@ -15,7 +15,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { Star } from 'lucide-vue-next';
+import { Dumbbell, Star } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
@@ -28,7 +28,10 @@ import {
   matchesSearch,
   type CatalogSection,
 } from '@/domain/catalogSearch';
+import LoadNoteModal from '@/ui/LoadNoteModal.vue';
+import { useSession } from '@/ui/session/useSession';
 import { useCatalog } from '@/ui/useCatalog';
+import { useUnits } from '@/ui/useUnits';
 
 const PAGE_SIZE = 50;
 const FILTERS = ['all', 'favorites', 'push', 'pull', 'legs', 'core'] as const;
@@ -36,6 +39,16 @@ type Filter = (typeof FILTERS)[number];
 
 const { t, locale } = useI18n();
 const { entries, state, toggleFavorite } = useCatalog();
+const session = useSession();
+const { load: kg } = useUnits();
+
+/** Load lifted on each machine: last session or noted by hand, editable from here. */
+const noting = ref<{ id: string; name: string }>();
+const loadOf = (entry: CatalogEntry) => session.myLoadFor(entry.exercise.id);
+const loadText = (entry: CatalogEntry) => {
+  const l = loadOf(entry);
+  return l ? `${kg(l.loadKg)} × ${l.reps}` : '';
+};
 
 const query = ref('');
 const filter = ref<Filter>('all');
@@ -164,6 +177,21 @@ function onFilter(value: unknown): void {
               <ion-label class="ion-text-wrap">
                 <h2>{{ name }}</h2>
                 <p>{{ subtitle(entry) }}</p>
+                <button
+                  v-if="loadOf(entry) || entry.favorite"
+                  type="button"
+                  class="my-load"
+                  :class="{ empty: !loadOf(entry) }"
+                  :aria-label="
+                    loadOf(entry)
+                      ? t('myLoad.edit', { name, load: loadText(entry) })
+                      : t('myLoad.add', { name })
+                  "
+                  @click.stop.prevent="noting = { id: entry.exercise.id, name }"
+                >
+                  <Dumbbell :size="16" aria-hidden="true" />
+                  {{ loadOf(entry) ? loadText(entry) : t('myLoad.addShort') }}
+                </button>
               </ion-label>
               <ion-button
                 slot="end"
@@ -192,11 +220,43 @@ function onFilter(value: unknown): void {
           </ion-button>
         </div>
       </template>
+      <LoadNoteModal
+        :exercise-id="noting?.id"
+        :name="noting?.name ?? ''"
+        @close="noting = undefined"
+      />
     </ion-content>
   </ion-page>
 </template>
 
 <style scoped>
+.my-load {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  margin-block-start: 6px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(var(--ion-color-primary-rgb) / 12%);
+  color: var(--ion-color-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.my-load:focus {
+  outline: none;
+}
+.my-load:focus-visible {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: 2px;
+}
+.my-load.empty {
+  font-weight: 500;
+  background: transparent;
+  border: 1px dashed var(--ion-color-primary);
+}
 .count {
   margin-block: 8px 0;
   color: var(--ion-color-medium);

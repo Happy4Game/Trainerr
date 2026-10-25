@@ -927,5 +927,13 @@
     "deleteSession": "Delete this session",
     "deleteConfirm": "The session and all its sets will be erased from the history.",
     "deleteYes": "Yes, delete the session"
+  },
+  "myLoad": {
+    "title": "My load",
+    "help": "The load and reps you do on this machine. They show in the catalog and are the starting point of your next session.",
+    "invalid": "Enter a load and a number of reps.",
+    "edit": "My load on {name}: {load}. Edit",
+    "add": "Note my load on {name}",
+    "addShort": "Note my load"
   }
 }

@@ -134,3 +134,23 @@ test('the usual load noted on the card is the start of the first session', async
   await expect(page.getByText('Ta charge habituelle : 40 kg × 12')).toBeVisible();
   await expect(page.getByTestId('load')).toHaveText(/40\s*kg/);
 });
+
+test('the load lifted on a machine is noted and shown in the catalog', async ({ page }) => {
+  await openCatalog(page);
+  await search(page, 'pec deck');
+  await page.getByRole('button', { name: 'Ajouter Écarté à la machine à mes machines' }).click();
+
+  await page.getByRole('button', { name: 'Noter ma charge sur Écarté à la machine' }).click();
+  await page.getByRole('textbox', { name: 'Charge (kg)' }).fill('45');
+  await page.getByRole('textbox', { name: 'Reps' }).fill('10');
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+
+  const chip = page.getByRole('button', {
+    name: /Ma charge sur Écarté à la machine : 45\s*kg × 10/,
+  });
+  await expect(chip).toBeVisible();
+  // Still there after a restart.
+  await page.reload();
+  await search(page, 'pec deck');
+  await expect(chip).toBeVisible({ timeout: 20_000 });
+});

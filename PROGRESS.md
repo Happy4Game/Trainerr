@@ -93,6 +93,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - « Machine occupée » : chaque machine proposée a un aperçu (dessin, muscles, charge prévue, « Voir le mouvement ») et un bouton « Je prends celle-ci ».
 
+- Catalogue : la charge soulevée sur chaque machine (dernière séance, ou notée à la main si plus récente) s'affiche sous son nom ; un appui l'ouvre pour la noter ou la corriger, et elle sert de point de départ à la séance suivante.
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.
