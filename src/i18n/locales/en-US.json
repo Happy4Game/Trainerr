@@ -76,7 +76,12 @@
     "count": "{count} exercise | {count} exercises",
     "showMore": "Show more",
     "addFavorite": "Add {name} to my machines",
-    "removeFavorite": "Remove {name} from my machines"
+    "removeFavorite": "Remove {name} from my machines",
+    "sections": {
+      "favorites": "My machines",
+      "popular": "Popular machines",
+      "others": "Other exercises"
+    }
   },
   "exercise": {
     "notFound": "Exercise not found.",

@@ -556,3 +556,8 @@ export const CUSTOM_EXERCISES: Readonly<Record<string, CustomExercise>> = {
     cuesSource: 'Trainerr, à relire par un coach',
   },
 };
+
+/** Common gym machines (curated cards): shown first in the catalog. */
+export function isPopular(exerciseId: string): boolean {
+  return exerciseId in CURATED || exerciseId in CUSTOM_EXERCISES;
+}

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { compareNames, matchesSearch, normalizeForSearch } from '@/domain/catalogSearch';
+import {
+  catalogSection,
+  compareCatalog,
+  compareNames,
+  matchesSearch,
+  normalizeForSearch,
+} from '@/domain/catalogSearch';
 
 describe('catalog search', () => {
   it('ignores accents and case', () => {
@@ -28,5 +34,44 @@ describe('catalog search', () => {
       'Écarté à la machine',
       'Extension des jambes',
     ]);
+  });
+});
+
+describe('catalog order', () => {
+  const entry = (
+    name: string,
+    flags: { favorite?: boolean; popular?: boolean; illustrated?: boolean },
+  ) => ({
+    name,
+    favorite: false,
+    popular: false,
+    illustrated: false,
+    ...flags,
+  });
+
+  it('puts my machines first, then popular illustrated machines, then illustrated ones', () => {
+    const entries = [
+      entry('Zercher', {}),
+      entry('Tirage', { popular: true }),
+      entry('Presse', { popular: true, illustrated: true }),
+      entry('Curl araignée', { illustrated: true }),
+      entry('Abducteurs', { popular: true, illustrated: true }),
+      entry('Pec deck', { favorite: true }),
+    ];
+    const compare = compareCatalog(compareNames('fr-FR'));
+    expect([...entries].sort(compare).map((e) => e.name)).toEqual([
+      'Pec deck',
+      'Abducteurs',
+      'Presse',
+      'Tirage',
+      'Curl araignée',
+      'Zercher',
+    ]);
+  });
+
+  it('names the section of each entry', () => {
+    expect(catalogSection(entry('a', { favorite: true, popular: true }))).toBe('favorites');
+    expect(catalogSection(entry('a', { popular: true }))).toBe('popular');
+    expect(catalogSection(entry('a', { illustrated: true }))).toBe('others');
   });
 });

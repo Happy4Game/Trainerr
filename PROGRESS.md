@@ -52,7 +52,7 @@ Tests : 143 au total, dont les **10 cas réels d'octobre 2026** (`tests/fixtures
 - Base : migration v2, import du catalogue seulement quand il change, favoris et paliers conservés.
 - Détails et choix : [ADR 0005](docs/adr/0005-catalogue.md).
 
-Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), wger.de en secours ; départ et arrivée en alternance. La démo animée maison est retirée. Sans dessin : élévations latérales machine, rowing divergent, face pull, reverse fly machine, planche (ADR 0005).
+Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), wger.de en secours ; départ et arrivée en alternance. La démo animée maison est retirée. Le catalogue affiche d'abord mes machines, puis les machines populaires, avec une vignette du dessin ; les exercices illustrés passent avant les autres. Sans dessin : élévations latérales machine, rowing divergent, face pull, reverse fly machine, planche (ADR 0005).
 
 ## Étape 4 — Séance
 

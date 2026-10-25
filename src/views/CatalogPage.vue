@@ -4,12 +4,14 @@ import {
   IonContent,
   IonHeader,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonList,
   IonPage,
   IonSearchbar,
   IonSegment,
   IonSegmentButton,
+  IonThumbnail,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
@@ -17,7 +19,15 @@ import { Star } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
-import { compareNames, matchesSearch } from '@/domain/catalogSearch';
+import { illustrationFor } from '@/data/catalog/exerciseImages';
+import { isPopular } from '@/data/catalog/curated';
+import {
+  catalogSection,
+  compareCatalog,
+  compareNames,
+  matchesSearch,
+  type CatalogSection,
+} from '@/domain/catalogSearch';
 import { useCatalog } from '@/ui/useCatalog';
 
 const PAGE_SIZE = 50;
@@ -46,8 +56,17 @@ function searchTexts(entry: CatalogEntry): string[] {
   ];
 }
 
-const matching = computed(() => {
-  const compare = compareNames(locale.value);
+interface Row {
+  readonly entry: CatalogEntry;
+  readonly name: string;
+  readonly favorite: boolean;
+  readonly popular: boolean;
+  readonly illustrated: boolean;
+  readonly thumbnail?: string;
+}
+
+const matching = computed<Row[]>(() => {
+  const compare = compareCatalog(compareNames(locale.value));
   return entries.value
     .filter((entry) => {
       if (filter.value === 'favorites') return entry.favorite;
@@ -55,11 +74,29 @@ const matching = computed(() => {
       return entry.exercise.group === filter.value;
     })
     .filter((entry) => matchesSearch(searchTexts(entry), query.value))
-    .sort(
-      (a, b) => Number(b.favorite) - Number(a.favorite) || compare(displayName(a), displayName(b)),
-    );
+    .map((entry) => {
+      const image = illustrationFor(entry.exercise.id)?.images[0];
+      return {
+        entry,
+        name: displayName(entry),
+        favorite: entry.favorite,
+        popular: isPopular(entry.exercise.id),
+        illustrated: image !== undefined,
+        ...(image ? { thumbnail: `${import.meta.env.BASE_URL}exercise-images/${image.file}` } : {}),
+      };
+    })
+    .sort(compare);
 });
 const visible = computed(() => matching.value.slice(0, shown.value));
+/** Section title before the first row of each part (not in "my machines" filter). */
+const sectionStart = (index: number): CatalogSection | undefined => {
+  if (filter.value === 'favorites') return undefined;
+  const row = visible.value[index];
+  const previous = visible.value[index - 1];
+  if (!row) return undefined;
+  const section = catalogSection(row);
+  return previous && catalogSection(previous) === section ? undefined : section;
+};
 
 function subtitle(entry: CatalogEntry): string {
   const e = entry.exercise;
@@ -113,35 +150,41 @@ function onFilter(value: unknown): void {
         <p v-else-if="matching.length === 0" class="ion-padding">{{ t('catalog.empty') }}</p>
 
         <ion-list>
-          <ion-item
-            v-for="entry in visible"
-            :key="entry.exercise.id"
-            :router-link="`/tabs/catalog/${encodeURIComponent(entry.exercise.id)}`"
-            detail
-          >
-            <ion-label class="ion-text-wrap">
-              <h2>{{ displayName(entry) }}</h2>
-              <p>{{ subtitle(entry) }}</p>
-            </ion-label>
-            <ion-button
-              slot="end"
-              fill="clear"
-              class="star"
-              :aria-pressed="entry.favorite"
-              :aria-label="
-                t(entry.favorite ? 'catalog.removeFavorite' : 'catalog.addFavorite', {
-                  name: displayName(entry),
-                })
-              "
-              @click.stop.prevent="toggleFavorite(entry.exercise.id)"
+          <template v-for="({ entry, name, thumbnail }, index) in visible" :key="entry.exercise.id">
+            <ion-item-divider v-if="sectionStart(index)" sticky>
+              <ion-label>{{ t(`catalog.sections.${sectionStart(index)}`) }}</ion-label>
+            </ion-item-divider>
+            <ion-item
+              :router-link="`/tabs/catalog/${encodeURIComponent(entry.exercise.id)}`"
+              detail
             >
-              <Star
-                :size="26"
-                :fill="entry.favorite ? 'currentColor' : 'none'"
-                aria-hidden="true"
-              />
-            </ion-button>
-          </ion-item>
+              <ion-thumbnail slot="start" class="thumbnail" aria-hidden="true">
+                <img v-if="thumbnail" :src="thumbnail" alt="" loading="lazy" />
+              </ion-thumbnail>
+              <ion-label class="ion-text-wrap">
+                <h2>{{ name }}</h2>
+                <p>{{ subtitle(entry) }}</p>
+              </ion-label>
+              <ion-button
+                slot="end"
+                fill="clear"
+                class="star"
+                :aria-pressed="entry.favorite"
+                :aria-label="
+                  t(entry.favorite ? 'catalog.removeFavorite' : 'catalog.addFavorite', {
+                    name,
+                  })
+                "
+                @click.stop.prevent="toggleFavorite(entry.exercise.id)"
+              >
+                <Star
+                  :size="26"
+                  :fill="entry.favorite ? 'currentColor' : 'none'"
+                  aria-hidden="true"
+                />
+              </ion-button>
+            </ion-item>
+          </template>
         </ion-list>
         <div v-if="visible.length < matching.length" class="ion-padding">
           <ion-button expand="block" fill="outline" @click="shown += PAGE_SIZE">
@@ -158,6 +201,15 @@ function onFilter(value: unknown): void {
   margin-block: 8px 0;
   color: var(--ion-color-medium);
   font-size: 0.9rem;
+}
+.thumbnail {
+  --size: 56px;
+  --border-radius: 8px;
+  /* Black-on-white drawings: white card in the dark theme too. */
+  background: #fff;
+}
+.thumbnail img {
+  object-fit: contain;
 }
 .star {
   min-width: 48px;
