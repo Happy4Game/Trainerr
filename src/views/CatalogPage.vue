@@ -178,7 +178,6 @@ function onFilter(value: unknown): void {
                 <h2>{{ name }}</h2>
                 <p>{{ subtitle(entry) }}</p>
                 <button
-                  v-if="loadOf(entry) || entry.favorite"
                   type="button"
                   class="my-load"
                   :class="{ empty: !loadOf(entry) }"
@@ -189,7 +188,7 @@ function onFilter(value: unknown): void {
                   "
                   @click.stop.prevent="noting = { id: entry.exercise.id, name }"
                 >
-                  <Dumbbell :size="16" aria-hidden="true" />
+                  <Dumbbell v-if="loadOf(entry)" :size="16" aria-hidden="true" />
                   {{ loadOf(entry) ? loadText(entry) : t('myLoad.addShort') }}
                 </button>
               </ion-label>
@@ -239,7 +238,7 @@ function onFilter(value: unknown): void {
   padding: 4px 12px;
   border: 0;
   border-radius: 999px;
-  background: rgb(var(--ion-color-primary-rgb) / 12%);
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
   color: var(--ion-color-primary);
   font: inherit;
   font-size: 0.9rem;
@@ -253,9 +252,12 @@ function onFilter(value: unknown): void {
   outline-offset: 2px;
 }
 .my-load.empty {
-  font-weight: 500;
+  min-height: 28px;
+  margin-block-start: 2px;
+  padding: 2px 0;
   background: transparent;
-  border: 1px dashed var(--ion-color-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 .count {
   margin-block: 8px 0;

@@ -936,7 +936,7 @@
     "invalid": "Enter a load and a number of reps.",
     "edit": "My load on {name}: {load}. Edit",
     "add": "Note my load on {name}",
-    "addShort": "Note my load"
+    "addShort": "+ My load"
   },
   "setEdit": {
     "title": "Fix the set",

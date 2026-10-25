@@ -936,7 +936,7 @@
     "invalid": "Indique une charge et un nombre de reps.",
     "edit": "Ma charge sur {name} : {load}. Modifier",
     "add": "Noter ma charge sur {name}",
-    "addShort": "Noter ma charge"
+    "addShort": "+ Ma charge"
   },
   "setEdit": {
     "title": "Corriger la série",

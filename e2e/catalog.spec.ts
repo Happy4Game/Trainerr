@@ -154,3 +154,15 @@ test('the load lifted on a machine is noted and shown in the catalog', async ({ 
   await search(page, 'pec deck');
   await expect(chip).toBeVisible({ timeout: 20_000 });
 });
+
+test('the load can be noted on any exercise, even not in my machines', async ({ page }) => {
+  await openCatalog(page);
+  await search(page, 'curl marteau');
+  await page.getByRole('button', { name: 'Noter ma charge sur Curl marteau' }).click();
+  await page.getByRole('textbox', { name: 'Charge (kg)' }).fill('14');
+  await page.getByRole('textbox', { name: 'Reps' }).fill('12');
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+  await expect(
+    page.getByRole('button', { name: /Ma charge sur Curl marteau : 14\s*kg × 12/ }),
+  ).toBeVisible();
+});
