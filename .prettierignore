@@ -15,3 +15,4 @@ src/data/catalog/names-fr.json
 server/node_modules
 src/data/catalog/instructions-fr.json
 exports
+LICENSE.md
