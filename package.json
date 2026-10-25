@@ -11,6 +11,8 @@
     "dev": "vite --host",
     "build": "node scripts/generate-licenses.mjs && vue-tsc --noEmit && vite build",
     "preview": "vite preview --host",
+    "android:sync": "npm run build && cap sync android",
+    "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug",
     "typecheck": "vue-tsc --noEmit && tsc -p server/tsconfig.json",
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",

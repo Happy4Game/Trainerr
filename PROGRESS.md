@@ -109,6 +109,9 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Onglet Stats : tuiles de synthèse (séances sur 30 jours, semaines au rythme, records, charge par semaine), régularité avec jours de la semaine, records les plus récents en premier avec la charge en évidence, partage du récap déplacé en bas.
 
+- Android : projet Capacitor dans `android/`, APK de debug avec `npm run android:apk` et construit par la CI (artefact `trainerr-debug-apk`) ; guide dans [docs/android.md](docs/android.md). Version Play Store : clé de signature et icône à fournir.
+- Documentation : README avec captures, CONTRIBUTING (déroulé, règles, tests, licences, accessibilité).
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.
@@ -151,5 +154,4 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
 - Les exports se téléchargent dans le navigateur ; sur téléphone il faudra les plugins Filesystem / Share.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
-- Pas encore de projet Android (`npx cap add android`) : il faudra Android Studio et le SDK sur le poste.
 - Le dépôt n'a pas encore de remote GitHub : les branches sont locales, les pull requests seront ouvertes quand le dépôt GitHub existera.
