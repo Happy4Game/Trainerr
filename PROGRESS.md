@@ -101,6 +101,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 - Séances personnalisées : « Mes séances » dans l'onglet Séance ; créer, nommer, choisir et réordonner les exercices, commencer, modifier, supprimer. Elles gardent conseils de charge, transitions et historique (nom affiché partout).
 
+- « Tout voir » ouvre le programme de la séance : chaque machine avec dessin, état, séries faites / prévues, charge, et « Maintenant » / « Rouvrir » pour changer l'ordre. Ligne compacte « Précédent : … · ← Revenir · +1 série ».
+
 ## Étape 6 — Suivi
 
 - Onglet **Historique** : Séances, Stats, Corps.

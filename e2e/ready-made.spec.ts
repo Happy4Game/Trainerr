@@ -94,3 +94,16 @@ test('more sets than planned: during the exercise or right after it', async ({ p
   await expect(page.getByText('Série 5 sur 5')).toBeVisible();
   await expect(page.getByRole('timer')).toBeVisible();
 });
+
+test('the session plan shows every machine and lets one be done now', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  await page.getByRole('button', { name: 'Voir le programme de la séance' }).click();
+  const items = page.locator('ion-modal ol.overview > li');
+  await expect(items).toHaveCount(5);
+  const third = (await items.nth(2).locator('.name').textContent())?.trim() ?? '';
+  await page.locator('ion-modal ion-button', { hasText: 'Maintenant' }).nth(1).click();
+  await expect(page.getByRole('region', { name: third })).toBeVisible();
+});

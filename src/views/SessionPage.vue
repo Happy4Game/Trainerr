@@ -29,6 +29,7 @@ import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import ExerciseRow from '@/ui/ExerciseRow.vue';
+import SessionOverview from '@/ui/session/SessionOverview.vue';
 import SetEditModal from '@/ui/session/SetEditModal.vue';
 import { Pencil } from 'lucide-vue-next';
 import { useUnits } from '@/ui/useUnits';
@@ -47,6 +48,7 @@ const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, s
 const { previousExercise } = session;
 
 const busyFor = ref<string>();
+const overviewOpen = ref(false);
 const content = ref<{ $el: { scrollToTop: (duration?: number) => Promise<void> } }>();
 
 /** Exercises of the session in order: done, current, then the ones to come. */
@@ -60,7 +62,8 @@ const progress = computed(() => {
   return ids.map((id) => ({
     id,
     name: nameOf(id),
-    status: queue.done.includes(id) ? 'done' : id === current ? 'current' : 'next',
+    status: (queue.done.includes(id) ? 'done' : id === current ? 'current' : 'next') as
+      'done' | 'current' | 'next',
   }));
 });
 const currentIndex = computed(() => progress.value.findIndex((e) => e.status === 'current'));
@@ -355,24 +358,28 @@ async function logWarmup(): Promise<void> {
 
       <!-- Pendant la séance -->
       <template v-else-if="phase === 'active' && active">
-        <ion-button
-          v-if="previousExercise"
-          fill="clear"
-          size="small"
-          class="go-back"
-          @click="session.goBack()"
-        >
-          {{ t('session.goBack', { name: nameOf(previousExercise) }) }}
-        </ion-button>
-        <ion-button
-          v-if="previousExercise && session.canAddSet(previousExercise)"
-          fill="clear"
-          size="small"
-          class="go-back"
-          @click="session.extraSet(previousExercise)"
-        >
-          {{ t('session.extraSet.previous', { name: nameOf(previousExercise) }) }}
-        </ion-button>
+        <div v-if="previousExercise" class="previous">
+          <span class="previous-name">
+            {{ t('session.previous', { name: nameOf(previousExercise) }) }}
+          </span>
+          <ion-button
+            fill="outline"
+            size="small"
+            :aria-label="t('session.goBack', { name: nameOf(previousExercise) })"
+            @click="session.goBack()"
+          >
+            {{ t('session.goBackShort') }}
+          </ion-button>
+          <ion-button
+            v-if="session.canAddSet(previousExercise)"
+            fill="outline"
+            size="small"
+            :aria-label="t('session.extraSet.previous', { name: nameOf(previousExercise) })"
+            @click="session.extraSet(previousExercise)"
+          >
+            {{ t('session.extraSet.short') }}
+          </ion-button>
+        </div>
         <RestTimer v-if="restEndsAt" :ends-at="restEndsAt" @done="session.endRest()" />
         <p v-if="lastLogged" class="just-logged" role="status">
           ✓ {{ t('setEdit.last', { set: lastLogged.label }) }}
@@ -470,38 +477,29 @@ async function logWarmup(): Promise<void> {
           @close="reportingDiscomfort = false"
         />
 
-        <details v-if="progress.length > 1" class="progress">
-          <summary :aria-label="t('session.progress.label')">
-            <span class="progress-title">
-              {{
-                currentIndex >= 0
-                  ? t('session.progress.title', {
-                      current: currentIndex + 1,
-                      total: progress.length,
-                    })
-                  : t('session.progress.done', progress.filter((e) => e.status === 'done').length)
-              }}
-            </span>
-            <span class="segments" aria-hidden="true">
-              <span v-for="e in progress" :key="e.id" class="segment" :class="e.status" />
-            </span>
-            <span class="see-all">{{ t('session.progress.seeAll') }}</span>
-          </summary>
-          <ol class="progress-list">
-            <li
-              v-for="e in progress"
-              :key="e.id"
-              :class="e.status"
-              :aria-current="e.status === 'current' ? 'step' : undefined"
-            >
-              <span class="mark" aria-hidden="true">{{
-                e.status === 'done' ? '✓' : e.status === 'current' ? '●' : '○'
-              }}</span>
-              <span class="visually-hidden">{{ t(`session.progress.status.${e.status}`) }}</span>
-              {{ e.name }}
-            </li>
-          </ol>
-        </details>
+        <button
+          v-if="progress.length > 1"
+          type="button"
+          class="progress"
+          :aria-label="t('session.overview.open')"
+          @click="overviewOpen = true"
+        >
+          <span class="progress-title">
+            {{
+              currentIndex >= 0
+                ? t('session.progress.title', {
+                    current: currentIndex + 1,
+                    total: progress.length,
+                  })
+                : t('session.progress.done', progress.filter((e) => e.status === 'done').length)
+            }}
+          </span>
+          <span class="segments" aria-hidden="true">
+            <span v-for="e in progress" :key="e.id" class="segment" :class="e.status" />
+          </span>
+          <span class="see-all">{{ t('session.progress.seeAll') }} ›</span>
+        </button>
+        <SessionOverview :open="overviewOpen" :exercises="progress" @close="overviewOpen = false" />
 
         <section
           v-if="nextMachine"
@@ -741,19 +739,21 @@ async function logWarmup(): Promise<void> {
   font-size: 0.75rem;
 }
 .progress {
-  margin-block: 4px 12px;
-}
-.progress summary {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 10px;
-  min-height: 44px;
-  cursor: pointer;
-  list-style: none;
-}
-.progress summary::-webkit-details-marker {
-  display: none;
+  width: 100%;
+  min-height: 48px;
+  margin-block: 4px 12px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--app-radius-small);
+  background: var(--ion-card-background);
+  box-shadow: var(--app-shadow);
+  color: inherit;
+  font: inherit;
+  text-align: start;
 }
 .progress-title {
   font-weight: 700;
@@ -777,44 +777,9 @@ async function logWarmup(): Promise<void> {
 }
 .see-all {
   font-size: 0.85rem;
-  color: var(--ion-color-primary);
-}
-.progress[open] .see-all {
-  visibility: hidden;
-}
-.progress-list {
-  margin-block-start: 8px !important;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.progress-list li {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  background: var(--ion-color-light);
-  color: var(--ion-color-medium-shade);
-}
-.progress-list li.done {
-  text-decoration: line-through;
-}
-.progress-list li.current {
-  background: var(--ion-color-primary);
-  color: var(--ion-color-primary-contrast);
   font-weight: 700;
-}
-.mark {
-  margin-inline-end: 4px;
-}
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
+  color: var(--ion-color-primary);
+  white-space: nowrap;
 }
 .next-machine {
   margin-block: 12px;
@@ -1015,6 +980,23 @@ async function logWarmup(): Promise<void> {
   flex: 1;
   flex-direction: column;
   min-width: 0;
+}
+.previous {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-block: 0 10px;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium-shade);
+}
+.previous-name {
+  flex: 1 1 12em;
+}
+.previous ion-button {
+  margin: 0;
+  --padding-start: 10px;
+  --padding-end: 10px;
 }
 .go-back {
   margin-inline-start: -8px;

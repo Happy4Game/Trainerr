@@ -334,7 +334,6 @@
       "fail": "pas pu finir"
     },
     "progress": {
-      "label": "Progression de la séance",
       "title": "Exercice {current} sur {total}",
       "done": "{count} exercice fait | {count} exercices faits",
       "status": {
@@ -349,7 +348,18 @@
       "finished": "{name} terminé",
       "plan": "{count} série | {count} séries",
       "go": "Je suis sur la machine"
-    }
+    },
+    "overview": {
+      "title": "Programme de la séance",
+      "open": "Voir le programme de la séance",
+      "sets": "{done} / {total} séries",
+      "nowNamed": "Faire {name} maintenant",
+      "reopen": "Rouvrir",
+      "reopenNamed": "Rouvrir {name}",
+      "nowShort": "Maintenant"
+    },
+    "previous": "Précédent : {name}",
+    "goBackShort": "← Revenir"
   },
   "availability": {
     "day": "Jour",

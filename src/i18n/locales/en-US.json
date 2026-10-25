@@ -334,7 +334,6 @@
       "fail": "could not finish"
     },
     "progress": {
-      "label": "Session progress",
       "title": "Exercise {current} of {total}",
       "done": "{count} exercise done | {count} exercises done",
       "status": {
@@ -349,7 +348,18 @@
       "finished": "{name} done",
       "plan": "{count} set | {count} sets",
       "go": "I'm on the machine"
-    }
+    },
+    "overview": {
+      "title": "Session plan",
+      "open": "See the session plan",
+      "sets": "{done} / {total} sets",
+      "nowNamed": "Do {name} now",
+      "reopen": "Reopen",
+      "reopenNamed": "Reopen {name}",
+      "nowShort": "Now"
+    },
+    "previous": "Previous: {name}",
+    "goBackShort": "← Back"
   },
   "availability": {
     "day": "Day",
