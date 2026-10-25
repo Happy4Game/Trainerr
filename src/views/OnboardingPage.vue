@@ -122,6 +122,7 @@ async function skip(): Promise<void> {
             expand="block"
             :fill="goal === g ? 'solid' : 'outline'"
             :aria-pressed="goal === g"
+            :class="{ selected: goal === g }"
             @click="goal = g"
           >
             <Check v-if="goal === g" :size="20" class="check" aria-hidden="true" />
@@ -139,6 +140,7 @@ async function skip(): Promise<void> {
             size="large"
             :fill="sessionsPerWeek === count ? 'solid' : 'outline'"
             :aria-pressed="sessionsPerWeek === count"
+            :class="{ selected: sessionsPerWeek === count }"
             @click="sessionsPerWeek = count"
           >
             <Check v-if="sessionsPerWeek === count" :size="20" class="check" aria-hidden="true" />
@@ -163,6 +165,7 @@ async function skip(): Promise<void> {
             expand="block"
             :fill="level === l ? 'solid' : 'outline'"
             :aria-pressed="level === l"
+            :class="{ selected: level === l }"
             @click="level = l"
           >
             <Check v-if="level === l" :size="20" class="check" aria-hidden="true" />
@@ -178,6 +181,7 @@ async function skip(): Promise<void> {
               expand="block"
               :fill="pause === p ? 'solid' : 'outline'"
               :aria-pressed="pause === p"
+              :class="{ selected: pause === p }"
               @click="pause = p"
             >
               <Check v-if="pause === p" :size="20" class="check" aria-hidden="true" />
@@ -203,6 +207,7 @@ async function skip(): Promise<void> {
             expand="block"
             :fill="sessionMinutes === d ? 'solid' : 'outline'"
             :aria-pressed="sessionMinutes === d"
+            :class="{ selected: sessionMinutes === d }"
             @click="sessionMinutes = d"
           >
             <Check v-if="sessionMinutes === d" :size="20" class="check" aria-hidden="true" />
@@ -220,6 +225,7 @@ async function skip(): Promise<void> {
             expand="block"
             :fill="sport === s ? 'solid' : 'outline'"
             :aria-pressed="sport === s"
+            :class="{ selected: sport === s }"
             @click="sport = s"
           >
             <Check v-if="sport === s" :size="20" class="check" aria-hidden="true" />
@@ -241,6 +247,7 @@ async function skip(): Promise<void> {
             expand="block"
             :fill="zone === z ? 'solid' : 'outline'"
             :aria-pressed="zone === z"
+            :class="{ selected: zone === z }"
             @click="zone = z"
           >
             <Check v-if="zone === z" :size="20" class="check" aria-hidden="true" />
@@ -298,8 +305,9 @@ h2 {
   margin-block: 8px;
   font-size: 1.05rem;
 }
-.choices ion-button[aria-pressed='true'],
-.row ion-button[aria-pressed='true'] {
+/* A class, not [aria-pressed]: Ionic moves aria attributes into the button. */
+.choices ion-button.selected,
+.row ion-button.selected {
   --background: var(--ion-color-primary);
   --border-color: var(--ion-color-primary);
   --color: var(--ion-color-primary-contrast);

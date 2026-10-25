@@ -49,3 +49,35 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
     await expect(week.getByRole('listitem').filter({ hasText: day })).not.toContainText('Legs');
   }
 });
+
+test('the chosen answer is always the only one highlighted', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
+  const ACTION = 'rgb(67, 56, 202)';
+  // Names of the buttons painted in the action colour.
+  const highlighted = (group: string) =>
+    page.locator(`${group} ion-button`).evaluateAll(
+      (buttons, action) =>
+        buttons
+          .filter((b) => {
+            const native = b.shadowRoot?.querySelector('.button-native');
+            return native && getComputedStyle(native).backgroundColor === action;
+          })
+          .map((b) => b.textContent?.trim()),
+      ACTION,
+    );
+
+  // The answer chosen by default is shown as chosen.
+  await expect.poll(() => highlighted('.choices')).toEqual(['Prendre du muscle']);
+  await page.getByRole('button', { name: 'Gagner en force' }).tap();
+  await expect.poll(() => highlighted('.choices')).toEqual(['Gagner en force']);
+
+  await page.getByRole('button', { name: 'Suivant' }).tap();
+  await expect.poll(() => highlighted('.row')).toEqual(['4']);
+  await page.getByRole('button', { name: '3', exact: true }).tap();
+  await expect.poll(() => highlighted('.row')).toEqual(['3']);
+
+  // Coming back keeps the earlier answer visible.
+  await page.getByRole('button', { name: 'Retour' }).tap();
+  await expect.poll(() => highlighted('.choices')).toEqual(['Gagner en force']);
+});
