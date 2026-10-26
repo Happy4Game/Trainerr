@@ -81,8 +81,10 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await tab(page, 'Historique');
   await expect(page.getByRole('heading', { level: 3, name: 'Haut du corps A' })).toBeVisible();
   await page.locator('ion-segment-button', { hasText: 'Stats' }).click();
-  await expect(page.getByText('Évolution de la force')).toBeVisible();
-  await expect(page.getByRole('img', { name: /1RM estimé/ })).toBeVisible();
-  await expect(page.getByText('Records', { exact: true })).toBeVisible();
-  await expect(page.getByRole('group', { name: /séances? sur 30 jours/ })).toBeVisible();
+  await expect(page.getByText('Est-ce que je progresse ?')).toBeVisible();
+  await expect(page.getByTestId('trend')).toHaveText(
+    'Une seule séance : la tendance arrive à la prochaine.',
+  );
+  await expect(page.getByText('Suis-je régulier ?')).toBeVisible();
+  await expect(page.getByRole('group', { name: "Dernière séance aujourd'hui" })).toBeVisible();
 });

@@ -1056,6 +1056,7 @@ export function useSession() {
     history,
     realHistory,
     bodyWeight,
+    weighings,
     saveBodyWeight,
     reloadWeighings: async () => {
       const { db } = await openAppDatabase();

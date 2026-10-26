@@ -25,6 +25,7 @@ import UpdatesSection from '@/ui/UpdatesSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
+import type { ThemePreference } from '@/data/repositories/settingsRepository';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { useSettings } from '@/ui/useSettings';
@@ -36,6 +37,7 @@ const session = useSession();
 
 const LANGUAGES: LanguagePreference[] = ['system', 'fr-FR', 'en-US'];
 const UNITS: WeightUnit[] = ['kg', 'lb'];
+const THEMES: ThemePreference[] = ['dark', 'light', 'system'];
 
 const KINDS: NotificationKind[] = [
   'sessionReminder',
@@ -123,6 +125,19 @@ async function redoQuestionnaire(): Promise<void> {
           >
             <ion-select-option v-for="u in UNITS" :key="u" :value="u">
               {{ t(`settings.unit.options.${u}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-select
+            :label="t('settings.theme.label')"
+            :value="settings.theme ?? 'dark'"
+            interface="action-sheet"
+            @ion-change="updateSettings({ theme: $event.detail.value })"
+          >
+            <ion-select-option v-for="th in THEMES" :key="th" :value="th">
+              {{ t(`settings.theme.options.${th}`) }}
             </ion-select-option>
           </ion-select>
         </ion-item>

@@ -729,8 +729,8 @@ h2 {
 }
 .value-input {
   max-width: 7ch;
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   text-align: center;
 }
 .breakdown,
@@ -745,9 +745,11 @@ h2 {
 }
 .value {
   min-width: 5.5ch;
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-size: 1.9rem;
+  font-weight: var(--tr-weight-black);
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
   text-align: center;
 }
 .flags {

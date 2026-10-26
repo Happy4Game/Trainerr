@@ -151,16 +151,34 @@ const streak = computed(() =>
 
 <style scoped>
 .hero {
-  margin-block-end: 16px;
-  padding: 20px;
-  border-radius: var(--app-radius);
-  background: var(--ion-color-primary);
-  color: var(--ion-color-primary-contrast);
+  position: relative;
+  overflow: hidden;
+  margin-block-end: var(--tr-space-4);
+  padding: var(--tr-space-5);
+  border-radius: var(--tr-radius-l);
+  background: var(--tr-hero);
+  color: var(--tr-hero-text);
+  box-shadow: var(--tr-shadow-2);
+  animation: tr-rise var(--tr-duration-slow) var(--tr-ease-out);
+}
+/* Halo discret en haut à droite : du relief sans image. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset-block-start: -60px;
+  inset-inline-end: -60px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 14%);
+  pointer-events: none;
 }
 .hero h2 {
   margin: 2px 0 6px;
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: var(--tr-font-xl);
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 .eyebrow {
   margin: 0;
@@ -181,19 +199,26 @@ const streak = computed(() =>
   height: 44px;
   object-fit: contain;
   border-radius: 10px;
-  background: #fff;
+  background: #fff; /* dessins au trait noir : fond blanc dans les deux thèmes */
 }
 .hero ion-button {
-  --background: var(--ion-color-primary-contrast);
+  --background: var(--tr-hero-text);
   --color: var(--ion-color-primary);
-  margin-block-start: 12px;
+  --border-radius: var(--tr-radius-m);
+  margin-block-start: var(--tr-space-4);
+  min-height: 56px;
+  font-size: 1.1rem;
 }
 .week-count {
-  margin: 0 0 8px;
-  font-size: 1rem;
+  margin: 0 0 var(--tr-space-3);
+  font-size: var(--tr-font-m);
+  color: var(--tr-text-muted);
 }
 .week-count strong {
-  font-size: 1.8rem;
+  font-size: var(--tr-font-xxl);
+  font-weight: var(--tr-weight-black);
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-text);
 }
 .week-bar {
   display: flex;
@@ -206,7 +231,7 @@ const streak = computed(() =>
   background: var(--ion-color-light);
 }
 .week-bar span.filled {
-  background: var(--ion-color-success);
+  background: var(--ion-color-primary);
 }
 .streak {
   margin-block: 12px 0;

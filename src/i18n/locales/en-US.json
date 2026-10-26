@@ -627,43 +627,109 @@
     "saved": "Load saved."
   },
   "stats": {
+    "brief": {
+      "title": "At a glance",
+      "up": "{count} exercise is progressing over the last 6 weeks. | {count} exercises are progressing over the last 6 weeks.",
+      "stalled": "{names}: stuck, see the advice below. | {names}: stuck, see the advice below.",
+      "lagging": "Few sets for {muscles} (under 10 a week).",
+      "pace": "{perWeek} session a week on average, {target} planned. | {perWeek} sessions a week on average, {target} planned."
+    },
+    "progress": {
+      "question": "Am I progressing?",
+      "title": "Strength per exercise",
+      "exercise": "Exercise shown",
+      "oneRepMax": "estimated 1RM today",
+      "change": "{change} in {weeks} week | {change} in {weeks} weeks",
+      "tooEarly": "One session so far: the trend comes with the next one.",
+      "legend": "Estimated 1RM ({unit})",
+      "legend2": "Best set load ({unit})",
+      "description": "{exercise}: {line} ({sessions} sessions)",
+      "formula": "Estimated 1RM with the Epley formula: load × (1 + reps / 30). Warm-up, slow-tempo and incomplete sets do not count.",
+      "verdict": {
+        "progressing": "Progressing",
+        "steady": "Steady",
+        "stalled": "Stalled",
+        "regressing": "Going down",
+        "tooEarly": "New"
+      },
+      "advice": {
+        "progressing": "Keep going: same rep range, the app raises the load when it is time.",
+        "steady": "Steady for now. Aim for one more rep at the same load next session.",
+        "stalled": "Stalled for {sessions} sessions → try a deload week (lighter loads, fewer sets) or change the rep range (e.g. 6-8 instead of 10-12).",
+        "regressing": "Going down: check sleep, meals and recovery. A lighter week often helps to bounce back.",
+        "tooEarly": "Do {missing} more session on this exercise to see a trend. | Do {missing} more sessions on this exercise to see a trend."
+      }
+    },
     "strength": {
-      "title": "Strength over time",
-      "exercise": "Exercise",
       "unit": "Estimated 1RM ({unit}), Epley formula",
-      "none": "No comparable set yet (warm-up and slow-tempo sets are left out).",
-      "description": "Estimated 1RM {exercise}: {change} % over {sessions} workouts",
-      "stagnation": "No progress over the last 3 workouts: try a variant of the exercise or a lighter week."
+      "stagnation": "No progress over the last 3 sessions: try a variation of the exercise or a lighter week."
     },
     "volume": {
-      "title": "Sets per muscle this week",
-      "help": "Suggested zone: {min} to {max} sets per muscle per week.",
-      "below": "{sets} sets, below",
-      "inRange": "{sets} sets",
-      "above": "{sets} sets, above",
-      "pushDominant": "Push ({push} sets) clearly outweighs pull ({pull}): add pulling work, especially if a shoulder hurts."
+      "question": "Do my muscles get enough work?",
+      "title": "Sets per muscle per week",
+      "period": "Average of the last complete week. | Average of the last {count} complete weeks.",
+      "periodCurrent": "Week in progress (no complete week yet).",
+      "zone": "Recommended: {min} to {max} sets per muscle per week",
+      "below": "{sets} · low",
+      "inRange": "{sets} · good",
+      "above": "{sets} · high",
+      "lagging": "Under 10 sets a week: {muscles}. Add 2 to 4 sets for them over the week, for example an isolation exercise at the end of a session. | Under 10 sets a week: {muscles}, among others. Add 2 to 4 sets for them over the week, for example an isolation exercise at the end of a session.",
+      "allGood": "Every big muscle gets 10 sets a week or more.",
+      "source": "Source: Schoenfeld, Ogborn & Krieger 2017 (meta-analysis on volume and hypertrophy)"
+    },
+    "balance": {
+      "question": "Is my training balanced?",
+      "title": "Push / pull, upper / lower",
+      "push": "Push · {sets}",
+      "pull": "Pull · {sets}",
+      "upper": "Upper body · {sets}",
+      "legs": "Legs · {sets}",
+      "pushPullLabel": "{push} push sets for {pull} pull sets",
+      "upperLowerLabel": "{upper} upper body sets, {legs} leg sets",
+      "pushDominant": "You push a lot more than you pull: add rows or pulldowns, your shoulders will thank you.",
+      "pullDominant": "You pull a lot more than you push: add a press to balance it.",
+      "upperDominant": "Legs are less than a quarter of your sets: one more lower body session a week would balance it.",
+      "lowerDominant": "Legs are more than three quarters of your sets: think of the upper body.",
+      "ok": "Balanced: push and pull are close, legs are well there.",
+      "period": "Work sets of the last 4 weeks, each set counted once from its movement."
     },
     "regularity": {
-      "title": "Consistency",
+      "question": "Am I regular?",
+      "title": "Regularity",
+      "perWeek": "{value} sessions a week on average",
+      "perWeekShort": "sessions / week",
       "pace": "{count} week in a row on pace | {count} weeks in a row on pace",
-      "calendar": "{count} training days over the last 8 weeks",
-      "best": "Your best: {best}"
+      "paceShort": "week on pace | weeks on pace",
+      "since": "Last session {count} day ago | Last session {count} days ago",
+      "sinceToday": "Last session today",
+      "sinceShort": "day since the last | days since the last",
+      "calendar": "{count} training days over the last 12 weeks",
+      "target": "Planned pace: {target} sessions a week. Your record: {best} weeks in a row."
+    },
+    "records": {
+      "question": "What did I beat lately?",
+      "title": "Records of the last 30 days",
+      "oneRepMax": "Estimated 1RM {load}",
+      "none": "No new record this month. It will come: progress comes in steps.",
+      "all": "See my record on {count} exercise | See my records on {count} exercises"
+    },
+    "body": {
+      "question": "Is my body weight moving?",
+      "title": "Body weight",
+      "latest": "last weighing",
+      "perWeek": "{change} / week",
+      "legend": "Weight ({unit}), last 3 months",
+      "description": "Body weight curve, {count} weighings",
+      "help": "Trend over the last 4 weeks. Weigh yourself in the morning, before eating, to compare like with like.",
+      "needMore": "One more weighing a week apart to see the trend.",
+      "none": "No weighing yet: add your weight in the Body tab."
     },
     "workload": {
+      "question": "Am I doing more than before?",
       "title": "Workload",
       "unit": "{unit} lifted per week (load × reps)",
       "description": "Workload over {weeks} weeks",
       "single": "{load} this week"
-    },
-    "records": {
-      "title": "Records",
-      "oneRepMax": "Estimated 1RM {load}"
-    },
-    "kpi": {
-      "sessions": "session in 30 days | sessions in 30 days",
-      "pace": "week on pace | weeks on pace",
-      "records": "record | records",
-      "workload": "lifted per week (average)"
     }
   },
   "body": {
@@ -690,6 +756,14 @@
     "back": "Back"
   },
   "settings": {
+    "theme": {
+      "label": "Theme",
+      "options": {
+        "dark": "Dark",
+        "light": "Light",
+        "system": "Same as the phone"
+      }
+    },
     "plates": {
       "title": "Bar and plates",
       "bar": "Bar weight",

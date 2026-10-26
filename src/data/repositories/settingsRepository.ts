@@ -16,6 +16,9 @@ export interface CustomSession {
   readonly exerciseIds: readonly string[];
 }
 
+/** Dark by default; light, or the phone setting, on request. */
+export type ThemePreference = 'dark' | 'light' | 'system';
+
 /** Template id of a custom session in the history: "custom:<id>". */
 export const CUSTOM_PREFIX = 'custom:';
 
@@ -63,6 +66,8 @@ export interface Settings {
   /** Sessions built by the user: a name and exercises in order. */
   readonly customSessions?: readonly CustomSession[];
   readonly language: LanguagePreference;
+  /** Dark by default. */
+  readonly theme?: ThemePreference;
   readonly weightUnit: WeightUnit;
   /** Set once the first-launch questionnaire is done or skipped. */
   readonly onboarded: boolean;

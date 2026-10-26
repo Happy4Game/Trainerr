@@ -627,43 +627,109 @@
     "saved": "Charge enregistrée."
   },
   "stats": {
+    "brief": {
+      "title": "En bref",
+      "up": "{count} exercice progresse sur les 6 dernières semaines. | {count} exercices progressent sur les 6 dernières semaines.",
+      "stalled": "{names} : bloqué, regarde le conseil plus bas. | {names} : bloqués, regarde les conseils plus bas.",
+      "lagging": "Peu de séries pour {muscles} (moins de 10 par semaine).",
+      "pace": "{perWeek} séance par semaine en moyenne, pour {target} visées. | {perWeek} séances par semaine en moyenne, pour {target} visées."
+    },
+    "progress": {
+      "question": "Est-ce que je progresse ?",
+      "title": "Force par exercice",
+      "exercise": "Exercice affiché",
+      "oneRepMax": "1RM estimé aujourd'hui",
+      "change": "{change} en {weeks} semaine | {change} en {weeks} semaines",
+      "tooEarly": "Une seule séance : la tendance arrive à la prochaine.",
+      "legend": "1RM estimé ({unit})",
+      "legend2": "Charge de la meilleure série ({unit})",
+      "description": "{exercise} : {line} ({sessions} séances)",
+      "formula": "1RM estimé avec la formule d'Epley : charge × (1 + reps / 30). Les séries d'échauffement, en tempo lent ou incomplètes ne comptent pas.",
+      "verdict": {
+        "progressing": "Progresse",
+        "steady": "Stable",
+        "stalled": "Stagne",
+        "regressing": "Recule",
+        "tooEarly": "Nouveau"
+      },
+      "advice": {
+        "progressing": "Continue comme ça : même fourchette de reps, l'appli monte la charge quand c'est le moment.",
+        "steady": "Stable pour l'instant. Vise une rep de plus à la même charge à la prochaine séance.",
+        "stalled": "Stagnation depuis {sessions} séances → essaie une semaine de décharge (charges et séries réduites) ou change de fourchette de reps (par ex. 6-8 au lieu de 10-12).",
+        "regressing": "En baisse : vérifie sommeil, repas et récupération. Une semaine plus légère aide souvent à repartir.",
+        "tooEarly": "Fais encore {missing} séance sur cet exercice pour voir une tendance. | Fais encore {missing} séances sur cet exercice pour voir une tendance."
+      }
+    },
     "strength": {
-      "title": "Évolution de la force",
-      "exercise": "Exercice",
       "unit": "1RM estimé ({unit}), formule d'Epley",
-      "none": "Pas encore de série comparable (les séries d'échauffement et en tempo lent sont exclues).",
-      "description": "1RM estimé {exercise} : {change} % sur {sessions} séances",
       "stagnation": "Pas de progrès sur les 3 dernières séances : essaie une variante de l'exercice ou une semaine plus légère."
     },
     "volume": {
-      "title": "Séries par muscle cette semaine",
-      "help": "Zone conseillée : {min} à {max} séries par muscle et par semaine.",
-      "below": "{sets} séries, en dessous",
-      "inRange": "{sets} séries",
-      "above": "{sets} séries, au-dessus",
-      "pushDominant": "La poussée ({push} séries) domine nettement le tirage ({pull}) : ajoute du tirage, surtout si une épaule tire."
+      "question": "Mes muscles reçoivent-ils assez de travail ?",
+      "title": "Séries par muscle et par semaine",
+      "period": "Moyenne de la dernière semaine complète. | Moyenne des {count} dernières semaines complètes.",
+      "periodCurrent": "Semaine en cours (pas encore de semaine complète).",
+      "zone": "Zone conseillée : {min} à {max} séries par muscle et par semaine",
+      "below": "{sets} · peu",
+      "inRange": "{sets} · bien",
+      "above": "{sets} · beaucoup",
+      "lagging": "Sous 10 séries par semaine : {muscles}. Ajoute 2 à 4 séries pour eux sur la semaine, par exemple un exercice d'isolation en fin de séance. | Sous 10 séries par semaine : {muscles}, entre autres. Ajoute 2 à 4 séries pour eux sur la semaine, par exemple un exercice d'isolation en fin de séance.",
+      "allGood": "Tous les grands muscles sont à 10 séries par semaine ou plus.",
+      "source": "Source : Schoenfeld, Ogborn & Krieger 2017 (méta-analyse volume et hypertrophie)"
+    },
+    "balance": {
+      "question": "Mon entraînement est-il équilibré ?",
+      "title": "Pousser / tirer, haut / bas",
+      "push": "Pousser · {sets}",
+      "pull": "Tirer · {sets}",
+      "upper": "Haut du corps · {sets}",
+      "legs": "Jambes · {sets}",
+      "pushPullLabel": "{push} séries de poussée pour {pull} de tirage",
+      "upperLowerLabel": "{upper} séries pour le haut du corps, {legs} pour les jambes",
+      "pushDominant": "Tu pousses nettement plus que tu ne tires : ajoute du tirage (rowing, tirage vertical), les épaules te remercieront.",
+      "pullDominant": "Tu tires nettement plus que tu ne pousses : ajoute un développé si tu veux équilibrer.",
+      "upperDominant": "Les jambes font moins d'un quart de tes séries : une séance de bas du corps de plus par semaine rééquilibrerait.",
+      "lowerDominant": "Les jambes font plus des trois quarts de tes séries : pense au haut du corps.",
+      "ok": "Équilibré : poussée et tirage proches, jambes bien présentes.",
+      "period": "Séries de travail des 4 dernières semaines, chaque série comptée une fois selon le mouvement."
     },
     "regularity": {
+      "question": "Suis-je régulier ?",
       "title": "Régularité",
+      "perWeek": "{value} séances par semaine en moyenne",
+      "perWeekShort": "séances / semaine",
       "pace": "{count} semaine d'affilée au rythme | {count} semaines d'affilée au rythme",
-      "calendar": "{count} jours d'entraînement sur les 8 dernières semaines",
-      "best": "Ton record : {best}"
+      "paceShort": "semaine au rythme | semaines au rythme",
+      "since": "Dernière séance il y a {count} jour | Dernière séance il y a {count} jours",
+      "sinceToday": "Dernière séance aujourd'hui",
+      "sinceShort": "jour depuis la dernière | jours depuis la dernière",
+      "calendar": "{count} jours d'entraînement sur les 12 dernières semaines",
+      "target": "Rythme visé : {target} séances par semaine. Ton record : {best} semaines d'affilée."
+    },
+    "records": {
+      "question": "Qu'est-ce que j'ai battu récemment ?",
+      "title": "Records des 30 derniers jours",
+      "oneRepMax": "1RM estimé {load}",
+      "none": "Pas de nouveau record ce mois-ci. Ça viendra : la progression se fait par paliers.",
+      "all": "Voir mon record sur {count} exercice | Voir mes records sur {count} exercices"
+    },
+    "body": {
+      "question": "Mon poids bouge-t-il ?",
+      "title": "Poids de corps",
+      "latest": "dernière pesée",
+      "perWeek": "{change} / semaine",
+      "legend": "Poids ({unit}), 3 derniers mois",
+      "description": "Courbe du poids de corps, {count} pesées",
+      "help": "Tendance sur les 4 dernières semaines. Pèse-toi le matin, à jeun, pour comparer ce qui est comparable.",
+      "needMore": "Encore une pesée à une semaine d'écart pour voir la tendance.",
+      "none": "Pas encore de pesée : ajoute ton poids dans l'onglet Corps."
     },
     "workload": {
+      "question": "Est-ce que j'en fais plus qu'avant ?",
       "title": "Charge de travail",
       "unit": "{unit} soulevés par semaine (charge × reps)",
       "description": "Charge de travail sur {weeks} semaines",
       "single": "{load} cette semaine"
-    },
-    "records": {
-      "title": "Records",
-      "oneRepMax": "1RM estimé {load}"
-    },
-    "kpi": {
-      "sessions": "séance sur 30 jours | séances sur 30 jours",
-      "pace": "semaine au rythme | semaines au rythme",
-      "records": "record | records",
-      "workload": "soulevés par semaine (moyenne)"
     }
   },
   "body": {
@@ -690,6 +756,14 @@
     "back": "Dos"
   },
   "settings": {
+    "theme": {
+      "label": "Thème",
+      "options": {
+        "dark": "Sombre",
+        "light": "Clair",
+        "system": "Comme le téléphone"
+      }
+    },
     "plates": {
       "title": "Barre et disques",
       "bar": "Poids de la barre",
