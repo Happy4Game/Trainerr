@@ -715,7 +715,9 @@
       "help": "Used for assisted pull-ups and dips: real load = body weight − help. Each weighing is also added in History → Body."
     },
     "sessionNotification": "Notification during the session",
-    "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android)."
+    "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android).",
+    "keepAwake": "Screen on during the session",
+    "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions."
   },
   "tips": {
     "title": "Getting started",

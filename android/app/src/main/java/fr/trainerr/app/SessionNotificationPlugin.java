@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.view.WindowManager;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.getcapacitor.JSObject;
@@ -71,6 +72,17 @@ public class SessionNotificationPlugin extends Plugin {
     @PluginMethod
     public void hide(PluginCall call) {
         NotificationManagerCompat.from(getContext()).cancel(NOTIFICATION_ID);
+        call.resolve();
+    }
+
+    /** Screen kept on during the session: no unlocking between two sets. */
+    @PluginMethod
+    public void keepScreenOn(PluginCall call) {
+        boolean on = Boolean.TRUE.equals(call.getBoolean("on", false));
+        getActivity().runOnUiThread(() -> {
+            if (on) getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            else getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        });
         call.resolve();
     }
 

@@ -49,6 +49,8 @@ export interface Settings {
   readonly shareRecords: boolean;
   /** Android: look for a new version on GitHub at launch (once a day). On by default. */
   readonly autoUpdateCheck?: boolean;
+  /** Screen kept on during a session. On by default. */
+  readonly keepAwake?: boolean;
   /** Android notification during a session (rest countdown, end-of-rest alert). On by default. */
   readonly sessionNotification?: boolean;
   /** The user agreed to send the summary of their week to the AI coach. */

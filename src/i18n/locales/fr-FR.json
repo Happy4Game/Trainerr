@@ -715,7 +715,9 @@
       "help": "Sert aux tractions et dips assistés : charge réelle = poids du corps − aide. Chaque pesée s'ajoute aussi dans Historique → Corps."
     },
     "sessionNotification": "Notification pendant la séance",
-    "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android)."
+    "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android).",
+    "keepAwake": "Écran allumé pendant la séance",
+    "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances."
   },
   "tips": {
     "title": "Bien débuter",

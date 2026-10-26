@@ -14,6 +14,7 @@ interface SessionNotificationPlugin {
     channelName: string;
   }): Promise<{ shown?: boolean } | undefined>;
   hide(): Promise<void>;
+  keepScreenOn(options: { on: boolean }): Promise<void>;
 }
 
 const SessionNotification = registerPlugin<SessionNotificationPlugin>('SessionNotification');
@@ -61,6 +62,40 @@ export async function hideSessionNotification(): Promise<void> {
     await cancelRestEnd();
   } catch {
     // Nothing to hide.
+  }
+}
+
+/** Minimal typing of the Screen Wake Lock API (browser). */
+interface WakeLockSentinelLike {
+  release(): Promise<void>;
+}
+let wakeLock: WakeLockSentinelLike | undefined;
+
+/**
+ * Keeps the screen on during the session. Android: window flag of the app
+ * (released by the system when the app is left). Browser: Screen Wake Lock
+ * API, taken again when the page comes back to the front.
+ */
+export async function keepScreenOn(on: boolean): Promise<void> {
+  try {
+    if (available()) {
+      await SessionNotification.keepScreenOn({ on });
+      return;
+    }
+    const api = (
+      navigator as Navigator & {
+        wakeLock?: { request(type: 'screen'): Promise<WakeLockSentinelLike> };
+      }
+    ).wakeLock;
+    if (!api) return;
+    if (on && !wakeLock) wakeLock = await api.request('screen');
+    if (!on && wakeLock) {
+      await wakeLock.release();
+      wakeLock = undefined;
+    }
+  } catch {
+    // Refused (battery saver, page hidden): the session goes on.
+    wakeLock = undefined;
   }
 }
 
