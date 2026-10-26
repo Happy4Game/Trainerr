@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { parseCsv, parseWorkoutCsv, suggestMatches, toIsoDate } from '@/domain/importCsv';
+import {
+  detectFormat,
+  parseCsv,
+  parseLoadsCsv,
+  parseWorkoutCsv,
+  suggestMatches,
+  toIsoDate,
+} from '@/domain/importCsv';
 
 const STRONG = `Date;Workout Name;Duration;Exercise Name;Set Order;Weight;Reps;Distance;Seconds;Notes;Workout Notes;RPE
 2026-10-15 19:02:11;Push A;55m;Bench Press (Dumbbell);W;8;15;0;0;;;
@@ -79,5 +86,34 @@ describe('import from other apps', () => {
     expect(suggestMatches('Leg Press (Machine)', catalog)[0]).toBe('Leg_Press');
     expect(suggestMatches('presse a cuisses', catalog)[0]).toBe('Leg_Press');
     expect(suggestMatches('Burpees', catalog)).toEqual([]);
+  });
+});
+
+describe('import of the loads already lifted', () => {
+  const LOADS = `exercise,load_kg,reps,date
+Presse à cuisses,107,10,2026-10-24
+Écarté à la machine,"52,5",12,
+Tirage vertical,45,,2026-10-20
+,30,10,
+Tirage vertical,47.5,8,2026-10-22`;
+
+  it('is told apart from a session export', () => {
+    expect(detectFormat(['exercise', 'load_kg', 'reps'])).toBe('loads');
+    expect(detectFormat(['date', 'template', 'exercise_id', 'exercise', 'load_kg', 'reps'])).toBe(
+      'trainerr',
+    );
+    expect(() => parseWorkoutCsv(LOADS)).toThrow(/charges/);
+  });
+
+  it('one load per exercise, the last line wins, the date is optional', () => {
+    expect(parseLoadsCsv(LOADS)).toEqual([
+      { exerciseName: 'Presse à cuisses', loadKg: 107, reps: 10, date: '2026-10-24' },
+      { exerciseName: 'Écarté à la machine', loadKg: 52.5, reps: 12 },
+      { exerciseName: 'Tirage vertical', loadKg: 47.5, reps: 8, date: '2026-10-22' },
+    ]);
+  });
+
+  it('refuses a file without loads', () => {
+    expect(() => parseLoadsCsv('foo,bar\n1,2')).toThrow(/non reconnu/);
   });
 });

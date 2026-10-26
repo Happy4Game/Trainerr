@@ -894,7 +894,7 @@
   },
   "importCsv": {
     "title": "Importer depuis une autre appli",
-    "choose": "Choisir un fichier CSV (Strong, Hevy)",
+    "choose": "Choisir un fichier CSV (séances ou charges)",
     "found": "{sessions} séance(s) trouvée(s) dans l'export {app}.",
     "apps": {
       "strong": "Strong",
@@ -905,7 +905,12 @@
     "check": "Vérifie à quel exercice correspond chaque nom :",
     "skip": "Ne pas importer",
     "confirm": "Importer {count} séance | Importer {count} séances",
-    "done": "{count} séance importée. | {count} séances importées."
+    "done": "{count} séance importée. | {count} séances importées.",
+    "continueTitle": "Par quelle séance continuer ?",
+    "continueHelp": "Tes séances importées ne suivent pas forcément le programme de l'appli : choisis la prochaine séance, la suite s'enchaîne.",
+    "loadsFound": "{count} charge trouvée, une par machine. | {count} charges trouvées, une par machine.",
+    "loadsConfirm": "Importer {count} charge | Importer {count} charges",
+    "loadsDone": "{count} charge importée : elle sert de point de départ sur la machine. | {count} charges importées : elles servent de point de départ sur chaque machine."
   },
   "coach": {
     "section": "Partager avec un coach",

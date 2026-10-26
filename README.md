@@ -48,7 +48,7 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 - **Hors ligne d'abord** : base SQLite sur le téléphone, aucune donnée envoyée sans action de ta part (RGPD).
 - **Français et anglais**, kilos ou livres, thème clair et sombre, grandes zones tactiles.
-- Export, import (Strong, Hevy), sauvegarde chiffrée et suppression complète en un bouton.
+- Export, import (Strong, Hevy, tes séances ou tes charges en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
 
 ## 🚀 Installer et lancer
 

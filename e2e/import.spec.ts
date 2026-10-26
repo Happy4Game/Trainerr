@@ -32,3 +32,51 @@ test('imports a Strong export after checking the exercise matches', async ({ pag
       .filter({ hasText: 'Presse à cuisses' }),
   ).toContainText('90 kg × 12');
 });
+
+test('imported sessions: the user picks the session the cycle goes on with', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.goto('/tabs/settings');
+  await page
+    .locator('input[type=file][accept=".csv,text/csv"]')
+    .setInputFiles({ name: 'strong.csv', mimeType: 'text/csv', buffer: Buffer.from(STRONG) });
+  await page.getByRole('button', { name: 'Importer 2 séances' }).click();
+
+  const next = page.getByRole('region', { name: 'Par quelle séance continuer ?' });
+  await next.getByRole('button', { name: 'Bas du corps B' }).click();
+  await expect(next.getByRole('button', { pressed: true, name: /Bas du corps B/ })).toBeVisible();
+
+  await page.goto('/tabs/planning');
+  await expect(
+    page.getByRole('region', { name: 'Prochaine séance' }).getByRole('heading', { level: 2 }),
+  ).toHaveText(/Bas du corps B|Plus de séance/);
+  await expect(
+    page
+      .getByRole('region', { name: 'Ordre des séances' })
+      .getByRole('button', { pressed: true, name: /Bas du corps B/ }),
+  ).toBeVisible();
+});
+
+test('the loads already lifted are imported as the starting point on each machine', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.goto('/tabs/settings');
+  const LOADS = `exercise,load_kg,reps,date
+Presse à cuisses,107,10,2026-10-24
+Écarté à la machine,52,12,`;
+  await page
+    .locator('input[type=file][accept=".csv,text/csv"]')
+    .setInputFiles({ name: 'charges.csv', mimeType: 'text/csv', buffer: Buffer.from(LOADS) });
+  await expect(page.getByText('2 charges trouvées, une par machine.')).toBeVisible();
+  await expect(page.getByLabel(/^Presse à cuisses · 107/)).toHaveValue('Leg_Press');
+  await page.getByRole('button', { name: 'Importer 2 charges' }).click();
+  await expect(page.getByText(/2 charges importées/)).toBeVisible();
+
+  await page.goto('/tabs/catalog');
+  await page.getByRole('searchbox').fill('presse à cuisses');
+  await expect(
+    page.getByRole('button', { name: /Ma charge sur Presse à cuisses : 107\s*kg × 10/ }),
+  ).toBeVisible({ timeout: 20_000 });
+});

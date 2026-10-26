@@ -650,9 +650,14 @@ async function finish(): Promise<void> {
   phase.value = summary.value ? 'finished' : 'idle';
 }
 
-async function saveReference(exerciseId: string, loadKg: number, reps: number): Promise<void> {
+async function saveReference(
+  exerciseId: string,
+  loadKg: number,
+  reps: number,
+  date: string = today(),
+): Promise<void> {
   const { db } = await openAppDatabase();
-  const reference = { exerciseId, loadKg, reps, date: today() };
+  const reference = { exerciseId, loadKg, reps, date };
   await setReference(db, reference);
   references.value = [...references.value.filter((r) => r.exerciseId !== exerciseId), reference];
 }

@@ -21,8 +21,9 @@ import { useRouter } from 'vue-router';
 import { suggestProgramChange } from '@/domain/cycles';
 import { useI18n } from 'vue-i18n';
 import type { WeeklySlot } from '@/domain/planning';
-import { rotationFor, TRAINING_MODELS, type TrainingModelId } from '@/domain/trainingModels';
+import { TRAINING_MODELS, type TrainingModelId } from '@/domain/trainingModels';
 import AvailabilityGrid from '@/ui/AvailabilityGrid.vue';
+import NextSessionChooser from '@/ui/NextSessionChooser.vue';
 import { rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings } from '@/ui/useSettings';
@@ -55,21 +56,11 @@ const ifMissed = computed(() => {
     }));
 });
 
-/** The rotation from the next session due: touching another one starts there. */
-const order = computed(() => {
-  const rotation = settings.value ? rotationFor(settings.value.model) : [];
-  const first = rotation.findIndex((r) => r.id === session.template.value?.id);
-  return rotation.map((_, i) => rotation[(first + i) % rotation.length]?.id ?? '');
-});
 /** The last session of the week, pushed to next week when one is missed. */
 const pushedOut = computed(() => {
   const coming = week.value.days.filter((d) => d.status === 'today' || d.status === 'planned');
   return ifMissed.value.length < coming.length ? coming.at(-1)?.session?.templateId : undefined;
 });
-async function chooseNext(templateId: string): Promise<void> {
-  const after = session.lastDoneSessionId.value;
-  await save({ nextChoice: { templateId, ...(after ? { afterSessionId: after } : {}) } });
-}
 
 const editing = ref(false);
 const freeSlots = ref<WeeklySlot[]>([]);
@@ -231,24 +222,7 @@ const changeSuggested = computed(() =>
           {{ t('planning.unplaced', plan.unplaced) }}
         </p>
 
-        <section class="order" :aria-label="t('planning.order.title')">
-          <h2 class="section">{{ t('planning.order.title') }}</h2>
-          <p class="hint">{{ t('planning.order.help') }}</p>
-          <div class="chips">
-            <ion-button
-              v-for="(id, i) in order"
-              :key="id"
-              size="small"
-              :fill="i === 0 ? 'solid' : 'outline'"
-              :class="{ selected: i === 0 }"
-              :aria-pressed="i === 0"
-              @click="i > 0 && chooseNext(id)"
-            >
-              <span v-if="i === 0" class="chip-tag">{{ t('planning.order.next') }}</span>
-              {{ templateLabel(id) }}
-            </ion-button>
-          </div>
-        </section>
+        <NextSessionChooser :title="t('planning.order.title')" :help="t('planning.order.help')" />
 
         <ion-card>
           <ion-card-header>
@@ -541,30 +515,6 @@ ion-card-title {
 }
 .instead {
   opacity: 0.8;
-}
-.order {
-  margin-block-end: 8px;
-}
-.hint {
-  margin: 0 0 8px;
-  color: var(--ion-color-medium-shade);
-  font-size: 0.9rem;
-}
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.chips ion-button {
-  margin: 0;
-  --border-width: 1.5px;
-}
-.chip-tag {
-  margin-inline-end: 6px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  opacity: 0.85;
 }
 .note {
   padding: 8px 12px;

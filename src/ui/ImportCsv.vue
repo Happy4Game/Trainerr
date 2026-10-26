@@ -4,21 +4,36 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { openAppDatabase } from '@/data/appDatabase';
 import { importSessions } from '@/data/repositories/sessionRepository';
-import { parseWorkoutCsv, suggestMatches, type ImportedSession } from '@/domain/importCsv';
+import {
+  detectFormat,
+  parseCsv,
+  parseLoadsCsv,
+  parseWorkoutCsv,
+  suggestMatches,
+  type ImportedLoad,
+  type ImportedSession,
+} from '@/domain/importCsv';
+import NextSessionChooser from '@/ui/NextSessionChooser.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useCatalog } from '@/ui/useCatalog';
 import { useSettings } from '@/ui/useSettings';
+import { useUnits } from '@/ui/useUnits';
 
 const { t, locale } = useI18n();
 const { entries } = useCatalog();
 const { settings } = useSettings();
 const session = useSession();
+const { load: kg } = useUnits();
 
 const fileInput = ref<HTMLInputElement>();
 const text = ref('');
 const format = ref<string>();
 const strongUnit = ref<'kg' | 'lb'>('kg');
 const parsed = ref<ImportedSession[]>([]);
+/** A file of loads already lifted, one per machine, instead of sessions. */
+const loads = ref<ImportedLoad[]>([]);
+/** Sessions just imported: the user says where the cycle goes on. */
+const imported = ref(false);
 /** Exercise name in the file → catalog id, or '' to skip it. */
 const matches = ref<Record<string, string>>({});
 const message = ref('');
@@ -34,17 +49,29 @@ const nameOf = (id: string) => {
   return e ? (locale.value.startsWith('fr') ? e.name : e.nameEn) : id;
 };
 const names = computed(() => [
-  ...new Set(parsed.value.flatMap((s) => s.sets.map((set) => set.exerciseName))),
+  ...new Set([
+    ...parsed.value.flatMap((s) => s.sets.map((set) => set.exerciseName)),
+    ...loads.value.map((l) => l.exerciseName),
+  ]),
 ]);
 const suggestions = computed(() =>
   Object.fromEntries(names.value.map((n) => [n, suggestMatches(n, catalogNames.value, 6)])),
 );
 
 function parse(): void {
+  imported.value = false;
   try {
-    const result = parseWorkoutCsv(text.value, { strongUnit: strongUnit.value });
-    format.value = result.format;
-    parsed.value = result.sessions;
+    const header = parseCsv(text.value)[0] ?? [];
+    if (detectFormat(header) === 'loads') {
+      format.value = 'loads';
+      parsed.value = [];
+      loads.value = parseLoadsCsv(text.value);
+    } else {
+      const result = parseWorkoutCsv(text.value, { strongUnit: strongUnit.value });
+      format.value = result.format;
+      parsed.value = result.sessions;
+      loads.value = [];
+    }
     matches.value = Object.fromEntries(
       names.value.map((n) => [n, suggestions.value[n]?.[0] ?? '']),
     );
@@ -52,6 +79,7 @@ function parse(): void {
   } catch (error) {
     message.value = error instanceof Error ? error.message : String(error);
     parsed.value = [];
+    loads.value = [];
   }
 }
 
@@ -83,6 +111,19 @@ async function confirm(): Promise<void> {
   await session.reload();
   parsed.value = [];
   message.value = t('importCsv.done', count);
+  imported.value = count > 0;
+}
+
+async function confirmLoads(): Promise<void> {
+  let count = 0;
+  for (const load of loads.value) {
+    const exerciseId = matches.value[load.exerciseName];
+    if (!exerciseId) continue;
+    await session.saveReference(exerciseId, load.loadKg, load.reps, load.date);
+    count++;
+  }
+  loads.value = [];
+  message.value = t('importCsv.loadsDone', count);
 }
 </script>
 
@@ -100,6 +141,30 @@ async function confirm(): Promise<void> {
       @change="onFile"
     />
     <p v-if="message" role="status">{{ message }}</p>
+    <NextSessionChooser
+      v-if="imported"
+      :title="t('importCsv.continueTitle')"
+      :help="t('importCsv.continueHelp')"
+    />
+
+    <template v-if="loads.length > 0">
+      <p>{{ t('importCsv.loadsFound', loads.length) }}</p>
+      <p>{{ t('importCsv.check') }}</p>
+      <div v-for="load in loads" :key="load.exerciseName" class="match">
+        <label :for="`match-${load.exerciseName}`">
+          {{ load.exerciseName }} · {{ kg(load.loadKg) }} × {{ load.reps }}
+        </label>
+        <select :id="`match-${load.exerciseName}`" v-model="matches[load.exerciseName]">
+          <option v-for="id in suggestions[load.exerciseName]" :key="id" :value="id">
+            {{ nameOf(id) }}
+          </option>
+          <option value="">{{ t('importCsv.skip') }}</option>
+        </select>
+      </div>
+      <ion-button expand="block" @click="confirmLoads">
+        {{ t('importCsv.loadsConfirm', loads.length) }}
+      </ion-button>
+    </template>
 
     <template v-if="parsed.length > 0">
       <p>

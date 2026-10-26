@@ -894,7 +894,7 @@
   },
   "importCsv": {
     "title": "Import from another app",
-    "choose": "Choose a CSV file (Strong, Hevy)",
+    "choose": "Choose a CSV file (sessions or loads)",
     "found": "{sessions} workout(s) found in the {app} export.",
     "apps": {
       "strong": "Strong",
@@ -905,7 +905,12 @@
     "check": "Check which exercise each name matches:",
     "skip": "Do not import",
     "confirm": "Import {count} workout | Import {count} workouts",
-    "done": "{count} workout imported. | {count} workouts imported."
+    "done": "{count} workout imported. | {count} workouts imported.",
+    "continueTitle": "Which session comes next?",
+    "continueHelp": "Your imported sessions may not follow the app's program: pick the next session, the rest follows.",
+    "loadsFound": "{count} load found, one per machine. | {count} loads found, one per machine.",
+    "loadsConfirm": "Import {count} load | Import {count} loads",
+    "loadsDone": "{count} load imported: it is the starting point on the machine. | {count} loads imported: they are the starting point on each machine."
   },
   "coach": {
     "section": "Share with a coach",

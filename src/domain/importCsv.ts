@@ -59,12 +59,49 @@ export function parseCsv(text: string): string[][] {
   return rows;
 }
 
-export function detectFormat(header: readonly string[]): CsvFormat | undefined {
+/** A session export, or the loads already lifted on each machine (no session). */
+export function detectFormat(header: readonly string[]): CsvFormat | 'loads' | undefined {
   const h = header.map((c) => c.trim().toLowerCase());
   if (h.includes('exercise_title') && h.includes('weight_kg')) return 'hevy';
   if (h.includes('exercise name') && h.includes('set order')) return 'strong';
-  if (h.includes('exercise_id') && h.includes('load_kg')) return 'trainerr';
+  if (h.includes('load_kg') && h.includes('template')) return 'trainerr';
+  if (h.includes('load_kg') && h.includes('exercise')) return 'loads';
   return undefined;
+}
+
+export interface ImportedLoad {
+  readonly exerciseName: string;
+  readonly loadKg: number;
+  readonly reps: number;
+  /** When it was lifted; today when missing. */
+  readonly date?: IsoDate;
+}
+
+/**
+ * Loads already lifted, one line per machine: `exercise,load_kg,reps,date`.
+ * Lines without a name or reps are skipped; the last line of an exercise wins.
+ */
+export function parseLoadsCsv(text: string): ImportedLoad[] {
+  const [header, ...rows] = parseCsv(text);
+  if (!header || detectFormat(header) !== 'loads')
+    throw new Error('Format de fichier non reconnu (exercise, load_kg, reps).');
+  const column = (name: string) => header.findIndex((c) => c.trim().toLowerCase() === name);
+  const [name, load, reps, date] = ['exercise', 'load_kg', 'reps', 'date'].map(column);
+  const loads = new Map<string, ImportedLoad>();
+  for (const row of rows) {
+    const exerciseName = (row[name as number] ?? '').trim();
+    const repCount = number(row[reps as number]);
+    if (!exerciseName || repCount <= 0) continue;
+    const day = date === -1 ? undefined : toIsoDate(row[date as number] ?? '');
+    loads.delete(exerciseName);
+    loads.set(exerciseName, {
+      exerciseName,
+      loadKg: number(row[load as number]),
+      reps: repCount,
+      ...(day ? { date: day } : {}),
+    });
+  }
+  return [...loads.values()];
 }
 
 const number = (text: string | undefined) => {
@@ -82,6 +119,7 @@ export function parseWorkoutCsv(
 ): { format: CsvFormat; sessions: ImportedSession[] } {
   const [header, ...rows] = parseCsv(text);
   const format = header ? detectFormat(header) : undefined;
+  if (format === 'loads') throw new Error('Ce fichier contient des charges, pas des séances.');
   if (!header || !format)
     throw new Error('Format de fichier non reconnu (Strong, Hevy ou Trainerr).');
   const column = (name: string) => header.findIndex((c) => c.trim().toLowerCase() === name);
