@@ -40,6 +40,9 @@ jobs:
           java-version: 21
           cache: gradle
       - uses: android-actions/setup-android@v3
+        with:
+          # Le paquet « tools » (installé par défaut) n'existe plus dans le SDK.
+          packages: platform-tools
 
       - name: Vérifier les secrets de signature
         id: secrets

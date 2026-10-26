@@ -20,6 +20,9 @@ jobs:
           java-version: 21
           cache: gradle
       - uses: android-actions/setup-android@v3
+        with:
+          # Le paquet « tools » (installé par défaut) n'existe plus dans le SDK.
+          packages: platform-tools
       - run: npm ci
       - name: Construire l'APK de debug
         run: npm run android:apk
