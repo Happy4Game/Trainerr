@@ -119,6 +119,10 @@ const { settings: appSettings } = useSettings();
 const supersetChoice = ref<boolean>();
 const useSupersets = computed(() => supersetChoice.value ?? appSettings.value?.supersets ?? false);
 const customSessions = computed(() => appSettings.value?.customSessions ?? []);
+/** "I am a beginner" in the questionnaire, first sessions: the beginner full body is offered first. */
+const beginnerStart = computed(
+  () => appSettings.value?.level === 'beginner' && session.history.value.length < 3,
+);
 
 const remainingExercises = computed(() => {
   const s = active.value;
@@ -260,6 +264,25 @@ async function logWarmup(): Promise<void> {
 
       <!-- Avant la séance -->
       <template v-else-if="phase === 'idle' && template">
+        <!-- Someone who starts out: the simplest session first, in one tap. -->
+        <ion-card v-if="beginnerStart" class="beginner">
+          <ion-card-header>
+            <ion-card-title>{{ t('presets.beginner.title') }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ t('presets.beginner.text') }}</p>
+            <ion-button
+              expand="block"
+              size="large"
+              @click="session.startPreset('fullBodyBeginner')"
+            >
+              {{ t('presets.start', { name: t('presets.sessions.fullBodyBeginner') }) }}
+            </ion-button>
+            <ion-button expand="block" fill="clear" router-link="/tabs/session/presets">
+              {{ t('presets.beginner.details') }}
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
         <ion-card>
           <ion-card-header>
             <ion-card-title>

@@ -1229,7 +1229,12 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s}"
     },
-    "shortcut": "Ou une séance type : Push, Pull, Jambes…"
+    "shortcut": "Ou une séance type : Push, Pull, Jambes…",
+    "beginner": {
+      "title": "Tu débutes ? Commence ici",
+      "text": "5 machines guidées pour tout le corps, 3 séries de 10, dans le bon ordre. L'appli propose une charge légère pour démarrer : dis « Facile » si c'était trop léger, elle montera.",
+      "details": "Voir le détail et les autres séances types"
+    }
   },
   "sessionNotification": {
     "title": "Séance en cours · {name}",

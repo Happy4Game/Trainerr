@@ -76,3 +76,33 @@ test('the machines of a ready-made session join my machines in one tap', async (
     page.getByRole('button', { name: 'Retirer Développé couché barre de mes machines' }),
   ).toBeVisible();
 });
+
+test('a beginner is offered the beginner full body first, with realistic loads', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
+  const next = () => page.getByRole('button', { name: 'Suivant' }).click();
+  await page.getByRole('button', { name: 'Prendre du muscle' }).click();
+  await next();
+  await page.getByRole('button', { name: '3', exact: true }).click();
+  await next();
+  await page.getByRole('button', { name: 'Je débute' }).click();
+  await next();
+  await next(); // availability as it is
+  await page.getByRole('button', { name: '1 h', exact: true }).click();
+  await next();
+  await page.getByRole('button', { name: 'Non', exact: true }).click();
+  await next();
+  await page.getByRole('button', { name: 'Aucune' }).click();
+  await next();
+  await page.getByRole('button', { name: 'Plus tard' }).click();
+
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await expect(page.getByText('Tu débutes ? Commence ici')).toBeVisible();
+  await page.getByRole('button', { name: 'Commencer : Full body débutant' }).click();
+  const legPress = page.getByRole('region', { name: 'Presse à cuisses' });
+  await expect(legPress).toBeVisible();
+  // A light test set, not the lightest plate of the machine.
+  await expect(legPress.getByTestId('load')).toHaveText('45 kg');
+});

@@ -1229,7 +1229,12 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s} s"
     },
-    "shortcut": "Or a ready-made session: Push, Pull, Legs…"
+    "shortcut": "Or a ready-made session: Push, Pull, Legs…",
+    "beginner": {
+      "title": "New to this? Start here",
+      "text": "5 guided machines for the whole body, 3 sets of 10, in the right order. The app suggests a light load to start: say \"Easy\" if it was too light, it will go up.",
+      "details": "See the details and the other ready-made sessions"
+    }
   },
   "sessionNotification": {
     "title": "Session in progress · {name}",
