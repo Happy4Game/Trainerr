@@ -178,5 +178,5 @@ test('exercises can be found by touching a body part', async ({ page }) => {
   ).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Retirer la zone' }).click();
-  await expect(page.getByRole('status')).toHaveText('480 exercices');
+  await expect(page.getByRole('status')).toHaveText('482 exercices');
 });

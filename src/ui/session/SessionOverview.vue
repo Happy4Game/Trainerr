@@ -8,7 +8,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { Check } from 'lucide-vue-next';
+import { ArrowDown, ArrowUp, Check, Minus, Plus, X } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useUnits } from '@/ui/useUnits';
@@ -34,6 +34,13 @@ const setsLine = (id: string) =>
     done: session.workSetsInSession(id).length,
     total: session.plannedSets(id),
   });
+
+const pending = () => session.active.value?.plan.queue.pending ?? [];
+const canMove = (id: string, delta: -1 | 1) => {
+  const index = pending().indexOf(id);
+  // The first one is the current exercise: the others move around it.
+  return index > 0 && index + delta > 0 && index + delta < pending().length;
+};
 
 async function doNow(id: string): Promise<void> {
   await session.addExerciseNow(id);
@@ -98,6 +105,65 @@ async function doNow(id: string): Promise<void> {
           >
             {{ t(e.status === 'next' ? 'session.overview.nowShort' : 'session.overview.reopen') }}
           </ion-button>
+          <span v-if="e.status !== 'done'" class="edit">
+            <ion-button
+              size="small"
+              fill="clear"
+              :disabled="!session.canRemoveSet(e.id)"
+              @click="session.removePlannedSet(e.id)"
+            >
+              <Minus :size="18" aria-hidden="true" />
+              <span class="visually-hidden">{{
+                t('session.overview.fewerSets', { name: e.name })
+              }}</span>
+            </ion-button>
+            <ion-button
+              size="small"
+              fill="clear"
+              :disabled="!session.canAddSet(e.id)"
+              @click="session.extraSet(e.id)"
+            >
+              <Plus :size="18" aria-hidden="true" />
+              <span class="visually-hidden">{{
+                t('session.overview.moreSets', { name: e.name })
+              }}</span>
+            </ion-button>
+            <template v-if="e.status === 'next'">
+              <ion-button
+                size="small"
+                fill="clear"
+                :disabled="!canMove(e.id, -1)"
+                @click="session.moveExercise(e.id, -1)"
+              >
+                <ArrowUp :size="18" aria-hidden="true" />
+                <span class="visually-hidden">{{
+                  t('session.overview.earlier', { name: e.name })
+                }}</span>
+              </ion-button>
+              <ion-button
+                size="small"
+                fill="clear"
+                :disabled="!canMove(e.id, 1)"
+                @click="session.moveExercise(e.id, 1)"
+              >
+                <ArrowDown :size="18" aria-hidden="true" />
+                <span class="visually-hidden">{{
+                  t('session.overview.later', { name: e.name })
+                }}</span>
+              </ion-button>
+              <ion-button
+                size="small"
+                fill="clear"
+                color="danger"
+                @click="session.removeExercise(e.id)"
+              >
+                <X :size="18" aria-hidden="true" />
+                <span class="visually-hidden">{{
+                  t('session.overview.remove', { name: e.name })
+                }}</span>
+              </ion-button>
+            </template>
+          </span>
         </li>
       </ol>
     </ion-content>
@@ -112,6 +178,7 @@ async function doNow(id: string): Promise<void> {
 }
 .item {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   margin-block-end: 8px;
@@ -168,6 +235,25 @@ async function doNow(id: string): Promise<void> {
 }
 .name {
   font-weight: 700;
+}
+.edit {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.edit ion-button {
+  min-width: 44px;
+  min-height: 44px;
+  margin: 0;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 .detail {
   font-size: 0.85rem;

@@ -10,6 +10,7 @@ import {
   finishSession,
   getActiveSession,
   listDoneSessions,
+  moveSets,
   savePlan,
   setSessionDate,
   setSessionNote,
@@ -301,6 +302,21 @@ describe('editing the history', () => {
       ['Dumbbell_Bench_Press', 9],
       ['Butterfly', 12],
     ]);
+  });
+
+  it('moves sets logged on the wrong machine, keeping each machine history right', async () => {
+    const { first, second } = await doneSession('2026-10-20');
+    await moveSets(db, [first.id, second.id], 'Leverage_Chest_Press');
+    const [session] = await listDoneSessions(db);
+    expect(session?.sets.map((s) => [s.exerciseId, s.loadKg, s.reps])).toEqual([
+      ['Leverage_Chest_Press', 18, 10],
+      ['Leverage_Chest_Press', 18, 9],
+    ]);
+    const left = await db.query(
+      "SELECT id FROM set_log WHERE exercise_id = 'Dumbbell_Bench_Press'",
+    );
+    expect(left).toEqual([]);
+    await moveSets(db, [], 'Butterfly');
   });
 
   it('moves a session to another day, in date order', async () => {

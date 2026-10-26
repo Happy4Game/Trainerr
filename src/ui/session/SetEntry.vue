@@ -21,7 +21,7 @@ import { useUnits } from '@/ui/useUnits';
 import { DEFAULT_BODY_WEIGHT_KG } from '@/domain/assisted';
 
 const props = defineProps<{ exerciseId: string }>();
-const emit = defineEmits<{ busy: []; plates: [loadKg: number] }>();
+const emit = defineEmits<{ busy: []; replace: []; plates: [loadKg: number] }>();
 
 const { t, n, locale } = useI18n();
 const session = useSession();
@@ -218,6 +218,17 @@ function listen(): void {
         @click="session.extraSet(exerciseId)"
       >
         {{ t('session.extraSet.short') }}
+      </ion-button>
+      <ion-button
+        v-if="session.canRemoveSet(exerciseId)"
+        size="small"
+        fill="outline"
+        color="medium"
+        class="extra-set"
+        :aria-label="t('session.fewerSets.label')"
+        @click="session.removePlannedSet(exerciseId)"
+      >
+        {{ t('session.fewerSets.short') }}
       </ion-button>
     </div>
     <div v-if="partnerName" class="superset" role="note">
@@ -425,6 +436,9 @@ function listen(): void {
     <div class="tools">
       <ion-button fill="outline" color="medium" @click="emit('busy')">
         {{ t('session.busy') }}
+      </ion-button>
+      <ion-button fill="outline" color="medium" @click="emit('replace')">
+        {{ t('session.replaceCard.open') }}
       </ion-button>
       <ion-button
         v-if="entry.exercise.equipment === 'barbell'"

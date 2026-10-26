@@ -7,6 +7,7 @@ import {
   abandonSession,
   addSet,
   deleteSet,
+  moveSets,
   updateSet,
   finishSession,
   getActiveSession,
@@ -69,6 +70,14 @@ import { isPopular } from '@/data/catalog/curated';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
 import { PRESET_PREFIX, resolvePreset } from '@/domain/presets';
+import {
+  afterMovingSets,
+  movePending,
+  removeFromQueue,
+  replaceInQueue,
+  replacementsFor,
+  withoutSet,
+} from '@/domain/sessionEdit';
 import { presetSession } from '@/data/content/presetSessions';
 import {
   assistedScale,
@@ -341,8 +350,9 @@ const readyMade = computed(() => {
   if (!settings.value || !template.value) return undefined;
   const count = exercisesPerSession(settings.value.sessionMinutes);
   if (preview.value.length >= count) return undefined;
+  // Help machines need the body weight and are not in every gym: never suggested unasked.
   const popular = entries.value
-    .filter((e) => isPopular(e.exercise.id))
+    .filter((e) => isPopular(e.exercise.id) && !e.exercise.assisted)
     .map((e) => e.exercise)
     .sort((a, b) => Number(!!illustrationFor(b.id)) - Number(!!illustrationFor(a.id)));
   const session = readyMadeSession({
@@ -675,6 +685,112 @@ async function addExerciseNow(exerciseId: string): Promise<void> {
   await updatePlan({ ...plan, exercises, queue: addExercise(plan.queue, exerciseId) });
 }
 
+/** Same movement on another machine: my machines and the common ones, not already in the session. */
+function replacements(exerciseId: string): CatalogExercise[] {
+  const exercise = entryOf(exerciseId)?.exercise;
+  const queue = active.value?.plan.queue;
+  if (!exercise || !queue) return [];
+  const inSession = new Set([
+    ...queue.pending,
+    ...queue.done,
+    ...queue.waiting.map((w) => w.exerciseId),
+  ]);
+  const candidates = entries.value
+    .filter((e) => (e.favorite || isPopular(e.exercise.id)) && !inSession.has(e.exercise.id))
+    .map((e) => e.exercise);
+  return replacementsFor(exercise, candidates, (id) => entryOf(id)?.favorite === true);
+}
+
+/**
+ * Another machine instead of this one. Sets already done here stay here (the
+ * history stays right), the new machine gets the sets left to do.
+ */
+async function replaceExercise(fromId: string, toId: string): Promise<void> {
+  if (!active.value) return;
+  const plan = active.value.plan;
+  const done = workSetsInSession(fromId).length;
+  const line = plan.exercises.find((e) => e.exerciseId === fromId);
+  const remaining = Math.max(1, plannedSets(fromId) - done);
+  const others = plan.exercises.filter((e) => e.exerciseId !== toId);
+  const exercises =
+    done === 0
+      ? others.map((e) => (e.exerciseId === fromId ? { ...e, exerciseId: toId } : e))
+      : [...others, { ...(line ?? { sets: remaining }), exerciseId: toId, sets: remaining }];
+  const queue =
+    done === 0
+      ? replaceInQueue(plan.queue, fromId, toId)
+      : startNow(completeExercise(plan.queue, fromId), toId);
+  const swap = (id: string) => (id === fromId ? toId : id);
+  const supersets = plan.supersets?.map(([a, b]) => [swap(a), swap(b)] as const);
+  await updatePlan({ ...plan, exercises, queue, ...(supersets ? { supersets } : {}) });
+}
+
+/** One place earlier or later among the exercises to come. */
+async function moveExercise(exerciseId: string, delta: -1 | 1): Promise<void> {
+  if (!active.value) return;
+  await updatePlan({
+    ...active.value.plan,
+    queue: movePending(active.value.plan.queue, exerciseId, delta),
+  });
+}
+
+/** Removed from the rest of the session; with sets already done, it is simply finished. */
+async function removeExercise(exerciseId: string): Promise<void> {
+  if (!active.value) return;
+  const queue = active.value.plan.queue;
+  await updatePlan({
+    ...active.value.plan,
+    queue:
+      setsInSession(exerciseId).length > 0
+        ? completeExercise(queue, exerciseId)
+        : removeFromQueue(queue, exerciseId),
+  });
+}
+
+/** One set less than planned; the exercise ends if its sets are now all done. */
+async function removePlannedSet(exerciseId: string): Promise<void> {
+  if (!active.value) return;
+  const plan = active.value.plan;
+  const done = workSetsInSession(exerciseId).length;
+  const exercises = withoutSet(plan.exercises, exerciseId, done);
+  const target = exercises.find((e) => e.exerciseId === exerciseId)?.sets ?? 0;
+  const queue =
+    done > 0 && done >= target && plan.queue.pending.includes(exerciseId)
+      ? completeExercise(plan.queue, exerciseId)
+      : plan.queue;
+  await updatePlan({ ...plan, exercises, queue });
+}
+
+/**
+ * Sets logged on the wrong machine moved to the right one, in the session
+ * in progress. Each machine keeps a true history.
+ */
+async function moveLoggedSets(setIds: readonly string[], toId: string): Promise<void> {
+  const session = active.value;
+  const moved = session?.sets.filter((s) => setIds.includes(s.id)) ?? [];
+  const fromId = moved[0]?.exerciseId;
+  if (!session || !fromId || fromId === toId) return;
+  const { db } = await openAppDatabase();
+  await moveSets(db, setIds, toId);
+  active.value = {
+    ...session,
+    sets: session.sets.map((s) => (setIds.includes(s.id) ? { ...s, exerciseId: toId } : s)),
+  };
+  const plan = session.plan;
+  const movedWork = moved.filter((s) => !s.warmup).length;
+  const exercises = plan.exercises.some((e) => e.exerciseId === toId)
+    ? plan.exercises
+    : [...plan.exercises, { exerciseId: toId, sets: Math.max(movedWork, plannedSets(fromId)) }];
+  const toTarget = exercises.find((e) => e.exerciseId === toId)?.sets ?? movedWork;
+  const queue = afterMovingSets(plan.queue, {
+    fromId,
+    toId,
+    fromHasSetsLeft: setsInSession(fromId).length > 0,
+    toComplete: workSetsInSession(toId).length >= toTarget,
+  });
+  await updatePlan({ ...plan, exercises, queue });
+}
+
 /** Any change of a finished session (correction, forgotten set…), then the history again. */
 async function editHistory(change: (db: SqlDatabase) => Promise<unknown>): Promise<void> {
   const { db } = await openAppDatabase();
@@ -886,6 +1002,13 @@ export function useSession() {
     addExerciseNow,
     editHistory,
     extraSet,
+    replacements,
+    replaceExercise,
+    moveExercise,
+    removeExercise,
+    removePlannedSet,
+    moveLoggedSets,
+    canRemoveSet: (id: string) => plannedSets(id) > Math.max(1, workSetsInSession(id).length),
     canAddSet: (id: string) => plannedSets(id) < MAX_SETS,
     previousExercise: computed(() =>
       active.value ? previousInQueue(active.value.plan.queue) : undefined,

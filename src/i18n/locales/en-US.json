@@ -386,7 +386,12 @@
       "nowNamed": "Do {name} now",
       "reopen": "Reopen",
       "reopenNamed": "Reopen {name}",
-      "nowShort": "Now"
+      "nowShort": "Now",
+      "fewerSets": "One set less: {name}",
+      "moreSets": "One more set: {name}",
+      "earlier": "Do earlier: {name}",
+      "later": "Do later: {name}",
+      "remove": "Remove from the session: {name}"
     },
     "previous": "Previous: {name}",
     "goBackShort": "← Back",
@@ -420,7 +425,20 @@
     "seconds": "Seconds",
     "repsPerSide": "Reps / leg",
     "fewerSeconds": "5 seconds less",
-    "moreSeconds": "5 seconds more"
+    "moreSeconds": "5 seconds more",
+    "fewerSets": {
+      "short": "−1 set",
+      "label": "One set less on this exercise"
+    },
+    "replaceCard": {
+      "open": "Change machine",
+      "title": "Replace {name}",
+      "help": "Same movement on another machine: the suggested load is the one of that machine.",
+      "keepDone": "{count} set already done stays on {name}. The new machine takes the sets left. | {count} sets already done stay on {name}. The new machine takes the sets left.",
+      "mine": "My machine",
+      "none": "No other machine for this movement among your machines or the common ones.",
+      "other": "Another exercise…"
+    }
   },
   "availability": {
     "day": "Day",
@@ -1050,7 +1068,9 @@
     "addExercise": "Add an exercise",
     "deleteSession": "Delete this session",
     "deleteConfirm": "The session and all its sets will be erased from the history.",
-    "deleteYes": "Yes, delete the session"
+    "deleteYes": "Yes, delete the session",
+    "moveMachine": "Change machine",
+    "moveMachineNamed": "These sets were on another machine than {name}"
   },
   "myLoad": {
     "title": "My load",
@@ -1068,7 +1088,12 @@
     "deleteYes": "Yes, delete",
     "open": "Fix: {set}",
     "last": "Last set: {set}",
-    "fix": "Fix"
+    "fix": "Fix",
+    "wrongMachine": {
+      "title": "Wrong machine?",
+      "all": "Move the {count} sets of {name}",
+      "pick": "Choose the right machine"
+    }
   },
   "customSession": {
     "mine": "My sessions",

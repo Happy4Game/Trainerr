@@ -26,6 +26,7 @@ import {
   addSet,
   deleteSession,
   deleteSet,
+  moveSets,
   setSessionDate,
   setSessionNote,
   updateSet,
@@ -61,6 +62,21 @@ const groups = computed(() => {
 });
 
 const picking = ref(false);
+/** Exercise whose sets were logged on the wrong machine, while the right one is picked. */
+const movingFrom = ref<string>();
+async function moveGroup(toId: string): Promise<void> {
+  const fromId = movingFrom.value;
+  movingFrom.value = undefined;
+  const group = groups.value.find((g) => g.exerciseId === fromId);
+  if (!group) return;
+  await session.editHistory((db) =>
+    moveSets(
+      db,
+      group.sets.map((s) => s.id),
+      toId,
+    ),
+  );
+}
 const confirmingDelete = ref(false);
 
 const number = (value: unknown) => Number(String(value ?? '').replace(',', '.'));
@@ -192,12 +208,27 @@ async function remove() {
             >
               <Plus :size="18" aria-hidden="true" /> {{ t('historyEdit.addSet') }}
             </ion-button>
+            <ion-button
+              fill="clear"
+              size="small"
+              :aria-label="t('historyEdit.moveMachineNamed', { name: nameOf(group.exerciseId) })"
+              @click="movingFrom = group.exerciseId"
+            >
+              {{ t('historyEdit.moveMachine') }}
+            </ion-button>
           </ion-card-content>
         </ion-card>
 
         <ion-button expand="block" fill="outline" @click="picking = true">
           <Plus :size="20" aria-hidden="true" /> {{ t('historyEdit.addExercise') }}
         </ion-button>
+        <ExercisePicker
+          :open="movingFrom !== undefined"
+          :title="t('setEdit.wrongMachine.pick')"
+          :exclude="movingFrom ? [movingFrom] : []"
+          @pick="moveGroup"
+          @close="movingFrom = undefined"
+        />
 
         <ion-textarea
           class="ion-margin-top"

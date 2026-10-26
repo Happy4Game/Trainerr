@@ -244,3 +244,19 @@ export async function importSessions(
   await db.executeScript(statements.join('\n'));
   return sessions.filter((s) => s.sets.length > 0).length;
 }
+
+/**
+ * Sets logged on the wrong machine moved to the right one: the history of
+ * each machine stays true, since every set belongs to one exercise.
+ */
+export async function moveSets(
+  db: SqlDatabase,
+  setIds: readonly string[],
+  toExerciseId: string,
+): Promise<void> {
+  if (setIds.length === 0) return;
+  await db.run(
+    `UPDATE set_log SET exercise_id = ? WHERE id IN (${setIds.map(() => '?').join(', ')})`,
+    [toExerciseId, ...setIds],
+  );
+}

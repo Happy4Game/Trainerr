@@ -28,6 +28,7 @@ import RestTimer from '@/ui/session/RestTimer.vue';
 import MobilityCard from '@/ui/MobilityCard.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
+import ReplaceCard from '@/ui/session/ReplaceCard.vue';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionPlanList from '@/ui/session/SessionPlanList.vue';
 import SessionOverview from '@/ui/session/SessionOverview.vue';
@@ -49,6 +50,8 @@ const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, s
 const { previousExercise } = session;
 
 const busyFor = ref<string>();
+/** Machine being swapped for another one doing the same movement. */
+const replacing = ref<string>();
 const overviewOpen = ref(false);
 const content = ref<{ $el: { scrollToTop: (duration?: number) => Promise<void> } }>();
 
@@ -494,6 +497,8 @@ async function logWarmup(): Promise<void> {
           </ion-card-content>
         </ion-card>
 
+        <ReplaceCard v-if="replacing" :exercise-id="replacing" @close="replacing = undefined" />
+
         <DiscomfortCard
           v-if="reportingDiscomfort"
           :remaining="remainingExercises"
@@ -568,7 +573,12 @@ async function logWarmup(): Promise<void> {
               <ion-button size="small" @click="logWarmup">{{ t('session.warmupDone') }}</ion-button>
             </ion-card-content>
           </ion-card>
-          <SetEntry :exercise-id="step.exerciseId" @busy="onBusy" @plates="platesLoad = $event" />
+          <SetEntry
+            :exercise-id="step.exerciseId"
+            @busy="onBusy"
+            @replace="replacing = step.exerciseId"
+            @plates="platesLoad = $event"
+          />
           <ion-button fill="outline" color="warning" @click="reportingDiscomfort = true">
             {{ t('discomfort.open') }}
           </ion-button>

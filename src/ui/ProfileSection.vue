@@ -38,7 +38,7 @@ async function save(): Promise<void> {
   </ion-item>
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
-      <p role="status">
+      <p aria-live="polite">
         {{
           saved
             ? t('settings.profile.saved')

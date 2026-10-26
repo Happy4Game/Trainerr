@@ -9,6 +9,7 @@ import {
   IonSegmentButton,
   IonLabel,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/vue';
 import { Minus, Plus } from 'lucide-vue-next';
@@ -19,6 +20,7 @@ import { stepDown, stepUp } from '@/domain/loadSteps';
 import type { Difficulty } from '@/domain/types';
 import { useUnits } from '@/ui/useUnits';
 import { useSession } from './useSession';
+import ExercisePicker from '@/ui/ExercisePicker.vue';
 
 /** Correction of a set already validated during the session. */
 const props = defineProps<{ set?: StoredSet | undefined; name: string }>();
@@ -33,6 +35,30 @@ const load = ref(0);
 const reps = ref(0);
 const difficulty = ref<Difficulty>('ok');
 const confirmingDelete = ref(false);
+/** Logged on the wrong machine: moved to the right one, with the other sets of that machine. */
+const pickingMachine = ref(false);
+const moveAll = ref(true);
+const sameMachine = computed(() =>
+  props.set
+    ? (session.active.value?.sets ?? []).filter((s) => s.exerciseId === props.set?.exerciseId)
+    : [],
+);
+// The move waits for the picker to be fully closed: closing both windows at
+// once left the session screen hidden from the screen reader and the taps.
+const target = ref<string>();
+function pickMachine(exerciseId: string): void {
+  target.value = exerciseId;
+  pickingMachine.value = false;
+}
+async function onPickerClosed(): Promise<void> {
+  pickingMachine.value = false;
+  const exerciseId = target.value;
+  target.value = undefined;
+  if (!props.set || !exerciseId) return;
+  const ids = moveAll.value ? sameMachine.value.map((s) => s.id) : [props.set.id];
+  await session.moveLoggedSets(ids, exerciseId);
+  emit('close');
+}
 watch(
   () => props.set,
   (set) => {
@@ -121,6 +147,26 @@ async function remove(): Promise<void> {
       <ion-button expand="block" size="large" class="save" @click="save">
         {{ t('setEdit.save') }}
       </ion-button>
+      <section class="wrong-machine" :aria-label="t('setEdit.wrongMachine.title')">
+        <h3>{{ t('setEdit.wrongMachine.title') }}</h3>
+        <ion-toggle
+          v-if="sameMachine.length > 1"
+          :checked="moveAll"
+          @ion-change="moveAll = $event.detail.checked"
+        >
+          {{ t('setEdit.wrongMachine.all', { count: sameMachine.length, name }) }}
+        </ion-toggle>
+        <ion-button expand="block" fill="outline" @click="pickingMachine = true">
+          {{ t('setEdit.wrongMachine.pick') }}
+        </ion-button>
+        <ExercisePicker
+          :open="pickingMachine"
+          :title="t('setEdit.wrongMachine.pick')"
+          :exclude="set ? [set.exerciseId] : []"
+          @pick="pickMachine"
+          @close="onPickerClosed"
+        />
+      </section>
       <ion-button
         v-if="!confirmingDelete"
         expand="block"
@@ -181,6 +227,15 @@ p.label {
 }
 .save {
   margin-block-start: 20px;
+}
+.wrong-machine {
+  margin-block: 16px 8px;
+  padding-block-start: 8px;
+  border-block-start: 1px solid var(--ion-color-light-shade);
+}
+.wrong-machine h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
 }
 .confirm {
   padding: 12px;
