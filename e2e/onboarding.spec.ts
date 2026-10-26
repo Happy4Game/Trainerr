@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 import { skipOnboarding } from './helpers';
 
 test('the questionnaire sets the program and the week', async ({ page }) => {
+  // The week shown depends on the day: a Monday morning, so the whole week is ahead.
+  await page.clock.install({ time: new Date('2026-10-26T08:00:00') });
   await page.goto('/');
   const next = () => page.getByRole('button', { name: 'Suivant' }).click();
 
