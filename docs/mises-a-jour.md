@@ -59,7 +59,7 @@ Ensuite, les mises à jour se font depuis l'appli.
 1. Vérifie que les 4 secrets existent.
 2. Recrée le keystore dans le dossier temporaire du runner (jamais dans le dépôt), l'efface à la fin.
 3. `npm ci`, `npm run build`, `npx cap sync android`, puis `./gradlew assembleRelease` avec JDK 21 (celui demandé par Capacitor 8).
-4. `versionCode` = numéro d'exécution du workflow (`github.run_number`), `versionName` = `1.0.<n>` : chaque release est plus récente que la précédente ([versionCode sur developer.android.com](https://developer.android.com/studio/publish/versioning?hl=fr)).
+4. `versionCode` = numéro d'exécution du workflow + 1 (`github.run_number + 1`), `versionName` = `1.0.<versionCode>` : chaque release est plus récente que la précédente. Le + 1 vient de l'APK `trainerr-1.0.0.apk` construit à la main avec la même clé (versionCode 1) : sans décalage, la première release aurait aussi le versionCode 1 et ne serait pas proposée ([versionCode sur developer.android.com](https://developer.android.com/studio/publish/versioning?hl=fr)).
 5. Crée la release `v1.0.<n>` avec l'outil `gh` fourni par GitHub, et y joint l'APK et `latest.json` :
 
    ```json

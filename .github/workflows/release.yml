@@ -19,11 +19,17 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
-    env:
-      VERSION_CODE: ${{ github.run_number }}
-      VERSION_NAME: 1.0.${{ github.run_number }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Numéro de version
+        # Numéro d'exécution + 1 : l'APK 1.0.0 installé à la main (versionCode 1)
+        # reçoit ainsi même la toute première release. Le versionName finit par
+        # le versionCode : l'appli le lit dans le tag (v1.0.<code>).
+        run: |
+          code=$(( ${{ github.run_number }} + 1 ))
+          echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
+          echo "VERSION_NAME=1.0.$code" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v4
         with:
           node-version: 24
