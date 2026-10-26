@@ -389,7 +389,8 @@ L'exemple reprend ton ancienne référence au développé couché : 70 kg.
 
 - Poids de la barre : 20 kg par défaut, 15 ou 10 kg possibles, ou valeur libre
 - Disques disponibles et nombre de paires (ex. 25, 20, 15, 10, 5, 2,5, 1,25 kg)
-- Colliers de serrage comptés ou non
+- Colliers de serrage comptés ou non (colliers à ressort, 2,5 kg la paire)
+- Réglés une fois dans Réglages → Barre et disques ; le calculateur s'en sert à chaque séance
 
 **Affichage**
 

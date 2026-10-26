@@ -19,6 +19,7 @@ import {
 import { useI18n } from 'vue-i18n';
 import DataSection from '@/ui/DataSection.vue';
 import GymsSection from '@/ui/GymsSection.vue';
+import PlatesSection from '@/ui/PlatesSection.vue';
 import ProfileSection from '@/ui/ProfileSection.vue';
 import UpdatesSection from '@/ui/UpdatesSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
@@ -129,6 +130,8 @@ async function redoQuestionnaire(): Promise<void> {
         <ProfileSection />
 
         <GymsSection />
+
+        <PlatesSection />
 
         <ion-list-header>{{ t('settings.workout') }}</ion-list-header>
         <ion-item>

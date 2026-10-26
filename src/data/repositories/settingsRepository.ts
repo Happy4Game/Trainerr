@@ -2,6 +2,7 @@ import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
 import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
 import type { NextChoice, SportId, WeeklySlot } from '@/domain/planning';
+import type { PlateConfig } from '@/domain/plates';
 import type { Equipment } from '@/domain/types';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
@@ -51,6 +52,8 @@ export interface Settings {
   readonly autoUpdateCheck?: boolean;
   /** Beeps at the end of the rest (app open). On by default. */
   readonly restSound?: boolean;
+  /** Bar and plates of the gym, for the plate calculator (20 kg bar and usual plates by default). */
+  readonly barbell?: PlateConfig;
   /** Screen kept on during a session. On by default. */
   readonly keepAwake?: boolean;
   /** Android notification during a session (rest countdown, end-of-rest alert). On by default. */

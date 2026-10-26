@@ -690,6 +690,17 @@
     "back": "Back"
   },
   "settings": {
+    "plates": {
+      "title": "Bar and plates",
+      "bar": "Bar weight",
+      "plate": "{load} plates",
+      "pairs": "{count} pair | {count} pairs",
+      "fewer": "One pair of {load} less",
+      "more": "One pair of {load} more",
+      "collars": "Count the collars",
+      "collarsHelp": "Spring collars, {load} the pair.",
+      "help": "The plate calculator only suggests loads you can build with these plates (pairs available at the gym)."
+    },
     "title": "Settings",
     "content": "About the app",
     "workout": "Workouts",

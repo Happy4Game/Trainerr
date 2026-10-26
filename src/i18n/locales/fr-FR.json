@@ -690,6 +690,17 @@
     "back": "Dos"
   },
   "settings": {
+    "plates": {
+      "title": "Barre et disques",
+      "bar": "Poids de la barre",
+      "plate": "Disques de {load}",
+      "pairs": "{count} paire | {count} paires",
+      "fewer": "Une paire de {load} en moins",
+      "more": "Une paire de {load} en plus",
+      "collars": "Compter les colliers",
+      "collarsHelp": "Colliers à ressort, {load} la paire.",
+      "help": "Le calculateur de disques ne propose que les charges faisables avec ces disques (nombre de paires disponibles à la salle)."
+    },
     "title": "Réglages",
     "content": "Infos",
     "workout": "Séances",
