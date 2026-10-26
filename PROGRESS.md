@@ -154,7 +154,8 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - **Plus de choix en séance** : changer de machine (même mouvement), −1 / +1 série, exercice plus tôt / plus tard / retiré, et « Mauvaise machine ? » pour déplacer des séries vers la bonne machine (pendant la séance et dans l'historique).
 - **Notification de séance (Android)** : exercice, série et compte à rebours du repos écran verrouillé (petit plugin natif), alerte de fin de repos, interrupteur dans les Réglages.
 - **Mises à jour** : workflow « Publier l'APK » (APK signé + `latest.json` en GitHub Release à chaque push sur `main`), vérification au démarrage et dans Réglages → Mises à jour, installation par l'installateur d'Android. Mise en place : [docs/mises-a-jour.md](docs/mises-a-jour.md).
-- **Séance test** jouée de bout en bout : [docs/retour-utilisateur.md](docs/retour-utilisateur.md) (6 points corrigés, 4 pistes restantes).
+- **Séances test** jouées de bout en bout (Pull avec tractions assistées ; débutant en Full body ; avancé en Push puis Jambes) : [docs/retour-utilisateur.md](docs/retour-utilisateur.md), 11 points corrigés. Ensuite : écran de repos allégé, machines utilisées ajoutées à « Mes machines » en un tap, même mouvement en tête du choix de machine, série test réaliste (sur le poids du corps), exercices au poids du corps sans lest d'office, encart « Tu débutes ? » vers Full body débutant.
+- **Vérification des mises à jour** : activée par défaut, exception écrite dans SPEC.md (vie privée).
 
 **À faire par Thibaut** : créer la clé de signature et les 4 secrets GitHub (docs/mises-a-jour.md), pousser le dépôt, puis tester sur le téléphone la notification de séance et une mise à jour.
 
@@ -174,4 +175,5 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
 - Le remote GitHub est configuré (`origin` → github.com/Happy4Game/Trainerr) mais rien n'est encore poussé : il manque l'authentification GitHub sur l'ordinateur.
 - Notification de séance et mises à jour : compilées (APK debug et release signé vérifiés), pas encore essayées sur un vrai téléphone.
-- Pistes du retour utilisateur non traitées : trop d'éléments au-dessus de l'exercice pendant le repos, machines d'une séance type non ajoutées à « Mes machines », sélecteur « Mauvaise machine ? » sans les machines du même mouvement en tête.
+- Pistes du retour utilisateur non traitées : proposer de noter ses charges habituelles après « Je m'entraîne déjà », question explicite après la série test, questionnaire plus court.
+- Clé de signature créée hors du dépôt (`~/trainerr-release.jks`, mot de passe dans `~/.trainerr-release-secrets`) ; reste à installer `gh`, se connecter, pousser et créer les 4 secrets.

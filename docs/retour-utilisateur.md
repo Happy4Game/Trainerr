@@ -47,9 +47,52 @@ Un pratiquant de 78 kg, qui ne fait pas encore de tractions sans aide, va à la 
 
 Pendant le développement, la même démarche avait déjà trouvé un bug : fermer la fenêtre de choix de machine en même temps que celle de correction laissait l'écran de séance bloqué pour le lecteur d'écran et les taps. Corrigé avant la livraison, avec un test.
 
+## Pistes de la première séance, traitées ensuite
+
+- **Écran de repos allégé** : pendant le repos, le minuteur et la série suivante viennent d'abord ; « Corriger », « Mauvaise machine ? », « ← Revenir » et « +1 série » sont repliés sous une ligne « ✓ Dernière série … · Corriger, revenir… ».
+- **Machines d'une séance type** : le récap de fin liste les machines utilisées qui ne sont pas dans « Mes machines », avec « Ajouter ces N machines à mes machines » (1 tap).
+- **Choix de la bonne machine** : « Mauvaise machine ? » et « Un autre exercice… » proposent en tête les machines du même mouvement, marquées « Même mouvement » ; plus besoin de taper le nom (2 taps au total).
+
+# Deuxième séance test : un débutant et un pratiquant avancé
+
+_26 octobre 2026, même méthode (360 × 760 px, tactile, build de production)._
+
+## Les deux profils
+
+- **Débutant, 75 kg estimés, aucune donnée** : il répond au questionnaire (« Prendre du muscle », 3 séances, « Je débute », 1 h, pas d'autre sport, aucune zone), puis fait la séance **Full body débutant** sans rien régler.
+- **Avancé** : il passe le questionnaire, fait **Push** (développé couché tapé à 100 kg, développé incliné pris donc remplacé, saisie rapide entre les séries, repos passés), puis **Jambes** (squat tapé à 140 kg).
+
+## Nombre de taps
+
+| Parcours                                          | Taps       | Remarque                                                         |
+| ------------------------------------------------- | ---------- | ---------------------------------------------------------------- |
+| Questionnaire complet                             | 14         | une question par écran, « Suivant » à chaque fois                |
+| Débutant : de l'onglet Séance au premier exercice | 3 → **1**  | encart « Tu débutes ? » ajouté en tête                           |
+| Débutant : Full body (15 séries, 5 machines)      | 35         | 15 séries + 4 « Je suis sur la machine » + 15 repos passés + fin |
+| Avancé : charge de travail tapée la première fois | 1 + saisie | toucher la charge, taper 100, Entrée                             |
+| Avancé : machine prise puis reprise               | 3          | « Machine occupée », « Je prends celle-ci », « Oui, j'y vais »   |
+| Avancé : Push complet (16 séries, repos passés)   | 47         | dont 2 charges tapées et l'ajout des machines en fin de séance   |
+
+## Ce qui marche bien
+
+- **Une main suffit** : toutes les actions de la série sont des boutons de 48 à 64 px ; seul le premier passage sur une machine demande le clavier (avancé).
+- **Lisibilité en salle** : charge et reps en gros chiffres, conseil en une ligne en gras, minuteur lisible de loin, écran « Machine suivante » avec le dessin.
+- **Avancé** : après une série à 100 kg × 7 « Correct », l'appli propose « ↗ Vise une rep de plus : 100 kg × 8 » ; après « Limite », elle garde la charge. La machine prise revient d'elle-même après l'exercice suivant (« … est libre ? »).
+- **Débutant** : il n'a rien à comprendre pour commencer ; la fourchette, la charge et le repos sont réglés par la séance type.
+
+## Problèmes trouvés, et corrigés
+
+| #   | Problème constaté                                                                                                                                                                                                    | Gravité  | Correction                                                                                                                                                                   |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 7   | Première fois sur une machine sans charge notée : la série test était au plus petit palier (presse 5 kg, tirage 5 kg, haltères 2 kg). Absurde pour tous, et dangereux de faire croire à un débutant qu'il progresse. | **Fort** | Série test calculée sur le poids du corps (presse 45 kg, développé machine 20 kg, tirage 30 kg pour 75 kg ; haltères au tiers). Parts à valider par un coach. Tests ajoutés. |
+| 8   | Planche et exercices au poids du corps : « 5 kg × 30 » proposé d'office (le palier 0 était perdu).                                                                                                                   | **Bug**  | Pas de lest par défaut ; affichage « Lest : Aucun », « poids du corps × 30 s ».                                                                                              |
+| 9   | Un échauffement était conseillé avant la série test, déjà légère.                                                                                                                                                    | Moyen    | Pas d'échauffement avant une série test.                                                                                                                                     |
+| 10  | Après « Je débute », l'onglet Séance proposait une pré-séance avec squat et développé couché à la barre ; la séance débutant était à 2 écrans.                                                                       | Fort     | Encart « Tu débutes ? Commence ici » en tête pendant les 3 premières séances : Full body débutant en 1 tap.                                                                  |
+| 11  | « Extension lombaire · 0 kg » dans les listes.                                                                                                                                                                       | Faible   | « poids du corps » à la place de « 0 kg ».                                                                                                                                   |
+
 ## Ce qui reste à améliorer (pas corrigé)
 
-- **Beaucoup de choses au-dessus de l'exercice pendant le repos** : « Précédent : … ← Revenir · +1 série », le minuteur, la dernière série. Sur un petit écran, les boutons de ressenti passent sous le pli et il faut faire défiler pour la série suivante. Piste : replier « Précédent » dans le programme de la séance.
-- **Une machine utilisée via une séance type n'est pas ajoutée à « Mes machines »** : la séance du jour suivante ne la proposera pas d'elle-même. Piste : proposer « Ajouter ces machines à mes machines » sur le récap de fin.
-- **Recherche dans le sélecteur de machine** : il faut taper le nom. Pour « Mauvaise machine ? », les machines du même mouvement pourraient être proposées en premier, comme dans « Changer de machine ».
-- **Notification de séance et mise à jour** : vérifiées à la compilation de l'APK (debug et release signé) et par les tests web, mais pas encore sur un vrai téléphone : à tester sur Android 13+ (permission des notifications, compte à rebours écran verrouillé, alerte de fin de repos, installation d'une mise à jour).
+- **Avancé, première séance** : chaque nouvel exercice demande de taper sa charge de travail. Piste : à la fin du questionnaire « Je m'entraîne déjà », proposer de noter ses charges habituelles (l'import CSV et « Ma charge » sur la fiche existent, mais ne sont pas proposés à ce moment).
+- **Série test du débutant** : après « Correct » sur la série test, la charge reste la même ; il faut dire « Facile » pour monter. Le texte d'aide le dit, mais une question explicite (« C'était trop léger ? ») serait plus claire.
+- **Questionnaire** : 14 taps ; « Suivant » pourrait être implicite quand une seule réponse est possible.
+- **Notification de séance et mise à jour** : vérifiées à la compilation de l'APK (debug et release signé) et par les tests web, pas encore sur un vrai téléphone (Android 13+ : permission, compte à rebours écran verrouillé, alerte de fin de repos, installation d'une mise à jour).
