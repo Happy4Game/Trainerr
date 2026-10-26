@@ -35,11 +35,11 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
 
   // That set was in fact on the machine: moved, the dumbbells come back to do.
   await page.getByRole('button', { name: 'Mauvaise machine ?' }).click();
-  await page.getByRole('search').last().getByRole('searchbox').fill('shoulder press');
-  await page
-    .getByRole('button', { name: /^Développé épaules machine/ })
-    .first()
-    .click();
+  // No typing: the same movement comes first in the list.
+  const first = page.locator('ion-modal ion-item').first();
+  await expect(first).toContainText('Développé épaules machine');
+  await expect(first).toContainText('Même mouvement');
+  await first.click();
   await expect(page.getByText(/^Développé épaules machine — 2 kg × 10/)).toBeVisible();
   // The right machine now has that set and comes next.
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();

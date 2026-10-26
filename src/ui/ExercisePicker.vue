@@ -20,8 +20,16 @@ import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { compareCatalog, compareNames, matchesSearch } from '@/domain/catalogSearch';
 import { useCatalog } from '@/ui/useCatalog';
 
-/** Chooses one exercise of the catalog: my machines and popular ones first. */
-const props = defineProps<{ open: boolean; title: string; exclude?: readonly string[] }>();
+/**
+ * Chooses one exercise of the catalog: the suggested ones first (e.g. the same
+ * movement on other machines), then my machines and popular ones.
+ */
+const props = defineProps<{
+  open: boolean;
+  title: string;
+  exclude?: readonly string[];
+  suggested?: readonly string[];
+}>();
 const emit = defineEmits<{ pick: [exerciseId: string]; close: [] }>();
 
 const SHOWN = 40;
@@ -32,6 +40,11 @@ const query = ref('');
 const rows = computed(() => {
   const french = locale.value.startsWith('fr');
   const excluded = new Set(props.exclude ?? []);
+  const suggested = props.suggested ?? [];
+  const rank = (id: string) => {
+    const index = suggested.indexOf(id);
+    return index < 0 ? suggested.length : index;
+  };
   return entries.value
     .filter((entry) => !excluded.has(entry.exercise.id))
     .filter((entry) =>
@@ -46,12 +59,13 @@ const rows = computed(() => {
         id: entry.exercise.id,
         name: french ? entry.exercise.name : entry.exercise.nameEn,
         favorite: entry.favorite,
+        suggested: suggested.includes(entry.exercise.id),
         popular: isPopular(entry.exercise.id),
         illustrated: image !== undefined,
         ...(image ? { thumbnail: `${import.meta.env.BASE_URL}exercise-images/${image.file}` } : {}),
       };
     })
-    .sort(compareCatalog(compareNames(locale.value)))
+    .sort((a, b) => rank(a.id) - rank(b.id) || compareCatalog(compareNames(locale.value))(a, b))
     .slice(0, SHOWN);
 });
 
@@ -87,7 +101,8 @@ function pick(id: string): void {
           </ion-thumbnail>
           <ion-label class="ion-text-wrap">
             <h2>{{ row.name }}</h2>
-            <p v-if="row.favorite">{{ t('picker.mine') }}</p>
+            <p v-if="row.suggested" class="suggested">{{ t('picker.sameMovement') }}</p>
+            <p v-else-if="row.favorite">{{ t('picker.mine') }}</p>
             <p v-else-if="row.popular">{{ t('picker.popular') }}</p>
           </ion-label>
         </ion-item>
@@ -102,6 +117,9 @@ function pick(id: string): void {
   --size: 48px;
   --border-radius: 8px;
   background: #fff;
+}
+.suggested {
+  color: var(--ion-color-primary) !important;
 }
 .thumbnail img {
   object-fit: contain;

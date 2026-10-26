@@ -84,6 +84,7 @@ async function take(id: string): Promise<void> {
         :open="picking"
         :title="t('session.replaceCard.other')"
         :exclude="[exerciseId]"
+        :suggested="session.sameMovement(exerciseId)"
         @pick="take"
         @close="picking = false"
       />

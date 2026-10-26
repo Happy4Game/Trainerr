@@ -226,6 +226,7 @@ async function remove() {
           :open="movingFrom !== undefined"
           :title="t('setEdit.wrongMachine.pick')"
           :exclude="movingFrom ? [movingFrom] : []"
+          :suggested="movingFrom ? session.sameMovement(movingFrom) : []"
           @pick="moveGroup"
           @close="movingFrom = undefined"
         />

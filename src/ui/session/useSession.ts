@@ -715,6 +715,29 @@ function replacements(exerciseId: string): CatalogExercise[] {
 }
 
 /**
+ * Where sets of this machine may really have been done: the same movement,
+ * the machines of today's session and my machines first.
+ */
+function sameMovement(exerciseId: string): string[] {
+  const exercise = entryOf(exerciseId)?.exercise;
+  const queue = active.value?.plan.queue;
+  if (!exercise) return [];
+  const today = new Set([
+    ...(queue?.pending ?? []),
+    ...(queue?.done ?? []),
+    ...(queue?.waiting.map((w) => w.exerciseId) ?? []),
+  ]);
+  const candidates = entries.value
+    .filter((e) => e.favorite || isPopular(e.exercise.id) || today.has(e.exercise.id))
+    .map((e) => e.exercise);
+  return replacementsFor(
+    exercise,
+    candidates,
+    (id) => today.has(id) || entryOf(id)?.favorite === true,
+  ).map((e) => e.id);
+}
+
+/**
  * Another machine instead of this one. Sets already done here stay here (the
  * history stays right), the new machine gets the sets left to do.
  */
@@ -1027,6 +1050,7 @@ export function useSession() {
     editHistory,
     extraSet,
     replacements,
+    sameMovement,
     replaceExercise,
     moveExercise,
     removeExercise,

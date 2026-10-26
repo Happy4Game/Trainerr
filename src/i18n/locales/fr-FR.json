@@ -1060,7 +1060,8 @@
   "picker": {
     "cancel": "Annuler",
     "mine": "Dans mes machines",
-    "popular": "Machine populaire"
+    "popular": "Machine populaire",
+    "sameMovement": "Même mouvement"
   },
   "historyEdit": {
     "title": "Modifier la séance",

@@ -163,6 +163,7 @@ async function remove(): Promise<void> {
           :open="pickingMachine"
           :title="t('setEdit.wrongMachine.pick')"
           :exclude="set ? [set.exerciseId] : []"
+          :suggested="set ? session.sameMovement(set.exerciseId) : []"
           @pick="pickMachine"
           @close="onPickerClosed"
         />

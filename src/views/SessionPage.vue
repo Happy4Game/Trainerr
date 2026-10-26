@@ -490,6 +490,7 @@ async function logWarmup(): Promise<void> {
             wrongMachine ? t('setEdit.wrongMachine.where', { name: nameOf(wrongMachine) }) : ''
           "
           :exclude="wrongMachine ? [wrongMachine] : []"
+          :suggested="wrongMachine ? session.sameMovement(wrongMachine) : []"
           @pick="moveToRightMachine"
           @close="wrongMachine = undefined"
         />

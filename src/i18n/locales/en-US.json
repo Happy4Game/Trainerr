@@ -1060,7 +1060,8 @@
   "picker": {
     "cancel": "Cancel",
     "mine": "In my machines",
-    "popular": "Popular machine"
+    "popular": "Popular machine",
+    "sameMovement": "Same movement"
   },
   "historyEdit": {
     "title": "Edit the session",
