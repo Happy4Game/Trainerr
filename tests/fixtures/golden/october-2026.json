@@ -1,0 +1,114 @@
+{
+  "description": "Cas réels des séances du 15 au 24 octobre 2026 (SPEC.md, section « Cas de test »). Toute modification de ce fichier doit être expliquée dans la pull request et validée par Thibaut.",
+  "cases": [
+    {
+      "id": "comeback-db-bench-22kg",
+      "situation": "Reprise, DC haltères, ancienne référence 22 kg",
+      "expected": "Proposer 16 kg (environ 70 %)",
+      "kind": "comebackStart",
+      "exercise": "dbBench",
+      "steps": "dumbbell",
+      "referenceKg": 22,
+      "pause": "overThreeMonths",
+      "then": { "loadKg": 16 }
+    },
+    {
+      "id": "db-bench-16x12-ok",
+      "situation": "DC haltères 16 kg × 12, Correct",
+      "expected": "Série suivante : 18 kg",
+      "kind": "nextSet",
+      "exercise": "dbBench",
+      "steps": "dumbbell",
+      "set": { "loadKg": 16, "reps": 12, "difficulty": "ok" },
+      "then": { "action": "increase", "loadKg": 18 }
+    },
+    {
+      "id": "leg-press-107x10-3-sets",
+      "situation": "Leg press 107 kg × 10 sur 3 séries",
+      "expected": "Séance suivante : 110 kg",
+      "kind": "nextSession",
+      "exercise": "legPress",
+      "steps": "legPress",
+      "history": [
+        [
+          { "loadKg": 107, "reps": 10, "difficulty": "ok" },
+          { "loadKg": 107, "reps": 10, "difficulty": "ok" },
+          { "loadKg": 107, "reps": 10, "difficulty": "ok" }
+        ]
+      ],
+      "then": { "loadKg": 110 }
+    },
+    {
+      "id": "pec-fly-52x12-missing-step",
+      "situation": "Pec fly 52 kg × 12, palier suivant 59 kg",
+      "expected": "Rester à 52 kg, viser 15 reps",
+      "kind": "nextSet",
+      "exercise": "pecFly",
+      "steps": "stack",
+      "set": { "loadKg": 52, "reps": 12, "difficulty": "ok" },
+      "then": { "action": "keep", "loadKg": 52, "targetReps": 15 }
+    },
+    {
+      "id": "lat-pulldown-45x8-incomplete",
+      "situation": "Lat pulldown 45 kg × 8, reps incomplètes",
+      "expected": "Série suivante : 39 kg",
+      "kind": "nextSet",
+      "exercise": "latPulldown",
+      "steps": "stack",
+      "set": { "loadKg": 45, "reps": 8, "difficulty": "hard", "completeReps": false },
+      "then": { "action": "decrease", "loadKg": 39, "reminders": ["rangeOfMotion"] }
+    },
+    {
+      "id": "seated-row-39x9-incomplete",
+      "situation": "Seated row 39 kg × 9, reps incomplètes",
+      "expected": "32 kg, reps complètes",
+      "kind": "nextSet",
+      "exercise": "seatedRow",
+      "steps": "stack",
+      "set": { "loadKg": 39, "reps": 9, "difficulty": "hard", "completeReps": false },
+      "then": { "action": "decrease", "loadKg": 32, "reminders": ["rangeOfMotion"] }
+    },
+    {
+      "id": "leg-extension-52x8-hard",
+      "situation": "Leg extension 52 kg × 8, Limite",
+      "expected": "Même charge, viser 3 × 10",
+      "kind": "nextSet",
+      "exercise": "legExtension",
+      "steps": "stack",
+      "set": { "loadKg": 52, "reps": 8, "difficulty": "hard" },
+      "comeback": { "pause": "overThreeMonths", "daysSinceRestart": 6 },
+      "then": { "action": "keep", "loadKg": 52, "targetReps": 10, "targetSets": 3 }
+    },
+    {
+      "id": "curl-9x10-slow-tempo",
+      "situation": "Curl 9 kg × 10, tempo lent",
+      "expected": "Exclu de la comparaison du 1RM",
+      "kind": "strength",
+      "exercise": "curl",
+      "set": { "loadKg": 9, "reps": 10, "difficulty": "ok", "slowTempo": true },
+      "then": { "countsForStrength": false }
+    },
+    {
+      "id": "shoulder-press-front-shoulder",
+      "situation": "Shoulder press, gêne avant de l'épaule",
+      "expected": "Retirer les exercices de poussée restants, alerte",
+      "kind": "discomfort",
+      "zone": "frontShoulder",
+      "remaining": ["pecFly", "lateralRaise", "tricepsPushdown"],
+      "then": {
+        "removeExerciseIds": ["pec-fly", "lateral-raise", "triceps-pushdown"],
+        "advice": ["heatAndRest", "warningSigns"]
+      }
+    },
+    {
+      "id": "pec-fly-busy",
+      "situation": "Pec fly occupé",
+      "expected": "Proposer lateral raise, revenir au pec fly ensuite",
+      "kind": "busyMachine",
+      "session": ["shoulderPress", "pecFly", "lateralRaise", "tricepsPushdown"],
+      "doneBefore": ["shoulderPress"],
+      "busy": "pecFly",
+      "then": { "firstAlternative": "lateral-raise", "afterAlternative": "pec-fly" }
+    }
+  ]
+}

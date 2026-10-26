@@ -1,0 +1,1265 @@
+{
+  "tabs": {
+    "today": "Today",
+    "session": "Workout",
+    "catalog": "Catalog",
+    "history": "History",
+    "planning": "Planning",
+    "inProgress": "session in progress"
+  },
+  "today": {
+    "plannedAt": "Planned today at {start}.",
+    "restDay": "No workout planned today: rest, or an extra workout if you feel like it.",
+    "go": "Start",
+    "resume": "Resume the workout",
+    "week": "This week",
+    "weekCount": "{done} sessions done out of {target} this week",
+    "streak": "{count} week on pace | {count} weeks in a row on pace",
+    "seePlanning": "See the planning",
+    "next": "Next session",
+    "inProgressShort": "Session in progress",
+    "noPlan": "Next session",
+    "weekSessions": "session | sessions",
+    "exercises": "{count} exercise | {count} exercises"
+  },
+  "gym": {
+    "defaultName": "My gym"
+  },
+  "muscles": {
+    "chest": "Chest",
+    "frontDelts": "Front delts",
+    "sideDelts": "Side delts",
+    "rearDelts": "Rear delts",
+    "triceps": "Triceps",
+    "biceps": "Biceps",
+    "forearms": "Forearms",
+    "lats": "Lats",
+    "upperBack": "Upper back",
+    "traps": "Traps",
+    "lowerBack": "Lower back",
+    "abs": "Abs",
+    "obliques": "Obliques",
+    "glutes": "Glutes",
+    "quads": "Quads",
+    "hamstrings": "Hamstrings",
+    "adductors": "Adductors",
+    "abductors": "Abductors",
+    "calves": "Calves"
+  },
+  "groups": {
+    "push": "Push",
+    "pull": "Pull",
+    "legs": "Legs",
+    "core": "Core"
+  },
+  "kinds": {
+    "heavyCompound": "Heavy compound",
+    "machineCompound": "Machine compound",
+    "isolation": "Isolation"
+  },
+  "equipment": {
+    "machine": "Machine",
+    "cable": "Cable",
+    "dumbbell": "Dumbbells",
+    "barbell": "Barbell",
+    "bodyweight": "Bodyweight"
+  },
+  "catalog": {
+    "search": "Search a machine or a muscle",
+    "filters": {
+      "all": "All",
+      "favorites": "My machines",
+      "push": "Push",
+      "pull": "Pull",
+      "legs": "Legs",
+      "core": "Core"
+    },
+    "loading": "Loading the catalog…",
+    "error": "Could not load the catalog: {message}",
+    "empty": "No exercise matches.",
+    "noFavorites": "Star the machines of your gym: only those will be used in your workouts.",
+    "count": "{count} exercise | {count} exercises",
+    "showMore": "Show more",
+    "addFavorite": "Add {name} to my machines",
+    "removeFavorite": "Remove {name} from my machines",
+    "sections": {
+      "favorites": "My machines",
+      "popular": "Popular machines",
+      "others": "Other exercises"
+    },
+    "body": {
+      "toggle": "Search by body part",
+      "title": "Search by body part",
+      "help": "Touch a zone to see the exercises that work it.",
+      "zone": "Zone: {muscles}",
+      "clear": "Clear the zone"
+    }
+  },
+  "exercise": {
+    "notFound": "Exercise not found.",
+    "favorite": {
+      "add": "Add to my machines",
+      "remove": "In my machines"
+    },
+    "repRange": "{min} to {max} reps",
+    "muscles": {
+      "title": "Muscles worked",
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "none": "None",
+      "map": "Body map: {muscles}"
+    },
+    "cues": {
+      "title": "Cues",
+      "source": "Source: {source}",
+      "review": "Cues to be proofread by a coach before the app is released.",
+      "englishOnly": "Instructions in English: no translation yet for this exercise.",
+      "machineTranslation": {
+        "fr": "Machine translation from English: it may contain mistakes.",
+        "en": "Machine translation from French: it may contain mistakes."
+      },
+      "originalShown": "Original text:",
+      "showOriginal": "See the original text",
+      "showTranslation": "See the translation"
+    },
+    "machine": {
+      "title": "My machine",
+      "note": "Other settings (handle, backrest…)",
+      "notePlaceholder": "E.g. wide handle",
+      "photo": "Take a photo of the machine plate",
+      "photoReplace": "Replace the photo",
+      "photoDelete": "Delete the photo",
+      "photoAlt": "Plate of the {name} machine"
+    },
+    "steps": {
+      "title": "Load steps",
+      "help": "Suggested loads are rounded to these steps.",
+      "defaults": "Default steps, replace them with your machine's: {steps}…",
+      "add": "Add a step ({unit})",
+      "addButton": "Add",
+      "remove": "Remove {load}",
+      "invalid": "Invalid load",
+      "generate": {
+        "title": "Generate a series of steps ({unit})",
+        "first": "From",
+        "increment": "Step",
+        "last": "To",
+        "button": "Generate"
+      },
+      "saved": "Steps saved"
+    },
+    "source": {
+      "free-exercise-db": "Card from free-exercise-db (public domain).",
+      "trainerr": "Card written for Trainerr.",
+      "user": "Exercise added by you."
+    },
+    "illustration": {
+      "label": "Movement illustration: {name}",
+      "pause": "Pause the animation",
+      "play": "Play the animation",
+      "caption": "Illustration: {exercise} —",
+      "source": "source"
+    },
+    "backToSession": "← Back to the session",
+    "session": "Session",
+    "setup": {
+      "title": "Fine settings",
+      "addOns": "Add-on weights",
+      "addOnsHelp": "Small weights put on the stack (e.g. 1.25 or 2.5 kg): suggested loads use them between two plates.",
+      "otherAddOn": "Other add-on weight ({unit})",
+      "fineStep": "Precision of a typed load",
+      "fineStepHelp": "A load typed by hand is rounded to this value.",
+      "seat": "Seat",
+      "seatPlaceholder": "E.g. 4",
+      "notch": "Notch (backrest, arm, pad)",
+      "notchPlaceholder": "E.g. 2",
+      "addOther": "Add this weight"
+    }
+  },
+  "templates": {
+    "fullBodyA": "Full body A",
+    "fullBodyB": "Full body B",
+    "upperA": "Upper body A",
+    "lowerA": "Lower body A",
+    "upperB": "Upper body B",
+    "lowerB": "Lower body B",
+    "pushA": "Push A",
+    "pullA": "Pull A",
+    "legsA": "Legs A",
+    "pushB": "Push B",
+    "pullB": "Pull B",
+    "legsB": "Legs B",
+    "push": "Push",
+    "pull": "Pull",
+    "legs": "Legs",
+    "upper": "Upper body",
+    "lower": "Lower body",
+    "upperPower": "Upper body (power)",
+    "lowerPower": "Lower body (power)",
+    "upperHypertrophy": "Upper body (volume)",
+    "lowerHypertrophy": "Lower body (volume)",
+    "chestBackA": "Chest + back A",
+    "shouldersArmsA": "Shoulders + arms A",
+    "chestBackB": "Chest + back B",
+    "shouldersArmsB": "Shoulders + arms B",
+    "chest": "Chest",
+    "back": "Back",
+    "shoulders": "Shoulders",
+    "arms": "Arms",
+    "legsDay": "Legs",
+    "imported": "Imported workout"
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "ok": "Good",
+    "hard": "Hard",
+    "fail": "Failed"
+  },
+  "session": {
+    "next": "Today's workout: {template}",
+    "start": "Start the workout",
+    "noFavorites": "No favorite machine for the {template} workout. Star the machines of your gym in the catalog.",
+    "goToCatalog": "Open the catalog",
+    "setNumber": "Set {current} of {total}",
+    "reason": {
+      "aboveRange": "You went past the top of your rep range: you are ready to go up.",
+      "easy": "The previous set was easy.",
+      "inRange": "You are in your range: same load, one more rep if you can.",
+      "hard": "The previous set was hard: keep the load.",
+      "belowRange": "You are below your rep range: a bit lighter.",
+      "failure": "Failure on the previous set: lighter.",
+      "incompleteReps": "Incomplete reps: lighter, to keep the full range of motion.",
+      "missingStep": "The next step of the machine is too heavy: add reps instead.",
+      "noHeavierStep": "You are at the heaviest step of the machine.",
+      "progression": "Based on your last sessions.",
+      "comeback": "Coming back after a break: reduced load to restart safely.",
+      "testSet": "First time: light test set to find your load.",
+      "usual": "Based on the load noted on the machine card."
+    },
+    "reminder": {
+      "rangeOfMotion": "Full range of motion: an incomplete rep does not count.",
+      "technique": "Two failures in a row: read the cues on the card again."
+    },
+    "load": "Load",
+    "reps": "Reps",
+    "lighter": "Lighter step",
+    "heavier": "Heavier step",
+    "fewerReps": "One rep less",
+    "moreReps": "One rep more",
+    "halfRep": "Add a half rep",
+    "incomplete": "Incomplete reps",
+    "slowTempo": "Slow tempo",
+    "howWasIt": "How was it?",
+    "busy": "Machine taken",
+    "busyTitle": "{name} is taken",
+    "busyHelp": "Do something else meanwhile, the app asks again after the next exercise.",
+    "alternative": {
+      "substitute": "Same muscles",
+      "swap": "Next exercise of the workout",
+      "take": "I'll take this one",
+      "choose": "Take {name}",
+      "none": "No other machine for these muscles in your favorites: wait a bit or move on."
+    },
+    "continue": "Go on with the rest",
+    "isFree": "Is {name} free?",
+    "free": "Yes, going",
+    "stillBusy": "Still taken",
+    "crowded": "Crowded gym: finish with dumbbells and cables, same muscles.",
+    "replace": "{from} → {to}",
+    "warmup": "Suggested warm-up: {load} × {reps}",
+    "warmupDone": "Warm-up done",
+    "warmupShort": "warm-up",
+    "skip": "Skip this exercise",
+    "allDone": "All exercises done. Well done!",
+    "carryOver": "Moved to the next workout of the same type: {names}",
+    "logged": "Sets of this workout",
+    "undo": "Undo the last set",
+    "finish": "Finish the workout",
+    "rest": {
+      "title": "Rest",
+      "label": "Rest: {time} left",
+      "skip": "Skip",
+      "less": " (shorter rest)",
+      "more": " (longer rest)"
+    },
+    "voice": {
+      "start": "Dictate",
+      "listening": "Listening…"
+    },
+    "plates": {
+      "open": "Plates",
+      "title": "Plate calculator",
+      "close": "Close",
+      "lighter": "Lighter achievable load",
+      "heavier": "Heavier achievable load",
+      "closest": "Exact load impossible: {below} or {above}",
+      "perSide": "Per side: {plates} kg",
+      "bar": "{kg} kg bar"
+    },
+    "summary": {
+      "title": "Workout finished",
+      "close": "Close",
+      "record": "New record: {name}, {load} × {reps}.",
+      "backToLevel": "You are back to your old level: {name}!",
+      "streak": "{count} week on pace. Keep going! | {count} weeks in a row on pace. Keep going!",
+      "badge": "Badge earned: {badge}",
+      "bravo": "Well done!",
+      "setsLabel": "set | sets",
+      "workloadLabel": "lifted in total",
+      "recordsLabel": "record | records",
+      "newMachines": "You used {names}, not in your machines yet. | You used {names}, not in your machines yet.",
+      "adoptMachines": "Add this machine to my machines | Add these {count} machines to my machines"
+    },
+    "note": "Workout note",
+    "notePlaceholder": "E.g. slept badly, crowded gym",
+    "express": "Express workout (20–30 min)",
+    "home": "Home workout",
+    "readyMade": {
+      "title": "Suggested pre-session",
+      "introNone": "You have no favorite machine for this session: here is a session with common machines.",
+      "intro": "You have only one favorite machine for this session: it is completed with common machines. | You have only {count} favorite machines for this session: they are completed with common machines.",
+      "suggested": "suggested",
+      "start": "Do this pre-session",
+      "adopt": "Add the suggested machine to my machines | Add the {count} suggested machines to my machines"
+    },
+    "seeCard": "See the card of {name}",
+    "seeMovement": "See the movement",
+    "goBack": "← Back to: {name}",
+    "extraSet": {
+      "short": "+1 set",
+      "label": "Add a set to this exercise",
+      "previous": "+1 set on: {name}"
+    },
+    "addExercise": "+ Add an exercise",
+    "moreOptions": "Add details (incomplete reps, slow tempo, voice)",
+    "coach": {
+      "lastTime": "Last time: {sets}",
+      "noHistory": "First time on this exercise.",
+      "advice": {
+        "moreLoad": "Go heavier: {load} × {reps}",
+        "moreReps": "Aim for one more rep: {load} × {reps}",
+        "same": "Keep the load: {load} × {reps}",
+        "lighter": "Go lighter: {load} × {reps}",
+        "first": "Start at {load} × {reps}",
+        "comeback": "Easy comeback: {load} × {reps}"
+      },
+      "usual": "Your usual load: {set}",
+      "previousSet": "Previous set: {set}",
+      "assistedAdvice": {
+        "moreLoad": "Lower the help: {load} × {reps}",
+        "moreReps": "Aim for one more rep: help {load} × {reps}",
+        "same": "Keep the same help: {load} × {reps}",
+        "lighter": "Add a bit of help: {load} × {reps}",
+        "first": "Start with {load} of help × {reps}",
+        "comeback": "Easy restart: help {load} × {reps}"
+      }
+    },
+    "steps": {
+      "do": "Do your set",
+      "doHelp": "The advised load and reps are already filled in. Only change them if you did something else.",
+      "feelHelp": "One tap saves the set and starts the rest."
+    },
+    "difficultyHint": {
+      "easy": "3+ reps left",
+      "ok": "1 or 2 left",
+      "hard": "nothing left",
+      "fail": "could not finish"
+    },
+    "progress": {
+      "title": "Exercise {current} of {total}",
+      "done": "{count} exercise done | {count} exercises done",
+      "status": {
+        "done": "done",
+        "current": "in progress",
+        "next": "to come"
+      },
+      "seeAll": "See all"
+    },
+    "nextMachine": {
+      "title": "Next machine",
+      "finished": "{name} done",
+      "plan": "{count} set | {count} sets",
+      "go": "I'm on the machine"
+    },
+    "overview": {
+      "title": "Session plan",
+      "open": "See the session plan",
+      "sets": "{done} / {total} sets",
+      "nowNamed": "Do {name} now",
+      "reopen": "Reopen",
+      "reopenNamed": "Reopen {name}",
+      "nowShort": "Now",
+      "fewerSets": "One set less: {name}",
+      "moreSets": "One more set: {name}",
+      "earlier": "Do earlier: {name}",
+      "later": "Do later: {name}",
+      "remove": "Remove from the session: {name}"
+    },
+    "previous": "Previous: {name}",
+    "goBackShort": "← Back",
+    "supersetToggle": "Pair exercises in supersets",
+    "supersetToggleHelp": "Two exercises for opposite muscles back to back, rest after the second: shorter session. Optional.",
+    "split": "Split",
+    "splitNamed": "Split the superset with {name}",
+    "supersetPlace": "Superset {place}/2 ·",
+    "supersetThen": "then {name} right away, no rest.",
+    "supersetLast": "with {name}: rest after this set.",
+    "supersetGroup": "Superset: {first} and {second}",
+    "supersetTitle": "Superset",
+    "supersetRest": "back to back, rest after the second",
+    "supersetNone": "No superset possible for this session: the exercises work the same muscles or are heavy lifts. They stay as straight sets.",
+    "typeLoad": "Type the load",
+    "typeLoadNamed": "Load: {load}. Tap to type it",
+    "breakdown": "Plate {plate} + add-on {addOns}",
+    "setup": {
+      "label": "Setting: {setup}",
+      "seat": "seat {value}",
+      "notch": "notch {value}"
+    },
+    "assisted": {
+      "help": "Help",
+      "lessHelp": "Less help (harder)",
+      "moreHelp": "More help (easier)",
+      "set": "help {load} × {reps}",
+      "real": "Real load: {real} ({weight} body weight − {help} help)",
+      "noWeight": "Estimated weight: enter your weight",
+      "load": "help {load}"
+    },
+    "seconds": "Seconds",
+    "repsPerSide": "Reps / leg",
+    "fewerSeconds": "5 seconds less",
+    "moreSeconds": "5 seconds more",
+    "fewerSets": {
+      "short": "−1 set",
+      "label": "One set less on this exercise"
+    },
+    "replaceCard": {
+      "open": "Change machine",
+      "title": "Replace {name}",
+      "help": "Same movement on another machine: the suggested load is the one of that machine.",
+      "keepDone": "{count} set already done stays on {name}. The new machine takes the sets left. | {count} sets already done stay on {name}. The new machine takes the sets left.",
+      "mine": "My machine",
+      "none": "No other machine for this movement among your machines or the common ones.",
+      "other": "Another exercise…"
+    },
+    "restMore": "Fix, go back… ›",
+    "bodyweight": {
+      "none": "body weight",
+      "extra": "body weight + {load}",
+      "label": "Extra load",
+      "short": "None"
+    }
+  },
+  "availability": {
+    "day": "Day",
+    "periods": {
+      "morning": "Morning",
+      "noon": "Noon",
+      "evening": "Evening",
+      "late": "Late"
+    }
+  },
+  "models": {
+    "fullBody": "Full body",
+    "upperLower": "Upper / Lower",
+    "ppl": "Push / Pull / Legs",
+    "pplul": "PPL + Upper / Lower",
+    "phul": "PHUL (power + hypertrophy)",
+    "arnold": "Arnold split",
+    "broSplit": "Bro split"
+  },
+  "sports": {
+    "none": "No",
+    "cycling": "Cycling (deliveries too)",
+    "running": "Running",
+    "football": "Football",
+    "swimming": "Swimming",
+    "combat": "Combat sport",
+    "other": "Other"
+  },
+  "zones": {
+    "none": "None",
+    "shoulders": "Shoulders",
+    "knees": "Knees",
+    "back": "Back"
+  },
+  "onboarding": {
+    "title": "Welcome",
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
+    "goal": {
+      "question": "Your goal?",
+      "hypertrophy": "Build muscle",
+      "maintenance": "Stay in shape",
+      "strength": "Get stronger"
+    },
+    "sessions": {
+      "question": "How many workouts a week?",
+      "model": "Suggested program: {model}",
+      "first": "Which session do you start with?",
+      "firstHelp": "Already on this program? Pick your next session, the rest follows."
+    },
+    "level": {
+      "question": "Your level?",
+      "beginner": "I'm starting",
+      "trained": "I already train",
+      "comeback": "I'm coming back after a break",
+      "pause": "How long was the break?",
+      "comebackHint": "You can enter your old loads on each machine card: the app will start from a reduced load."
+    },
+    "availability": {
+      "question": "When are you available?",
+      "hint": "Tick the slots when you can go to the gym."
+    },
+    "duration": {
+      "30": "30 min",
+      "45": "45 min",
+      "60": "1 h",
+      "90": "1 h 30",
+      "question": "How long is a workout for you?"
+    },
+    "sport": {
+      "question": "Do you practice another sport?",
+      "when": "When?"
+    },
+    "zone": {
+      "question": "A body area to spare?"
+    },
+    "notifications": {
+      "question": "Reminders?",
+      "why": "A reminder 1 h before each planned workout, and a short note if it has been a while. At most one notification a day, never between 10 pm and 8 am.",
+      "privacy": "Everything stays on your phone: no server, no data sent.",
+      "accept": "Turn on reminders",
+      "later": "Later"
+    },
+    "aiNote": "App built with AI by a student: more in “About”.",
+    "pauses": {
+      "underOneMonth": "Less than 1 month",
+      "oneToThreeMonths": "1 to 3 months",
+      "overThreeMonths": "More than 3 months"
+    }
+  },
+  "planning": {
+    "week": "Your week",
+    "rest": "Rest",
+    "unplaced": "{count} workout found no slot: add availability. | {count} workouts found no slot: add availability.",
+    "availability": "My availability",
+    "edit": "Edit",
+    "save": "Save",
+    "program": "My program",
+    "model": "Model",
+    "sessionsPerWeek": "Workouts per week",
+    "frequencyNote": "With this setting, each muscle is trained only once a week. Twice a week gives better results at equal volume (Schoenfeld, 2016).",
+    "next": "Next session",
+    "today": "Today",
+    "done": "Done",
+    "start": "Let's go",
+    "weekDone": "Week complete, well done!",
+    "noneLeft": "No more sessions planned this week.",
+    "progress": "{done} of {count} session this week | {done} of {count} sessions this week",
+    "postponed": "Your {day} session was not done: nothing is lost, {template} is next.",
+    "missed": "Session not done",
+    "missedHelp": "It moves to the next session",
+    "ifMissed": {
+      "ask": "And if I miss it?",
+      "intro": "If you miss {template}, it is not lost: it moves to the next slot and the rest shifts.",
+      "instead": "instead of {template}",
+      "nextWeek": "It would move to next week.",
+      "pushed": "{template} moves to next week."
+    },
+    "order": {
+      "title": "Session order",
+      "help": "Tap a session to start with it, for example if you were already mid-cycle. The rest shifts.",
+      "next": "Next"
+    }
+  },
+  "notifications": {
+    "reminder": "{template} at {time} today. Your workout is waiting!",
+    "nudge": "It's been {days} days. A short 30-minute workout?",
+    "tip": "Did you know? {title}"
+  },
+  "history": {
+    "empty": "No finished workout yet.",
+    "views": {
+      "sessions": "Workouts",
+      "stats": "Stats",
+      "body": "Body"
+    },
+    "edit": "Edit {session}",
+    "sessions": "{count} session | {count} sessions",
+    "sets": "{count} set | {count} sets",
+    "exercisesOf": "Exercises of {session}",
+    "lifted": "{load} lifted"
+  },
+  "comeback": {
+    "load": "Load ({unit})",
+    "reps": "Reps",
+    "save": "Save",
+    "start": "Suggested starting load: {load}",
+    "gauge": "Back to your old level: {current} / {reference} = {percent} %",
+    "reached": "You are back to your old level!",
+    "comeback": {
+      "title": "Before my break",
+      "help": "Note your best set from before the break: the app will start from a reduced load, then go up as soon as sets are easy."
+    },
+    "usual": {
+      "title": "My load on this machine",
+      "help": "Note the load and reps you usually do: your first session will start from there instead of a test set. Then the app follows your sessions."
+    },
+    "saved": "Load saved."
+  },
+  "stats": {
+    "strength": {
+      "title": "Strength over time",
+      "exercise": "Exercise",
+      "unit": "Estimated 1RM ({unit}), Epley formula",
+      "none": "No comparable set yet (warm-up and slow-tempo sets are left out).",
+      "description": "Estimated 1RM {exercise}: {change} % over {sessions} workouts",
+      "stagnation": "No progress over the last 3 workouts: try a variant of the exercise or a lighter week."
+    },
+    "volume": {
+      "title": "Sets per muscle this week",
+      "help": "Suggested zone: {min} to {max} sets per muscle per week.",
+      "below": "{sets} sets, below",
+      "inRange": "{sets} sets",
+      "above": "{sets} sets, above",
+      "pushDominant": "Push ({push} sets) clearly outweighs pull ({pull}): add pulling work, especially if a shoulder hurts."
+    },
+    "regularity": {
+      "title": "Consistency",
+      "pace": "{count} week in a row on pace | {count} weeks in a row on pace",
+      "calendar": "{count} training days over the last 8 weeks",
+      "best": "Your best: {best}"
+    },
+    "workload": {
+      "title": "Workload",
+      "unit": "{unit} lifted per week (load × reps)",
+      "description": "Workload over {weeks} weeks",
+      "single": "{load} this week"
+    },
+    "records": {
+      "title": "Records",
+      "oneRepMax": "Estimated 1RM {load}"
+    },
+    "kpi": {
+      "sessions": "session in 30 days | sessions in 30 days",
+      "pace": "week on pace | weeks on pace",
+      "records": "record | records",
+      "workload": "lifted per week (average)"
+    }
+  },
+  "body": {
+    "title": "Body tracking",
+    "weight": "Weight ({unit})",
+    "arm": "Arm (cm)",
+    "waist": "Waist (cm)",
+    "save": "Save",
+    "privacy": "This data stays on your phone and is never synced.",
+    "cm": "{value} cm",
+    "delete": "Delete this measurement",
+    "protein": {
+      "title": "Protein",
+      "target": "Target: about {grams} g of protein a day (1.6 g per kg of body weight).",
+      "source": "Source: Morton et al. 2018, see the Credits."
+    },
+    "photo": {
+      "title": "Monthly photo",
+      "help": "One photo a month, same light, same angle: it tells more than the mirror. It stays on your phone.",
+      "take": "Take this month's photo",
+      "alt": "Photo of {date}"
+    },
+    "front": "Front",
+    "back": "Back"
+  },
+  "settings": {
+    "title": "Settings",
+    "content": "About the app",
+    "workout": "Workouts",
+    "supersets": "Suggest supersets",
+    "redo": "Answer the questionnaire again",
+    "notifications": "Notifications",
+    "notificationsAll": "Allow notifications",
+    "kinds": {
+      "sessionReminder": "Reminder before a workout",
+      "nudge": "Gentle nudge",
+      "record": "Record beaten",
+      "streak": "Consistency",
+      "backToLevel": "Back to level",
+      "tip": "Tip of the week"
+    },
+    "quietHours": "Never a notification between {start} and {end}, nor during your blocked slots.",
+    "language": {
+      "title": "Language and units",
+      "label": "Language",
+      "options": {
+        "system": "Phone language",
+        "fr-FR": "Français",
+        "en-US": "English"
+      }
+    },
+    "unit": {
+      "label": "Weight unit",
+      "options": {
+        "kg": "Kilograms (kg)",
+        "lb": "Pounds (lb)"
+      }
+    },
+    "profile": {
+      "title": "My profile",
+      "weight": "Body weight ({unit})",
+      "save": "Save",
+      "saved": "Weight saved.",
+      "current": "Current weight: {weight}",
+      "none": "Weight not entered yet (75 kg estimated).",
+      "help": "Used for assisted pull-ups and dips: real load = body weight − help. Each weighing is also added in History → Body."
+    },
+    "sessionNotification": "Notification during the session",
+    "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android)."
+  },
+  "tips": {
+    "title": "Getting started",
+    "source": "Source:",
+    "disclaimer": "These cards do not replace the advice of a coach, a doctor or a physiotherapist.",
+    "status": {
+      "toSource": "Source to be added before the app is released.",
+      "coachReview": "Field experience, to be proofread by a coach.",
+      "internal": "Rule of the app's progression engine."
+    },
+    "themes": {
+      "technique": "Technique",
+      "effort": "Effort",
+      "progression": "Progression",
+      "programme": "Program",
+      "nutrition": "Nutrition",
+      "recovery": "Recovery",
+      "health": "Health",
+      "motivation": "Motivation",
+      "etiquette": "Gym etiquette"
+    },
+    "items": {
+      "completeReps": {
+        "title": "Technique before load",
+        "body": "An incomplete rep (range of motion not reached) does not count. Better go down one step and do the full movement."
+      },
+      "warmup": {
+        "title": "Warm up",
+        "body": "One light set of 12 to 15 reps on the first exercise is enough to prepare muscles and joints. The app suggests it."
+      },
+      "benchElbows": {
+        "title": "Bench press: elbows and shoulder blades",
+        "body": "Elbows at about 45° from the body rather than flared, shoulder blades squeezed and down during the whole movement."
+      },
+      "repsInReserve": {
+        "title": "Keep 1 to 2 reps in reserve",
+        "body": "End your sets feeling you could still do 1 or 2 reps, without going to failure every time."
+      },
+      "progression": {
+        "title": "When to add weight",
+        "body": "When you reach the top of the rep range on all your sets, the load goes up one step at the next workout."
+      },
+      "frequency": {
+        "title": "Twice a week, 10 to 20 sets",
+        "body": "Training each muscle twice a week, with 10 to 20 sets per muscle per week, works well to build muscle."
+      },
+      "machines": {
+        "title": "Machines or free weights",
+        "body": "Both build muscle equally: pick what you like and what is free at the gym."
+      },
+      "protein": {
+        "title": "Protein",
+        "body": "Aim for about 1.6 g of protein per kg of body weight per day: beyond that, the extra gain is small."
+      },
+      "collagen": {
+        "title": "Collagen",
+        "body": "Collagen does not replace regular protein (meat, fish, eggs, dairy, legumes) to build muscle."
+      },
+      "soreness": {
+        "title": "Soreness or pain?",
+        "body": "Soreness is diffuse and goes away in 2 to 3 days. Sharp pain, joint pain or pain at rest is not normal: stop and ask for advice."
+      },
+      "sleep": {
+        "title": "Rest is part of the program",
+        "body": "Sleep and at least one full rest day a week help muscles recover and grow."
+      },
+      "kneeCracking": {
+        "title": "Cracking knees",
+        "body": "Knees that crack without pain are common and usually harmless. If it hurts or swells, see a professional."
+      },
+      "photo": {
+        "title": "One photo a month",
+        "body": "Same light, same angle, once a month: it tells more than the daily mirror."
+      },
+      "etiquette": {
+        "title": "Gym etiquette",
+        "body": "Wipe the machine, put the weights back, and share the machine between sets if someone is waiting."
+      }
+    }
+  },
+  "credits": {
+    "title": "Credits",
+    "data": {
+      "title": "Data and images",
+      "freeExerciseDb": "exercise catalog, public domain (Unlicense).",
+      "and": "and",
+      "muscleMap": "muscle silhouettes, MIT license.",
+      "lucide": "icons, ISC license.",
+      "images": "movement illustrations (start and end), resized and converted to greyscale:"
+    },
+    "sources": {
+      "title": "Scientific sources",
+      "themes": {
+        "programme": "Program and volume",
+        "nutrition": "Nutrition",
+        "technique": "Technique",
+        "health": "Health",
+        "models": "Training models",
+        "order": "Exercise order"
+      }
+    },
+    "libraries": {
+      "title": "Libraries",
+      "help": "{count} open-source libraries shipped in the app, with their license text.",
+      "standard": "Standard license text:"
+    }
+  },
+  "about": {
+    "title": "About",
+    "p1": "This app was built entirely with the help of an artificial intelligence, and guided by me, Thibaut, a student developer trying to learn as best he can.",
+    "p2": "I am neither a coach nor a health professional, and I am not perfect: there may be mistakes left. The app's advice relies on studies cited in the Credits, but it does not replace the advice of a coach, a doctor or a physiotherapist.",
+    "p3": "I was not a fan of AI to begin with. But here it is for a good cause, and I find it works well.",
+    "p4": "Any help is welcome: a mistake spotted, an idea, a tip, feel free to tell me.",
+    "report": "Report a mistake or suggest an idea",
+    "reportSoon": "The contact option is coming soon.",
+    "credits": "See the credits and sources"
+  },
+  "data": {
+    "title": "My data",
+    "privacy": "Everything stays on your phone. Export a backup to switch phones.",
+    "export": "Export a backup (JSON)",
+    "exportCsv": "Export my sets (CSV)",
+    "import": "Import a backup",
+    "delete": "Delete all my data",
+    "confirmTitle": "Confirm deletion",
+    "confirm": "Workouts, sets, measurements, settings: everything will be erased from this phone. This cannot be undone. Export a backup first if you want to keep it.",
+    "confirmYes": "Yes, delete everything",
+    "cancel": "Cancel",
+    "encryptedTitle": "Encrypted backup",
+    "encryptedHelp": "Protected by a password (at least 8 characters), you can keep it on your own cloud (Google Drive…) through the share menu. Without the password nobody can read it, not even you: write it down.",
+    "password": "Password",
+    "exportEncrypted": "Export an encrypted backup",
+    "passwordTooShort": "The password must have at least 8 characters.",
+    "encryptedFile": "This backup is encrypted: enter its password.",
+    "unlock": "Decrypt and restore"
+  },
+  "discomfort": {
+    "open": "Something hurts",
+    "title": "Discomfort?",
+    "where": "Where?",
+    "signs": "Tick what applies:",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "ok": "Got it",
+    "notDiagnosis": "This is not a diagnosis: the app does not replace a doctor or a physiotherapist.",
+    "removed": "{count} exercise removed from the workout. | {count} exercises removed from the workout.",
+    "zones": {
+      "frontShoulder": "Front of the shoulder",
+      "shoulder": "Shoulder",
+      "elbow": "Elbow",
+      "wrist": "Wrist",
+      "lowerBack": "Lower back",
+      "knee": "Knee",
+      "hip": "Hip",
+      "other": "Elsewhere"
+    },
+    "flags": {
+      "sharpPain": "Sharp pain",
+      "jointPain": "Pain in the joint",
+      "painAtRest": "Pain even at rest",
+      "tingling": "Tingling",
+      "chestPainBreathless": "Chest pain and breathlessness"
+    },
+    "advice": {
+      "heatAndRest": "Stop the exercises loading this area. Heat and rest often help.",
+      "warningSigns": "If the pain gets sharp, in the joint, at rest or with tingling: stop and see a professional.",
+      "seePhysioIfPersists": "Second time this week: one shoulder exercise per Push workout only. If it persists, see a physiotherapist.",
+      "stopAndConsult": "Stop the workout now and see a doctor or a physiotherapist.",
+      "callEmergency": "Stop everything and call the emergency number (15 in France) now.",
+      "sorenessVsPain": "Soreness is diffuse and goes away in 2 to 3 days: you can keep your program."
+    }
+  },
+  "units": {
+    "kg": "{value} kg",
+    "lb": "{value} lb",
+    "symbol": {
+      "kg": "kg",
+      "lb": "lb"
+    }
+  },
+  "common": {
+    "back": "Back"
+  },
+  "badges": {
+    "firstSession": "First workout",
+    "tenSessions": "10 workouts",
+    "fiftySessions": "50 workouts",
+    "firstWeekOnPace": "First week on pace",
+    "fourWeeksOnPace": "4 weeks on pace",
+    "firstRecord": "First record",
+    "backToLevel": "Back to your old level"
+  },
+  "progress": {
+    "title": "My progress",
+    "description": "Estimated 1RM {name} over {sessions} workouts",
+    "best": "Best estimated 1RM: {load}",
+    "forReps": "How much for X reps?",
+    "target": "{reps} reps: {load}"
+  },
+  "cycle": {
+    "week": "Cycle {cycle}, week {week} of 5",
+    "light": "Cycle {cycle}, week {week} of 5: lighter week, one set less per exercise to recover.",
+    "change": "Several cycles on this program: you can try another model, or keep this one if you like it."
+  },
+  "mobility": {
+    "title": "Joint warm-up (≈ {minutes} min)",
+    "seconds": "{seconds} s",
+    "review": "Content to be validated by a coach or a physiotherapist.",
+    "moves": {
+      "armCircles": {
+        "name": "Arm circles",
+        "how": "Arms out to the side, small then big circles, both ways."
+      },
+      "wallSlides": {
+        "name": "Wall slides",
+        "how": "Back and arms against the wall, raise and lower the arms keeping contact."
+      },
+      "thoracicRotations": {
+        "name": "Thoracic rotations",
+        "how": "On all fours, one hand behind the head, open the elbow towards the ceiling."
+      },
+      "wristCircles": {
+        "name": "Wrist circles",
+        "how": "Hands together, rotate the wrists slowly both ways."
+      },
+      "catCow": {
+        "name": "Cat-cow",
+        "how": "On all fours, alternate rounded and arched back while breathing."
+      },
+      "hipCircles": {
+        "name": "Hip circles",
+        "how": "Standing, hands on hips, big circles both ways."
+      },
+      "legSwings": {
+        "name": "Leg swings",
+        "how": "Holding a support, swing one leg back and forth, then the other."
+      },
+      "bodyweightSquats": {
+        "name": "Bodyweight squats",
+        "how": "Go down slowly, heels down, come up smoothly."
+      },
+      "ankleRocks": {
+        "name": "Ankle rocks",
+        "how": "One foot forward, push the knee over the toes without lifting the heel."
+      }
+    }
+  },
+  "gyms": {
+    "title": "My gyms",
+    "choose": "Choose {name}",
+    "rename": "Name of the gym {name}",
+    "add": "Add a gym",
+    "addPlaceholder": "E.g. holiday gym",
+    "addButton": "Add",
+    "help": "Each gym has its own favorite machines, load steps and settings.",
+    "home": "Equipment at home"
+  },
+  "importCsv": {
+    "title": "Import from another app",
+    "choose": "Choose a CSV file (sessions or loads)",
+    "found": "{sessions} workout(s) found in the {app} export.",
+    "apps": {
+      "strong": "Strong",
+      "hevy": "Hevy",
+      "trainerr": "Trainerr"
+    },
+    "unit": "Load unit in this file:",
+    "check": "Check which exercise each name matches:",
+    "skip": "Do not import",
+    "confirm": "Import {count} workout | Import {count} workouts",
+    "done": "{count} workout imported. | {count} workouts imported.",
+    "continueTitle": "Which session comes next?",
+    "continueHelp": "Your imported sessions may not follow the app's program: pick the next session, the rest follows.",
+    "loadsFound": "{count} load found, one per machine. | {count} loads found, one per machine.",
+    "loadsConfirm": "Import {count} load | Import {count} loads",
+    "loadsDone": "{count} load imported: it is the starting point on the machine. | {count} loads imported: they are the starting point on each machine."
+  },
+  "coach": {
+    "section": "Share with a coach",
+    "share": "Send my program and history",
+    "title": "My training program",
+    "program": "Program",
+    "history": "Workout history",
+    "goal": "Goal",
+    "duration": "Workout length",
+    "zone": "Area to spare",
+    "note": "Generated by Trainerr. Suggested loads follow the rules described in the app; thanks for your corrections!"
+  },
+  "recap": {
+    "share": "Share my monthly recap",
+    "showLoads": "Show the loads",
+    "title": "My {month}",
+    "sessions": "{count} workout | {count} workouts",
+    "sets": "{count} set | {count} sets",
+    "days": "{count} training day | {count} training days",
+    "workload": "{load} lifted",
+    "records": "{count} record beaten | {count} records beaten",
+    "footer": "Made with Trainerr",
+    "cardTitle": "Share my month"
+  },
+  "friends": {
+    "title": "Challenges with friends",
+    "privacy": "Optional. Only your nickname, your number of sessions this week and your regularity are sent to the server. Your loads stay on your phone, unless you choose to share your records.",
+    "serverHelp": "To challenge your friends, enter the address of your group's Trainerr server.",
+    "server": "Server address",
+    "saveServer": "Save the server",
+    "pseudo": "Nickname",
+    "createAccount": "Create my account",
+    "code": "Code to share: {code}",
+    "sessions": "{count} session | {count} sessions",
+    "weeks": "{count} week on pace | {count} weeks on pace",
+    "noGroup": "You are not in any group yet.",
+    "groupName": "Name of the new group",
+    "create": "Create",
+    "joinCode": "Group code",
+    "join": "Join",
+    "shareRecords": "Share my records (loads) with my groups",
+    "refresh": "Refresh",
+    "deleteAccount": "Delete my account",
+    "deleteConfirm": "Your account, your empty groups and your stats will be erased from the server. Your sessions stay on your phone.",
+    "deleteYes": "Yes, delete",
+    "errors": {
+      "network": "Server unreachable. Check your connection or the server address.",
+      "unknown_code": "No group matches this code.",
+      "invalid_name": "The name must be 1 to 40 characters long.",
+      "url": "The address must start with http:// or https://.",
+      "other": "The server returned an error. Try again later."
+    }
+  },
+  "advice": {
+    "title": "AI coach advice",
+    "consent": "To answer you, the summary of your last 7 days (exercises, loads, reported discomforts) will be sent to your Trainerr server, then to Claude, Anthropic's AI. Neither your name nor your body measurements are sent.",
+    "seeSummary": "See what will be sent",
+    "agree": "I agree to send this summary",
+    "question": "Your question (optional)",
+    "ask": "Ask for advice",
+    "loading": "The coach is thinking…",
+    "warning": "Advice generated by an AI: it can be wrong and does not replace a health professional.",
+    "withdraw": "Withdraw my consent",
+    "errors": {
+      "network": "Server unreachable. Try again when you have a connection.",
+      "daily_limit": "You reached today's number of advice requests. Come back tomorrow!",
+      "refused": "The coach cannot answer this question. Rephrase it or ask a professional.",
+      "unavailable": "The AI coach is unavailable right now. Try again later.",
+      "other": "Something went wrong. Try again later."
+    }
+  },
+  "picker": {
+    "cancel": "Cancel",
+    "mine": "In my machines",
+    "popular": "Popular machine",
+    "sameMovement": "Same movement"
+  },
+  "historyEdit": {
+    "title": "Edit the session",
+    "notFound": "Session not found.",
+    "date": "Date",
+    "set": "Set {number}: {name}",
+    "reps": "Reps",
+    "difficulty": "Feeling",
+    "deleteSet": "Delete this set",
+    "addSet": "Add a set",
+    "addExercise": "Add an exercise",
+    "deleteSession": "Delete this session",
+    "deleteConfirm": "The session and all its sets will be erased from the history.",
+    "deleteYes": "Yes, delete the session",
+    "moveMachine": "Change machine",
+    "moveMachineNamed": "These sets were on another machine than {name}"
+  },
+  "myLoad": {
+    "title": "My load",
+    "help": "The load and reps you do on this machine. They show in the catalog and are the starting point of your next session.",
+    "invalid": "Enter a load and a number of reps.",
+    "edit": "My load on {name}: {load}. Edit",
+    "add": "Note my load on {name}",
+    "addShort": "+ My load"
+  },
+  "setEdit": {
+    "title": "Fix the set",
+    "save": "Save the fix",
+    "delete": "Delete this set",
+    "deleteConfirm": "The set will be removed from the session. If the exercise then lacks sets, it is reopened.",
+    "deleteYes": "Yes, delete",
+    "open": "Fix: {set}",
+    "last": "Last set: {set}",
+    "fix": "Fix",
+    "wrongMachine": {
+      "title": "Wrong machine?",
+      "all": "Move the {count} sets of {name}",
+      "pick": "Choose the right machine",
+      "where": "Where did you do these {name} sets?"
+    }
+  },
+  "customSession": {
+    "mine": "My sessions",
+    "intro": "Build your own sessions with the exercises you choose.",
+    "create": "+ Create a session",
+    "newTitle": "New session",
+    "editTitle": "Edit the session",
+    "name": "Session name",
+    "namePlaceholder": "E.g. Friday arms",
+    "exercises": "{count} exercise | {count} exercises",
+    "empty": "Add at least one exercise.",
+    "add": "Add an exercise",
+    "up": "Move {name} up",
+    "down": "Move {name} down",
+    "remove": "Remove {name}",
+    "save": "Save the session",
+    "delete": "Delete this session",
+    "deleteConfirm": "The session will be deleted. Sessions already done stay in the history.",
+    "deleteYes": "Yes, delete",
+    "edit": "Edit",
+    "editNamed": "Edit {name}",
+    "start": "Start",
+    "startNamed": "Start {name}",
+    "deleted": "Custom session",
+    "orderIssue": "{isolation} comes before {compound}: tiring this muscle first ({muscle}) would limit the big lift.",
+    "fixOrder": "Put back in the advised order"
+  },
+  "emptyStates": {
+    "history": "No session yet",
+    "stats": "Your stats are coming",
+    "statsText": "They fill up from your first finished session: regularity, strength, records.",
+    "start": "Start a session",
+    "favorites": "No machine in your gym",
+    "seeAll": "See all machines"
+  },
+  "presets": {
+    "title": "Ready-made sessions",
+    "intro": "Ready sessions in the right order: the big lift first, isolation at the end.",
+    "open": "See the ready-made sessions",
+    "models": {
+      "push": {
+        "name": "Push",
+        "summary": "Chest, shoulders, triceps"
+      },
+      "pull": {
+        "name": "Pull",
+        "summary": "Back, rear delts, biceps"
+      },
+      "legs": {
+        "name": "Legs",
+        "summary": "Quads, hamstrings, glutes, calves"
+      },
+      "fullBodyBeginner": {
+        "name": "Beginner full body",
+        "summary": "The whole body on machines, 5 simple exercises"
+      },
+      "upperLower": {
+        "name": "Upper / Lower",
+        "summary": "Two sessions in turn: upper body, then legs"
+      }
+    },
+    "sessions": {
+      "push": "Push",
+      "pull": "Pull",
+      "legs": "Legs",
+      "fullBodyBeginner": "Beginner full body",
+      "upper": "Upper body",
+      "lower": "Lower body"
+    },
+    "line": "{sets} × {reps} · rest {rest}",
+    "repsRange": "{min}-{max}",
+    "perSide": "{reps} per leg",
+    "seconds": "{reps} s",
+    "start": "Start: {name}",
+    "replaced": "Instead of {main}: it is one of your machines",
+    "role": {
+      "mainCompound": "Heavy compound",
+      "secondaryCompound": "Secondary compound",
+      "isolation": "Isolation"
+    },
+    "principle": {
+      "title": "Why this order?",
+      "p1": "Exercises using several joints (bench press, pull-ups, squat) come first, while you are fresh: they need the most strength and technique.",
+      "p2": "Then come the secondary compounds, then isolation (one muscle). A muscle is never isolated before the big lift that uses it: tired triceps would limit the bench press.",
+      "p3": "What studies say: an exercise gains more strength when done early in the session. For muscle size the order matters little: doing enough sets is what counts.",
+      "sources": "Sources"
+    },
+    "why": {
+      "benchFirst": "The heaviest lift of the session: done first, while chest, shoulders and triceps are fresh.",
+      "inclineSecond": "Another compound, lighter: it targets the upper chest once the big work is done.",
+      "shoulderPressAfterChest": "The shoulders already helped on the presses: a guided machine stays safe even a bit tired.",
+      "lateralRaiseAfterPress": "Isolation of the side delts, after the presses that already worked them.",
+      "tricepsLast": "The triceps help on every press: isolated at the end so they do not limit the heavy lifts.",
+      "pullupsFirst": "The hardest pull: first to get the most reps. Assisted if needed, the app counts the help backwards.",
+      "rowSecond": "Second big pull, horizontal this time: the mid back works while the lats are still fresh.",
+      "cableRowThird": "Lighter guided row: back volume without a heavy load.",
+      "facePullAfterRows": "Rear delt isolation, good to balance pushing, after the rows that warmed them up.",
+      "curlLast": "The biceps help on every pull: isolating them first would weaken pull-ups and rows.",
+      "squatFirst": "The heaviest and most technical: first, while back and legs are fresh.",
+      "rdlSecond": "Heavy hip hinge for hamstrings and glutes, done before they are tired.",
+      "lungesThird": "One leg at a time: lighter but needs balance, so before isolation.",
+      "legExtensionAfterSquat": "Quad isolation, after the squat and lunges that already worked them.",
+      "legCurlAfterRdl": "Hamstring isolation, after the Romanian deadlift.",
+      "calvesLast": "Small muscle barely used by the rest: at the end, it does not hinder any other exercise.",
+      "beginnerLegPress": "The biggest movement, guided and safe to learn: first, while you are fresh.",
+      "beginnerChestPress": "Guided press: the machine holds the path, you focus on the range of motion.",
+      "beginnerPulldown": "Guided vertical pull, easier to dose than pull-ups.",
+      "beginnerRow": "Horizontal pull for the mid back, to balance pushing.",
+      "plankLast": "Core at the end: the abs stabilise every exercise, tiring them first would hinder the rest.",
+      "upperBench": "Heavy push first: it needs the most strength.",
+      "upperRow": "Heavy pull right after: pushing then pulling lets the pushing muscles rest.",
+      "upperShoulderPress": "Secondary push, alternating with the pull that follows.",
+      "upperPulldown": "Secondary pull, while the shoulders recover.",
+      "upperCurl": "Biceps isolation, after all the pulls.",
+      "upperTriceps": "Triceps isolation, after all the presses."
+    },
+    "rest": {
+      "seconds": "{s} s",
+      "minutes": "{m} min",
+      "minutesSeconds": "{m} min {s} s"
+    },
+    "shortcut": "Or a ready-made session: Push, Pull, Legs…",
+    "beginner": {
+      "title": "New to this? Start here",
+      "text": "5 guided machines for the whole body, 3 sets of 10, in the right order. The app suggests a light load to start: say \"Easy\" if it was too light, it will go up.",
+      "details": "See the details and the other ready-made sessions"
+    }
+  },
+  "sessionNotification": {
+    "title": "Session in progress · {name}",
+    "set": "{name} · set {current}/{total} · {load}",
+    "resting": "Rest · then: {next}",
+    "finished": "All done: finish the session in the app.",
+    "restOver": "Rest over",
+    "channel": "Session in progress",
+    "restChannel": "End of rest"
+  },
+  "updates": {
+    "title": "Updates",
+    "installed": "Installed version: {version} ({code})",
+    "check": "Check",
+    "checking": "Looking for a new version…",
+    "upToDate": "You have the latest version.",
+    "available": "New version {version} available",
+    "install": "Download and install",
+    "later": "Later",
+    "downloading": "Downloading… {percent} %",
+    "permission": "Android asks to allow Trainerr to install its updates (only once).",
+    "allow": "Allow",
+    "retry": "Try again",
+    "error": "Cannot check right now ({message}).",
+    "auto": "Look for updates at launch",
+    "autoHelp": "At most once a day, the app asks GitHub for the latest published version. Nothing else is sent."
+  }
+}

@@ -1,0 +1,1265 @@
+{
+  "tabs": {
+    "today": "Aujourd'hui",
+    "session": "Séance",
+    "catalog": "Catalogue",
+    "history": "Historique",
+    "planning": "Planning",
+    "inProgress": "séance en cours"
+  },
+  "today": {
+    "plannedAt": "Prévue aujourd'hui à {start}.",
+    "restDay": "Pas de séance prévue aujourd'hui : repos, ou une séance en plus si tu en as envie.",
+    "go": "Commencer",
+    "resume": "Reprendre la séance",
+    "week": "Cette semaine",
+    "weekCount": "{done} séances faites sur {target} cette semaine",
+    "streak": "{count} semaine au rythme | {count} semaines d'affilée au rythme",
+    "seePlanning": "Voir le planning",
+    "next": "Prochaine séance",
+    "inProgressShort": "Séance en cours",
+    "noPlan": "Prochaine séance",
+    "weekSessions": "séance | séances",
+    "exercises": "{count} exercice | {count} exercices"
+  },
+  "gym": {
+    "defaultName": "Ma salle"
+  },
+  "muscles": {
+    "chest": "Pectoraux",
+    "frontDelts": "Avant des épaules",
+    "sideDelts": "Côté des épaules",
+    "rearDelts": "Arrière des épaules",
+    "triceps": "Triceps",
+    "biceps": "Biceps",
+    "forearms": "Avant-bras",
+    "lats": "Grand dorsal",
+    "upperBack": "Haut du dos",
+    "traps": "Trapèzes",
+    "lowerBack": "Lombaires",
+    "abs": "Abdominaux",
+    "obliques": "Obliques",
+    "glutes": "Fessiers",
+    "quads": "Quadriceps",
+    "hamstrings": "Ischio-jambiers",
+    "adductors": "Adducteurs",
+    "abductors": "Abducteurs",
+    "calves": "Mollets"
+  },
+  "groups": {
+    "push": "Poussée",
+    "pull": "Tirage",
+    "legs": "Jambes",
+    "core": "Gainage"
+  },
+  "kinds": {
+    "heavyCompound": "Composé lourd",
+    "machineCompound": "Composé machine",
+    "isolation": "Isolation"
+  },
+  "equipment": {
+    "machine": "Machine guidée",
+    "cable": "Poulie",
+    "dumbbell": "Haltères",
+    "barbell": "Barre",
+    "bodyweight": "Poids du corps"
+  },
+  "catalog": {
+    "search": "Chercher une machine ou un muscle",
+    "filters": {
+      "all": "Tout",
+      "favorites": "Mes machines",
+      "push": "Poussée",
+      "pull": "Tirage",
+      "legs": "Jambes",
+      "core": "Gainage"
+    },
+    "loading": "Chargement du catalogue…",
+    "error": "Impossible de charger le catalogue : {message}",
+    "empty": "Aucun exercice ne correspond.",
+    "noFavorites": "Mets une étoile sur les machines de ta salle : seules celles-ci seront proposées dans tes séances.",
+    "count": "{count} exercice | {count} exercices",
+    "showMore": "Afficher plus",
+    "addFavorite": "Ajouter {name} à mes machines",
+    "removeFavorite": "Retirer {name} de mes machines",
+    "sections": {
+      "favorites": "Mes machines",
+      "popular": "Machines populaires",
+      "others": "Autres exercices"
+    },
+    "body": {
+      "toggle": "Chercher par zone du corps",
+      "title": "Recherche par zone du corps",
+      "help": "Touche une zone pour voir les exercices qui la travaillent.",
+      "zone": "Zone : {muscles}",
+      "clear": "Retirer la zone"
+    }
+  },
+  "exercise": {
+    "notFound": "Exercice introuvable.",
+    "favorite": {
+      "add": "Ajouter à mes machines",
+      "remove": "Dans mes machines"
+    },
+    "repRange": "{min} à {max} reps",
+    "muscles": {
+      "title": "Muscles travaillés",
+      "primary": "Principaux",
+      "secondary": "Secondaires",
+      "none": "Aucun",
+      "map": "Silhouette : {muscles}"
+    },
+    "cues": {
+      "title": "Consignes",
+      "source": "Source : {source}",
+      "review": "Consignes à relire par un coach avant la publication de l'appli.",
+      "englishOnly": "Instructions en anglais : pas encore de traduction pour cet exercice.",
+      "machineTranslation": {
+        "fr": "Traduction automatique de l'anglais : elle peut contenir des erreurs.",
+        "en": "Traduction automatique du français : elle peut contenir des erreurs."
+      },
+      "originalShown": "Texte original :",
+      "showOriginal": "Voir le texte original",
+      "showTranslation": "Voir la traduction"
+    },
+    "machine": {
+      "title": "Ma machine",
+      "note": "Autres réglages (poignée, dossier…)",
+      "notePlaceholder": "Ex. poignée large",
+      "photo": "Photographier la plaque de la machine",
+      "photoReplace": "Remplacer la photo",
+      "photoDelete": "Supprimer la photo",
+      "photoAlt": "Plaque de la machine {name}"
+    },
+    "steps": {
+      "title": "Paliers de charge",
+      "help": "Les charges proposées seront arrondies à ces paliers.",
+      "defaults": "Paliers par défaut, à remplacer par ceux de ta machine : {steps}…",
+      "add": "Ajouter un palier ({unit})",
+      "addButton": "Ajouter",
+      "remove": "Retirer {load}",
+      "invalid": "Charge invalide",
+      "generate": {
+        "title": "Générer une série de paliers (en {unit})",
+        "first": "Départ",
+        "increment": "Écart",
+        "last": "Fin",
+        "button": "Générer"
+      },
+      "saved": "Paliers enregistrés"
+    },
+    "source": {
+      "free-exercise-db": "Fiche issue de free-exercise-db (domaine public).",
+      "trainerr": "Fiche rédigée pour Trainerr.",
+      "user": "Exercice ajouté par toi."
+    },
+    "illustration": {
+      "label": "Illustration du mouvement : {name}",
+      "pause": "Mettre l'animation en pause",
+      "play": "Reprendre l'animation",
+      "caption": "Illustration : {exercise} —",
+      "source": "source"
+    },
+    "backToSession": "← Revenir à la séance",
+    "session": "Séance",
+    "setup": {
+      "title": "Réglages fins",
+      "addOns": "Poids d'appoint",
+      "addOnsHelp": "Petits poids à poser sur la pile (ex. 1,25 ou 2,5 kg) : les charges proposées les utilisent entre deux plaques.",
+      "otherAddOn": "Autre poids d'appoint ({unit})",
+      "fineStep": "Précision de la charge tapée",
+      "fineStepHelp": "Une charge tapée à la main est arrondie à cette valeur.",
+      "seat": "Siège",
+      "seatPlaceholder": "Ex. 4",
+      "notch": "Cran (dossier, bras, coussin)",
+      "notchPlaceholder": "Ex. 2",
+      "addOther": "Ajouter ce poids"
+    }
+  },
+  "templates": {
+    "fullBodyA": "Full body A",
+    "fullBodyB": "Full body B",
+    "upperA": "Haut du corps A",
+    "lowerA": "Bas du corps A",
+    "upperB": "Haut du corps B",
+    "lowerB": "Bas du corps B",
+    "pushA": "Push A",
+    "pullA": "Pull A",
+    "legsA": "Legs A",
+    "pushB": "Push B",
+    "pullB": "Pull B",
+    "legsB": "Legs B",
+    "push": "Push",
+    "pull": "Pull",
+    "legs": "Legs",
+    "upper": "Haut du corps",
+    "lower": "Bas du corps",
+    "upperPower": "Haut du corps (force)",
+    "lowerPower": "Bas du corps (force)",
+    "upperHypertrophy": "Haut du corps (volume)",
+    "lowerHypertrophy": "Bas du corps (volume)",
+    "chestBackA": "Pecs + dos A",
+    "shouldersArmsA": "Épaules + bras A",
+    "chestBackB": "Pecs + dos B",
+    "shouldersArmsB": "Épaules + bras B",
+    "chest": "Pectoraux",
+    "back": "Dos",
+    "shoulders": "Épaules",
+    "arms": "Bras",
+    "legsDay": "Jambes",
+    "imported": "Séance importée"
+  },
+  "difficulty": {
+    "easy": "Facile",
+    "ok": "Correct",
+    "hard": "Limite",
+    "fail": "Échec"
+  },
+  "session": {
+    "next": "Séance du jour : {template}",
+    "start": "Commencer la séance",
+    "noFavorites": "Aucune machine favorite pour la séance {template}. Mets une étoile sur les machines de ta salle dans le catalogue.",
+    "goToCatalog": "Ouvrir le catalogue",
+    "setNumber": "Série {current} sur {total}",
+    "reason": {
+      "aboveRange": "Tu as dépassé le haut de ta fourchette de reps : tu es prêt à monter.",
+      "easy": "La série précédente était facile.",
+      "inRange": "Tu es dans ta fourchette : même charge, une rep de plus si tu peux.",
+      "hard": "La série précédente était limite : on garde la charge.",
+      "belowRange": "Tu es sous ta fourchette de reps : on allège un peu.",
+      "failure": "Échec à la série précédente : on allège.",
+      "incompleteReps": "Reps incomplètes : on allège pour garder l'amplitude complète.",
+      "missingStep": "Le palier suivant de la machine est trop lourd : ajoute plutôt des reps.",
+      "noHeavierStep": "Tu es au palier le plus lourd de la machine.",
+      "progression": "D'après tes dernières séances.",
+      "comeback": "Reprise après une pause : charge réduite pour repartir sans te blesser.",
+      "testSet": "Première fois : série test légère pour trouver ta charge.",
+      "usual": "D'après la charge notée sur la fiche de la machine."
+    },
+    "reminder": {
+      "rangeOfMotion": "Amplitude complète : une rep incomplète ne compte pas.",
+      "technique": "Deux échecs de suite : relis les consignes de la fiche."
+    },
+    "load": "Charge",
+    "reps": "Reps",
+    "lighter": "Palier plus léger",
+    "heavier": "Palier plus lourd",
+    "fewerReps": "Une rep de moins",
+    "moreReps": "Une rep de plus",
+    "halfRep": "Ajouter une demi-rep",
+    "incomplete": "Reps incomplètes",
+    "slowTempo": "Tempo lent",
+    "howWasIt": "Comment c'était ?",
+    "busy": "Machine occupée",
+    "busyTitle": "{name} est occupée",
+    "busyHelp": "Fais autre chose en attendant, l'appli te repropose la machine après l'exercice suivant.",
+    "alternative": {
+      "substitute": "Mêmes muscles",
+      "swap": "Exercice suivant de la séance",
+      "take": "Je prends celle-ci",
+      "choose": "Prendre {name}",
+      "none": "Pas d'autre machine pour ces muscles dans tes favoris : attends un peu ou passe à la suite."
+    },
+    "continue": "Continuer avec la suite",
+    "isFree": "{name} est libre ?",
+    "free": "Oui, j'y vais",
+    "stillBusy": "Toujours occupée",
+    "crowded": "Salle bondée : finis la séance avec haltères et poulies, mêmes muscles.",
+    "replace": "{from} → {to}",
+    "warmup": "Échauffement conseillé : {load} × {reps}",
+    "warmupDone": "Échauffement fait",
+    "warmupShort": "échauffement",
+    "skip": "Passer cet exercice",
+    "allDone": "Tous les exercices sont faits. Bravo !",
+    "carryOver": "Reporté à la prochaine séance du même type : {names}",
+    "logged": "Séries de la séance",
+    "undo": "Annuler la dernière série",
+    "finish": "Terminer la séance",
+    "rest": {
+      "title": "Repos",
+      "label": "Repos : {time} restant",
+      "skip": "Passer",
+      "less": " (raccourcir le repos)",
+      "more": " (allonger le repos)"
+    },
+    "voice": {
+      "start": "Dicter",
+      "listening": "J'écoute…"
+    },
+    "plates": {
+      "open": "Disques",
+      "title": "Calculateur de disques",
+      "close": "Fermer",
+      "lighter": "Charge réalisable plus légère",
+      "heavier": "Charge réalisable plus lourde",
+      "closest": "Charge exacte impossible : {below} ou {above}",
+      "perSide": "Par côté : {plates} kg",
+      "bar": "barre de {kg} kg"
+    },
+    "summary": {
+      "title": "Séance terminée",
+      "close": "Fermer",
+      "record": "Nouveau record : {name}, {load} × {reps}.",
+      "backToLevel": "Tu as retrouvé ton niveau d'avant : {name} !",
+      "streak": "{count} semaine au rythme. Continue ! | {count} semaines d'affilée au rythme. Continue !",
+      "badge": "Badge obtenu : {badge}",
+      "bravo": "Bravo !",
+      "setsLabel": "série | séries",
+      "workloadLabel": "soulevés au total",
+      "recordsLabel": "record | records",
+      "newMachines": "Tu as utilisé {names}, pas encore dans tes machines. | Tu as utilisé {names}, pas encore dans tes machines.",
+      "adoptMachines": "Ajouter cette machine à mes machines | Ajouter ces {count} machines à mes machines"
+    },
+    "note": "Note de séance",
+    "notePlaceholder": "Ex. mal dormi, salle bondée",
+    "express": "Séance express (20–30 min)",
+    "home": "Séance à la maison",
+    "readyMade": {
+      "title": "Pré-séance proposée",
+      "introNone": "Tu n'as aucune machine en favori pour cette séance : voici une séance avec des machines courantes.",
+      "intro": "Tu n'as qu'une machine en favori pour cette séance : elle est complétée avec des machines courantes. | Tu n'as que {count} machines en favori pour cette séance : elles sont complétées avec des machines courantes.",
+      "suggested": "proposée",
+      "start": "Faire cette pré-séance",
+      "adopt": "Ajouter la machine proposée à mes machines | Ajouter les {count} machines proposées à mes machines"
+    },
+    "seeCard": "Voir la fiche de {name}",
+    "seeMovement": "Voir le mouvement",
+    "goBack": "← Revenir à : {name}",
+    "extraSet": {
+      "short": "+1 série",
+      "label": "Ajouter une série à cet exercice",
+      "previous": "+1 série sur : {name}"
+    },
+    "addExercise": "+ Ajouter un exercice",
+    "moreOptions": "Préciser la série (reps incomplètes, tempo lent, dictée)",
+    "coach": {
+      "lastTime": "La dernière fois : {sets}",
+      "noHistory": "Première fois sur cet exercice.",
+      "advice": {
+        "moreLoad": "Monte la charge : {load} × {reps}",
+        "moreReps": "Vise une rep de plus : {load} × {reps}",
+        "same": "Garde la charge : {load} × {reps}",
+        "lighter": "Allège : {load} × {reps}",
+        "first": "Commence à {load} × {reps}",
+        "comeback": "Reprise en douceur : {load} × {reps}"
+      },
+      "usual": "Ta charge habituelle : {set}",
+      "previousSet": "Série précédente : {set}",
+      "assistedAdvice": {
+        "moreLoad": "Baisse l'aide : {load} × {reps}",
+        "moreReps": "Vise une rep de plus : aide {load} × {reps}",
+        "same": "Garde la même aide : {load} × {reps}",
+        "lighter": "Remets un peu d'aide : {load} × {reps}",
+        "first": "Commence avec {load} d'aide × {reps}",
+        "comeback": "Reprise en douceur : aide {load} × {reps}"
+      }
+    },
+    "steps": {
+      "do": "Fais ta série",
+      "doHelp": "La charge et les reps conseillées sont déjà remplies. Change-les seulement si tu as fait autre chose.",
+      "feelHelp": "Un appui enregistre la série et lance le repos."
+    },
+    "difficultyHint": {
+      "easy": "3 reps ou plus en réserve",
+      "ok": "1 ou 2 en réserve",
+      "hard": "plus rien en réserve",
+      "fail": "pas pu finir"
+    },
+    "progress": {
+      "title": "Exercice {current} sur {total}",
+      "done": "{count} exercice fait | {count} exercices faits",
+      "status": {
+        "done": "fait",
+        "current": "en cours",
+        "next": "à venir"
+      },
+      "seeAll": "Tout voir"
+    },
+    "nextMachine": {
+      "title": "Machine suivante",
+      "finished": "{name} terminé",
+      "plan": "{count} série | {count} séries",
+      "go": "Je suis sur la machine"
+    },
+    "overview": {
+      "title": "Programme de la séance",
+      "open": "Voir le programme de la séance",
+      "sets": "{done} / {total} séries",
+      "nowNamed": "Faire {name} maintenant",
+      "reopen": "Rouvrir",
+      "reopenNamed": "Rouvrir {name}",
+      "nowShort": "Maintenant",
+      "fewerSets": "Une série de moins : {name}",
+      "moreSets": "Une série de plus : {name}",
+      "earlier": "Faire plus tôt : {name}",
+      "later": "Faire plus tard : {name}",
+      "remove": "Retirer de la séance : {name}"
+    },
+    "previous": "Précédent : {name}",
+    "goBackShort": "← Revenir",
+    "supersetToggle": "Enchaîner en supersets",
+    "supersetToggleHelp": "Deux exercices de muscles opposés à la suite, repos après le second : séance plus courte. Facultatif.",
+    "split": "Séparer",
+    "splitNamed": "Séparer le superset avec {name}",
+    "supersetPlace": "Superset {place}/2 ·",
+    "supersetThen": "puis {name} tout de suite, sans repos.",
+    "supersetLast": "avec {name} : repos après cette série.",
+    "supersetGroup": "Superset : {first} et {second}",
+    "supersetTitle": "Superset",
+    "supersetRest": "enchaînés, repos après le second",
+    "supersetNone": "Pas de superset possible pour cette séance : les exercices travaillent les mêmes muscles ou sont des exercices lourds. Ils restent en séries classiques.",
+    "typeLoad": "Taper la charge",
+    "typeLoadNamed": "Charge : {load}. Toucher pour la taper",
+    "breakdown": "Plaque {plate} + appoint {addOns}",
+    "setup": {
+      "label": "Réglage : {setup}",
+      "seat": "siège {value}",
+      "notch": "cran {value}"
+    },
+    "assisted": {
+      "help": "Aide",
+      "lessHelp": "Moins d'aide (plus dur)",
+      "moreHelp": "Plus d'aide (plus facile)",
+      "set": "aide {load} × {reps}",
+      "real": "Charge réelle : {real} ({weight} de poids du corps − {help} d'aide)",
+      "noWeight": "Poids estimé : note ton poids",
+      "load": "aide {load}"
+    },
+    "seconds": "Secondes",
+    "repsPerSide": "Reps / jambe",
+    "fewerSeconds": "5 secondes de moins",
+    "moreSeconds": "5 secondes de plus",
+    "fewerSets": {
+      "short": "−1 série",
+      "label": "Une série de moins sur cet exercice"
+    },
+    "replaceCard": {
+      "open": "Changer de machine",
+      "title": "Remplacer {name}",
+      "help": "Même mouvement sur une autre machine : la charge proposée est celle de cette machine.",
+      "keepDone": "{count} série déjà faite reste sur {name}. La nouvelle machine reprend les séries qui restent. | {count} séries déjà faites restent sur {name}. La nouvelle machine reprend les séries qui restent.",
+      "mine": "Ma machine",
+      "none": "Pas d'autre machine pour ce mouvement dans tes machines ni les machines courantes.",
+      "other": "Un autre exercice…"
+    },
+    "restMore": "Corriger, revenir… ›",
+    "bodyweight": {
+      "none": "poids du corps",
+      "extra": "poids du corps + {load}",
+      "label": "Lest",
+      "short": "Aucun"
+    }
+  },
+  "availability": {
+    "day": "Jour",
+    "periods": {
+      "morning": "Matin",
+      "noon": "Midi",
+      "evening": "Soir",
+      "late": "Tard"
+    }
+  },
+  "models": {
+    "fullBody": "Full body",
+    "upperLower": "Haut / Bas",
+    "ppl": "Push / Pull / Legs",
+    "pplul": "PPL + Haut / Bas",
+    "phul": "PHUL (force + volume)",
+    "arnold": "Arnold split",
+    "broSplit": "Un muscle par jour"
+  },
+  "sports": {
+    "none": "Non",
+    "cycling": "Vélo (dont livraison)",
+    "running": "Course à pied",
+    "football": "Football",
+    "swimming": "Natation",
+    "combat": "Sport de combat",
+    "other": "Autre"
+  },
+  "zones": {
+    "none": "Aucune",
+    "shoulders": "Épaules",
+    "knees": "Genoux",
+    "back": "Dos"
+  },
+  "onboarding": {
+    "title": "Bienvenue",
+    "skip": "Passer",
+    "next": "Suivant",
+    "back": "Retour",
+    "goal": {
+      "question": "Ton objectif ?",
+      "hypertrophy": "Prendre du muscle",
+      "maintenance": "Garder la forme",
+      "strength": "Gagner en force"
+    },
+    "sessions": {
+      "question": "Combien de séances par semaine ?",
+      "model": "Programme conseillé : {model}",
+      "first": "Par quelle séance commences-tu ?",
+      "firstHelp": "Tu as déjà commencé ce programme ? Choisis ta prochaine séance, la suite s'enchaîne."
+    },
+    "level": {
+      "question": "Ton niveau ?",
+      "beginner": "Je débute",
+      "trained": "Je m'entraîne déjà",
+      "comeback": "Je reprends après une pause",
+      "pause": "Combien de temps de pause ?",
+      "comebackHint": "Tu pourras noter tes anciennes charges sur chaque fiche machine : l'appli partira d'une charge réduite."
+    },
+    "availability": {
+      "question": "Quand es-tu disponible ?",
+      "hint": "Coche les créneaux où tu peux aller à la salle."
+    },
+    "duration": {
+      "30": "30 min",
+      "45": "45 min",
+      "60": "1 h",
+      "90": "1 h 30",
+      "question": "Combien de temps dure une séance pour toi ?"
+    },
+    "sport": {
+      "question": "Tu pratiques un autre sport ?",
+      "when": "Quand ?"
+    },
+    "zone": {
+      "question": "Une zone à ménager ?"
+    },
+    "notifications": {
+      "question": "Des rappels ?",
+      "why": "Un rappel 1 h avant chaque séance prévue, et un petit mot si ça fait longtemps. Au maximum une notification par jour, jamais entre 22 h et 8 h.",
+      "privacy": "Tout reste sur ton téléphone : aucun serveur, aucune donnée envoyée.",
+      "accept": "Activer les rappels",
+      "later": "Plus tard"
+    },
+    "aiNote": "Appli conçue avec l'IA par un étudiant : plus d'infos dans « À propos ».",
+    "pauses": {
+      "underOneMonth": "Moins d'1 mois",
+      "oneToThreeMonths": "1 à 3 mois",
+      "overThreeMonths": "Plus de 3 mois"
+    }
+  },
+  "planning": {
+    "week": "Ta semaine",
+    "rest": "Repos",
+    "unplaced": "{count} séance n'a pas trouvé de créneau : ajoute des disponibilités. | {count} séances n'ont pas trouvé de créneau : ajoute des disponibilités.",
+    "availability": "Mes disponibilités",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "program": "Mon programme",
+    "model": "Modèle",
+    "sessionsPerWeek": "Séances par semaine",
+    "frequencyNote": "Avec ce réglage, chaque muscle n'est travaillé qu'une fois par semaine. Deux fois par semaine donne de meilleurs résultats à volume égal (Schoenfeld, 2016).",
+    "next": "Prochaine séance",
+    "today": "Aujourd'hui",
+    "done": "Faite",
+    "start": "C'est parti",
+    "weekDone": "Semaine bouclée, bravo !",
+    "noneLeft": "Plus de séance prévue cette semaine.",
+    "progress": "{done} sur {count} séance cette semaine | {done} sur {count} séances cette semaine",
+    "postponed": "Ta séance de {day} n'a pas été faite : rien n'est perdu, {template} est la prochaine.",
+    "missed": "Séance non faite",
+    "missedHelp": "Elle passe à la séance suivante",
+    "ifMissed": {
+      "ask": "Et si je la rate ?",
+      "intro": "Si tu rates {template}, elle n'est pas perdue : elle passe au créneau suivant et la suite se décale.",
+      "instead": "au lieu de {template}",
+      "nextWeek": "Elle passerait à la semaine prochaine.",
+      "pushed": "{template} passe à la semaine prochaine."
+    },
+    "order": {
+      "title": "Ordre des séances",
+      "help": "Touche une séance pour commencer par elle, par exemple si tu étais déjà en plein cycle. La suite se décale.",
+      "next": "Prochaine"
+    }
+  },
+  "notifications": {
+    "reminder": "{template} à {time} aujourd'hui. Ta séance t'attend !",
+    "nudge": "Ça fait {days} jours. Une séance courte de 30 min, ça te dit ?",
+    "tip": "Le savais-tu ? {title}"
+  },
+  "history": {
+    "empty": "Pas encore de séance terminée.",
+    "views": {
+      "sessions": "Séances",
+      "stats": "Stats",
+      "body": "Corps"
+    },
+    "edit": "Modifier {session}",
+    "sessions": "{count} séance | {count} séances",
+    "sets": "{count} série | {count} séries",
+    "exercisesOf": "Exercices de {session}",
+    "lifted": "{load} soulevés"
+  },
+  "comeback": {
+    "load": "Charge ({unit})",
+    "reps": "Reps",
+    "save": "Enregistrer",
+    "start": "Charge de départ proposée : {load}",
+    "gauge": "Retour à l'ancien niveau : {current} / {reference} = {percent} %",
+    "reached": "Tu as retrouvé ton niveau d'avant !",
+    "comeback": {
+      "title": "Avant ma pause",
+      "help": "Note ta meilleure série d'avant la pause : l'appli repartira d'une charge réduite, puis remontera dès que les séries sont faciles."
+    },
+    "usual": {
+      "title": "Ma charge sur cette machine",
+      "help": "Note la charge et les reps que tu fais d'habitude : ta première séance partira de là au lieu d'une série test. Ensuite, l'appli suit tes séances."
+    },
+    "saved": "Charge enregistrée."
+  },
+  "stats": {
+    "strength": {
+      "title": "Évolution de la force",
+      "exercise": "Exercice",
+      "unit": "1RM estimé ({unit}), formule d'Epley",
+      "none": "Pas encore de série comparable (les séries d'échauffement et en tempo lent sont exclues).",
+      "description": "1RM estimé {exercise} : {change} % sur {sessions} séances",
+      "stagnation": "Pas de progrès sur les 3 dernières séances : essaie une variante de l'exercice ou une semaine plus légère."
+    },
+    "volume": {
+      "title": "Séries par muscle cette semaine",
+      "help": "Zone conseillée : {min} à {max} séries par muscle et par semaine.",
+      "below": "{sets} séries, en dessous",
+      "inRange": "{sets} séries",
+      "above": "{sets} séries, au-dessus",
+      "pushDominant": "La poussée ({push} séries) domine nettement le tirage ({pull}) : ajoute du tirage, surtout si une épaule tire."
+    },
+    "regularity": {
+      "title": "Régularité",
+      "pace": "{count} semaine d'affilée au rythme | {count} semaines d'affilée au rythme",
+      "calendar": "{count} jours d'entraînement sur les 8 dernières semaines",
+      "best": "Ton record : {best}"
+    },
+    "workload": {
+      "title": "Charge de travail",
+      "unit": "{unit} soulevés par semaine (charge × reps)",
+      "description": "Charge de travail sur {weeks} semaines",
+      "single": "{load} cette semaine"
+    },
+    "records": {
+      "title": "Records",
+      "oneRepMax": "1RM estimé {load}"
+    },
+    "kpi": {
+      "sessions": "séance sur 30 jours | séances sur 30 jours",
+      "pace": "semaine au rythme | semaines au rythme",
+      "records": "record | records",
+      "workload": "soulevés par semaine (moyenne)"
+    }
+  },
+  "body": {
+    "title": "Suivi du corps",
+    "weight": "Poids ({unit})",
+    "arm": "Bras (cm)",
+    "waist": "Taille (cm)",
+    "save": "Enregistrer",
+    "privacy": "Ces données restent sur ton téléphone et ne sont jamais synchronisées.",
+    "cm": "{value} cm",
+    "delete": "Supprimer cette mesure",
+    "protein": {
+      "title": "Protéines",
+      "target": "Cible : environ {grams} g de protéines par jour (1,6 g par kg de poids de corps).",
+      "source": "Source : Morton et al. 2018, voir les Crédits."
+    },
+    "photo": {
+      "title": "Photo du mois",
+      "help": "Une photo par mois, même lumière, même angle : plus parlant que le miroir. Elle reste sur ton téléphone.",
+      "take": "Prendre la photo du mois",
+      "alt": "Photo du {date}"
+    },
+    "front": "Face",
+    "back": "Dos"
+  },
+  "settings": {
+    "title": "Réglages",
+    "content": "Infos",
+    "workout": "Séances",
+    "supersets": "Proposer des supersets",
+    "redo": "Refaire le questionnaire",
+    "notifications": "Notifications",
+    "notificationsAll": "Autoriser les notifications",
+    "kinds": {
+      "sessionReminder": "Rappel avant une séance",
+      "nudge": "Relance douce",
+      "record": "Record battu",
+      "streak": "Régularité",
+      "backToLevel": "Retour au niveau",
+      "tip": "Conseil de la semaine"
+    },
+    "quietHours": "Jamais de notification entre {start} et {end}, ni pendant tes créneaux bloqués.",
+    "language": {
+      "title": "Langue et unités",
+      "label": "Langue",
+      "options": {
+        "system": "Langue du téléphone",
+        "fr-FR": "Français",
+        "en-US": "English"
+      }
+    },
+    "unit": {
+      "label": "Unité de poids",
+      "options": {
+        "kg": "Kilogrammes (kg)",
+        "lb": "Livres (lb)"
+      }
+    },
+    "profile": {
+      "title": "Mon profil",
+      "weight": "Poids du corps ({unit})",
+      "save": "Enregistrer",
+      "saved": "Poids enregistré.",
+      "current": "Poids actuel : {weight}",
+      "none": "Poids pas encore noté (75 kg estimés).",
+      "help": "Sert aux tractions et dips assistés : charge réelle = poids du corps − aide. Chaque pesée s'ajoute aussi dans Historique → Corps."
+    },
+    "sessionNotification": "Notification pendant la séance",
+    "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android)."
+  },
+  "tips": {
+    "title": "Bien débuter",
+    "source": "Source :",
+    "disclaimer": "Ces fiches ne remplacent pas l'avis d'un coach, d'un médecin ou d'un kiné.",
+    "status": {
+      "toSource": "Source à ajouter avant la publication de l'appli.",
+      "coachReview": "Expérience de terrain, à relire par un coach.",
+      "internal": "Règle du moteur de progression de l'appli."
+    },
+    "themes": {
+      "technique": "Technique",
+      "effort": "Effort",
+      "progression": "Progression",
+      "programme": "Programme",
+      "nutrition": "Nutrition",
+      "recovery": "Récupération",
+      "health": "Santé",
+      "motivation": "Motivation",
+      "etiquette": "Savoir-vivre"
+    },
+    "items": {
+      "completeReps": {
+        "title": "La technique passe avant la charge",
+        "body": "Une rep incomplète (amplitude non atteinte) ne compte pas. Mieux vaut baisser d'un palier et faire le mouvement en entier."
+      },
+      "warmup": {
+        "title": "S'échauffer",
+        "body": "Une série légère de 12 à 15 reps sur le premier exercice suffit à préparer muscles et articulations. L'appli te la propose."
+      },
+      "benchElbows": {
+        "title": "Développé couché : coudes et omoplates",
+        "body": "Coudes à environ 45° du corps plutôt qu'à l'horizontale, omoplates serrées et basses pendant tout le mouvement."
+      },
+      "repsInReserve": {
+        "title": "Garder 1 à 2 reps en réserve",
+        "body": "Finir ses séries en sentant qu'on pourrait encore faire 1 ou 2 reps, sans aller à l'échec à chaque fois."
+      },
+      "progression": {
+        "title": "Quand monter la charge",
+        "body": "Quand tu atteins le haut de la fourchette de reps sur toutes tes séries, la charge monte d'un palier à la séance suivante."
+      },
+      "frequency": {
+        "title": "Deux fois par semaine, 10 à 20 séries",
+        "body": "Travailler chaque muscle 2 fois par semaine, avec 10 à 20 séries par muscle et par semaine, donne de bons résultats pour prendre du muscle."
+      },
+      "machines": {
+        "title": "Machines ou poids libres",
+        "body": "Les deux font autant grossir le muscle : choisis ce que tu préfères et ce qui est libre à la salle."
+      },
+      "protein": {
+        "title": "Les protéines",
+        "body": "Viser environ 1,6 g de protéines par kg de poids de corps et par jour : au-delà, le gain devient faible."
+      },
+      "collagen": {
+        "title": "Le collagène",
+        "body": "Le collagène ne remplace pas les protéines classiques (viande, poisson, œufs, laitages, légumineuses) pour construire du muscle."
+      },
+      "soreness": {
+        "title": "Courbature ou douleur ?",
+        "body": "Une courbature est diffuse et passe en 2 à 3 jours. Une douleur vive, dans une articulation ou au repos n'est pas normale : arrête et demande conseil."
+      },
+      "sleep": {
+        "title": "Le repos fait partie du programme",
+        "body": "Le sommeil et au moins un jour de repos complet par semaine aident les muscles à récupérer et à progresser."
+      },
+      "kneeCracking": {
+        "title": "Des genoux qui craquent",
+        "body": "Des genoux qui craquent sans douleur, c'est fréquent et en général sans gravité. Si ça fait mal ou que ça gonfle, consulte."
+      },
+      "photo": {
+        "title": "Une photo par mois",
+        "body": "Même lumière, même angle, une fois par mois : c'est plus parlant que le miroir de tous les jours."
+      },
+      "etiquette": {
+        "title": "Le savoir-vivre à la salle",
+        "body": "Essuie la machine, range les poids, et partage la machine entre tes séries si quelqu'un attend."
+      }
+    }
+  },
+  "credits": {
+    "title": "Crédits",
+    "data": {
+      "title": "Données et images",
+      "freeExerciseDb": "catalogue d'exercices, domaine public (Unlicense).",
+      "and": "et",
+      "muscleMap": "silhouettes musculaires, licence MIT.",
+      "lucide": "icônes, licence ISC.",
+      "images": "illustrations des mouvements (départ et arrivée), redimensionnées et passées en niveaux de gris :"
+    },
+    "sources": {
+      "title": "Sources scientifiques",
+      "themes": {
+        "programme": "Programme et volume",
+        "nutrition": "Nutrition",
+        "technique": "Technique",
+        "health": "Santé",
+        "models": "Modèles d'entraînement",
+        "order": "Ordre des exercices"
+      }
+    },
+    "libraries": {
+      "title": "Bibliothèques",
+      "help": "{count} bibliothèques libres embarquées dans l'appli, avec le texte de leur licence.",
+      "standard": "Texte standard de la licence :"
+    }
+  },
+  "about": {
+    "title": "À propos",
+    "p1": "Cette application a été entièrement réalisée avec l'aide d'une intelligence artificielle, et guidée par moi, Thibaut, étudiant développeur qui essaie d'apprendre du mieux qu'il peut.",
+    "p2": "Je ne suis ni coach ni professionnel de santé, et je ne suis pas parfait : il peut rester des erreurs. Les conseils de l'appli s'appuient sur des études citées dans les Crédits, mais ils ne remplacent pas l'avis d'un coach, d'un médecin ou d'un kiné.",
+    "p3": "À la base, je ne suis pas fan de l'IA. Mais ici, c'est pour la bonne cause, et je trouve que ça marche bien.",
+    "p4": "Toute aide est bonne à prendre : une erreur repérée, une idée, un conseil, n'hésite pas à me le dire.",
+    "report": "Signaler une erreur ou proposer une idée",
+    "reportSoon": "Le moyen de contact arrive bientôt.",
+    "credits": "Voir les crédits et les sources"
+  },
+  "data": {
+    "title": "Mes données",
+    "privacy": "Tout reste sur ton téléphone. Exporte une sauvegarde pour changer de téléphone.",
+    "export": "Exporter une sauvegarde (JSON)",
+    "exportCsv": "Exporter mes séries (CSV)",
+    "import": "Importer une sauvegarde",
+    "delete": "Supprimer toutes mes données",
+    "confirmTitle": "Confirmer la suppression",
+    "confirm": "Séances, séries, mesures, réglages : tout sera effacé de ce téléphone. Ce n'est pas réversible. Exporte une sauvegarde avant si tu veux la garder.",
+    "confirmYes": "Oui, tout supprimer",
+    "cancel": "Annuler",
+    "encryptedTitle": "Sauvegarde chiffrée",
+    "encryptedHelp": "Protégée par un mot de passe (8 caractères au moins), tu peux la ranger sur ton propre cloud (Google Drive…) via le menu Partager. Sans le mot de passe, personne ne peut la lire, pas même toi : note-le bien.",
+    "password": "Mot de passe",
+    "exportEncrypted": "Exporter une sauvegarde chiffrée",
+    "passwordTooShort": "Le mot de passe doit faire au moins 8 caractères.",
+    "encryptedFile": "Cette sauvegarde est chiffrée : entre son mot de passe.",
+    "unlock": "Déchiffrer et restaurer"
+  },
+  "discomfort": {
+    "open": "Ça tire",
+    "title": "Une gêne ?",
+    "where": "Où ?",
+    "signs": "Coche ce qui correspond :",
+    "confirm": "Valider",
+    "cancel": "Annuler",
+    "ok": "Compris",
+    "notDiagnosis": "Ce n'est pas un diagnostic : l'appli ne remplace pas un médecin ou un kiné.",
+    "removed": "{count} exercice retiré de la séance. | {count} exercices retirés de la séance.",
+    "zones": {
+      "frontShoulder": "Avant de l'épaule",
+      "shoulder": "Épaule",
+      "elbow": "Coude",
+      "wrist": "Poignet",
+      "lowerBack": "Bas du dos",
+      "knee": "Genou",
+      "hip": "Hanche",
+      "other": "Ailleurs"
+    },
+    "flags": {
+      "sharpPain": "Douleur vive",
+      "jointPain": "Douleur dans l'articulation",
+      "painAtRest": "Douleur même au repos",
+      "tingling": "Fourmillements",
+      "chestPainBreathless": "Douleur dans la poitrine et essoufflement"
+    },
+    "advice": {
+      "heatAndRest": "Arrête les exercices qui sollicitent cette zone. Chaleur et repos aident souvent.",
+      "warningSigns": "Si la douleur devient vive, articulaire, présente au repos ou avec des fourmillements : arrête et consulte.",
+      "seePhysioIfPersists": "C'est la 2e fois cette semaine : un seul exercice d'épaule par séance Push. Si ça persiste, consulte un kiné.",
+      "stopAndConsult": "Arrête la séance maintenant et consulte un médecin ou un kiné.",
+      "callEmergency": "Arrête tout et appelle le 15 (SAMU) maintenant.",
+      "sorenessVsPain": "Une courbature est diffuse et passe en 2 à 3 jours : tu peux garder ton programme."
+    }
+  },
+  "units": {
+    "kg": "{value} kg",
+    "lb": "{value} lb",
+    "symbol": {
+      "kg": "kg",
+      "lb": "lb"
+    }
+  },
+  "common": {
+    "back": "Retour"
+  },
+  "badges": {
+    "firstSession": "Première séance",
+    "tenSessions": "10 séances",
+    "fiftySessions": "50 séances",
+    "firstWeekOnPace": "Première semaine au rythme",
+    "fourWeeksOnPace": "4 semaines au rythme",
+    "firstRecord": "Premier record",
+    "backToLevel": "Retour au niveau d'avant"
+  },
+  "progress": {
+    "title": "Ma progression",
+    "description": "1RM estimé {name} sur {sessions} séances",
+    "best": "Meilleur 1RM estimé : {load}",
+    "forReps": "Combien pour X reps ?",
+    "target": "{reps} reps : {load}"
+  },
+  "cycle": {
+    "week": "Cycle {cycle}, semaine {week} sur 5",
+    "light": "Cycle {cycle}, semaine {week} sur 5 : semaine allégée, une série de moins par exercice pour récupérer.",
+    "change": "Cela fait plusieurs cycles sur ce programme : tu peux essayer un autre modèle, ou garder celui-ci s'il te plaît."
+  },
+  "mobility": {
+    "title": "Échauffement articulaire (≈ {minutes} min)",
+    "seconds": "{seconds} s",
+    "review": "Contenu à faire valider par un coach ou un kiné.",
+    "moves": {
+      "armCircles": {
+        "name": "Cercles de bras",
+        "how": "Bras tendus sur le côté, petits puis grands cercles, dans les deux sens."
+      },
+      "wallSlides": {
+        "name": "Glissés au mur",
+        "how": "Dos et bras contre le mur, monter et descendre les bras en gardant le contact."
+      },
+      "thoracicRotations": {
+        "name": "Rotations du buste",
+        "how": "À quatre pattes, une main derrière la tête, ouvrir le coude vers le plafond."
+      },
+      "wristCircles": {
+        "name": "Cercles des poignets",
+        "how": "Mains jointes, faire tourner les poignets lentement dans les deux sens."
+      },
+      "catCow": {
+        "name": "Chat-vache",
+        "how": "À quatre pattes, alterner dos rond et dos creux en respirant."
+      },
+      "hipCircles": {
+        "name": "Cercles de hanches",
+        "how": "Debout, mains sur les hanches, grands cercles dans les deux sens."
+      },
+      "legSwings": {
+        "name": "Balanciers de jambe",
+        "how": "En appui sur un support, balancer une jambe d'avant en arrière, puis l'autre."
+      },
+      "bodyweightSquats": {
+        "name": "Squats au poids du corps",
+        "how": "Descendre lentement, talons au sol, remonter sans à-coup."
+      },
+      "ankleRocks": {
+        "name": "Bascules de chevilles",
+        "how": "Un pied devant, avancer le genou au-dessus des orteils sans décoller le talon."
+      }
+    }
+  },
+  "gyms": {
+    "title": "Mes salles",
+    "choose": "Choisir {name}",
+    "rename": "Nom de la salle {name}",
+    "add": "Ajouter une salle",
+    "addPlaceholder": "Ex. salle en vacances",
+    "addButton": "Ajouter",
+    "help": "Chaque salle a ses machines favorites, ses paliers et ses réglages.",
+    "home": "Matériel à la maison"
+  },
+  "importCsv": {
+    "title": "Importer depuis une autre appli",
+    "choose": "Choisir un fichier CSV (séances ou charges)",
+    "found": "{sessions} séance(s) trouvée(s) dans l'export {app}.",
+    "apps": {
+      "strong": "Strong",
+      "hevy": "Hevy",
+      "trainerr": "Trainerr"
+    },
+    "unit": "Unité des charges dans ce fichier :",
+    "check": "Vérifie à quel exercice correspond chaque nom :",
+    "skip": "Ne pas importer",
+    "confirm": "Importer {count} séance | Importer {count} séances",
+    "done": "{count} séance importée. | {count} séances importées.",
+    "continueTitle": "Par quelle séance continuer ?",
+    "continueHelp": "Tes séances importées ne suivent pas forcément le programme de l'appli : choisis la prochaine séance, la suite s'enchaîne.",
+    "loadsFound": "{count} charge trouvée, une par machine. | {count} charges trouvées, une par machine.",
+    "loadsConfirm": "Importer {count} charge | Importer {count} charges",
+    "loadsDone": "{count} charge importée : elle sert de point de départ sur la machine. | {count} charges importées : elles servent de point de départ sur chaque machine."
+  },
+  "coach": {
+    "section": "Partager avec un coach",
+    "share": "Envoyer mon programme et mon historique",
+    "title": "Mon programme d'entraînement",
+    "program": "Programme",
+    "history": "Historique des séances",
+    "goal": "Objectif",
+    "duration": "Durée d'une séance",
+    "zone": "Zone à ménager",
+    "note": "Généré par Trainerr. Les charges proposées suivent les règles décrites dans l'appli ; merci pour tes corrections !"
+  },
+  "recap": {
+    "share": "Partager mon récap du mois",
+    "showLoads": "Afficher les charges",
+    "title": "Mon mois de {month}",
+    "sessions": "{count} séance | {count} séances",
+    "sets": "{count} série | {count} séries",
+    "days": "{count} jour d'entraînement | {count} jours d'entraînement",
+    "workload": "{load} soulevés",
+    "records": "{count} record battu | {count} records battus",
+    "footer": "Fait avec Trainerr",
+    "cardTitle": "Partager mon mois"
+  },
+  "friends": {
+    "title": "Défis entre amis",
+    "privacy": "Optionnel. Seuls ton pseudo, ton nombre de séances de la semaine et ta régularité sont envoyés au serveur. Tes charges restent sur ton téléphone, sauf si tu choisis de partager tes records.",
+    "serverHelp": "Pour défier tes amis, indique l'adresse du serveur Trainerr de votre groupe.",
+    "server": "Adresse du serveur",
+    "saveServer": "Enregistrer le serveur",
+    "pseudo": "Pseudo",
+    "createAccount": "Créer mon compte",
+    "code": "Code à partager : {code}",
+    "sessions": "{count} séance | {count} séances",
+    "weeks": "{count} semaine au rythme | {count} semaines au rythme",
+    "noGroup": "Tu n'es dans aucun groupe pour l'instant.",
+    "groupName": "Nom du nouveau groupe",
+    "create": "Créer",
+    "joinCode": "Code d'un groupe",
+    "join": "Rejoindre",
+    "shareRecords": "Partager mes records (charges) avec mes groupes",
+    "refresh": "Actualiser",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteConfirm": "Ton compte, tes groupes vides et tes statistiques seront effacés du serveur. Tes séances restent sur ton téléphone.",
+    "deleteYes": "Oui, supprimer",
+    "errors": {
+      "network": "Serveur injoignable. Vérifie ta connexion ou l'adresse du serveur.",
+      "unknown_code": "Aucun groupe ne correspond à ce code.",
+      "invalid_name": "Le nom doit faire entre 1 et 40 caractères.",
+      "url": "L'adresse doit commencer par http:// ou https://.",
+      "other": "Le serveur a renvoyé une erreur. Réessaie plus tard."
+    }
+  },
+  "advice": {
+    "title": "Conseil du coach IA",
+    "consent": "Pour te répondre, le résumé de tes 7 derniers jours (exercices, charges, gênes signalées) sera envoyé à ton serveur Trainerr, puis à Claude, l'IA d'Anthropic. Ni ton nom ni tes mensurations ne sont envoyés.",
+    "seeSummary": "Voir ce qui sera envoyé",
+    "agree": "J'accepte d'envoyer ce résumé",
+    "question": "Ta question (facultatif)",
+    "ask": "Demander un conseil",
+    "loading": "Le coach réfléchit…",
+    "warning": "Conseil généré par une IA : il peut se tromper et ne remplace pas un professionnel de santé.",
+    "withdraw": "Retirer mon accord",
+    "errors": {
+      "network": "Serveur injoignable. Réessaie quand tu as du réseau.",
+      "daily_limit": "Tu as atteint le nombre de conseils du jour. Reviens demain !",
+      "refused": "Le coach ne peut pas répondre à cette question. Reformule-la ou demande à un professionnel.",
+      "unavailable": "Le coach IA est indisponible pour le moment. Réessaie plus tard.",
+      "other": "Une erreur est survenue. Réessaie plus tard."
+    }
+  },
+  "picker": {
+    "cancel": "Annuler",
+    "mine": "Dans mes machines",
+    "popular": "Machine populaire",
+    "sameMovement": "Même mouvement"
+  },
+  "historyEdit": {
+    "title": "Modifier la séance",
+    "notFound": "Séance introuvable.",
+    "date": "Date",
+    "set": "Série {number} : {name}",
+    "reps": "Reps",
+    "difficulty": "Ressenti",
+    "deleteSet": "Supprimer cette série",
+    "addSet": "Ajouter une série",
+    "addExercise": "Ajouter un exercice",
+    "deleteSession": "Supprimer cette séance",
+    "deleteConfirm": "La séance et toutes ses séries seront effacées de l'historique.",
+    "deleteYes": "Oui, supprimer la séance",
+    "moveMachine": "Changer de machine",
+    "moveMachineNamed": "Ces séries étaient sur une autre machine que {name}"
+  },
+  "myLoad": {
+    "title": "Ma charge",
+    "help": "La charge et les reps que tu fais sur cette machine. Elles s'affichent dans le catalogue et servent de point de départ à ta prochaine séance.",
+    "invalid": "Indique une charge et un nombre de reps.",
+    "edit": "Ma charge sur {name} : {load}. Modifier",
+    "add": "Noter ma charge sur {name}",
+    "addShort": "+ Ma charge"
+  },
+  "setEdit": {
+    "title": "Corriger la série",
+    "save": "Enregistrer la correction",
+    "delete": "Supprimer cette série",
+    "deleteConfirm": "La série sera retirée de la séance. Si l'exercice manque alors de séries, il est rouvert.",
+    "deleteYes": "Oui, supprimer",
+    "open": "Corriger : {set}",
+    "last": "Dernière série : {set}",
+    "fix": "Corriger",
+    "wrongMachine": {
+      "title": "Mauvaise machine ?",
+      "all": "Déplacer les {count} séries de {name}",
+      "pick": "Choisir la bonne machine",
+      "where": "Où as-tu fait ces séries de {name} ?"
+    }
+  },
+  "customSession": {
+    "mine": "Mes séances",
+    "intro": "Compose tes propres séances avec les exercices de ton choix.",
+    "create": "+ Créer une séance",
+    "newTitle": "Nouvelle séance",
+    "editTitle": "Modifier la séance",
+    "name": "Nom de la séance",
+    "namePlaceholder": "Ex. Bras du vendredi",
+    "exercises": "{count} exercice | {count} exercices",
+    "empty": "Ajoute au moins un exercice.",
+    "add": "Ajouter un exercice",
+    "up": "Monter {name}",
+    "down": "Descendre {name}",
+    "remove": "Retirer {name}",
+    "save": "Enregistrer la séance",
+    "delete": "Supprimer cette séance",
+    "deleteConfirm": "La séance sera supprimée. Les séances déjà faites restent dans l'historique.",
+    "deleteYes": "Oui, supprimer",
+    "edit": "Modifier",
+    "editNamed": "Modifier {name}",
+    "start": "Commencer",
+    "startNamed": "Commencer {name}",
+    "deleted": "Séance perso",
+    "orderIssue": "{isolation} est avant {compound} : fatiguer d'abord ce muscle ({muscle}) limiterait le gros exercice.",
+    "fixOrder": "Remettre dans l'ordre conseillé"
+  },
+  "emptyStates": {
+    "history": "Aucune séance pour l'instant",
+    "stats": "Tes stats arrivent",
+    "statsText": "Elles se remplissent dès ta première séance terminée : régularité, force, records.",
+    "start": "Commencer une séance",
+    "favorites": "Aucune machine dans ta salle",
+    "seeAll": "Voir toutes les machines"
+  },
+  "presets": {
+    "title": "Séances types",
+    "intro": "Des séances prêtes, dans le bon ordre : le gros exercice d'abord, l'isolation à la fin.",
+    "open": "Voir les séances types",
+    "models": {
+      "push": {
+        "name": "Push (poussée)",
+        "summary": "Pectoraux, épaules, triceps"
+      },
+      "pull": {
+        "name": "Pull (tirage)",
+        "summary": "Dos, arrière d'épaule, biceps"
+      },
+      "legs": {
+        "name": "Jambes",
+        "summary": "Quadriceps, ischios, fessiers, mollets"
+      },
+      "fullBodyBeginner": {
+        "name": "Full body débutant",
+        "summary": "Tout le corps sur machines, 5 exercices simples"
+      },
+      "upperLower": {
+        "name": "Haut / Bas",
+        "summary": "Deux séances en alternance : haut du corps, puis jambes"
+      }
+    },
+    "sessions": {
+      "push": "Push",
+      "pull": "Pull",
+      "legs": "Jambes",
+      "fullBodyBeginner": "Full body débutant",
+      "upper": "Haut du corps",
+      "lower": "Bas du corps"
+    },
+    "line": "{sets} × {reps} · repos {rest}",
+    "repsRange": "{min}-{max}",
+    "perSide": "{reps} par jambe",
+    "seconds": "{reps} s",
+    "start": "Commencer : {name}",
+    "replaced": "À la place de {main} : c'est une de tes machines",
+    "role": {
+      "mainCompound": "Polyarticulaire lourd",
+      "secondaryCompound": "Polyarticulaire secondaire",
+      "isolation": "Isolation"
+    },
+    "principle": {
+      "title": "Pourquoi cet ordre ?",
+      "p1": "Les exercices qui font travailler plusieurs articulations (développé couché, tractions, squat) passent en premier, quand tu es frais : ce sont eux qui demandent le plus de force et de technique.",
+      "p2": "Viennent ensuite les polyarticulaires secondaires, puis l'isolation (un seul muscle). On ne fait jamais l'isolation d'un muscle avant le gros exercice qui l'utilise : des triceps déjà fatigués limiteraient le développé couché.",
+      "p3": "Ce que disent les études : un exercice progresse plus en force quand il est placé en début de séance. Pour le volume musculaire, l'ordre compte peu : l'essentiel est de faire assez de séries.",
+      "sources": "Sources"
+    },
+    "why": {
+      "benchFirst": "Le plus lourd de la séance : fait en premier, quand pectoraux, épaules et triceps sont frais.",
+      "inclineSecond": "Encore un polyarticulaire, plus léger : il vise le haut des pectoraux une fois le gros travail fait.",
+      "shoulderPressAfterChest": "Les épaules ont déjà aidé sur les développés : une machine guidée reste sûre même un peu fatigué.",
+      "lateralRaiseAfterPress": "Isolation du milieu de l'épaule, après les développés qui l'ont déjà sollicité.",
+      "tricepsLast": "Les triceps aident à tous les développés : on les isole à la fin pour ne pas limiter les exercices lourds.",
+      "pullupsFirst": "Le plus exigeant du tirage : en premier pour tirer le plus de reps. Assistées si besoin, l'appli compte l'aide à l'envers.",
+      "rowSecond": "Deuxième gros tirage, horizontal cette fois : le milieu du dos travaille avec les dorsaux encore frais.",
+      "cableRowThird": "Tirage plus léger et guidé : du volume pour le dos sans charge lourde.",
+      "facePullAfterRows": "Isolation de l'arrière d'épaule, bon pour l'équilibre avec la poussée, après les rowings qui l'ont déjà échauffé.",
+      "curlLast": "Les biceps aident à chaque tirage : les isoler avant affaiblirait tractions et rowings.",
+      "squatFirst": "Le plus lourd et le plus technique : en premier, quand le dos et les jambes sont frais.",
+      "rdlSecond": "Charnière de hanche lourde pour ischios et fessiers, à faire avant qu'ils ne soient fatigués.",
+      "lungesThird": "Une jambe à la fois : moins lourd, mais demande de l'équilibre, donc avant l'isolation.",
+      "legExtensionAfterSquat": "Isolation des quadriceps, après le squat et les fentes qui les ont déjà bien travaillés.",
+      "legCurlAfterRdl": "Isolation des ischios, après le soulevé de terre roumain.",
+      "calvesLast": "Petit muscle peu sollicité par le reste : à la fin, il ne gêne aucun autre exercice.",
+      "beginnerLegPress": "Le plus gros mouvement, guidé et sûr pour apprendre : en premier, quand tu es frais.",
+      "beginnerChestPress": "Poussée guidée : la machine tient la trajectoire, tu te concentres sur l'amplitude.",
+      "beginnerPulldown": "Tirage vertical guidé, plus facile à doser que les tractions.",
+      "beginnerRow": "Tirage horizontal pour le milieu du dos, pour équilibrer la poussée.",
+      "plankLast": "Gainage à la fin : les abdos stabilisent tous les exercices, les fatiguer avant gênerait le reste.",
+      "upperBench": "Poussée lourde en premier : c'est elle qui demande le plus de force.",
+      "upperRow": "Tirage lourd juste après : pousser puis tirer laisse les muscles de la poussée se reposer.",
+      "upperShoulderPress": "Poussée secondaire, en alternance avec le tirage qui suit.",
+      "upperPulldown": "Tirage secondaire, pendant que les épaules récupèrent.",
+      "upperCurl": "Isolation des biceps, après tous les tirages.",
+      "upperTriceps": "Isolation des triceps, après tous les développés."
+    },
+    "rest": {
+      "seconds": "{s} s",
+      "minutes": "{m} min",
+      "minutesSeconds": "{m} min {s}"
+    },
+    "shortcut": "Ou une séance type : Push, Pull, Jambes…",
+    "beginner": {
+      "title": "Tu débutes ? Commence ici",
+      "text": "5 machines guidées pour tout le corps, 3 séries de 10, dans le bon ordre. L'appli propose une charge légère pour démarrer : dis « Facile » si c'était trop léger, elle montera.",
+      "details": "Voir le détail et les autres séances types"
+    }
+  },
+  "sessionNotification": {
+    "title": "Séance en cours · {name}",
+    "set": "{name} · série {current}/{total} · {load}",
+    "resting": "Repos · ensuite : {next}",
+    "finished": "Tout est fait : termine la séance dans l'appli.",
+    "restOver": "Repos terminé",
+    "channel": "Séance en cours",
+    "restChannel": "Fin du repos"
+  },
+  "updates": {
+    "title": "Mises à jour",
+    "installed": "Version installée : {version} ({code})",
+    "check": "Vérifier",
+    "checking": "Recherche d'une nouvelle version…",
+    "upToDate": "Tu as la dernière version.",
+    "available": "Nouvelle version {version} disponible",
+    "install": "Télécharger et installer",
+    "later": "Plus tard",
+    "downloading": "Téléchargement… {percent} %",
+    "permission": "Android demande d'autoriser Trainerr à installer ses mises à jour (une seule fois).",
+    "allow": "Autoriser",
+    "retry": "Réessayer",
+    "error": "Impossible de vérifier pour l'instant ({message}).",
+    "auto": "Chercher les mises à jour au démarrage",
+    "autoHelp": "Une fois par jour au plus, l'appli demande à GitHub la dernière version publiée. Rien d'autre n'est envoyé."
+  }
+}

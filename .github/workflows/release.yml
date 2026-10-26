@@ -1,0 +1,110 @@
+name: Publier l'APK
+
+# À chaque push sur main : APK signé avec la clé de l'appli, publié comme
+# GitHub Release (APK + latest.json). L'appli Android y cherche ses mises à jour.
+# Secrets à créer : voir docs/mises-a-jour.md.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+# Deux pushes rapprochés : les releases sortent dans l'ordre, sans se gêner.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Numéro de version
+        # Numéro d'exécution + 1 : l'APK 1.0.0 installé à la main (versionCode 1)
+        # reçoit ainsi même la toute première release. Le versionName finit par
+        # le versionCode : l'appli le lit dans le tag (v1.0.<code>).
+        run: |
+          code=$(( ${{ github.run_number }} + 1 ))
+          echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
+          echo "VERSION_NAME=1.0.$code" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - uses: android-actions/setup-android@v3
+        with:
+          # Le paquet « tools » (installé par défaut) n'existe plus dans le SDK.
+          packages: platform-tools
+
+      - name: Vérifier les secrets de signature
+        id: secrets
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          # Tant que les secrets ne sont pas créés, rien n'est publié (sans faire échouer main).
+          for name in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::warning::Secret $name manquant : aucune release publiée. Voir docs/mises-a-jour.md"
+              echo "ready=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Récupérer la clé de signature
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        # Écrite hors du dépôt, dans le dossier temporaire du runner, effacée à la fin.
+        run: echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/trainerr-release.jks"
+
+      - run: npm ci
+        if: steps.secrets.outputs.ready == 'true'
+      - name: Construire l'appli web et la copier dans Android
+        if: steps.secrets.outputs.ready == 'true'
+        run: npm run build && npx cap sync android
+
+      - name: Construire l'APK signé
+        if: steps.secrets.outputs.ready == 'true'
+        working-directory: android
+        env:
+          TRAINERR_KEYSTORE: ${{ runner.temp }}/trainerr-release.jks
+          TRAINERR_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          TRAINERR_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          TRAINERR_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          TRAINERR_VERSION_CODE: ${{ env.VERSION_CODE }}
+          TRAINERR_VERSION_NAME: ${{ env.VERSION_NAME }}
+        run: ./gradlew assembleRelease
+
+      - name: Préparer les fichiers de la release
+        if: steps.secrets.outputs.ready == 'true'
+        run: |
+          mkdir -p release
+          cp android/app/build/outputs/apk/release/app-release.apk "release/trainerr-$VERSION_NAME.apk"
+          node scripts/release-manifest.mjs "$VERSION_NAME" "$VERSION_CODE" \
+            "release/trainerr-$VERSION_NAME.apk" release/latest.json
+
+      - name: Publier la GitHub Release
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v$VERSION_NAME" release/* \
+            --title "Trainerr $VERSION_NAME" \
+            --notes "$(git log -1 --pretty=%s)" \
+            --target "$GITHUB_SHA"
+
+      - name: Effacer la clé
+        if: always()
+        run: rm -f "$RUNNER_TEMP/trainerr-release.jks"

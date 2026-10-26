@@ -1,0 +1,6 @@
+# Node installé localement sur le poste de dev (sans effet ailleurs).
+export PATH="$HOME/.local/node/bin:$PATH"
+npx lint-staged
+npm run typecheck
+npm run check:i18n
+npm test
