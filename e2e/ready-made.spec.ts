@@ -89,6 +89,8 @@ test('more sets than planned: during the exercise or right after it', async ({ p
   await expect(page.getByRole('region', { name: first })).toHaveCount(0);
 
   // A fifth one, right after: the exercise comes back, rest timer kept.
+  // During the rest, these actions are folded under the timer.
+  await page.getByText('Corriger, revenir… ›').click();
   await page.getByRole('button', { name: `+1 série sur : ${first}` }).click();
   await expect(page.getByRole('region', { name: first })).toBeVisible();
   await expect(page.getByText('Série 5 sur 5')).toBeVisible();

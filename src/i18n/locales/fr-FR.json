@@ -439,7 +439,8 @@
       "mine": "Ma machine",
       "none": "Pas d'autre machine pour ce mouvement dans tes machines ni les machines courantes.",
       "other": "Un autre exercice…"
-    }
+    },
+    "restMore": "Corriger, revenir… ›"
   },
   "availability": {
     "day": "Jour",

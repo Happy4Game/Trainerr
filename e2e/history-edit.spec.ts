@@ -80,6 +80,8 @@ test('a set validated too fast can be fixed or deleted during the session', asyn
   const first = await doOneSet(page);
   // Right after validating: the last set is shown with a way to fix it.
   await expect(page.getByText(/Dernière série : .*× 10/)).toBeVisible();
+  // During the rest, the fix is folded under the timer.
+  await page.getByText('Corriger, revenir… ›').click();
   await page.getByRole('button', { name: 'Corriger', exact: true }).click();
   await page.locator('ion-modal ion-button', { hasText: 'Une rep de moins' }).click();
   await page.locator('ion-modal ion-button', { hasText: 'Une rep de moins' }).click();

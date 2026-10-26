@@ -404,43 +404,86 @@ async function logWarmup(): Promise<void> {
 
       <!-- Pendant la séance -->
       <template v-else-if="phase === 'active' && active">
-        <div v-if="previousExercise" class="previous">
-          <span class="previous-name">
-            {{ t('session.previous', { name: nameOf(previousExercise) }) }}
-          </span>
-          <ion-button
-            fill="outline"
-            size="small"
-            :aria-label="t('session.goBack', { name: nameOf(previousExercise) })"
-            @click="session.goBack()"
-          >
-            {{ t('session.goBackShort') }}
-          </ion-button>
-          <ion-button
-            v-if="session.canAddSet(previousExercise)"
-            fill="outline"
-            size="small"
-            :aria-label="t('session.extraSet.previous', { name: nameOf(previousExercise) })"
-            @click="session.extraSet(previousExercise)"
-          >
-            {{ t('session.extraSet.short') }}
-          </ion-button>
-        </div>
         <RestTimer
           v-if="restEndsAt"
           :ends-at="restEndsAt"
           @done="session.endRest()"
           @adjust="session.adjustRest($event)"
         />
-        <p v-if="lastLogged" :key="lastLogged.id" class="just-logged" role="status">
-          ✓ {{ t('setEdit.last', { set: lastLogged.label }) }}
-          <button type="button" class="link" @click="editing = lastLogged">
-            {{ t('setEdit.fix') }}
-          </button>
-          <button type="button" class="link" @click="wrongMachine = lastLogged.exerciseId">
-            {{ t('setEdit.wrongMachine.title') }}
-          </button>
-        </p>
+        <!-- During the rest, the timer and the next set come first: the rest folds away. -->
+        <details v-if="restEndsAt && (lastLogged || previousExercise)" class="rest-more">
+          <summary>
+            <span v-if="lastLogged" role="status"
+              >✓ {{ t('setEdit.last', { set: lastLogged.label }) }}</span
+            >
+            <span v-else>{{
+              t('session.previous', { name: nameOf(previousExercise ?? '') })
+            }}</span>
+            <span class="more-hint">{{ t('session.restMore') }}</span>
+          </summary>
+          <div class="previous">
+            <template v-if="lastLogged">
+              <ion-button fill="outline" size="small" @click="editing = lastLogged">
+                {{ t('setEdit.fix') }}
+              </ion-button>
+              <ion-button fill="outline" size="small" @click="wrongMachine = lastLogged.exerciseId">
+                {{ t('setEdit.wrongMachine.title') }}
+              </ion-button>
+            </template>
+            <template v-if="previousExercise">
+              <ion-button
+                fill="outline"
+                size="small"
+                :aria-label="t('session.goBack', { name: nameOf(previousExercise) })"
+                @click="session.goBack()"
+              >
+                {{ t('session.goBackShort') }}
+              </ion-button>
+              <ion-button
+                v-if="session.canAddSet(previousExercise)"
+                fill="outline"
+                size="small"
+                :aria-label="t('session.extraSet.previous', { name: nameOf(previousExercise) })"
+                @click="session.extraSet(previousExercise)"
+              >
+                {{ t('session.extraSet.short') }}
+              </ion-button>
+            </template>
+          </div>
+        </details>
+        <template v-else>
+          <div v-if="previousExercise" class="previous">
+            <span class="previous-name">
+              {{ t('session.previous', { name: nameOf(previousExercise) }) }}
+            </span>
+            <ion-button
+              fill="outline"
+              size="small"
+              :aria-label="t('session.goBack', { name: nameOf(previousExercise) })"
+              @click="session.goBack()"
+            >
+              {{ t('session.goBackShort') }}
+            </ion-button>
+            <ion-button
+              v-if="session.canAddSet(previousExercise)"
+              fill="outline"
+              size="small"
+              :aria-label="t('session.extraSet.previous', { name: nameOf(previousExercise) })"
+              @click="session.extraSet(previousExercise)"
+            >
+              {{ t('session.extraSet.short') }}
+            </ion-button>
+          </div>
+          <p v-if="lastLogged" :key="lastLogged.id" class="just-logged" role="status">
+            ✓ {{ t('setEdit.last', { set: lastLogged.label }) }}
+            <button type="button" class="link" @click="editing = lastLogged">
+              {{ t('setEdit.fix') }}
+            </button>
+            <button type="button" class="link" @click="wrongMachine = lastLogged.exerciseId">
+              {{ t('setEdit.wrongMachine.title') }}
+            </button>
+          </p>
+        </template>
         <ExercisePicker
           :open="wrongMachine !== undefined"
           :title="
@@ -1055,6 +1098,25 @@ async function logWarmup(): Promise<void> {
   margin-block: 0 10px;
   font-size: 0.85rem;
   color: var(--ion-color-medium-shade);
+}
+.rest-more {
+  margin-block: 8px 10px;
+  font-size: 0.9rem;
+  color: var(--ion-color-medium-shade);
+}
+.rest-more summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.more-hint {
+  color: var(--ion-color-primary);
+}
+.rest-more .previous {
+  margin-block: 4px 0;
 }
 .previous-name {
   flex: 1 1 12em;
