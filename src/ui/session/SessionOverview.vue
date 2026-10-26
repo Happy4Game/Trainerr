@@ -11,7 +11,7 @@ import {
 import { ArrowDown, ArrowUp, Check, Minus, Plus, X } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
-import { useUnits } from '@/ui/useUnits';
+import { useLoadLabel } from './useLoadLabel';
 import { useSession } from './useSession';
 
 /** The whole session at a glance: done, current and next machines, with a quick reorder. */
@@ -23,7 +23,7 @@ const emit = defineEmits<{ close: [] }>();
 
 const { t } = useI18n();
 const session = useSession();
-const { load: kg } = useUnits();
+const loadOf = useLoadLabel();
 
 const thumbnailOf = (id: string) => {
   const image = illustrationFor(id)?.images[0];
@@ -85,7 +85,7 @@ async function doNow(id: string): Promise<void> {
               <span class="status">{{ t(`session.progress.status.${e.status}`) }}</span>
               · {{ setsLine(e.id) }}
               <template v-if="e.status === 'next' && session.proposalFor(e.id)">
-                · {{ kg(session.proposalFor(e.id)?.loadKg ?? 0) }}
+                · {{ loadOf(e.id, session.proposalFor(e.id)?.loadKg ?? 0) }}
               </template>
             </span>
           </span>

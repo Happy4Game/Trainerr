@@ -30,6 +30,7 @@ import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import ReplaceCard from '@/ui/session/ReplaceCard.vue';
 import { useSessionNotification } from '@/ui/session/useSessionNotification';
+import { useLoadLabel } from '@/ui/session/useLoadLabel';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionPlanList from '@/ui/session/SessionPlanList.vue';
 import SessionOverview from '@/ui/session/SessionOverview.vue';
@@ -96,6 +97,10 @@ const nextMachine = computed(() => {
     ...(image ? { thumbnail: `${import.meta.env.BASE_URL}exercise-images/${image.file}` } : {}),
   };
 });
+// A session that starts (e.g. from the ready-made sessions, far down the page) starts at the top.
+watch(phase, (now, before) => {
+  if (now === 'active' && before !== 'active') void content.value?.$el.scrollToTop(0);
+});
 // A new exercise starts at the top of the screen.
 watch(
   () => (step.value?.kind === 'exercise' ? step.value.exerciseId : undefined),
@@ -154,9 +159,10 @@ const thumbnailOf = (id: string) => {
   return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
 };
 const musclesOf = (e: Exercise) => e.primaryMuscles.map((m) => t(`muscles.${m}`)).join(', ');
+const loadOf = useLoadLabel();
 /** "3 sets · 20 kg" under an exercise of the plan. */
 const planDetail = (id: string) =>
-  `${t('session.nextMachine.plan', session.plannedSets(id))} · ${kg(session.proposalFor(id)?.loadKg ?? 0)}`;
+  `${t('session.nextMachine.plan', session.plannedSets(id))} · ${loadOf(id, session.proposalFor(id)?.loadKg ?? 0)}`;
 /** Card of a machine; a banner there leads back to the session. */
 const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
@@ -199,10 +205,19 @@ const fallback = computed(() => {
   return crowdedFallback(toReplace, session.favoriteExercises.value);
 });
 
+/** Shortcut under the last set: every set of this machine today goes to the right one. */
+const wrongMachine = ref<string>();
+async function moveToRightMachine(toId: string): Promise<void> {
+  const fromId = wrongMachine.value;
+  wrongMachine.value = undefined;
+  const ids = (active.value?.sets ?? []).filter((s) => s.exerciseId === fromId).map((s) => s.id);
+  await session.moveLoggedSets(ids, toId);
+}
+
 const loggedSets = computed(() =>
   (active.value?.sets ?? []).map((set) => ({
     ...set,
-    label: `${nameOf(set.exerciseId)} — ${kg(set.loadKg)} × ${n(set.reps)}`,
+    label: `${nameOf(set.exerciseId)} — ${loadOf(set.exerciseId, set.loadKg)} × ${n(set.reps)}`,
   })),
 );
 
@@ -291,6 +306,9 @@ async function logWarmup(): Promise<void> {
               >
                 {{ t('session.express') }}
               </ion-button>
+              <ion-button expand="block" fill="clear" router-link="/tabs/session/presets">
+                {{ t('presets.shortcut') }}
+              </ion-button>
             </template>
             <template v-else-if="!readyMade">
               <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>
@@ -325,6 +343,9 @@ async function logWarmup(): Promise<void> {
               </ion-button>
               <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
                 {{ t('session.readyMade.adopt', readyMade.suggestedIds.length) }}
+              </ion-button>
+              <ion-button expand="block" fill="clear" router-link="/tabs/session/presets">
+                {{ t('presets.shortcut') }}
               </ion-button>
               <ion-button expand="block" fill="clear" router-link="/tabs/catalog">
                 {{ t('session.goToCatalog') }}
@@ -416,7 +437,19 @@ async function logWarmup(): Promise<void> {
           <button type="button" class="link" @click="editing = lastLogged">
             {{ t('setEdit.fix') }}
           </button>
+          <button type="button" class="link" @click="wrongMachine = lastLogged.exerciseId">
+            {{ t('setEdit.wrongMachine.title') }}
+          </button>
         </p>
+        <ExercisePicker
+          :open="wrongMachine !== undefined"
+          :title="
+            wrongMachine ? t('setEdit.wrongMachine.where', { name: nameOf(wrongMachine) }) : ''
+          "
+          :exclude="wrongMachine ? [wrongMachine] : []"
+          @pick="moveToRightMachine"
+          @close="wrongMachine = undefined"
+        />
         <SetEditModal
           :set="editing"
           :name="editing ? nameOf(editing.exerciseId) : ''"

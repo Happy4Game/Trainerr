@@ -420,7 +420,8 @@
       "moreHelp": "Plus d'aide (plus facile)",
       "set": "aide {load} × {reps}",
       "real": "Charge réelle : {real} ({weight} de poids du corps − {help} d'aide)",
-      "noWeight": "Poids estimé : note ton poids"
+      "noWeight": "Poids estimé : note ton poids",
+      "load": "aide {load}"
     },
     "seconds": "Secondes",
     "repsPerSide": "Reps / jambe",
@@ -1094,7 +1095,8 @@
     "wrongMachine": {
       "title": "Mauvaise machine ?",
       "all": "Déplacer les {count} séries de {name}",
-      "pick": "Choisir la bonne machine"
+      "pick": "Choisir la bonne machine",
+      "where": "Où as-tu fait ces séries de {name} ?"
     }
   },
   "customSession": {
@@ -1216,7 +1218,8 @@
       "seconds": "{s} s",
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s}"
-    }
+    },
+    "shortcut": "Ou une séance type : Push, Pull, Jambes…"
   },
   "sessionNotification": {
     "title": "Séance en cours · {name}",

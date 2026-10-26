@@ -87,8 +87,9 @@ export function withoutSet(
 }
 
 /**
- * Sets logged on the wrong machine moved to the right one: the right one
- * counts as done, and the wrong one, now without any set, goes back to come.
+ * Sets logged on the wrong machine moved to the right one: the user is on the
+ * right one, so it comes now (or counts as done when its sets are all there),
+ * and the wrong one, now without any set, goes back to come.
  */
 export function afterMovingSets(
   queue: ExerciseQueue,
@@ -103,8 +104,9 @@ export function afterMovingSets(
   if (toComplete) {
     pending = pending.filter((id) => id !== toId);
     if (!done.includes(toId)) done = [...done, toId];
-  } else if (!pending.includes(toId) && !done.includes(toId)) {
-    pending = [toId, ...pending];
+  } else {
+    done = done.filter((id) => id !== toId);
+    pending = [toId, ...pending.filter((id) => id !== toId)];
   }
   return { ...queue, pending, done, waiting: queue.waiting.filter((w) => w.exerciseId !== toId) };
 }

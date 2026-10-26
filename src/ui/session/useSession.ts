@@ -82,7 +82,9 @@ import { presetSession } from '@/data/content/presetSessions';
 import {
   assistedScale,
   bodyWeightOn,
+  DEFAULT_ASSISTANCE_STEPS,
   DEFAULT_BODY_WEIGHT_KG,
+  firstAssistedRealKg,
   withRealLoads,
   type AssistedScale,
 } from '@/domain/assisted';
@@ -135,7 +137,11 @@ const entryOf = (id: string): CatalogEntry | undefined => byId.value.get(id);
 /** Plates of the machine (or the defaults), with the add-on weights clipped on top. */
 const stepsOf = (entry: CatalogEntry) =>
   withAddOns(
-    entry.loadSteps.length > 0 ? entry.loadSteps : defaultStepsFor(entry.exercise.equipment),
+    entry.loadSteps.length > 0
+      ? entry.loadSteps
+      : entry.exercise.assisted
+        ? DEFAULT_ASSISTANCE_STEPS
+        : defaultStepsFor(entry.exercise.equipment),
     entry.setup.addOnsKg,
   );
 
@@ -271,8 +277,13 @@ function proposalFor(exerciseId: string): Proposal | undefined {
       ? { usual: { loadKg: referenceKg, reps: reference.reps } }
       : {}),
   });
+  // A test set on a help machine: about half the body weight, not the full help.
+  const startKg =
+    scale && start.kind === 'testSet'
+      ? firstAssistedRealKg(scale, bodyWeight.value ?? DEFAULT_BODY_WEIGHT_KG)
+      : start.loadKg;
   return {
-    loadKg: toMachine(start.loadKg),
+    loadKg: toMachine(startKg),
     targetReps: start.targetReps,
     reason: start.kind,
     reminders: [],

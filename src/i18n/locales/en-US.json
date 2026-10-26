@@ -420,7 +420,8 @@
       "moreHelp": "More help (easier)",
       "set": "help {load} × {reps}",
       "real": "Real load: {real} ({weight} body weight − {help} help)",
-      "noWeight": "Estimated weight: enter your weight"
+      "noWeight": "Estimated weight: enter your weight",
+      "load": "help {load}"
     },
     "seconds": "Seconds",
     "repsPerSide": "Reps / leg",
@@ -1094,7 +1095,8 @@
     "wrongMachine": {
       "title": "Wrong machine?",
       "all": "Move the {count} sets of {name}",
-      "pick": "Choose the right machine"
+      "pick": "Choose the right machine",
+      "where": "Where did you do these {name} sets?"
     }
   },
   "customSession": {
@@ -1216,7 +1218,8 @@
       "seconds": "{s} s",
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s} s"
-    }
+    },
+    "shortcut": "Or a ready-made session: Push, Pull, Legs…"
   },
   "sessionNotification": {
     "title": "Session in progress · {name}",

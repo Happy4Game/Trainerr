@@ -4,7 +4,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
-import { useUnits } from '@/ui/useUnits';
+import { useLoadLabel } from './useLoadLabel';
 import { useSession } from './useSession';
 
 /** Another machine for the same movement, or any exercise, instead of this one. */
@@ -13,7 +13,7 @@ const emit = defineEmits<{ close: [] }>();
 
 const { t, locale } = useI18n();
 const session = useSession();
-const { load: kg } = useUnits();
+const loadOf = useLoadLabel();
 const picking = ref(false);
 
 const nameOf = (id: string) => {
@@ -60,7 +60,7 @@ async function take(id: string): Promise<void> {
               </template>
               {{ t(`equipment.${e.equipment}`) }}
               <template v-if="session.proposalFor(e.id)">
-                · {{ kg(session.proposalFor(e.id)?.loadKg ?? 0) }}
+                · {{ loadOf(e.id, session.proposalFor(e.id)?.loadKg ?? 0) }}
               </template>
             </p>
             <ion-button

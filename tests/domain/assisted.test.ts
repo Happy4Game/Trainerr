@@ -1,6 +1,12 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import { assistedScale, bodyWeightOn, withRealLoads } from '@/domain/assisted';
+import {
+  assistedScale,
+  bodyWeightOn,
+  DEFAULT_ASSISTANCE_STEPS,
+  firstAssistedRealKg,
+  withRealLoads,
+} from '@/domain/assisted';
 import { nextSessionProposal, nextSetProposal } from '@/domain/progression';
 import { uniformSteps } from '@/domain/loadSteps';
 import type { SetLog } from '@/domain/types';
@@ -83,6 +89,12 @@ describe('assisted exercises', () => {
         },
       ),
     );
+  });
+
+  it('start the first time at about half the body weight, never with the full help', () => {
+    const scale = assistedScale(DEFAULT_ASSISTANCE_STEPS, 78);
+    // 39 kg wanted: 38 kg real (40 kg of help), not 3 kg.
+    expect(scale.toAssistance(firstAssistedRealKg(scale, 78))).toBe(40);
   });
 
   it('use the body weight of the day of each session', () => {

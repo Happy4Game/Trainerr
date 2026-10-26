@@ -91,6 +91,16 @@ describe('changing a session in progress', () => {
         toComplete: true,
       }),
     ).toEqual({ pending: ['shoulderPress', 'chestPress'], waiting: [], done: ['bench'] });
+    // Logged on the barbell row, done on the cable row planned later: the cable row comes now.
+    const planned = { pending: ['row', 'cableRow', 'facePull'], waiting: [], done: ['pullup'] };
+    expect(
+      afterMovingSets(planned, {
+        fromId: 'row',
+        toId: 'cableRow',
+        fromHasSetsLeft: false,
+        toComplete: false,
+      }).pending,
+    ).toEqual(['cableRow', 'row', 'facePull']);
     // Only one set moved, the target still lacks sets: it comes next.
     expect(
       afterMovingSets(queue, {

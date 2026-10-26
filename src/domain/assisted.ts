@@ -1,4 +1,4 @@
-import { normalizeSteps, roundKg, type LoadSteps } from './loadSteps';
+import { floorStep, normalizeSteps, roundKg, uniformSteps, type LoadSteps } from './loadSteps';
 import type { IsoDate, SessionLog, SetLog } from './types';
 
 /**
@@ -10,6 +10,20 @@ import type { IsoDate, SessionLog, SetLog } from './types';
 
 /** Used until the user enters their weight (shown as an estimate). */
 export const DEFAULT_BODY_WEIGHT_KG = 75;
+
+/** Usual help plates of an assisted machine, until the user enters the real ones. */
+export const DEFAULT_ASSISTANCE_STEPS: LoadSteps = uniformSteps(5, 60, 5);
+
+/**
+ * First time on the machine: about half the body weight lifted, a safe start
+ * for most people (to be validated by a coach). Lighter if the machine cannot
+ * help that much.
+ */
+export const FIRST_TIME_REAL_SHARE = 0.5;
+
+export function firstAssistedRealKg(scale: AssistedScale, bodyWeightKg: number): number {
+  return floorStep(scale.realSteps, bodyWeightKg * FIRST_TIME_REAL_SHARE);
+}
 
 export interface AssistedScale {
   /** Real load lifted with this assistance (never below 0). */

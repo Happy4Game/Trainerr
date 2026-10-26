@@ -34,8 +34,7 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
 
   // That set was in fact on the machine: moved, the dumbbells come back to do.
-  await page.getByRole('button', { name: 'Corriger', exact: true }).click();
-  await page.getByRole('button', { name: 'Choisir la bonne machine' }).click();
+  await page.getByRole('button', { name: 'Mauvaise machine ?' }).click();
   await page.getByRole('search').last().getByRole('searchbox').fill('shoulder press');
   await page
     .getByRole('button', { name: /^Développé épaules machine/ })
@@ -44,6 +43,10 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   await expect(page.getByText(/^Développé épaules machine — 2 kg × 10/)).toBeVisible();
   // The right machine now has that set and comes next.
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
+  // And the session goes on, on that machine.
+  await expect(page.getByText('Série 2 sur 2')).toBeVisible();
+  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await expect(page.getByText('Série 2 sur 2')).toHaveCount(0);
 
   // Reorder what comes next from the overview.
   await page.getByRole('button', { name: 'Voir le programme de la séance' }).click();
