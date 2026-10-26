@@ -1,6 +1,7 @@
 import { CORE_MUSCLES, LEG_MUSCLES, MUSCLES, PUSH_MUSCLES, type MuscleId } from '@/domain/muscles';
 import type { Equipment, ExerciseKind, PplGroup } from '@/domain/types';
 import type { CatalogExercise } from '../catalog/catalog';
+import { isAssistedExercise } from '../catalog/curated';
 import type { SqlDatabase } from '../sqlite/database';
 import { sqlLiteral as q } from '../sqlite/sqlLiteral';
 import { parseSetup, type MachineSetup } from './gymRepository';
@@ -144,6 +145,8 @@ export async function listCatalog(db: SqlDatabase, gymId: string): Promise<Catal
       ...(row.rep_range_min !== null && row.rep_range_max !== null
         ? { repRange: { min: row.rep_range_min, max: row.rep_range_max } }
         : {}),
+      // Bundled with the app, like the rest of the catalog content.
+      ...(isAssistedExercise(row.id) ? { assisted: true } : {}),
       ...(row.cues
         ? {
             cues: {

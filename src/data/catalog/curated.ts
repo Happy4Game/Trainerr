@@ -23,6 +23,8 @@ export interface CuratedOverride {
 
 export interface CustomExercise extends CuratedOverride {
   readonly nameEn: string;
+  /** Assisted machine: the load typed is the help, counted backwards. */
+  readonly assisted?: true;
   readonly kind: ExerciseKind;
   readonly group: PplGroup;
   readonly equipment: Equipment;
@@ -31,7 +33,7 @@ export interface CustomExercise extends CuratedOverride {
 }
 
 /** Bumped whenever this file changes, so that phones re-import the catalog. */
-export const CURATED_VERSION = 3;
+export const CURATED_VERSION = 4;
 
 const FEDB = 'free-exercise-db (adapté)';
 const BENCH = 'BarBend, Eric Cressey';
@@ -555,7 +557,58 @@ export const CUSTOM_EXERCISES: Readonly<Record<string, CustomExercise>> = {
     ],
     cuesSource: 'Trainerr, à relire par un coach',
   },
+  'trainerr:assisted-pullup': {
+    nameFr: 'Tractions assistées',
+    nameEn: 'Assisted Pull-Up',
+    machineName: 'Assisted Pull-Up / Dip',
+    aliases: ['gravitron', 'traction assistée', 'assisted chin-up'],
+    assisted: true,
+    kind: 'heavyCompound',
+    group: 'pull',
+    equipment: 'machine',
+    primaryMuscles: ['lats'],
+    secondaryMuscles: ['biceps', 'upperBack', 'rearDelts'],
+    cues: [
+      'Genoux sur le coussin, partir bras tendus, épaules basses',
+      'Tirer la poitrine vers la barre, coudes vers les hanches',
+      'Moins d’aide = plus dur : baisse l’aide quand les séries deviennent faciles',
+    ],
+    cuesEn: [
+      'Knees on the pad, start with straight arms, shoulders down',
+      'Pull the chest to the bar, elbows towards the hips',
+      'Less help = harder: lower the help when the sets get easy',
+    ],
+    cuesSource: 'Trainerr, à relire par un coach',
+  },
+  'trainerr:assisted-dip': {
+    nameFr: 'Dips assistés',
+    nameEn: 'Assisted Dip',
+    machineName: 'Assisted Pull-Up / Dip',
+    aliases: ['gravitron dips', 'dips assistés'],
+    assisted: true,
+    kind: 'heavyCompound',
+    group: 'push',
+    equipment: 'machine',
+    primaryMuscles: ['triceps', 'chest'],
+    secondaryMuscles: ['frontDelts'],
+    cues: [
+      'Buste légèrement penché, épaules loin des oreilles',
+      'Descendre jusqu’à ce que les bras soient à l’horizontale, sans douleur à l’épaule',
+      'Pousser jusqu’aux bras tendus, sans verrouiller brutalement',
+    ],
+    cuesEn: [
+      'Torso slightly leaning forward, shoulders away from the ears',
+      'Lower until the upper arms are level, without shoulder pain',
+      'Push up to straight arms, without snapping the elbows',
+    ],
+    cuesSource: 'Trainerr, à relire par un coach',
+  },
 };
+
+/** Assisted machines: the load is the help given, the real load is body weight − help. */
+export function isAssistedExercise(exerciseId: string): boolean {
+  return CUSTOM_EXERCISES[exerciseId]?.assisted === true;
+}
 
 /** Common gym machines (curated cards): shown first in the catalog. */
 export function isPopular(exerciseId: string): boolean {

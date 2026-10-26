@@ -18,6 +18,7 @@ import { useSession } from './useSession';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
 import { useUnits } from '@/ui/useUnits';
+import { DEFAULT_BODY_WEIGHT_KG } from '@/domain/assisted';
 
 const props = defineProps<{ exerciseId: string }>();
 const emit = defineEmits<{ busy: []; plates: [loadKg: number] }>();
@@ -125,12 +126,27 @@ const lastTime = computed(() => session.lastTimeSets(props.exerciseId));
 const usual = computed(() =>
   session.references.value.find((r) => r.exerciseId === props.exerciseId),
 );
-const lastTimeText = computed(() =>
-  lastTime.value.map((set) => `${kg(set.loadKg)} × ${n(set.reps)}`).join(', '),
-);
-const advice = computed<SetAdvice>(() =>
-  proposal.value ? setAdvice(proposal.value, session.previousFor(props.exerciseId)) : 'first',
-);
+/** Assisted machine: the load is the help, less help is progress. */
+const assisted = computed(() => entry.value?.exercise.assisted === true);
+const setText = (set: { loadKg: number; reps: number }) =>
+  assisted.value
+    ? t('session.assisted.set', { load: kg(set.loadKg), reps: n(set.reps) })
+    : `${kg(set.loadKg)} × ${n(set.reps)}`;
+const lastTimeText = computed(() => lastTime.value.map(setText).join(', '));
+const real = (set: { loadKg: number; reps: number }) => ({
+  ...set,
+  loadKg: session.realLoadFor(props.exerciseId, set.loadKg),
+});
+// Compared on the real load: on an assisted machine, less help shows as "more load".
+const advice = computed<SetAdvice>(() => {
+  if (!proposal.value) return 'first';
+  const previous = session.previousFor(props.exerciseId);
+  return setAdvice(
+    { ...proposal.value, loadKg: real({ loadKg: proposal.value.loadKg, reps: 0 }).loadKg },
+    previous && real(previous),
+  );
+});
+const realLoad = computed(() => session.realLoadFor(props.exerciseId, load.value));
 const ADVICE_ICON: Record<SetAdvice, string> = {
   moreLoad: '↑',
   moreReps: '↗',
@@ -228,7 +244,7 @@ function listen(): void {
       <p v-if="previousToday" class="before">
         {{
           t('session.coach.previousSet', {
-            set: `${kg(previousToday.loadKg)} × ${n(previousToday.reps)}`,
+            set: setText(previousToday),
           })
         }}
       </p>
@@ -236,13 +252,13 @@ function listen(): void {
         {{ t('session.coach.lastTime', { sets: lastTimeText }) }}
       </p>
       <p v-else-if="usual" class="before">
-        {{ t('session.coach.usual', { set: `${kg(usual.loadKg)} × ${n(usual.reps)}` }) }}
+        {{ t('session.coach.usual', { set: setText(usual) }) }}
       </p>
       <p v-else class="before">{{ t('session.coach.noHistory') }}</p>
       <p class="advice">
         <span class="arrow" aria-hidden="true">{{ ADVICE_ICON[advice] }}</span>
         {{
-          t(`session.coach.advice.${advice}`, {
+          t(`session.coach.${assisted ? 'assistedAdvice' : 'advice'}.${advice}`, {
             load: kg(proposal.loadKg),
             reps: n(proposal.targetReps),
           })
@@ -264,8 +280,14 @@ function listen(): void {
     <h3 class="step"><span class="badge">1</span> {{ t('session.steps.do') }}</h3>
     <p v-if="learning" class="help">{{ t('session.steps.doHelp') }}</p>
     <div class="stepper">
-      <span class="stepper-label">{{ t('session.load') }}</span>
-      <ion-button fill="outline" :aria-label="t('session.lighter')" @click="lighter">
+      <span class="stepper-label">{{
+        assisted ? t('session.assisted.help') : t('session.load')
+      }}</span>
+      <ion-button
+        fill="outline"
+        :aria-label="assisted ? t('session.assisted.lessHelp') : t('session.lighter')"
+        @click="lighter"
+      >
         <Minus :size="24" aria-hidden="true" />
       </ion-button>
       <ion-input
@@ -288,10 +310,26 @@ function listen(): void {
       >
         <output class="value" data-testid="load">{{ kg(load) }}</output>
       </button>
-      <ion-button fill="outline" :aria-label="t('session.heavier')" @click="heavier">
+      <ion-button
+        fill="outline"
+        :aria-label="assisted ? t('session.assisted.moreHelp') : t('session.heavier')"
+        @click="heavier"
+      >
         <Plus :size="24" aria-hidden="true" />
       </ion-button>
     </div>
+    <p v-if="assisted" class="breakdown" data-testid="real-load">
+      {{
+        t('session.assisted.real', {
+          real: kg(realLoad),
+          weight: kg(session.bodyWeight.value ?? DEFAULT_BODY_WEIGHT_KG),
+          help: kg(load),
+        })
+      }}
+      <router-link v-if="session.bodyWeight.value === undefined" to="/tabs/settings">
+        {{ t('session.assisted.noWeight') }}
+      </router-link>
+    </p>
     <p v-if="breakdown" class="breakdown" data-testid="breakdown">
       {{
         t('session.breakdown', {

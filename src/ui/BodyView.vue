@@ -21,8 +21,10 @@ import { proteinTargetGrams } from '@/domain/tracking';
 import { readPhoto } from '@/ui/photo';
 import { todayIso } from '@/ui/useWeekPlan';
 import { useUnits } from '@/ui/useUnits';
+import { useSession } from '@/ui/session/useSession';
 
 const { t, n, locale } = useI18n();
+const session = useSession();
 const { load, symbol, fromInput } = useUnits();
 const measurements = ref<BodyMeasurement[]>([]);
 const weight = ref('');
@@ -61,6 +63,8 @@ async function save(): Promise<void> {
   });
   measurements.value = [...measurements.value, saved];
   weight.value = arm.value = waist.value = '';
+  // Assisted pull-ups and dips use the latest weight.
+  if (weightKg !== undefined) await session.reloadWeighings();
 }
 
 const photos = computed(() => measurements.value.filter((m) => m.photo));

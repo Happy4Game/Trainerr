@@ -68,6 +68,18 @@ import { rescheduleNotifications } from '@/ui/notifications';
 import { isPopular } from '@/data/catalog/curated';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
+import {
+  assistedScale,
+  bodyWeightOn,
+  DEFAULT_BODY_WEIGHT_KG,
+  withRealLoads,
+  type AssistedScale,
+} from '@/domain/assisted';
+import {
+  addMeasurement,
+  listMeasurements,
+  type BodyMeasurement,
+} from '@/data/repositories/bodyRepository';
 
 export interface Proposal {
   readonly loadKg: number;
@@ -84,6 +96,8 @@ const errorMessage = ref('');
 const settings = ref<Settings>();
 const history = ref<(SessionLog & { plan: Partial<SessionPlan>; note?: string })[]>([]);
 const references = ref<ReferenceLoad[]>([]);
+/** Weighings of the Body tab: assisted exercises need the body weight. */
+const weighings = ref<BodyMeasurement[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
 const summary = ref<{
@@ -113,6 +127,37 @@ const stepsOf = (entry: CatalogEntry) =>
     entry.loadSteps.length > 0 ? entry.loadSteps : defaultStepsFor(entry.exercise.equipment),
     entry.setup.addOnsKg,
   );
+
+/** Body weight today, from the last weighing; undefined until the user enters it. */
+const bodyWeight = computed(() => bodyWeightOn(today(), weighings.value));
+
+/**
+ * Assisted machine: the rules run on the real load (body weight − help), with
+ * today's weight, then give back the help to set. Undefined for other machines.
+ */
+function scaleOf(entry: CatalogEntry): AssistedScale | undefined {
+  return entry.exercise.assisted
+    ? assistedScale(stepsOf(entry), bodyWeight.value ?? DEFAULT_BODY_WEIGHT_KG)
+    : undefined;
+}
+const toRealSet = <S extends SetLog>(scale: AssistedScale | undefined, set: S): S =>
+  scale ? { ...set, loadKg: scale.toReal(set.loadKg) } : set;
+
+/** Real load lifted for a load logged: the load itself, or body weight − help. */
+function realLoadFor(exerciseId: string, loadKg: number): number {
+  const entry = entryOf(exerciseId);
+  const scale = entry && scaleOf(entry);
+  return scale ? scale.toReal(loadKg) : loadKg;
+}
+
+/** The history with real loads on assisted sets, for charts and records. */
+const realHistory = computed(() =>
+  withRealLoads(
+    history.value,
+    (id) => entryOf(id)?.exercise.assisted === true,
+    (date) => bodyWeightOn(date, weighings.value) ?? DEFAULT_BODY_WEIGHT_KG,
+  ),
+);
 
 /** Last session of the rotation done (custom sessions are left out). */
 const lastDone = computed(() => {
@@ -179,26 +224,40 @@ function proposalFor(exerciseId: string): Proposal | undefined {
   const entry = entryOf(exerciseId);
   if (!entry) return undefined;
   const range = repRangeFor(entry.exercise);
-  const steps = stepsOf(entry);
+  const scale = scaleOf(entry);
+  const steps = scale?.realSteps ?? stepsOf(entry);
+  // Back from the real load to what is set on the machine.
+  const toMachine = (loadKg: number) => (scale ? scale.toAssistance(loadKg) : loadKg);
   const last = workSetsInSession(exerciseId).at(-1);
   if (last) {
-    const p = nextSetProposal({ set: last, range, steps, isLastSet: false });
-    return { loadKg: p.loadKg, targetReps: p.targetReps, reason: p.reason, reminders: p.reminders };
+    const p = nextSetProposal({ set: toRealSet(scale, last), range, steps, isLastSet: false });
+    return {
+      loadKg: toMachine(p.loadKg),
+      targetReps: p.targetReps,
+      reason: p.reason,
+      reminders: p.reminders,
+    };
   }
   const reference = references.value.find((r) => r.exerciseId === exerciseId);
+  const referenceKg = reference && (scale ? scale.toReal(reference.loadKg) : reference.loadKg);
   const comeback = settings.value?.comeback;
   const start = startingProposal({
-    history: historyFor(exerciseId),
+    history: historyFor(exerciseId).map((sets) => sets.map((set) => toRealSet(scale, set))),
     range,
     steps,
-    ...(comeback && reference
-      ? { comeback: { referenceKg: reference.loadKg, pause: comeback.pause } }
+    ...(comeback && referenceKg !== undefined
+      ? { comeback: { referenceKg, pause: comeback.pause } }
       : {}),
-    ...(!comeback && reference
-      ? { usual: { loadKg: reference.loadKg, reps: reference.reps } }
+    ...(!comeback && reference && referenceKg !== undefined
+      ? { usual: { loadKg: referenceKg, reps: reference.reps } }
       : {}),
   });
-  return { loadKg: start.loadKg, targetReps: start.targetReps, reason: start.kind, reminders: [] };
+  return {
+    loadKg: toMachine(start.loadKg),
+    targetReps: start.targetReps,
+    reason: start.kind,
+    reminders: [],
+  };
 }
 
 function plannedSets(exerciseId: string): number {
@@ -216,7 +275,8 @@ const warmup = computed(() => {
   if (setsInSession(s.exerciseId).length > 0) return undefined;
   const entry = entryOf(s.exerciseId);
   const proposal = proposalFor(s.exerciseId);
-  if (!entry || !proposal) return undefined;
+  // No warm-up set with a help machine: lighter means more help, not a lighter plate.
+  if (!entry || !proposal || entry.exercise.assisted) return undefined;
   return warmupSet({
     exercise: entry.exercise,
     workLoadKg: proposal.loadKg,
@@ -232,6 +292,7 @@ async function load(): Promise<void> {
     settings.value = await getSettings(db);
     history.value = await listDoneSessions(db);
     references.value = await listReferences(db);
+    weighings.value = await listMeasurements(db);
     active.value = await getActiveSession(db);
     phase.value = active.value ? 'active' : 'idle';
   } catch (error) {
@@ -381,12 +442,13 @@ async function logSet(set: SetLog): Promise<void> {
   const done = workSetsInSession(set.exerciseId).length;
   const target = plannedSets(set.exerciseId);
   const isLast = done >= target;
+  const scale = entry && scaleOf(entry);
   const rule =
     entry &&
     nextSetProposal({
-      set,
+      set: toRealSet(scale, set),
       range: repRangeFor(entry.exercise),
-      steps: stepsOf(entry),
+      steps: scale?.realSteps ?? stepsOf(entry),
       isLastSet: isLast,
     });
   let queue = active.value.plan.queue;
@@ -604,7 +666,14 @@ async function finish(): Promise<void> {
       templateId: active.value.templateId,
       sets: active.value.sets,
     };
-    const records = newRecords(history.value, finished);
+    // Records and workload on the real load (assisted machines counted backwards).
+    const [realFinished] = withRealLoads(
+      [finished],
+      (id) => entryOf(id)?.exercise.assisted === true,
+      () => bodyWeight.value ?? DEFAULT_BODY_WEIGHT_KG,
+    );
+    const real = realFinished ?? finished;
+    const records = newRecords(realHistory.value, real);
     const all = [...history.value, finished];
     // Back to the old level: the pre-break reference is replaced by the new best.
     const backToLevel: string[] = [];
@@ -639,7 +708,9 @@ async function finish(): Promise<void> {
     );
     summary.value = {
       sets: work.length,
-      workloadKg: work.reduce((total, s) => total + s.loadKg * s.reps, 0),
+      workloadKg: real.sets
+        .filter((s) => !s.warmup)
+        .reduce((total, s) => total + s.loadKg * s.reps, 0),
       carryOver,
       records,
       backToLevel,
@@ -690,6 +761,13 @@ function bestSinceComeback(exerciseId: string): number | undefined {
   return loads.length > 0 ? Math.max(...loads) : undefined;
 }
 
+/** Weight typed in the profile: a weighing of today, shown in the Body tab too. */
+async function saveBodyWeight(weightKg: number): Promise<void> {
+  const { db } = await openAppDatabase();
+  await addMeasurement(db, { date: today(), weightKg, measurements: {} });
+  weighings.value = await listMeasurements(db);
+}
+
 function closeSummary(): void {
   summary.value = undefined;
   phase.value = 'idle';
@@ -719,6 +797,14 @@ export function useSession() {
     lastDoneTemplateId,
     lastDoneSessionId: computed(() => lastDone.value?.id),
     history,
+    realHistory,
+    bodyWeight,
+    saveBodyWeight,
+    reloadWeighings: async () => {
+      const { db } = await openAppDatabase();
+      weighings.value = await listMeasurements(db);
+    },
+    realLoadFor,
     preview,
     active,
     step,

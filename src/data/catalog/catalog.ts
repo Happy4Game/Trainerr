@@ -132,6 +132,7 @@ export function buildCatalog(): CatalogExercise[] {
     primaryMuscles: e.primaryMuscles,
     secondaryMuscles: e.secondaryMuscles,
     ...(e.repRange ? { repRange: e.repRange } : {}),
+    ...(e.assisted ? { assisted: true } : {}),
     cues: { fr: e.cues, en: e.cuesEn, source: e.cuesSource },
     instructionsEn: [],
     source: 'trainerr',

@@ -342,7 +342,15 @@
         "comeback": "Easy comeback: {load} × {reps}"
       },
       "usual": "Your usual load: {set}",
-      "previousSet": "Previous set: {set}"
+      "previousSet": "Previous set: {set}",
+      "assistedAdvice": {
+        "moreLoad": "Lower the help: {load} × {reps}",
+        "moreReps": "Aim for one more rep: help {load} × {reps}",
+        "same": "Keep the same help: {load} × {reps}",
+        "lighter": "Add a bit of help: {load} × {reps}",
+        "first": "Start with {load} of help × {reps}",
+        "comeback": "Easy restart: help {load} × {reps}"
+      }
     },
     "steps": {
       "do": "Do your set",
@@ -400,6 +408,14 @@
       "label": "Setting: {setup}",
       "seat": "seat {value}",
       "notch": "notch {value}"
+    },
+    "assisted": {
+      "help": "Help",
+      "lessHelp": "Less help (harder)",
+      "moreHelp": "More help (easier)",
+      "set": "help {load} × {reps}",
+      "real": "Real load: {real} ({weight} body weight − {help} help)",
+      "noWeight": "Estimated weight: enter your weight"
     }
   },
   "availability": {
@@ -656,6 +672,15 @@
         "kg": "Kilograms (kg)",
         "lb": "Pounds (lb)"
       }
+    },
+    "profile": {
+      "title": "My profile",
+      "weight": "Body weight ({unit})",
+      "save": "Save",
+      "saved": "Weight saved.",
+      "current": "Current weight: {weight}",
+      "none": "Weight not entered yet (75 kg estimated).",
+      "help": "Used for assisted pull-ups and dips: real load = body weight − help. Each weighing is also added in History → Body."
     }
   },
   "tips": {

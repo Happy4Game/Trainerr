@@ -342,7 +342,15 @@
         "comeback": "Reprise en douceur : {load} × {reps}"
       },
       "usual": "Ta charge habituelle : {set}",
-      "previousSet": "Série précédente : {set}"
+      "previousSet": "Série précédente : {set}",
+      "assistedAdvice": {
+        "moreLoad": "Baisse l'aide : {load} × {reps}",
+        "moreReps": "Vise une rep de plus : aide {load} × {reps}",
+        "same": "Garde la même aide : {load} × {reps}",
+        "lighter": "Remets un peu d'aide : {load} × {reps}",
+        "first": "Commence avec {load} d'aide × {reps}",
+        "comeback": "Reprise en douceur : aide {load} × {reps}"
+      }
     },
     "steps": {
       "do": "Fais ta série",
@@ -400,6 +408,14 @@
       "label": "Réglage : {setup}",
       "seat": "siège {value}",
       "notch": "cran {value}"
+    },
+    "assisted": {
+      "help": "Aide",
+      "lessHelp": "Moins d'aide (plus dur)",
+      "moreHelp": "Plus d'aide (plus facile)",
+      "set": "aide {load} × {reps}",
+      "real": "Charge réelle : {real} ({weight} de poids du corps − {help} d'aide)",
+      "noWeight": "Poids estimé : note ton poids"
     }
   },
   "availability": {
@@ -656,6 +672,15 @@
         "kg": "Kilogrammes (kg)",
         "lb": "Livres (lb)"
       }
+    },
+    "profile": {
+      "title": "Mon profil",
+      "weight": "Poids du corps ({unit})",
+      "save": "Enregistrer",
+      "saved": "Poids enregistré.",
+      "current": "Poids actuel : {weight}",
+      "none": "Poids pas encore noté (75 kg estimés).",
+      "help": "Sert aux tractions et dips assistés : charge réelle = poids du corps − aide. Chaque pesée s'ajoute aussi dans Historique → Corps."
     }
   },
   "tips": {

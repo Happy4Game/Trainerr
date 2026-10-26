@@ -40,7 +40,8 @@ import { useUnits } from '@/ui/useUnits';
 const { t, n, locale } = useI18n();
 const session = useSession();
 const { settings } = useSettings();
-const sessions = session.history;
+// Real loads: an assisted pull-up counts as body weight − help.
+const sessions = session.realHistory;
 const { load, symbol, toDisplay } = useUnits();
 
 const nameOf = (id: string) => {

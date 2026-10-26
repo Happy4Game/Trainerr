@@ -22,6 +22,11 @@ export interface Exercise {
   readonly secondaryMuscles: readonly MuscleId[];
   /** Overrides the default range of the exercise kind. */
   readonly repRange?: RepRange;
+  /**
+   * Assisted machine (pull-ups, dips): the load logged is the assistance,
+   * the real load is body weight − assistance (see assisted.ts).
+   */
+  readonly assisted?: boolean;
 }
 
 export interface SetLog {

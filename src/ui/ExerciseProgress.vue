@@ -16,7 +16,7 @@ const { t, locale } = useI18n();
 const session = useSession();
 const { load, toDisplay, symbol } = useUnits();
 
-const curve = computed(() => strengthCurve(session.history.value, props.exerciseId));
+const curve = computed(() => strengthCurve(session.realHistory.value, props.exerciseId));
 const best = computed(() => Math.max(0, ...curve.value.map((p) => p.oneRepMax)));
 const shortDate = (date: string) =>
   new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(

@@ -19,6 +19,7 @@ import {
 import { useI18n } from 'vue-i18n';
 import DataSection from '@/ui/DataSection.vue';
 import GymsSection from '@/ui/GymsSection.vue';
+import ProfileSection from '@/ui/ProfileSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
@@ -123,6 +124,8 @@ async function redoQuestionnaire(): Promise<void> {
             </ion-select-option>
           </ion-select>
         </ion-item>
+
+        <ProfileSection />
 
         <GymsSection />
 
