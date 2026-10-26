@@ -1226,5 +1226,22 @@
     "restOver": "Repos terminé",
     "channel": "Séance en cours",
     "restChannel": "Fin du repos"
+  },
+  "updates": {
+    "title": "Mises à jour",
+    "installed": "Version installée : {version} ({code})",
+    "check": "Vérifier",
+    "checking": "Recherche d'une nouvelle version…",
+    "upToDate": "Tu as la dernière version.",
+    "available": "Nouvelle version {version} disponible",
+    "install": "Télécharger et installer",
+    "later": "Plus tard",
+    "downloading": "Téléchargement… {percent} %",
+    "permission": "Android demande d'autoriser Trainerr à installer ses mises à jour (une seule fois).",
+    "allow": "Autoriser",
+    "retry": "Réessayer",
+    "error": "Impossible de vérifier pour l'instant ({message}).",
+    "auto": "Chercher les mises à jour au démarrage",
+    "autoHelp": "Une fois par jour au plus, l'appli demande à GitHub la dernière version publiée. Rien d'autre n'est envoyé."
   }
 }

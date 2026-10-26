@@ -20,6 +20,7 @@ import { useI18n } from 'vue-i18n';
 import DataSection from '@/ui/DataSection.vue';
 import GymsSection from '@/ui/GymsSection.vue';
 import ProfileSection from '@/ui/ProfileSection.vue';
+import UpdatesSection from '@/ui/UpdatesSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
@@ -183,6 +184,7 @@ async function redoQuestionnaire(): Promise<void> {
             </p>
           </ion-label>
         </ion-item>
+        <UpdatesSection />
         <DataSection />
       </ion-list>
     </ion-content>

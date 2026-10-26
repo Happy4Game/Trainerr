@@ -1226,5 +1226,22 @@
     "restOver": "Rest over",
     "channel": "Session in progress",
     "restChannel": "End of rest"
+  },
+  "updates": {
+    "title": "Updates",
+    "installed": "Installed version: {version} ({code})",
+    "check": "Check",
+    "checking": "Looking for a new version…",
+    "upToDate": "You have the latest version.",
+    "available": "New version {version} available",
+    "install": "Download and install",
+    "later": "Later",
+    "downloading": "Downloading… {percent} %",
+    "permission": "Android asks to allow Trainerr to install its updates (only once).",
+    "allow": "Allow",
+    "retry": "Try again",
+    "error": "Cannot check right now ({message}).",
+    "auto": "Look for updates at launch",
+    "autoHelp": "At most once a day, the app asks GitHub for the latest published version. Nothing else is sent."
   }
 }

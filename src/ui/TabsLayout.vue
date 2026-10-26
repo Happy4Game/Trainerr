@@ -4,9 +4,19 @@ import { BookOpen, CalendarDays, Dumbbell, History, Sun } from 'lucide-vue-next'
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useSession } from '@/ui/session/useSession';
+import UpdatePanel from '@/ui/UpdatePanel.vue';
+import { useUpdates } from '@/ui/updates';
 
 const { t } = useI18n();
 const { active } = useSession();
+const updates = useUpdates();
+/** A new version found at launch: offered once, never during a session. */
+const showUpdate = computed(
+  () =>
+    !updates.dismissed.value &&
+    !active.value &&
+    ['available', 'downloading', 'needsPermission'].includes(updates.state.value.kind),
+);
 /** A session in progress is always one tap away: a dot on its tab. */
 const inProgress = computed(() => active.value !== undefined);
 
@@ -23,6 +33,9 @@ const tabs = [
   <ion-page>
     <ion-tabs>
       <ion-router-outlet />
+      <div v-if="showUpdate" slot="bottom" class="update-banner">
+        <UpdatePanel compact @later="updates.dismissed.value = true" />
+      </div>
       <ion-tab-bar slot="bottom">
         <ion-tab-button v-for="tab in tabs" :key="tab.name" :tab="tab.name" :href="tab.href">
           <span class="icon-pill">
@@ -42,6 +55,11 @@ const tabs = [
 </template>
 
 <style scoped>
+.update-banner {
+  padding: 10px 14px;
+  background: var(--ion-card-background);
+  box-shadow: 0 -2px 8px rgb(0 0 0 / 12%);
+}
 ion-tab-bar {
   --border: 0;
   box-shadow: 0 -1px 0 var(--ion-color-light);

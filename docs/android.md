@@ -6,6 +6,8 @@ Trainerr est une appli web (Ionic + Vue) emballée pour Android par [Capacitor](
 
 À chaque push sur `main` et à chaque pull request, GitHub Actions construit un APK de test (workflow **Android APK**). Ouvre l'exécution dans l'onglet **Actions** du dépôt, puis télécharge l'artefact `trainerr-debug-apk`.
 
+À chaque push sur `main`, le workflow **Publier l'APK** publie aussi un APK signé dans les **Releases** du dépôt ; l'appli installée le propose ensuite elle-même. Mise en place (clé de signature, secrets GitHub) : [docs/mises-a-jour.md](mises-a-jour.md).
+
 ## Construire l'APK soi-même
 
 ### Prérequis
@@ -82,6 +84,6 @@ Le logo est l'haltère de [Lucide](https://lucide.dev/license) (ISC) en blanc su
 
 ## Bon à savoir
 
-- **Permissions** : Internet (serveur optionnel des défis et conseils), notifications et alarmes exactes (rappels de séance). Le module SQLite déclare aussi la biométrie, utilisée seulement si on chiffre la base.
+- **Permissions** : Internet (serveur optionnel des défis et conseils, recherche de mises à jour), notifications et alarmes exactes (rappels, notification de séance et fin du repos), installation de paquets (mises à jour, toujours confirmées par Android). Le module SQLite déclare aussi la biométrie, utilisée seulement si on chiffre la base.
 - **Données** : la base SQLite native reste dans le stockage privé de l'appli. Une désinstallation l'efface : pense à l'export ou à la sauvegarde chiffrée (Réglages → Mes données).
 - **Serveur optionnel** : depuis l'appli Android, l'origine est `https://localhost` ; elle fait partie des origines autorisées par défaut du serveur ([server/README.md](../server/README.md)), qui doit être en HTTPS.

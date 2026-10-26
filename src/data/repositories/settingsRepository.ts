@@ -47,6 +47,8 @@ export interface Settings {
   readonly account?: { readonly name: string; readonly token: string };
   /** Loads are hidden from friends by default. */
   readonly shareRecords: boolean;
+  /** Android: look for a new version on GitHub at launch (once a day). On by default. */
+  readonly autoUpdateCheck?: boolean;
   /** Android notification during a session (rest countdown, end-of-rest alert). On by default. */
   readonly sessionNotification?: boolean;
   /** The user agreed to send the summary of their week to the AI coach. */

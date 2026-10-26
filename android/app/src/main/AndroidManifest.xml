@@ -42,4 +42,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- Android 13+: the session notification (rest countdown) and the reminders. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Updates from the project's GitHub Releases: Android asks the user before installing. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 </manifest>
