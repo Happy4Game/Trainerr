@@ -146,6 +146,18 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Fait : export JSON et CSV, import, suppression complète avec confirmation ; tests de bout en bout des parcours principaux (11).
 - Reste : enregistrement des fichiers avec les plugins Capacitor sur téléphone (export par le menu Partager), projet Android, accessibilité (relecture TalkBack), régression visuelle, pseudo-langue de test, bêta-test.
 
+## Séance améliorée (branche `feat/seance-amelioree`, 26 oct. 2026)
+
+- **Charge précise sur machine** : poids d'appoint (1,25 / 2,5 kg ou autre) combinés aux plaques, « Plaque 45 kg + appoint 2,5 kg » ; charge tapée à la main en touchant la valeur, arrondie à la précision de la machine (0,5 kg au plus fin) ; siège et cran notés sur la fiche et rappelés à chaque série. Migration v5 (`machine_setup`).
+- **Tractions et dips assistés** : la charge notée est l'aide, charge réelle = poids du corps − aide ; moins d'aide = progression (en vert), courbes et records sur la charge réelle (poids du jour de chaque séance). Poids du corps dans Réglages → Mon profil.
+- **Séances types** : Push, Pull, Jambes, Full body débutant, Haut / Bas ; ordre polyarticulaire lourd → secondaire → isolation, « pourquoi à cette place » pour chaque exercice, encart sourcé (ACSM 2009, Simão 2012, Nunes 2021). Alerte d'ordre dans les séances personnalisées.
+- **Plus de choix en séance** : changer de machine (même mouvement), −1 / +1 série, exercice plus tôt / plus tard / retiré, et « Mauvaise machine ? » pour déplacer des séries vers la bonne machine (pendant la séance et dans l'historique).
+- **Notification de séance (Android)** : exercice, série et compte à rebours du repos écran verrouillé (petit plugin natif), alerte de fin de repos, interrupteur dans les Réglages.
+- **Mises à jour** : workflow « Publier l'APK » (APK signé + `latest.json` en GitHub Release à chaque push sur `main`), vérification au démarrage et dans Réglages → Mises à jour, installation par l'installateur d'Android. Mise en place : [docs/mises-a-jour.md](docs/mises-a-jour.md).
+- **Séance test** jouée de bout en bout : [docs/retour-utilisateur.md](docs/retour-utilisateur.md) (6 points corrigés, 4 pistes restantes).
+
+**À faire par Thibaut** : créer la clé de signature et les 4 secrets GitHub (docs/mises-a-jour.md), pousser le dépôt, puis tester sur le téléphone la notification de séance et une mise à jour.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.
@@ -160,4 +172,6 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
 - Les exports se téléchargent dans le navigateur ; sur téléphone il faudra les plugins Filesystem / Share.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
-- Le dépôt n'a pas encore de remote GitHub : les branches sont locales, les pull requests seront ouvertes quand le dépôt GitHub existera.
+- Le remote GitHub est configuré (`origin` → github.com/Happy4Game/Trainerr) mais rien n'est encore poussé : il manque l'authentification GitHub sur l'ordinateur.
+- Notification de séance et mises à jour : compilées (APK debug et release signé vérifiés), pas encore essayées sur un vrai téléphone.
+- Pistes du retour utilisateur non traitées : trop d'éléments au-dessus de l'exercice pendant le repos, machines d'une séance type non ajoutées à « Mes machines », sélecteur « Mauvaise machine ? » sans les machines du même mouvement en tête.

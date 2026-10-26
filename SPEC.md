@@ -22,7 +22,9 @@ L'appli tient en cinq écrans principaux : Aujourd'hui, Séance en cours, Catalo
 | Difficulté de la série | Choisit Facile / Correct / Limite / Échec | Sert au calcul de la charge suivante |
 | Proposition de charge | Accepte ou modifie | Propose la charge de la série ou de la séance suivante |
 | **Mode « machine prise »** | Tape « occupée » sur un exercice | Propose une alternative, garde l'exercice en attente (détail ci-dessous) |
-| Paliers de la machine | Renseigne les plaques dispo (ex. 52 → 59 kg) | Arrondit les propositions au palier réel |
+| Paliers de la machine | Renseigne les plaques dispo (ex. 52 → 59 kg), les poids d'appoint (1,25 / 2,5 kg) et la précision de saisie | Arrondit les propositions au palier réel, plaque + appoint compris ; une charge tapée est arrondie à 0,5 kg au plus fin |
+| Machines d'assistance | Note l'aide (tractions, dips assistés) et son poids du corps | Compte à l'envers : charge réelle = poids − aide, moins d'aide = progression |
+| Corriger une séance | Change de machine, ajoute / retire / réordonne exercices et séries, déplace des séries notées sur la mauvaise machine | Garde un historique juste pour chaque machine |
 | Planning auto | Indique ses jours et créneaux libres | Génère la semaine selon le modèle choisi |
 | Gêne / douleur | Signale « ça tire » + zone | Adapte la séance, affiche les signaux d'alerte |
 | Récap et stats | Consulte | Récap de séance, page statistiques |
@@ -70,6 +72,7 @@ La charge monte d'un palier quand les reps dépassent le haut de la fourchette o
 - **Première fois sur une machine** : série test légère, puis la règle 1 ou 3 s'applique.
 - **Palier absent** (ex. 55 kg demandé, la machine passe de 52 à 59) : rester au palier bas et monter la fourchette de reps (12 → 15) avant de sauter.
 - **Tempo lent** (descente 2–3 s) : la série est marquée, et exclue des comparaisons de 1RM.
+- **Machine d'assistance** (tractions, dips) : les règles tournent sur la charge réelle (poids du corps − aide) puis redonnent l'aide à régler ; première fois : environ la moitié du poids du corps. Courbes et records sur la charge réelle.
 
 **Force estimée** — chaque série calcule un 1RM estimé (formule d'Epley), utilisé pour les stats :
 
@@ -90,6 +93,8 @@ L'appli propose 7 modèles ; le questionnaire en recommande un selon le nombre d
 | PHUL | Haut / Bas en 4 jours : 2 séances lourdes (force), 2 séances volume (hypertrophie) | 4 | 2 fois | Intermédiaire, force + muscle |
 | Arnold split | Pecs + dos / épaules + bras / jambes, deux fois | 6 | 2 fois | Avancé, beaucoup de volume |
 | Split par muscle (« bro split ») | Un groupe musculaire par jour | 5 | 1 fois | Proposé, mais signalé moins efficace |
+
+**Séances types** : Push, Pull, Jambes, Full body débutant et Haut / Bas, prêtes à lancer. Ordre polyarticulaire lourd → polyarticulaire secondaire → isolation, jamais l'isolation d'un muscle avant son polyarticulaire ; chaque exercice dit pourquoi il est à cette place, avec les sources ([ACSM 2009](https://pubmed.ncbi.nlm.nih.gov/19204579/), [Simão 2012](https://pubmed.ncbi.nlm.nih.gov/22292516/), [Nunes 2021](https://doi.org/10.1080/17461391.2020.1733672)).
 
 **Règle d'affichage** : un modèle qui ne travaille chaque muscle qu'1 fois par semaine affiche une note, car la méta-analyse de Schoenfeld (2016) montre de meilleurs résultats à 2 fois par semaine, à volume égal.
 
@@ -316,7 +321,8 @@ Trente fonctions qui rendent l'appli plus pratique à la salle, toutes livrées 
 
 | Fonction | Description |
 | --- | --- |
-| Minuteur de repos | Se lance à la validation d'une série, durée selon le type d'exercice (section Moteur de progression), vibration à la fin, visible sur l'écran verrouillé |
+| Minuteur de repos | Se lance à la validation d'une série, durée selon le type d'exercice (section Moteur de progression), vibration à la fin, visible sur l'écran verrouillé : notification Android permanente pendant la séance (exercice, série, compte à rebours) et alerte à la fin du repos |
+| Mises à jour | Chaque version publiée sur GitHub (APK signé) est proposée par l'appli au démarrage, installée par l'installateur d'Android après accord ; désactivable |
 | Échauffement calculé | Propose 1 série d'approche à environ 50–60 % de la charge de travail, 12–15 reps, sur le premier exercice et sur les composés lourds |
 | Calculateur de disques | Voir la section suivante |
 | Sauvegarde et export | Export CSV et JSON de toutes les données, import pour changer de téléphone |
@@ -401,7 +407,7 @@ Huit tables forment le cœur ; la série est l'unité centrale, tout le reste se
 | `exercice` | id, nom, nom\_machine, alias\[\], groupe\_ppl, type, materiel, fourchette\_min, fourchette\_max | → muscles (n-n) |
 | `muscle` | id, nom, zone\_svg, groupe | ← exercice |
 | `exercice_muscle` | exercice\_id, muscle\_id, role (principal / secondaire) | table de liaison |
-| `machine_salle` | id, exercice\_id, paliers\_kg\[\], favori, photo\_plaque, reglages | → exercice |
+| `machine_salle` | id, exercice\_id, paliers\_kg\[\], favori, photo\_plaque, reglages, reglage\_machine (poids d'appoint, précision, siège, cran) | → exercice |
 | `seance` | id, date, type (Push A, Pull B…), statut, note | → series |
 | `serie` | id, seance\_id, exercice\_id, charge\_kg, reps (décimal), difficulte, echauffement, tempo\_lent, reps\_completes, gene\_zone | → seance, exercice |
 | `reference` | exercice\_id, charge\_avant\_pause, date | sert à la règle des 70 % |
