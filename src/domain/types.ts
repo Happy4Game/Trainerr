@@ -39,6 +39,10 @@ export interface SetLog {
   readonly slowTempo?: boolean;
   /** False when at least one rep did not reach full range of motion. */
   readonly completeReps?: boolean;
+  /** Reps in reserve, optional: 0 = nothing left, 4 = four or more. */
+  readonly rir?: number;
+  /** Free text for this set: "grip slipped", "seat 4"… */
+  readonly note?: string;
 }
 
 export interface SessionLog {

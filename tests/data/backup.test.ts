@@ -99,9 +99,9 @@ describe('backup', () => {
   it('exports the sets as CSV', async () => {
     const csv = await exportSetsCsv(db);
     expect(csv.split('\n')).toEqual([
-      'date,template,exercise_id,exercise,load_kg,reps,difficulty,warmup,slow_tempo,complete_reps',
-      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,10,ok,0,0,1',
-      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,9.5,hard,0,0,0',
+      'date,template,exercise_id,exercise,load_kg,reps,difficulty,warmup,slow_tempo,complete_reps,rir,note',
+      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,10,ok,0,0,1,,',
+      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,9.5,hard,0,0,0,,',
     ]);
   });
 });

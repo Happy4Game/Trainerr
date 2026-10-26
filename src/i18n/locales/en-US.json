@@ -248,6 +248,16 @@
     "moreReps": "One rep more",
     "halfRep": "Add a half rep",
     "incomplete": "Incomplete reps",
+    "rir": {
+      "label": "Reps in reserve (optional)",
+      "value": "{count} rep in reserve | {count} reps in reserve",
+      "plenty": "4 or more reps in reserve",
+      "help": "How many more clean reps you could have done. 4+ = plenty."
+    },
+    "setNote": {
+      "label": "Note on this set",
+      "placeholder": "Grip slipping, seat 4…"
+    },
     "slowTempo": "Slow tempo",
     "howWasIt": "How was it?",
     "busy": "Machine taken",
@@ -331,7 +341,7 @@
       "previous": "+1 set on: {name}"
     },
     "addExercise": "+ Add an exercise",
-    "moreOptions": "Add details (incomplete reps, slow tempo, voice)",
+    "moreOptions": "Add details (RIR, note, incomplete reps, slow tempo, voice)",
     "coach": {
       "lastTime": "Last time: {sets}",
       "noHistory": "First time on this exercise.",

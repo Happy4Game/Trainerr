@@ -248,6 +248,16 @@
     "moreReps": "Une rep de plus",
     "halfRep": "Ajouter une demi-rep",
     "incomplete": "Reps incomplètes",
+    "rir": {
+      "label": "Reps en réserve (facultatif)",
+      "value": "{count} rep en réserve | {count} reps en réserve",
+      "plenty": "4 reps ou plus en réserve",
+      "help": "Combien de reps tu aurais encore pu faire proprement. 4+ = largement."
+    },
+    "setNote": {
+      "label": "Note sur la série",
+      "placeholder": "Prise qui glisse, siège 4…"
+    },
     "slowTempo": "Tempo lent",
     "howWasIt": "Comment c'était ?",
     "busy": "Machine occupée",
@@ -331,7 +341,7 @@
       "previous": "+1 série sur : {name}"
     },
     "addExercise": "+ Ajouter un exercice",
-    "moreOptions": "Préciser la série (reps incomplètes, tempo lent, dictée)",
+    "moreOptions": "Préciser la série (RIR, note, reps incomplètes, tempo lent, dictée)",
     "coach": {
       "lastTime": "La dernière fois : {sets}",
       "noHistory": "Première fois sur cet exercice.",

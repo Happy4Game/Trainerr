@@ -15,6 +15,7 @@ import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
 import { useSession } from './useSession';
+import { useRirText } from './useRirText';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
 import { unlockSound } from './restSound';
@@ -26,6 +27,7 @@ const emit = defineEmits<{ busy: []; replace: []; plates: [loadKg: number] }>();
 
 const { t, n, locale } = useI18n();
 const session = useSession();
+const rirText = useRirText();
 
 const entry = computed(() => session.entryOf(props.exerciseId));
 const proposal = computed(() => session.proposalFor(props.exerciseId));
@@ -42,6 +44,9 @@ const load = ref(0);
 const reps = ref(0);
 const incomplete = ref(false);
 const slowTempo = ref(false);
+/** Optional: reps left in the tank (0 to 4+), and a free note on the set. */
+const rir = ref<number>();
+const setNote = ref('');
 const heard = ref<Difficulty>();
 const listening = ref(false);
 
@@ -54,6 +59,8 @@ watch(
     reps.value = proposal.value.targetReps;
     incomplete.value = false;
     slowTempo.value = false;
+    rir.value = undefined;
+    setNote.value = '';
     heard.value = undefined;
   },
   { immediate: true },
@@ -174,6 +181,8 @@ const ADVICE_ICON: Record<SetAdvice, string> = {
   comeback: '↺',
 };
 
+const RIR_VALUES = [0, 1, 2, 3, 4] as const;
+
 const DIFFICULTIES: { value: Difficulty; color: string }[] = [
   { value: 'easy', color: 'success' },
   { value: 'ok', color: 'primary' },
@@ -193,6 +202,8 @@ async function validate(difficulty: Difficulty): Promise<void> {
     difficulty,
     ...(incomplete.value ? { completeReps: false } : {}),
     ...(slowTempo.value ? { slowTempo: true } : {}),
+    ...(rir.value === undefined ? {} : { rir: rir.value }),
+    ...(setNote.value.trim() ? { note: setNote.value.trim() } : {}),
   });
   // A record: a happier buzz.
   if (session.lastSetBeatRecord.value) navigator.vibrate?.([60, 40, 60, 40, 160]);
@@ -455,6 +466,31 @@ function listen(): void {
           <ion-label>{{ t('session.slowTempo') }}</ion-label>
         </ion-chip>
       </div>
+      <fieldset class="rir">
+        <legend>{{ t('session.rir.label') }}</legend>
+        <ion-chip
+          v-for="value in RIR_VALUES"
+          :key="value"
+          :outline="rir !== value"
+          v-bind="rir === value ? { color: 'primary' } : {}"
+          role="radio"
+          :aria-checked="rir === value"
+          :aria-label="rirText(value)"
+          @click="rir = rir === value ? undefined : value"
+        >
+          <ion-label>{{ value === 4 ? '4+' : value }}</ion-label>
+        </ion-chip>
+      </fieldset>
+      <p class="help">{{ t('session.rir.help') }}</p>
+      <ion-input
+        v-model="setNote"
+        class="set-note"
+        fill="outline"
+        :label="t('session.setNote.label')"
+        label-placement="stacked"
+        :placeholder="t('session.setNote.placeholder')"
+        :maxlength="120"
+      />
       <ion-button
         v-if="voiceSupported()"
         fill="outline"
@@ -487,6 +523,28 @@ function listen(): void {
 </template>
 
 <style scoped>
+.rir {
+  border: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.rir legend {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.rir ion-chip {
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+}
+.set-note {
+  margin: 8px 0;
+}
+
 .extra-set {
   margin-inline: 4px;
   --padding-start: 8px;

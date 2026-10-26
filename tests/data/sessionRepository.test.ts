@@ -293,6 +293,32 @@ describe('editing the history', () => {
     expect(session?.sets[1]).toMatchObject({ loadKg: 18, reps: 9 });
   });
 
+  it('keeps the optional RIR and note of a set, and changes them only when asked', async () => {
+    const { id } = await doneSession('2026-10-20');
+    const third = await addSet(db, id, {
+      exerciseId: 'Butterfly',
+      loadKg: 40,
+      reps: 12,
+      difficulty: 'ok',
+      rir: 2,
+      note: '  prise qui glisse ',
+    });
+    await updateSet(db, third.id, { loadKg: 42, reps: 12, difficulty: 'ok' });
+    let [session] = await listDoneSessions(db);
+    expect(session?.sets[2]).toMatchObject({ loadKg: 42, rir: 2, note: 'prise qui glisse' });
+    expect(session?.sets[0]).not.toHaveProperty('rir');
+    await updateSet(db, third.id, {
+      loadKg: 42,
+      reps: 12,
+      difficulty: 'ok',
+      rir: undefined,
+      note: '',
+    });
+    [session] = await listDoneSessions(db);
+    expect(session?.sets[2]).not.toHaveProperty('rir');
+    expect(session?.sets[2]).not.toHaveProperty('note');
+  });
+
   it('adds a forgotten set and removes an extra one, keeping the order', async () => {
     const { id, first } = await doneSession('2026-10-20');
     await deleteSet(db, first.id);

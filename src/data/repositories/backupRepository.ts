@@ -89,7 +89,7 @@ function deleteStatements(): string[] {
 export async function exportSetsCsv(db: SqlDatabase): Promise<string> {
   const rows = await db.query<Record<string, SqlValue>>(
     `SELECT s.date, s.template, l.exercise_id, e.name AS exercise, l.load_kg, l.reps, l.difficulty,
-            l.warmup, l.slow_tempo, l.complete_reps
+            l.warmup, l.slow_tempo, l.complete_reps, l.rir, l.note
        FROM set_log l JOIN session s ON s.id = l.session_id
        LEFT JOIN exercise e ON e.id = l.exercise_id
       ORDER BY s.date, l.position`,
@@ -105,6 +105,8 @@ export async function exportSetsCsv(db: SqlDatabase): Promise<string> {
     'warmup',
     'slow_tempo',
     'complete_reps',
+    'rir',
+    'note',
   ];
   const cell = (value: SqlValue | undefined) => {
     const text = value === null || value === undefined ? '' : String(value);
