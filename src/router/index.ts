@@ -18,6 +18,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/CustomSessionPage.vue'),
         props: true,
       },
+      { path: 'session/presets', component: () => import('@/views/PresetsPage.vue') },
       // Machine card opened from the session: stays in the Session tab.
       {
         path: 'session/exercise/:id',

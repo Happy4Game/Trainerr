@@ -1,11 +1,18 @@
 import type { ExerciseQueue } from '@/domain/busyMachine';
-import type { Difficulty, IsoDate, SessionLog, SetLog } from '@/domain/types';
+import type { Difficulty, IsoDate, RepRange, SessionLog, SetLog } from '@/domain/types';
 import type { SqlDatabase } from '../sqlite/database';
 import { sqlLiteral as q } from '../sqlite/sqlLiteral';
 
 export interface PlannedExercise {
   readonly exerciseId: string;
   readonly sets: number;
+  /** Ready-made session: its own rep range and rest instead of the exercise defaults. */
+  readonly repRange?: RepRange;
+  readonly restSeconds?: number;
+  /** Reps are seconds held (plank). */
+  readonly timed?: boolean;
+  /** Reps counted for each leg. */
+  readonly perSide?: boolean;
 }
 
 /** What is needed to resume a session after the app was closed. */

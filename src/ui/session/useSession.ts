@@ -68,6 +68,8 @@ import { rescheduleNotifications } from '@/ui/notifications';
 import { isPopular } from '@/data/catalog/curated';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
+import { PRESET_PREFIX, resolvePreset } from '@/domain/presets';
+import { presetSession } from '@/data/content/presetSessions';
 import {
   assistedScale,
   bodyWeightOn,
@@ -219,11 +221,19 @@ function previousFor(exerciseId: string): SetLog | undefined {
   return lastTimeSets(exerciseId)[0];
 }
 
+/** Rep range of an exercise today: the ready-made session's own, else the exercise default. */
+function rangeOf(entry: CatalogEntry) {
+  return (
+    active.value?.plan.exercises.find((e) => e.exerciseId === entry.exercise.id)?.repRange ??
+    repRangeFor(entry.exercise)
+  );
+}
+
 /** Load and reps to pre-fill for the next set of an exercise. */
 function proposalFor(exerciseId: string): Proposal | undefined {
   const entry = entryOf(exerciseId);
   if (!entry) return undefined;
-  const range = repRangeFor(entry.exercise);
+  const range = rangeOf(entry);
   const scale = scaleOf(entry);
   const steps = scale?.realSteps ?? stepsOf(entry);
   // Back from the real load to what is set on the machine.
@@ -375,6 +385,39 @@ function supersetBlocks<E extends Exercise>(exercises: readonly E[]): SessionBlo
   return proposeSupersets(exercises, zone ? { protectedZone: zone } : {});
 }
 
+/** Ready-made session: its exercises in order, with their sets, reps and rests. */
+async function startPreset(presetId: string): Promise<void> {
+  const preset = presetSession(presetId);
+  if (!preset || !settings.value) return;
+  const lines = resolvePreset(preset, {
+    isFavorite: (id) => entryOf(id)?.favorite === true,
+    exists: (id) => entryOf(id) !== undefined,
+  });
+  if (lines.length === 0) return;
+  const ids = lines.map((line) => line.chosenId);
+  const plan: SessionPlan = {
+    exercises: lines.map((line) => ({
+      exerciseId: line.chosenId,
+      sets: setsForWeek(line.sets, cycle.value.light),
+      repRange: line.reps,
+      restSeconds: line.restSeconds,
+      ...(line.timed ? { timed: true } : {}),
+      ...(line.perSide ? { perSide: true } : {}),
+    })),
+    queue: startQueue(ids),
+  };
+  const { db } = await openAppDatabase();
+  await startSession(db, {
+    date: today(),
+    templateId: `${PRESET_PREFIX}${preset.id}`,
+    gymId: settings.value.currentGymId,
+    plan,
+  });
+  active.value = await getActiveSession(db);
+  restEndsAt.value = undefined;
+  phase.value = 'active';
+}
+
 async function start(
   options: {
     express?: boolean;
@@ -447,7 +490,7 @@ async function logSet(set: SetLog): Promise<void> {
     entry &&
     nextSetProposal({
       set: toRealSet(scale, set),
-      range: repRangeFor(entry.exercise),
+      range: rangeOf(entry),
       steps: scale?.realSteps ?? stepsOf(entry),
       isLastSet: isLast,
     });
@@ -460,7 +503,10 @@ async function logSet(set: SetLog): Promise<void> {
   if (superset.next) queue = startNow(queue, superset.next);
   if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
   const kind = entry?.exercise.kind ?? 'isolation';
-  restEndsAt.value = superset.rest ? Date.now() + REST_SECONDS[kind].max * 1000 : undefined;
+  const rest =
+    active.value.plan.exercises.find((e) => e.exerciseId === set.exerciseId)?.restSeconds ??
+    REST_SECONDS[kind].max;
+  restEndsAt.value = superset.rest ? Date.now() + rest * 1000 : undefined;
 }
 
 async function undoLastSet(): Promise<void> {
@@ -823,6 +869,9 @@ export function useSession() {
     workSetsInSession,
     alternatives,
     start,
+    startPreset,
+    /** Ready-made session line: seconds held, or reps per leg. */
+    planned: (id: string) => active.value?.plan.exercises.find((e) => e.exerciseId === id),
     logSet,
     undoLastSet,
     editSessionSet,

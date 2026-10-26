@@ -20,4 +20,10 @@ describe('session names', () => {
       'Ma séance',
     );
   });
+
+  it('names a ready-made session from its translation', () => {
+    expect(templateName('preset:pull', { translate, custom, fallback: 'Ma séance' })).toBe(
+      '?presets.sessions.pull',
+    );
+  });
 });

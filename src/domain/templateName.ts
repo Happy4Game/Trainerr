@@ -8,6 +8,9 @@ export function templateName(
     fallback: string;
   },
 ): string {
+  if (templateId.startsWith('preset:')) {
+    return context.translate(`presets.sessions.${templateId.slice('preset:'.length)}`);
+  }
   if (templateId.startsWith('custom:')) {
     const id = templateId.slice('custom:'.length);
     return context.custom.find((c) => c.id === id)?.name ?? context.fallback;

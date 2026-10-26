@@ -147,6 +147,9 @@ const advice = computed<SetAdvice>(() => {
   );
 });
 const realLoad = computed(() => session.realLoadFor(props.exerciseId, load.value));
+/** Ready-made session lines: a plank is held for seconds, lunges count per leg. */
+const timed = computed(() => session.planned(props.exerciseId)?.timed === true);
+const perSide = computed(() => session.planned(props.exerciseId)?.perSide === true);
 const ADVICE_ICON: Record<SetAdvice, string> = {
   moreLoad: '↑',
   moreReps: '↗',
@@ -339,15 +342,30 @@ function listen(): void {
       }}
     </p>
     <div class="stepper">
-      <span class="stepper-label">{{ t('session.reps') }}</span>
-      <ion-button fill="outline" :aria-label="t('session.fewerReps')" @click="changeReps(-1)">
+      <span class="stepper-label">{{
+        timed ? t('session.seconds') : perSide ? t('session.repsPerSide') : t('session.reps')
+      }}</span>
+      <ion-button
+        fill="outline"
+        :aria-label="timed ? t('session.fewerSeconds') : t('session.fewerReps')"
+        @click="changeReps(timed ? -5 : -1)"
+      >
         <Minus :size="24" aria-hidden="true" />
       </ion-button>
       <output class="value" data-testid="reps">{{ n(reps) }}</output>
-      <ion-button fill="outline" :aria-label="t('session.moreReps')" @click="changeReps(1)">
+      <ion-button
+        fill="outline"
+        :aria-label="timed ? t('session.moreSeconds') : t('session.moreReps')"
+        @click="changeReps(timed ? 5 : 1)"
+      >
         <Plus :size="24" aria-hidden="true" />
       </ion-button>
-      <ion-button fill="clear" :aria-label="t('session.halfRep')" @click="changeReps(0.5)">
+      <ion-button
+        v-if="!timed"
+        fill="clear"
+        :aria-label="t('session.halfRep')"
+        @click="changeReps(0.5)"
+      >
         +½
       </ion-button>
     </div>

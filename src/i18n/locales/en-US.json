@@ -416,7 +416,11 @@
       "set": "help {load} × {reps}",
       "real": "Real load: {real} ({weight} body weight − {help} help)",
       "noWeight": "Estimated weight: enter your weight"
-    }
+    },
+    "seconds": "Seconds",
+    "repsPerSide": "Reps / leg",
+    "fewerSeconds": "5 seconds less",
+    "moreSeconds": "5 seconds more"
   },
   "availability": {
     "day": "Day",
@@ -779,7 +783,8 @@
         "nutrition": "Nutrition",
         "technique": "Technique",
         "health": "Health",
-        "models": "Training models"
+        "models": "Training models",
+        "order": "Exercise order"
       }
     },
     "libraries": {
@@ -1087,7 +1092,9 @@
     "editNamed": "Edit {name}",
     "start": "Start",
     "startNamed": "Start {name}",
-    "deleted": "Custom session"
+    "deleted": "Custom session",
+    "orderIssue": "{isolation} comes before {compound}: tiring this muscle first ({muscle}) would limit the big lift.",
+    "fixOrder": "Put back in the advised order"
   },
   "emptyStates": {
     "history": "No session yet",
@@ -1096,5 +1103,92 @@
     "start": "Start a session",
     "favorites": "No machine in your gym",
     "seeAll": "See all machines"
+  },
+  "presets": {
+    "title": "Ready-made sessions",
+    "intro": "Ready sessions in the right order: the big lift first, isolation at the end.",
+    "open": "See the ready-made sessions",
+    "models": {
+      "push": {
+        "name": "Push",
+        "summary": "Chest, shoulders, triceps"
+      },
+      "pull": {
+        "name": "Pull",
+        "summary": "Back, rear delts, biceps"
+      },
+      "legs": {
+        "name": "Legs",
+        "summary": "Quads, hamstrings, glutes, calves"
+      },
+      "fullBodyBeginner": {
+        "name": "Beginner full body",
+        "summary": "The whole body on machines, 5 simple exercises"
+      },
+      "upperLower": {
+        "name": "Upper / Lower",
+        "summary": "Two sessions in turn: upper body, then legs"
+      }
+    },
+    "sessions": {
+      "push": "Push",
+      "pull": "Pull",
+      "legs": "Legs",
+      "fullBodyBeginner": "Beginner full body",
+      "upper": "Upper body",
+      "lower": "Lower body"
+    },
+    "line": "{sets} × {reps} · rest {rest}",
+    "repsRange": "{min}-{max}",
+    "perSide": "{reps} per leg",
+    "seconds": "{reps} s",
+    "start": "Start: {name}",
+    "replaced": "Instead of {main}: it is one of your machines",
+    "role": {
+      "mainCompound": "Heavy compound",
+      "secondaryCompound": "Secondary compound",
+      "isolation": "Isolation"
+    },
+    "principle": {
+      "title": "Why this order?",
+      "p1": "Exercises using several joints (bench press, pull-ups, squat) come first, while you are fresh: they need the most strength and technique.",
+      "p2": "Then come the secondary compounds, then isolation (one muscle). A muscle is never isolated before the big lift that uses it: tired triceps would limit the bench press.",
+      "p3": "What studies say: an exercise gains more strength when done early in the session. For muscle size the order matters little: doing enough sets is what counts.",
+      "sources": "Sources"
+    },
+    "why": {
+      "benchFirst": "The heaviest lift of the session: done first, while chest, shoulders and triceps are fresh.",
+      "inclineSecond": "Another compound, lighter: it targets the upper chest once the big work is done.",
+      "shoulderPressAfterChest": "The shoulders already helped on the presses: a guided machine stays safe even a bit tired.",
+      "lateralRaiseAfterPress": "Isolation of the side delts, after the presses that already worked them.",
+      "tricepsLast": "The triceps help on every press: isolated at the end so they do not limit the heavy lifts.",
+      "pullupsFirst": "The hardest pull: first to get the most reps. Assisted if needed, the app counts the help backwards.",
+      "rowSecond": "Second big pull, horizontal this time: the mid back works while the lats are still fresh.",
+      "cableRowThird": "Lighter guided row: back volume without a heavy load.",
+      "facePullAfterRows": "Rear delt isolation, good to balance pushing, after the rows that warmed them up.",
+      "curlLast": "The biceps help on every pull: isolating them first would weaken pull-ups and rows.",
+      "squatFirst": "The heaviest and most technical: first, while back and legs are fresh.",
+      "rdlSecond": "Heavy hip hinge for hamstrings and glutes, done before they are tired.",
+      "lungesThird": "One leg at a time: lighter but needs balance, so before isolation.",
+      "legExtensionAfterSquat": "Quad isolation, after the squat and lunges that already worked them.",
+      "legCurlAfterRdl": "Hamstring isolation, after the Romanian deadlift.",
+      "calvesLast": "Small muscle barely used by the rest: at the end, it does not hinder any other exercise.",
+      "beginnerLegPress": "The biggest movement, guided and safe to learn: first, while you are fresh.",
+      "beginnerChestPress": "Guided press: the machine holds the path, you focus on the range of motion.",
+      "beginnerPulldown": "Guided vertical pull, easier to dose than pull-ups.",
+      "beginnerRow": "Horizontal pull for the mid back, to balance pushing.",
+      "plankLast": "Core at the end: the abs stabilise every exercise, tiring them first would hinder the rest.",
+      "upperBench": "Heavy push first: it needs the most strength.",
+      "upperRow": "Heavy pull right after: pushing then pulling lets the pushing muscles rest.",
+      "upperShoulderPress": "Secondary push, alternating with the pull that follows.",
+      "upperPulldown": "Secondary pull, while the shoulders recover.",
+      "upperCurl": "Biceps isolation, after all the pulls.",
+      "upperTriceps": "Triceps isolation, after all the presses."
+    },
+    "rest": {
+      "seconds": "{s} s",
+      "minutes": "{m} min",
+      "minutesSeconds": "{m} min {s} s"
+    }
   }
 }

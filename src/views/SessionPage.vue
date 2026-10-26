@@ -338,6 +338,14 @@ async function logWarmup(): Promise<void> {
           </ion-card-content>
         </ion-card>
 
+        <section class="my-sessions" :aria-label="t('presets.title')">
+          <h2>{{ t('presets.title') }}</h2>
+          <p class="muted">{{ t('presets.intro') }}</p>
+          <ion-button expand="block" fill="outline" router-link="/tabs/session/presets">
+            {{ t('presets.open') }}
+          </ion-button>
+        </section>
+
         <section class="my-sessions" :aria-label="t('customSession.mine')">
           <h2>{{ t('customSession.mine') }}</h2>
           <p v-if="customSessions.length === 0" class="muted">{{ t('customSession.intro') }}</p>

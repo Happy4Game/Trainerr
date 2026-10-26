@@ -416,7 +416,11 @@
       "set": "aide {load} × {reps}",
       "real": "Charge réelle : {real} ({weight} de poids du corps − {help} d'aide)",
       "noWeight": "Poids estimé : note ton poids"
-    }
+    },
+    "seconds": "Secondes",
+    "repsPerSide": "Reps / jambe",
+    "fewerSeconds": "5 secondes de moins",
+    "moreSeconds": "5 secondes de plus"
   },
   "availability": {
     "day": "Jour",
@@ -779,7 +783,8 @@
         "nutrition": "Nutrition",
         "technique": "Technique",
         "health": "Santé",
-        "models": "Modèles d'entraînement"
+        "models": "Modèles d'entraînement",
+        "order": "Ordre des exercices"
       }
     },
     "libraries": {
@@ -1087,7 +1092,9 @@
     "editNamed": "Modifier {name}",
     "start": "Commencer",
     "startNamed": "Commencer {name}",
-    "deleted": "Séance perso"
+    "deleted": "Séance perso",
+    "orderIssue": "{isolation} est avant {compound} : fatiguer d'abord ce muscle ({muscle}) limiterait le gros exercice.",
+    "fixOrder": "Remettre dans l'ordre conseillé"
   },
   "emptyStates": {
     "history": "Aucune séance pour l'instant",
@@ -1096,5 +1103,92 @@
     "start": "Commencer une séance",
     "favorites": "Aucune machine dans ta salle",
     "seeAll": "Voir toutes les machines"
+  },
+  "presets": {
+    "title": "Séances types",
+    "intro": "Des séances prêtes, dans le bon ordre : le gros exercice d'abord, l'isolation à la fin.",
+    "open": "Voir les séances types",
+    "models": {
+      "push": {
+        "name": "Push (poussée)",
+        "summary": "Pectoraux, épaules, triceps"
+      },
+      "pull": {
+        "name": "Pull (tirage)",
+        "summary": "Dos, arrière d'épaule, biceps"
+      },
+      "legs": {
+        "name": "Jambes",
+        "summary": "Quadriceps, ischios, fessiers, mollets"
+      },
+      "fullBodyBeginner": {
+        "name": "Full body débutant",
+        "summary": "Tout le corps sur machines, 5 exercices simples"
+      },
+      "upperLower": {
+        "name": "Haut / Bas",
+        "summary": "Deux séances en alternance : haut du corps, puis jambes"
+      }
+    },
+    "sessions": {
+      "push": "Push",
+      "pull": "Pull",
+      "legs": "Jambes",
+      "fullBodyBeginner": "Full body débutant",
+      "upper": "Haut du corps",
+      "lower": "Bas du corps"
+    },
+    "line": "{sets} × {reps} · repos {rest}",
+    "repsRange": "{min}-{max}",
+    "perSide": "{reps} par jambe",
+    "seconds": "{reps} s",
+    "start": "Commencer : {name}",
+    "replaced": "À la place de {main} : c'est une de tes machines",
+    "role": {
+      "mainCompound": "Polyarticulaire lourd",
+      "secondaryCompound": "Polyarticulaire secondaire",
+      "isolation": "Isolation"
+    },
+    "principle": {
+      "title": "Pourquoi cet ordre ?",
+      "p1": "Les exercices qui font travailler plusieurs articulations (développé couché, tractions, squat) passent en premier, quand tu es frais : ce sont eux qui demandent le plus de force et de technique.",
+      "p2": "Viennent ensuite les polyarticulaires secondaires, puis l'isolation (un seul muscle). On ne fait jamais l'isolation d'un muscle avant le gros exercice qui l'utilise : des triceps déjà fatigués limiteraient le développé couché.",
+      "p3": "Ce que disent les études : un exercice progresse plus en force quand il est placé en début de séance. Pour le volume musculaire, l'ordre compte peu : l'essentiel est de faire assez de séries.",
+      "sources": "Sources"
+    },
+    "why": {
+      "benchFirst": "Le plus lourd de la séance : fait en premier, quand pectoraux, épaules et triceps sont frais.",
+      "inclineSecond": "Encore un polyarticulaire, plus léger : il vise le haut des pectoraux une fois le gros travail fait.",
+      "shoulderPressAfterChest": "Les épaules ont déjà aidé sur les développés : une machine guidée reste sûre même un peu fatigué.",
+      "lateralRaiseAfterPress": "Isolation du milieu de l'épaule, après les développés qui l'ont déjà sollicité.",
+      "tricepsLast": "Les triceps aident à tous les développés : on les isole à la fin pour ne pas limiter les exercices lourds.",
+      "pullupsFirst": "Le plus exigeant du tirage : en premier pour tirer le plus de reps. Assistées si besoin, l'appli compte l'aide à l'envers.",
+      "rowSecond": "Deuxième gros tirage, horizontal cette fois : le milieu du dos travaille avec les dorsaux encore frais.",
+      "cableRowThird": "Tirage plus léger et guidé : du volume pour le dos sans charge lourde.",
+      "facePullAfterRows": "Isolation de l'arrière d'épaule, bon pour l'équilibre avec la poussée, après les rowings qui l'ont déjà échauffé.",
+      "curlLast": "Les biceps aident à chaque tirage : les isoler avant affaiblirait tractions et rowings.",
+      "squatFirst": "Le plus lourd et le plus technique : en premier, quand le dos et les jambes sont frais.",
+      "rdlSecond": "Charnière de hanche lourde pour ischios et fessiers, à faire avant qu'ils ne soient fatigués.",
+      "lungesThird": "Une jambe à la fois : moins lourd, mais demande de l'équilibre, donc avant l'isolation.",
+      "legExtensionAfterSquat": "Isolation des quadriceps, après le squat et les fentes qui les ont déjà bien travaillés.",
+      "legCurlAfterRdl": "Isolation des ischios, après le soulevé de terre roumain.",
+      "calvesLast": "Petit muscle peu sollicité par le reste : à la fin, il ne gêne aucun autre exercice.",
+      "beginnerLegPress": "Le plus gros mouvement, guidé et sûr pour apprendre : en premier, quand tu es frais.",
+      "beginnerChestPress": "Poussée guidée : la machine tient la trajectoire, tu te concentres sur l'amplitude.",
+      "beginnerPulldown": "Tirage vertical guidé, plus facile à doser que les tractions.",
+      "beginnerRow": "Tirage horizontal pour le milieu du dos, pour équilibrer la poussée.",
+      "plankLast": "Gainage à la fin : les abdos stabilisent tous les exercices, les fatiguer avant gênerait le reste.",
+      "upperBench": "Poussée lourde en premier : c'est elle qui demande le plus de force.",
+      "upperRow": "Tirage lourd juste après : pousser puis tirer laisse les muscles de la poussée se reposer.",
+      "upperShoulderPress": "Poussée secondaire, en alternance avec le tirage qui suit.",
+      "upperPulldown": "Tirage secondaire, pendant que les épaules récupèrent.",
+      "upperCurl": "Isolation des biceps, après tous les tirages.",
+      "upperTriceps": "Isolation des triceps, après tous les développés."
+    },
+    "rest": {
+      "seconds": "{s} s",
+      "minutes": "{m} min",
+      "minutesSeconds": "{m} min {s}"
+    }
   }
 }

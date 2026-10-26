@@ -18,6 +18,8 @@ import { illustrationFor } from '@/data/catalog/exerciseImages';
 import type { CustomSession } from '@/data/repositories/settingsRepository';
 import { newId } from '@/data/repositories/sessionRepository';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
+import { orderIssues, recommendedOrder } from '@/domain/exerciseOrder';
+import type { CatalogExercise } from '@/data/catalog/catalog';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 
@@ -54,6 +56,16 @@ const thumbnailOf = (id: string) => {
   const image = illustrationFor(id)?.images[0];
   return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
 };
+/** An isolation placed before the compound of its muscle: said, and fixable in one tap. */
+const chosen = computed(() =>
+  exerciseIds.value
+    .map((id) => session.entryOf(id)?.exercise)
+    .filter((e): e is CatalogExercise => e !== undefined),
+);
+const issues = computed(() => orderIssues(chosen.value));
+function fixOrder(): void {
+  exerciseIds.value = recommendedOrder(chosen.value).map((e) => e.id);
+}
 const canSave = computed(() => name.value.trim() !== '' && exerciseIds.value.length > 0);
 
 function move(index: number, delta: number): void {
@@ -155,6 +167,19 @@ async function remove(): Promise<void> {
           </span>
         </li>
       </ol>
+      <div v-if="issues.length > 0" class="order-warning" role="note">
+        <p v-for="issue in issues" :key="issue.isolationId">
+          {{
+            t('customSession.orderIssue', {
+              isolation: nameOf(issue.isolationId),
+              compound: nameOf(issue.compoundId),
+              muscle: t(`muscles.${issue.muscle}`),
+            })
+          }}
+        </p>
+        <ion-button size="small" @click="fixOrder">{{ t('customSession.fixOrder') }}</ion-button>
+        <router-link to="/tabs/session/presets">{{ t('presets.principle.title') }}</router-link>
+      </div>
       <ion-button expand="block" fill="outline" @click="picking = true">
         <Plus :size="20" aria-hidden="true" /> {{ t('customSession.add') }}
       </ion-button>
@@ -192,6 +217,20 @@ async function remove(): Promise<void> {
 </template>
 
 <style scoped>
+.order-warning {
+  margin-block: 8px;
+  padding: 10px 12px;
+  border-radius: var(--app-radius-small);
+  background: var(--ion-color-warning);
+  color: var(--ion-color-warning-contrast);
+}
+.order-warning p {
+  margin: 0 0 6px;
+}
+.order-warning a {
+  margin-inline-start: 8px;
+  color: inherit;
+}
 .section {
   margin-block: 20px 8px;
   font-size: 1.1rem;

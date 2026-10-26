@@ -36,7 +36,7 @@ const imageAuthors = computed(() => {
   }
   return [...authors.entries()];
 });
-const themes = ['programme', 'nutrition', 'technique', 'health', 'models'] as const;
+const themes = ['programme', 'order', 'nutrition', 'technique', 'health', 'models'] as const;
 const spdx = (license: string) =>
   `https://spdx.org/licenses/${license.replace(/[()]/g, '').split(' ')[0]}.html`;
 </script>

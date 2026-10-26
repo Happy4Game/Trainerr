@@ -3,7 +3,7 @@ export interface Source {
   readonly id: string;
   readonly label: string;
   readonly url: string;
-  readonly theme: 'programme' | 'nutrition' | 'technique' | 'health' | 'models';
+  readonly theme: 'programme' | 'nutrition' | 'technique' | 'health' | 'models' | 'order';
 }
 
 export const SOURCES: readonly Source[] = [
@@ -70,6 +70,26 @@ export const SOURCES: readonly Source[] = [
     theme: 'health',
   },
   {
+    id: 'acsm2009',
+    label:
+      'American College of Sports Medicine, 2009 — modèles de progression en musculation (Medicine & Science in Sports & Exercise)',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/19204579/',
+    theme: 'order',
+  },
+  {
+    id: 'simao2012',
+    label: 'Simão et al., 2012 — l’ordre des exercices en musculation (Sports Medicine)',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/22292516/',
+    theme: 'order',
+  },
+  {
+    id: 'nunes2021',
+    label:
+      'Nunes et al., 2021 — ordre des exercices, force et hypertrophie : méta-analyse (European Journal of Sport Science)',
+    url: 'https://doi.org/10.1080/17461391.2020.1733672',
+    theme: 'order',
+  },
+  {
     id: 'strengthlog',
     label: 'StrengthLog — comparatif des splits',
     url: 'https://www.strengthlog.com/best-workout-splits/',
@@ -82,6 +102,9 @@ export const SOURCES: readonly Source[] = [
     theme: 'models',
   },
 ];
+
+/** Exercise order in a session: the ready-made sessions follow these. */
+export const ORDER_SOURCE_IDS = ['acsm2009', 'simao2012', 'nunes2021'] as const;
 
 export function sourceById(id: string): Source | undefined {
   return SOURCES.find((s) => s.id === id);
