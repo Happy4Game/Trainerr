@@ -11,3 +11,11 @@ test-results
 server/node_modules
 server/*.sqlite
 exports/
+
+# Secrets et clés de signature
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+keystore.properties
