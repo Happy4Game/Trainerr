@@ -306,7 +306,9 @@
       "bravo": "Bravo !",
       "setsLabel": "série | séries",
       "workloadLabel": "soulevés au total",
-      "recordsLabel": "record | records"
+      "recordsLabel": "record | records",
+      "newMachines": "Tu as utilisé {names}, pas encore dans tes machines. | Tu as utilisé {names}, pas encore dans tes machines.",
+      "adoptMachines": "Ajouter cette machine à mes machines | Ajouter ces {count} machines à mes machines"
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",

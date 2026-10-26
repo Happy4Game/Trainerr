@@ -306,7 +306,9 @@
       "bravo": "Well done!",
       "setsLabel": "set | sets",
       "workloadLabel": "lifted in total",
-      "recordsLabel": "record | records"
+      "recordsLabel": "record | records",
+      "newMachines": "You used {names}, not in your machines yet. | You used {names}, not in your machines yet.",
+      "adoptMachines": "Add this machine to my machines | Add these {count} machines to my machines"
     },
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",

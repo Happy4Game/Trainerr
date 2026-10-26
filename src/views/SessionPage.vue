@@ -805,6 +805,24 @@ async function logWarmup(): Promise<void> {
         <p v-if="summary.carryOver.length > 0" class="note-line">
           {{ t('session.carryOver', { names: summary.carryOver.map(nameOf).join(', ') }) }}
         </p>
+        <div v-if="summary.newMachines.length > 0" class="new-machines" role="note">
+          <p>
+            {{
+              t(
+                'session.summary.newMachines',
+                { names: summary.newMachines.map(nameOf).join(', ') },
+                summary.newMachines.length,
+              )
+            }}
+          </p>
+          <ion-button
+            expand="block"
+            fill="outline"
+            @click="session.adoptMachines(summary.newMachines)"
+          >
+            {{ t('session.summary.adoptMachines', summary.newMachines.length) }}
+          </ion-button>
+        </div>
         <ion-button expand="block" size="large" @click="session.closeSummary()">{{
           t('session.summary.close')
         }}</ion-button>
@@ -1009,6 +1027,9 @@ async function logWarmup(): Promise<void> {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.new-machines p {
+  margin-block: 12px 4px;
 }
 .summary-hero {
   padding: 24px 16px;

@@ -55,3 +55,24 @@ test('a custom session with an isolation before its compound is flagged and fixe
   await expect(page.getByRole('note')).toHaveCount(0);
   await expect(page.locator('ol.list li .name').first()).toHaveText('Développé couché barre');
 });
+
+test('the machines of a ready-made session join my machines in one tap', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.goto('/tabs/session/presets');
+  const push = page.getByRole('region', { name: 'Push', exact: true });
+  await push.getByRole('button', { name: 'Commencer : Push' }).click();
+  await expect(page.getByRole('region', { name: 'Développé couché barre' })).toBeVisible();
+  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: 'Terminer la séance' }).click();
+
+  await expect(page.getByText('Tu as utilisé Développé couché barre')).toBeVisible();
+  await page.getByRole('button', { name: 'Ajouter cette machine à mes machines' }).click();
+  await expect(page.getByText('Tu as utilisé Développé couché barre')).toHaveCount(0);
+
+  await page.getByRole('tab', { name: 'Catalogue' }).click();
+  await page.getByRole('searchbox').fill('bench press medium');
+  await expect(
+    page.getByRole('button', { name: 'Retirer Développé couché barre de mes machines' }),
+  ).toBeVisible();
+});

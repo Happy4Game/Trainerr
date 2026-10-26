@@ -121,6 +121,8 @@ const summary = ref<{
   backToLevel: readonly string[];
   badges: readonly BadgeCode[];
   weeksOnPace: number;
+  /** Machines used today that are not in "my machines" yet (ready-made session…). */
+  newMachines: readonly string[];
 }>();
 
 const { entries, state: catalogState, toggleFavorite } = useCatalog();
@@ -889,6 +891,9 @@ async function finish(): Promise<void> {
       backToLevel,
       badges,
       weeksOnPace: weeksOnPace(all, perWeek, finished.date).current,
+      newMachines: [...new Set(work.map((s) => s.exerciseId))].filter(
+        (id) => entryOf(id)?.favorite === false,
+      ),
     };
   }
   active.value = undefined;
@@ -939,6 +944,14 @@ async function saveBodyWeight(weightKg: number): Promise<void> {
   const { db } = await openAppDatabase();
   await addMeasurement(db, { date: today(), weightKg, measurements: {} });
   weighings.value = await listMeasurements(db);
+}
+
+/** One tap on the summary: the machines used today join "my machines". */
+async function adoptMachines(ids: readonly string[]): Promise<void> {
+  for (const id of ids) {
+    if (entryOf(id)?.favorite === false) await toggleFavorite(id);
+  }
+  if (summary.value) summary.value = { ...summary.value, newMachines: [] };
 }
 
 function closeSummary(): void {
@@ -1027,6 +1040,7 @@ export function useSession() {
     saveNote,
     removeExercises,
     finish,
+    adoptMachines,
     closeSummary,
     references,
     saveReference,
