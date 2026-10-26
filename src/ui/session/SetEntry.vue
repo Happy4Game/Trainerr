@@ -159,6 +159,9 @@ const advice = computed<SetAdvice>(() => {
   );
 });
 const realLoad = computed(() => session.realLoadFor(props.exerciseId, load.value));
+/** Record to beat, on the real load (body weight − help on an assisted machine). */
+const record = computed(() => session.recordFor(props.exerciseId));
+
 /** Ready-made session lines: a plank is held for seconds, lunges count per leg. */
 const timed = computed(() => session.planned(props.exerciseId)?.timed === true);
 const perSide = computed(() => session.planned(props.exerciseId)?.perSide === true);
@@ -191,6 +194,8 @@ async function validate(difficulty: Difficulty): Promise<void> {
     ...(incomplete.value ? { completeReps: false } : {}),
     ...(slowTempo.value ? { slowTempo: true } : {}),
   });
+  // A record: a happier buzz.
+  if (session.lastSetBeatRecord.value) navigator.vibrate?.([60, 40, 60, 40, 160]);
 }
 
 function listen(): void {
@@ -245,6 +250,15 @@ function listen(): void {
         {{ t('session.fewerSets.short') }}
       </ion-button>
     </div>
+    <p v-if="record" class="record" data-testid="record">
+      <span aria-hidden="true">🏆</span>
+      {{
+        t('session.record.toBeat', {
+          set: `${kg(record.bestLoad.loadKg)} × ${n(record.bestLoad.reps)}`,
+          oneRepMax: kg(Math.round(record.bestOneRepMax.value)),
+        })
+      }}
+    </p>
     <div v-if="partnerName" class="superset" role="note">
       <span>
         <strong>{{
@@ -513,6 +527,19 @@ h2 {
   gap: 8px;
   margin-block: 8px;
   font-size: 1.1rem;
+}
+.record {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-block: 0 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(var(--ion-color-warning-rgb), 0.16);
+  color: var(--ion-text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 .coach {
   margin-block: 8px 12px;

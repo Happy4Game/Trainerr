@@ -163,3 +163,17 @@ export function monthSummary(
     trainingDays: new Set(inMonth.map((s) => s.date)).size,
   };
 }
+
+/**
+ * A set that beats the record of its exercise, live during the session: a
+ * heavier load, or the same load for more reps. Warm-up and incomplete sets
+ * never count. No record yet: nothing to beat.
+ */
+export function beatsRecord(
+  set: { loadKg: number; reps: number; warmup?: boolean; completeReps?: boolean },
+  record: PersonalRecord | undefined,
+): boolean {
+  if (!record || set.warmup || set.completeReps === false) return false;
+  const best = record.bestLoad;
+  return set.loadKg > best.loadKg || (set.loadKg === best.loadKg && set.reps > best.reps);
+}

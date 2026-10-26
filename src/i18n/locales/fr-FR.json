@@ -450,7 +450,12 @@
       "short": "Aucun"
     },
     "warmupStep": "Échauffement {index}/{total} : {load} × {reps}",
-    "warmupSkip": "Passer l'échauffement"
+    "warmupSkip": "Passer l'échauffement",
+    "record": {
+      "toBeat": "Record à battre : {set} · 1RM estimé {oneRepMax}",
+      "beaten": "Nouveau record !",
+      "beatenDetail": "{name} : {set}"
+    }
   },
   "availability": {
     "day": "Jour",

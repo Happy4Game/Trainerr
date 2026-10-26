@@ -63,7 +63,7 @@ import { warmupRamp } from '@/domain/warmup';
 import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
 import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/domain/achievements';
-import { weeksOnPace } from '@/domain/stats';
+import { beatsRecord, personalRecords, weeksOnPace, type PersonalRecord } from '@/domain/stats';
 import { addBadges } from '@/data/repositories/badgeRepository';
 import { rescheduleNotifications } from '@/ui/notifications';
 import { isPopular } from '@/data/catalog/curated';
@@ -115,6 +115,8 @@ const references = ref<ReferenceLoad[]>([]);
 const weighings = ref<BodyMeasurement[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
+/** Record just beaten, for the celebration on the screen (cleared at the next set). */
+const recordBeaten = ref<{ exerciseId: string; loadKg: number; reps: number }>();
 const summary = ref<{
   sets: number;
   workloadKg: number;
@@ -179,6 +181,20 @@ const realHistory = computed(() =>
     (date) => bodyWeightOn(date, weighings.value) ?? DEFAULT_BODY_WEIGHT_KG,
   ),
 );
+
+/** Records of each exercise before today, on the real load. */
+const records = computed(() => personalRecords(realHistory.value));
+
+/** Record to beat on an exercise: the best of past sessions and of today. */
+function recordFor(exerciseId: string): PersonalRecord | undefined {
+  const past = records.value.get(exerciseId);
+  const today = recordBeaten.value;
+  if (!past || today?.exerciseId !== exerciseId) return past;
+  return {
+    ...past,
+    bestLoad: { loadKg: today.loadKg, reps: today.reps, date: past.bestLoad.date },
+  };
+}
 
 /** Last session of the rotation done (custom sessions are left out). */
 const lastDone = computed(() => {
@@ -515,9 +531,18 @@ async function start(
 async function logSet(set: SetLog): Promise<void> {
   if (!active.value) return;
   const { db } = await openAppDatabase();
+  // Compared before the set joins today's sets: the record to beat is the one shown.
+  const realLoad = realLoadFor(set.exerciseId, set.loadKg);
+  const beaten = beatsRecord({ ...set, loadKg: realLoad }, recordFor(set.exerciseId));
   const stored = await addSet(db, active.value.id, set);
   active.value = { ...active.value, sets: [...active.value.sets, stored] };
   if (set.warmup) return;
+  recordBeaten.value = beaten
+    ? { exerciseId: set.exerciseId, loadKg: realLoad, reps: set.reps }
+    : recordBeaten.value?.exerciseId === set.exerciseId
+      ? recordBeaten.value
+      : undefined;
+  lastSetBeatRecord.value = beaten;
 
   const entry = entryOf(set.exerciseId);
   const done = workSetsInSession(set.exerciseId).length;
@@ -549,6 +574,9 @@ async function logSet(set: SetLog): Promise<void> {
   );
   restEndsAt.value = superset.rest ? Date.now() + rest * 1000 : undefined;
 }
+
+/** The set just logged beat the record: the screen celebrates it. */
+const lastSetBeatRecord = ref(false);
 
 async function undoLastSet(): Promise<void> {
   const last = active.value?.sets.at(-1);
@@ -939,6 +967,8 @@ async function finish(): Promise<void> {
   }
   active.value = undefined;
   restEndsAt.value = undefined;
+  recordBeaten.value = undefined;
+  lastSetBeatRecord.value = false;
   history.value = await listDoneSessions(db);
   if (settings.value) await rescheduleNotifications(settings.value);
   phase.value = summary.value ? 'finished' : 'idle';
@@ -1036,6 +1066,9 @@ export function useSession() {
     active,
     step,
     warmup,
+    recordFor,
+    lastSetBeatRecord,
+    recordBeaten,
     skipWarmup: (exerciseId: string) => {
       warmupSkipped.value = [...warmupSkipped.value, exerciseId];
     },

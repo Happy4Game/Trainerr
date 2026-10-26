@@ -427,6 +427,23 @@ async function logWarmup(): Promise<void> {
 
       <!-- Pendant la séance -->
       <template v-else-if="phase === 'active' && active">
+        <div
+          v-if="session.lastSetBeatRecord.value && session.recordBeaten.value"
+          :key="`${session.recordBeaten.value.exerciseId}-${session.recordBeaten.value.loadKg}-${session.recordBeaten.value.reps}`"
+          class="record-banner"
+          role="status"
+        >
+          <span class="trophy" aria-hidden="true">🏆</span>
+          <span>
+            <strong>{{ t('session.record.beaten') }}</strong>
+            {{
+              t('session.record.beatenDetail', {
+                name: nameOf(session.recordBeaten.value.exerciseId),
+                set: `${kg(session.recordBeaten.value.loadKg)} × ${n(session.recordBeaten.value.reps)}`,
+              })
+            }}
+          </span>
+        </div>
         <RestTimer
           v-if="restEndsAt"
           :ends-at="restEndsAt"
@@ -1163,6 +1180,48 @@ async function logWarmup(): Promise<void> {
   margin-block: 0 10px;
   font-size: 0.85rem;
   color: var(--ion-color-medium-shade);
+}
+.record-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-block-end: 12px;
+  padding: 12px 14px;
+  border-radius: var(--app-radius);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--ion-color-warning-rgb), 0.35),
+    rgba(var(--ion-color-warning-rgb), 0.12)
+  );
+  color: var(--ion-text-color);
+  animation: record-pop 600ms cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.record-banner .trophy {
+  font-size: 2rem;
+  animation: trophy-shine 1.2s ease-out;
+}
+@keyframes record-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+@keyframes trophy-shine {
+  0% {
+    transform: rotate(-20deg) scale(0.6);
+  }
+  60% {
+    transform: rotate(12deg) scale(1.25);
+  }
+  100% {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .record-banner,
+  .record-banner .trophy {
+    animation: none;
+  }
 }
 .warmup-actions {
   display: flex;
