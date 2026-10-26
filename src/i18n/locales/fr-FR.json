@@ -448,7 +448,9 @@
       "extra": "poids du corps + {load}",
       "label": "Lest",
       "short": "Aucun"
-    }
+    },
+    "warmupStep": "Échauffement {index}/{total} : {load} × {reps}",
+    "warmupSkip": "Passer l'échauffement"
   },
   "availability": {
     "day": "Jour",

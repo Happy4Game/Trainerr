@@ -448,7 +448,9 @@
       "extra": "body weight + {load}",
       "label": "Extra load",
       "short": "None"
-    }
+    },
+    "warmupStep": "Warm-up {index}/{total}: {load} × {reps}",
+    "warmupSkip": "Skip the warm-up"
   },
   "availability": {
     "day": "Day",

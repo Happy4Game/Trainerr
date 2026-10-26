@@ -1,32 +1,54 @@
 import { describe, expect, it } from 'vitest';
 import { startingProposal } from '@/domain/progression';
 import { parseVoiceSet } from '@/domain/voiceInput';
-import { warmupSet } from '@/domain/warmup';
+import { warmupRamp } from '@/domain/warmup';
 import { dumbbellSteps, ex, stackSteps } from '../fixtures/exercises';
 
-describe('warm-up set', () => {
-  it('suggests about 55 % of the work load for 12–15 reps on the first exercise', () => {
+describe('warm-up sets', () => {
+  it('suggest one light set of about 55 % on the first exercise', () => {
     expect(
-      warmupSet({ exercise: ex.pecFly, workLoadKg: 52, steps: stackSteps, isFirst: true }),
-    ).toEqual({ loadKg: 32, reps: 15 });
+      warmupRamp({ exercise: ex.pecFly, workLoadKg: 52, steps: stackSteps, isFirst: true }),
+    ).toEqual([{ loadKg: 32, reps: 15 }]);
   });
 
-  it('is always suggested on heavy compounds', () => {
+  it('ramp up before a heavy compound: 40 % × 8, 60 % × 5, 80 % × 3', () => {
+    const bar = [
+      20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5, 40, 42.5, 45, 47.5, 50, 52.5, 55, 57.5, 60, 62.5, 65,
+      67.5, 70, 72.5, 75, 77.5, 80, 82.5, 85, 87.5, 90, 92.5, 95, 97.5, 100,
+    ];
     expect(
-      warmupSet({ exercise: ex.dbBench, workLoadKg: 18, steps: dumbbellSteps, isFirst: false }),
-    ).toEqual({ loadKg: 10, reps: 12 });
+      warmupRamp({
+        exercise: { ...ex.dbBench, equipment: 'barbell' },
+        workLoadKg: 100,
+        steps: bar,
+        isFirst: false,
+      }),
+    ).toEqual([
+      { loadKg: 40, reps: 8 },
+      { loadKg: 60, reps: 5 },
+      { loadKg: 80, reps: 3 },
+    ]);
   });
 
-  it('is skipped on other exercises', () => {
+  it('never repeat a load nor reach the work load with light dumbbells', () => {
     expect(
-      warmupSet({ exercise: ex.pecFly, workLoadKg: 52, steps: stackSteps, isFirst: false }),
-    ).toBeUndefined();
+      warmupRamp({ exercise: ex.dbBench, workLoadKg: 6, steps: dumbbellSteps, isFirst: false }),
+    ).toEqual([
+      { loadKg: 2, reps: 8 },
+      { loadKg: 4, reps: 5 },
+    ]);
   });
 
-  it('is skipped when no lighter step exists', () => {
+  it('are skipped on other exercises', () => {
     expect(
-      warmupSet({ exercise: ex.dbBench, workLoadKg: 2, steps: dumbbellSteps, isFirst: true }),
-    ).toBeUndefined();
+      warmupRamp({ exercise: ex.pecFly, workLoadKg: 52, steps: stackSteps, isFirst: false }),
+    ).toEqual([]);
+  });
+
+  it('are skipped when no lighter step exists', () => {
+    expect(
+      warmupRamp({ exercise: ex.dbBench, workLoadKg: 2, steps: dumbbellSteps, isFirst: true }),
+    ).toEqual([]);
   });
 });
 

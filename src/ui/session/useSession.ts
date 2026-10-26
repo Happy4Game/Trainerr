@@ -59,7 +59,7 @@ import {
 } from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
-import { warmupSet } from '@/domain/warmup';
+import { warmupRamp } from '@/domain/warmup';
 import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
 import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/domain/achievements';
@@ -304,10 +304,15 @@ function plannedSets(exerciseId: string): number {
 
 const step = computed(() => (active.value ? nextStep(active.value.plan.queue) : undefined));
 
+/** Exercises whose warm-up the user skipped in this session. */
+const warmupSkipped = ref<string[]>([]);
+
+/** Next warm-up set to do before the first work set, with its place in the ramp. */
 const warmup = computed(() => {
   const s = step.value;
   if (s?.kind !== 'exercise' || !active.value) return undefined;
-  if (setsInSession(s.exerciseId).length > 0) return undefined;
+  if (workSetsInSession(s.exerciseId).length > 0) return undefined;
+  if (warmupSkipped.value.includes(s.exerciseId)) return undefined;
   const entry = entryOf(s.exerciseId);
   const proposal = proposalFor(s.exerciseId);
   // No warm-up set with a help machine (lighter means more help), nor before a
@@ -315,12 +320,16 @@ const warmup = computed(() => {
   if (!entry || !proposal || entry.exercise.assisted || proposal.reason === 'testSet') {
     return undefined;
   }
-  return warmupSet({
+  const done = setsInSession(s.exerciseId).filter((set) => set.warmup).length;
+  const ramp = warmupRamp({
     exercise: entry.exercise,
     workLoadKg: proposal.loadKg,
     steps: stepsOf(entry),
-    isFirst: active.value.sets.length === 0,
+    // First exercise: nothing logged yet, or only its own warm-up sets.
+    isFirst: active.value.sets.every((set) => set.exerciseId === s.exerciseId && set.warmup),
   });
+  const next = ramp[done];
+  return next ? { ...next, index: done + 1, total: ramp.length } : undefined;
 });
 
 async function load(): Promise<void> {
@@ -1027,6 +1036,9 @@ export function useSession() {
     active,
     step,
     warmup,
+    skipWarmup: (exerciseId: string) => {
+      warmupSkipped.value = [...warmupSkipped.value, exerciseId];
+    },
     restEndsAt,
     summary,
     favoriteExercises: computed(() => favorites.value.map((e) => e.exercise)),

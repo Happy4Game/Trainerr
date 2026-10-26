@@ -4,24 +4,47 @@ import type { Exercise } from './types';
 export const WARMUP_RATIO = 0.55;
 
 /**
- * One light approach set, about 50–60 % of the work load: before the first
- * exercise of the session and before every heavy compound.
+ * Before a heavy compound, approach sets rising towards the work load, with
+ * fewer and fewer reps so that they warm up without tiring: 40 % × 8,
+ * 60 % × 5, 80 % × 3 (usual ramp, to be validated by a coach).
  */
-export function warmupSet(input: {
+export const HEAVY_RAMP: readonly { readonly ratio: number; readonly reps: number }[] = [
+  { ratio: 0.4, reps: 8 },
+  { ratio: 0.6, reps: 5 },
+  { ratio: 0.8, reps: 3 },
+];
+
+export interface WarmupSet {
+  readonly loadKg: number;
+  readonly reps: number;
+}
+
+/**
+ * Warm-up sets of an exercise: the ramp on a heavy compound, one light set
+ * (about 55 % × 12–15) on the first exercise of the session, none otherwise.
+ * Loads are real steps of the machine, lighter than the work load, never twice
+ * the same.
+ */
+export function warmupRamp(input: {
   exercise: Exercise;
   workLoadKg: number;
   steps: LoadSteps;
   isFirst: boolean;
-}): { loadKg: number; reps: number } | undefined {
+}): WarmupSet[] {
   const { exercise, workLoadKg, steps, isFirst } = input;
   const heavy = exercise.kind === 'heavyCompound';
-  if (!isFirst && !heavy) return undefined;
-  if (steps.length === 0) return undefined;
-  let loadKg = nearestStep(steps, workLoadKg * WARMUP_RATIO);
-  if (loadKg >= workLoadKg) {
-    const lower = stepDown(steps, workLoadKg);
-    if (lower === undefined) return undefined;
-    loadKg = lower;
+  if ((!isFirst && !heavy) || steps.length === 0) return [];
+  const plan = heavy ? HEAVY_RAMP : [{ ratio: WARMUP_RATIO, reps: 15 }];
+  const sets: WarmupSet[] = [];
+  for (const { ratio, reps } of plan) {
+    let loadKg = nearestStep(steps, workLoadKg * ratio);
+    if (loadKg >= workLoadKg) {
+      const lower = stepDown(steps, workLoadKg);
+      if (lower === undefined) continue;
+      loadKg = lower;
+    }
+    if (loadKg <= 0 || sets.some((s) => s.loadKg >= loadKg)) continue;
+    sets.push({ loadKg, reps });
   }
-  return { loadKg, reps: heavy ? 12 : 15 };
+  return sets;
 }

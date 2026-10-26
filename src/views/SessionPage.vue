@@ -670,9 +670,29 @@ async function logWarmup(): Promise<void> {
           <ion-card v-if="warmup" class="warmup">
             <ion-card-content>
               <p>
-                {{ t('session.warmup', { load: kg(warmup.loadKg), reps: warmup.reps }) }}
+                {{
+                  warmup.total > 1
+                    ? t('session.warmupStep', {
+                        index: warmup.index,
+                        total: warmup.total,
+                        load: kg(warmup.loadKg),
+                        reps: warmup.reps,
+                      })
+                    : t('session.warmup', { load: kg(warmup.loadKg), reps: warmup.reps })
+                }}
               </p>
-              <ion-button size="small" @click="logWarmup">{{ t('session.warmupDone') }}</ion-button>
+              <div class="warmup-actions">
+                <ion-button size="small" @click="logWarmup">{{
+                  t('session.warmupDone')
+                }}</ion-button>
+                <ion-button
+                  size="small"
+                  fill="clear"
+                  @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId)"
+                >
+                  {{ t('session.warmupSkip') }}
+                </ion-button>
+              </div>
             </ion-card-content>
           </ion-card>
           <SetEntry
@@ -1143,6 +1163,11 @@ async function logWarmup(): Promise<void> {
   margin-block: 0 10px;
   font-size: 0.85rem;
   color: var(--ion-color-medium-shade);
+}
+.warmup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 .rest-more {
   margin-block: 8px 10px;
