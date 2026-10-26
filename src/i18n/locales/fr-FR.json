@@ -124,8 +124,8 @@
     },
     "machine": {
       "title": "Ma machine",
-      "note": "Réglages (siège, dossier, poignée…)",
-      "notePlaceholder": "Ex. siège cran 4",
+      "note": "Autres réglages (poignée, dossier…)",
+      "notePlaceholder": "Ex. poignée large",
       "photo": "Photographier la plaque de la machine",
       "photoReplace": "Remplacer la photo",
       "photoDelete": "Supprimer la photo",
@@ -161,7 +161,20 @@
       "source": "source"
     },
     "backToSession": "← Revenir à la séance",
-    "session": "Séance"
+    "session": "Séance",
+    "setup": {
+      "title": "Réglages fins",
+      "addOns": "Poids d'appoint",
+      "addOnsHelp": "Petits poids à poser sur la pile (ex. 1,25 ou 2,5 kg) : les charges proposées les utilisent entre deux plaques.",
+      "otherAddOn": "Autre poids d'appoint ({unit})",
+      "fineStep": "Précision de la charge tapée",
+      "fineStepHelp": "Une charge tapée à la main est arrondie à cette valeur.",
+      "seat": "Siège",
+      "seatPlaceholder": "Ex. 4",
+      "notch": "Cran (dossier, bras, coussin)",
+      "notchPlaceholder": "Ex. 2",
+      "addOther": "Ajouter ce poids"
+    }
   },
   "templates": {
     "fullBodyA": "Full body A",
@@ -379,7 +392,15 @@
     "supersetGroup": "Superset : {first} et {second}",
     "supersetTitle": "Superset",
     "supersetRest": "enchaînés, repos après le second",
-    "supersetNone": "Pas de superset possible pour cette séance : les exercices travaillent les mêmes muscles ou sont des exercices lourds. Ils restent en séries classiques."
+    "supersetNone": "Pas de superset possible pour cette séance : les exercices travaillent les mêmes muscles ou sont des exercices lourds. Ils restent en séries classiques.",
+    "typeLoad": "Taper la charge",
+    "typeLoadNamed": "Charge : {load}. Toucher pour la taper",
+    "breakdown": "Plaque {plate} + appoint {addOns}",
+    "setup": {
+      "label": "Réglage : {setup}",
+      "seat": "siège {value}",
+      "notch": "cran {value}"
+    }
   },
   "availability": {
     "day": "Jour",
@@ -444,11 +465,11 @@
       "hint": "Coche les créneaux où tu peux aller à la salle."
     },
     "duration": {
-      "question": "Combien de temps dure une séance pour toi ?",
       "30": "30 min",
       "45": "45 min",
       "60": "1 h",
-      "90": "1 h 30"
+      "90": "1 h 30",
+      "question": "Combien de temps dure une séance pour toi ?"
     },
     "sport": {
       "question": "Tu pratiques un autre sport ?",

@@ -5,6 +5,9 @@ import {
   setFavorite,
   setLoadSteps,
   setMachineNote,
+  setMachineSetup,
+  cleanSetup,
+  type MachineSetup,
   setPlatePhoto,
 } from '@/data/repositories/gymRepository';
 import { normalizeSteps } from '@/domain/loadSteps';
@@ -61,6 +64,13 @@ async function saveNote(id: string, note: string): Promise<void> {
   await setMachineNote(db, await gymId(), id, note);
 }
 
+async function saveSetup(id: string, setup: MachineSetup): Promise<void> {
+  const clean = cleanSetup(setup);
+  update(id, (entry) => ({ ...entry, setup: clean }));
+  const { db } = await openAppDatabase();
+  await setMachineSetup(db, await gymId(), id, clean);
+}
+
 async function savePlatePhoto(id: string, photo: string | undefined): Promise<void> {
   const { db } = await openAppDatabase();
   await setPlatePhoto(db, await gymId(), id, photo ?? null);
@@ -85,6 +95,7 @@ export function useCatalog() {
     toggleFavorite,
     saveLoadSteps,
     saveNote,
+    saveSetup,
     savePlatePhoto,
   };
 }

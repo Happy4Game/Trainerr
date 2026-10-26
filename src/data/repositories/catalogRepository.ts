@@ -3,6 +3,7 @@ import type { Equipment, ExerciseKind, PplGroup } from '@/domain/types';
 import type { CatalogExercise } from '../catalog/catalog';
 import type { SqlDatabase } from '../sqlite/database';
 import { sqlLiteral as q } from '../sqlite/sqlLiteral';
+import { parseSetup, type MachineSetup } from './gymRepository';
 
 export interface CatalogEntry {
   readonly exercise: CatalogExercise;
@@ -10,6 +11,7 @@ export interface CatalogEntry {
   readonly loadSteps: readonly number[];
   readonly note?: string;
   readonly platePhoto?: string;
+  readonly setup: MachineSetup;
 }
 
 const VERSION_KEY = 'catalog_version';
@@ -106,12 +108,13 @@ interface ExerciseRow {
   load_steps_kg: string | null;
   settings: string | null;
   plate_photo: string | null;
+  machine_setup: string | null;
 }
 
 /** Every exercise, with this gym's favorite flag, load steps and note. */
 export async function listCatalog(db: SqlDatabase, gymId: string): Promise<CatalogEntry[]> {
   const rows = await db.query<ExerciseRow>(
-    `SELECT e.*, gm.favorite, gm.load_steps_kg, gm.settings, gm.plate_photo
+    `SELECT e.*, gm.favorite, gm.load_steps_kg, gm.settings, gm.plate_photo, gm.machine_setup
        FROM exercise e
        LEFT JOIN gym_machine gm ON gm.exercise_id = e.id AND gm.gym_id = ?`,
     [gymId],
@@ -159,6 +162,7 @@ export async function listCatalog(db: SqlDatabase, gymId: string): Promise<Catal
       loadSteps: row.load_steps_kg ? (JSON.parse(row.load_steps_kg) as number[]) : [],
       ...(row.settings ? { note: row.settings } : {}),
       ...(row.plate_photo ? { platePhoto: row.plate_photo } : {}),
+      setup: parseSetup(row.machine_setup),
     };
   });
 }

@@ -86,3 +86,52 @@ export function defaultStepsFor(equipment: Equipment): number[] {
       return uniformSteps(5, 200, 5);
   }
 }
+
+/** Below this, a typed load is not worth more precision: gym add-on weights start at 0.5 kg. */
+export const MIN_FINE_STEP_KG = 0.5;
+/** Small weights clipped on top of a stack (magnetic add-ons, "poids d'appoint"). */
+export const COMMON_ADD_ONS_KG: readonly number[] = [1.25, 2.5];
+
+/** How loads are reached on one machine, beyond its plates. */
+export interface MachineLoadSetup {
+  /** Precision of a load typed by hand, at least MIN_FINE_STEP_KG. */
+  readonly fineStepKg?: number;
+  /** Add-on weights available, each usable once on top of a plate. */
+  readonly addOnsKg?: readonly number[];
+}
+
+/** Every load reachable with a plate and any combination of the add-ons. */
+export function withAddOns(steps: LoadSteps, addOnsKg: readonly number[] = []): number[] {
+  const sums = addOnsKg
+    .filter((a) => a > 0)
+    .reduce<number[]>((acc, addOn) => [...acc, ...acc.map((s) => roundKg(s + addOn))], [0]);
+  return normalizeSteps(steps.flatMap((step) => sums.map((sum) => roundKg(step + sum))));
+}
+
+/** A load typed by hand, rounded to the machine precision (0.5 kg at least). */
+export function snapToFineStep(loadKg: number, fineStepKg = MIN_FINE_STEP_KG): number {
+  const step = Math.max(MIN_FINE_STEP_KG, fineStepKg);
+  return roundKg(Math.round(loadKg / step + EPSILON) * step);
+}
+
+/**
+ * What to put on the machine for a load: the plate of the stack and the
+ * add-ons on top. Undefined when the load is not reachable exactly.
+ */
+export function stackBreakdown(
+  loadKg: number,
+  steps: LoadSteps,
+  addOnsKg: readonly number[] = [],
+): { plateKg: number; addOnsKg: number[] } | undefined {
+  const combos = addOnsKg
+    .filter((a) => a > 0)
+    .reduce<number[][]>((acc, addOn) => [...acc, ...acc.map((c) => [...c, addOn])], [[]])
+    // Fewest add-ons first: one 2.5 kg rather than two 1.25 kg.
+    .sort((a, b) => a.length - b.length);
+  for (const combo of combos) {
+    const extra = combo.reduce((sum, a) => sum + a, 0);
+    const plate = steps.find((step) => Math.abs(step + extra - loadKg) < 1e-6);
+    if (plate !== undefined) return { plateKg: plate, addOnsKg: combo };
+  }
+  return undefined;
+}

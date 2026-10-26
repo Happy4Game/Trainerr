@@ -30,6 +30,7 @@ import ComebackCard from '@/ui/ComebackCard.vue';
 import ExerciseProgress from '@/ui/ExerciseProgress.vue';
 import { readPhoto } from '@/ui/photo';
 import LoadStepsEditor from '@/ui/LoadStepsEditor.vue';
+import MachineSetupEditor from '@/ui/MachineSetupEditor.vue';
 import { useSettings } from '@/ui/useSettings';
 import { defaultStepsFor } from '@/domain/loadSteps';
 import MuscleMap from '@/ui/muscleMap/MuscleMap.vue';
@@ -44,6 +45,7 @@ const {
   toggleFavorite,
   saveLoadSteps,
   saveNote,
+  saveSetup,
   savePlatePhoto,
 } = useCatalog();
 async function onPhoto(event: Event): Promise<void> {
@@ -245,6 +247,8 @@ const muscleList = (muscles: readonly MuscleId[]) =>
             <p class="small" role="status">
               {{ stepsSaved ? t('exercise.steps.saved') : '' }}
             </p>
+            <h2 class="section">{{ t('exercise.setup.title') }}</h2>
+            <MachineSetupEditor :setup="entry.setup" @change="saveSetup(exercise.id, $event)" />
             <div class="photo">
               <img
                 v-if="entry.platePhoto"

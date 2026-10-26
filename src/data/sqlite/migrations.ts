@@ -150,6 +150,13 @@ export const migrations: readonly Migration[] = [
       ALTER TABLE exercise ADD COLUMN cues_en TEXT;
     `,
   },
+  {
+    version: 5,
+    description: 'Machine setup: fine load step, add-on weights, seat and notch',
+    sql: `
+      ALTER TABLE gym_machine ADD COLUMN machine_setup TEXT NOT NULL DEFAULT '{}';
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;

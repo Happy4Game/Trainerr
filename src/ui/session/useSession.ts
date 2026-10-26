@@ -39,7 +39,7 @@ import {
   stillBusy,
   type Alternative,
 } from '@/domain/busyMachine';
-import { defaultStepsFor } from '@/domain/loadSteps';
+import { defaultStepsFor, withAddOns } from '@/domain/loadSteps';
 import { dueTemplate } from '@/domain/planning';
 import { nextSetProposal, REST_SECONDS, repRangeFor, startingProposal } from '@/domain/progression';
 import {
@@ -107,8 +107,12 @@ function today(): string {
 const byId = computed(() => new Map(entries.value.map((e) => [e.exercise.id, e])));
 const favorites = computed(() => entries.value.filter((e) => e.favorite));
 const entryOf = (id: string): CatalogEntry | undefined => byId.value.get(id);
+/** Plates of the machine (or the defaults), with the add-on weights clipped on top. */
 const stepsOf = (entry: CatalogEntry) =>
-  entry.loadSteps.length > 0 ? entry.loadSteps : defaultStepsFor(entry.exercise.equipment);
+  withAddOns(
+    entry.loadSteps.length > 0 ? entry.loadSteps : defaultStepsFor(entry.exercise.equipment),
+    entry.setup.addOnsKg,
+  );
 
 /** Last session of the rotation done (custom sessions are left out). */
 const lastDone = computed(() => {

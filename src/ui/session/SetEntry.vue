@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { IonButton, IonChip, IonLabel } from '@ionic/vue';
+import { IonButton, IonChip, IonInput, IonLabel } from '@ionic/vue';
 import { Mic, Minus, Plus } from 'lucide-vue-next';
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { stepDown, stepUp } from '@/domain/loadSteps';
+import {
+  defaultStepsFor,
+  parseLoad,
+  snapToFineStep,
+  stackBreakdown,
+  stepDown,
+  stepUp,
+} from '@/domain/loadSteps';
 import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
@@ -62,7 +69,43 @@ const name = computed(() =>
       : entry.value.exercise.nameEn
     : '',
 );
-const { load: kg, fromInput } = useUnits();
+const { load: kg, fromInput, toDisplay } = useUnits();
+
+// A load between two steps (e.g. 52.5 kg with an add-on) can be typed: tap the value.
+const typing = ref(false);
+const typed = ref('');
+const loadInput = ref<InstanceType<typeof IonInput>>();
+async function startTyping(): Promise<void> {
+  typed.value = n(toDisplay(load.value));
+  typing.value = true;
+  await nextTick();
+  await loadInput.value?.$el.setFocus();
+}
+function applyTyped(): void {
+  if (!typing.value) return;
+  typing.value = false;
+  const value = parseLoad(typed.value);
+  if (value !== undefined)
+    load.value = snapToFineStep(fromInput(value), entry.value?.setup.fineStepKg);
+}
+/** "Plate 45 kg + 2.5 kg": what to set on the machine when add-ons are used. */
+const breakdown = computed(() => {
+  const e = entry.value;
+  const addOns = e?.setup.addOnsKg ?? [];
+  if (!e || addOns.length === 0) return undefined;
+  const plates = e.loadSteps.length > 0 ? e.loadSteps : defaultStepsFor(e.exercise.equipment);
+  const found = stackBreakdown(load.value, plates, addOns);
+  return found && found.addOnsKg.length > 0 ? found : undefined;
+});
+/** Seat and notch noted on the machine card, recalled at each set. */
+const setupText = computed(() => {
+  const setup = entry.value?.setup;
+  const parts = [
+    setup?.seat ? t('session.setup.seat', { value: setup.seat }) : undefined,
+    setup?.notch ? t('session.setup.notch', { value: setup.notch }) : undefined,
+  ].filter((p): p is string => !!p);
+  return parts.length > 0 ? parts.join(' · ') : undefined;
+});
 
 function lighter(): void {
   load.value = stepDown(steps.value, load.value) ?? load.value;
@@ -214,6 +257,10 @@ function listen(): void {
       {{ t('session.reminder.technique') }}
     </p>
 
+    <p v-if="setupText" class="setup" data-testid="machine-setup">
+      {{ t('session.setup.label', { setup: setupText }) }}
+    </p>
+
     <h3 class="step"><span class="badge">1</span> {{ t('session.steps.do') }}</h3>
     <p v-if="learning" class="help">{{ t('session.steps.doHelp') }}</p>
     <div class="stepper">
@@ -221,11 +268,38 @@ function listen(): void {
       <ion-button fill="outline" :aria-label="t('session.lighter')" @click="lighter">
         <Minus :size="24" aria-hidden="true" />
       </ion-button>
-      <output class="value" data-testid="load">{{ kg(load) }}</output>
+      <ion-input
+        v-if="typing"
+        ref="loadInput"
+        v-model="typed"
+        class="value-input"
+        inputmode="decimal"
+        enterkeyhint="done"
+        :aria-label="t('session.typeLoad')"
+        @keyup.enter="applyTyped"
+        @ion-blur="applyTyped"
+      />
+      <button
+        v-else
+        type="button"
+        class="value-button"
+        :aria-label="t('session.typeLoadNamed', { load: kg(load) })"
+        @click="startTyping"
+      >
+        <output class="value" data-testid="load">{{ kg(load) }}</output>
+      </button>
       <ion-button fill="outline" :aria-label="t('session.heavier')" @click="heavier">
         <Plus :size="24" aria-hidden="true" />
       </ion-button>
     </div>
+    <p v-if="breakdown" class="breakdown" data-testid="breakdown">
+      {{
+        t('session.breakdown', {
+          plate: kg(breakdown.plateKg),
+          addOns: breakdown.addOnsKg.map(kg).join(' + '),
+        })
+      }}
+    </p>
     <div class="stepper">
       <span class="stepper-label">{{ t('session.reps') }}</span>
       <ion-button fill="outline" :aria-label="t('session.fewerReps')" @click="changeReps(-1)">
@@ -468,6 +542,31 @@ h2 {
 .stepper ion-button {
   min-width: 56px;
   min-height: 52px;
+}
+.value-button {
+  min-height: 52px;
+  padding: 0 4px;
+  border: 0;
+  border-block-end: 2px dashed var(--ion-color-medium);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.value-input {
+  max-width: 7ch;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+}
+.breakdown,
+.setup {
+  margin-block: 2px 6px;
+  font-size: 0.9rem;
+  color: var(--ion-color-medium-shade);
+}
+.setup {
+  font-weight: 600;
+  color: var(--ion-text-color);
 }
 .value {
   min-width: 5.5ch;

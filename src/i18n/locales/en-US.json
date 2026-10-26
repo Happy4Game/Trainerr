@@ -124,8 +124,8 @@
     },
     "machine": {
       "title": "My machine",
-      "note": "Settings (seat, backrest, handle…)",
-      "notePlaceholder": "E.g. seat notch 4",
+      "note": "Other settings (handle, backrest…)",
+      "notePlaceholder": "E.g. wide handle",
       "photo": "Take a photo of the machine plate",
       "photoReplace": "Replace the photo",
       "photoDelete": "Delete the photo",
@@ -161,7 +161,20 @@
       "source": "source"
     },
     "backToSession": "← Back to the session",
-    "session": "Session"
+    "session": "Session",
+    "setup": {
+      "title": "Fine settings",
+      "addOns": "Add-on weights",
+      "addOnsHelp": "Small weights put on the stack (e.g. 1.25 or 2.5 kg): suggested loads use them between two plates.",
+      "otherAddOn": "Other add-on weight ({unit})",
+      "fineStep": "Precision of a typed load",
+      "fineStepHelp": "A load typed by hand is rounded to this value.",
+      "seat": "Seat",
+      "seatPlaceholder": "E.g. 4",
+      "notch": "Notch (backrest, arm, pad)",
+      "notchPlaceholder": "E.g. 2",
+      "addOther": "Add this weight"
+    }
   },
   "templates": {
     "fullBodyA": "Full body A",
@@ -379,7 +392,15 @@
     "supersetGroup": "Superset: {first} and {second}",
     "supersetTitle": "Superset",
     "supersetRest": "back to back, rest after the second",
-    "supersetNone": "No superset possible for this session: the exercises work the same muscles or are heavy lifts. They stay as straight sets."
+    "supersetNone": "No superset possible for this session: the exercises work the same muscles or are heavy lifts. They stay as straight sets.",
+    "typeLoad": "Type the load",
+    "typeLoadNamed": "Load: {load}. Tap to type it",
+    "breakdown": "Plate {plate} + add-on {addOns}",
+    "setup": {
+      "label": "Setting: {setup}",
+      "seat": "seat {value}",
+      "notch": "notch {value}"
+    }
   },
   "availability": {
     "day": "Day",
@@ -444,11 +465,11 @@
       "hint": "Tick the slots when you can go to the gym."
     },
     "duration": {
-      "question": "How long is a workout for you?",
       "30": "30 min",
       "45": "45 min",
       "60": "1 h",
-      "90": "1 h 30"
+      "90": "1 h 30",
+      "question": "How long is a workout for you?"
     },
     "sport": {
       "question": "Do you practice another sport?",

@@ -7,6 +7,9 @@ import {
   nearestStep,
   normalizeSteps,
   parseLoad,
+  snapToFineStep,
+  stackBreakdown,
+  withAddOns,
   stepDown,
   stepUp,
   uniformSteps,
@@ -83,6 +86,48 @@ describe('load steps', () => {
         const normalized = normalizeSteps(raw);
         expect(normalized).toContain(nearestStep(normalized, target));
         expect(normalized).toContain(floorStep(normalized, target));
+      }),
+    );
+  });
+});
+
+describe('fine loads on a machine', () => {
+  it('adds every combination of add-on weights to each plate', () => {
+    expect(withAddOns([40, 45], [1.25, 2.5])).toEqual([
+      40, 41.25, 42.5, 43.75, 45, 46.25, 47.5, 48.75,
+    ]);
+    expect(withAddOns([40, 45])).toEqual([40, 45]);
+  });
+
+  it('rounds a typed load to the machine precision, never finer than 0.5 kg', () => {
+    expect(snapToFineStep(52.3)).toBe(52.5);
+    expect(snapToFineStep(52.2, 0.1)).toBe(52);
+    expect(snapToFineStep(53, 2.5)).toBe(52.5);
+    expect(snapToFineStep(41.3, 1.25)).toBe(41.25);
+  });
+
+  it('tells which plate and add-ons give a load', () => {
+    expect(stackBreakdown(47.5, [40, 45, 50], [1.25, 2.5])).toEqual({
+      plateKg: 45,
+      addOnsKg: [2.5],
+    });
+    expect(stackBreakdown(48.75, [40, 45, 50], [1.25, 2.5])).toEqual({
+      plateKg: 45,
+      addOnsKg: [1.25, 2.5],
+    });
+    expect(stackBreakdown(45, [40, 45], [1.25])).toEqual({ plateKg: 45, addOnsKg: [] });
+    expect(stackBreakdown(44, [40, 45], [1.25])).toBeUndefined();
+  });
+
+  it('always finds back the plate of a load built from it', () => {
+    fc.assert(
+      fc.property(fc.constantFrom(...stackSteps), fc.subarray([1.25, 2.5]), (plate, addOns) => {
+        const load = addOns.reduce((s, a) => s + a, plate);
+        const found = stackBreakdown(load, stackSteps, [1.25, 2.5]);
+        return (
+          found !== undefined &&
+          Math.abs(found.plateKg + found.addOnsKg.reduce((s, a) => s + a, 0) - load) < 1e-6
+        );
       }),
     );
   });

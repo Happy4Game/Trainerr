@@ -8,6 +8,7 @@ import {
   setFavorite,
   setLoadSteps,
   setMachineNote,
+  setMachineSetup,
 } from '@/data/repositories/gymRepository';
 import { migrate } from '@/data/sqlite/migrate';
 import { SqlJsDatabase } from '../support/sqlJsDatabase';
@@ -105,6 +106,7 @@ describe('gym machines', () => {
       favorite: true,
       loadSteps: [],
       note: 'Dossier cran 3',
+      setup: {},
     });
   });
 
@@ -112,7 +114,28 @@ describe('gym machines', () => {
     expect(await getMachine(db, DEFAULT_GYM_ID, 'Plank')).toEqual({
       favorite: false,
       loadSteps: [],
+      setup: {},
     });
+  });
+
+  it('keeps the machine setup: add-ons, precision, seat and notch', async () => {
+    await setLoadSteps(db, DEFAULT_GYM_ID, 'Leg_Press', [90, 100]);
+    await setMachineSetup(db, DEFAULT_GYM_ID, 'Leg_Press', {
+      addOnsKg: [2.5, 1.25, 2.5],
+      fineStepKg: 0.5,
+      seat: ' 4 ',
+      notch: '',
+    });
+    const machine = await getMachine(db, DEFAULT_GYM_ID, 'Leg_Press');
+    expect(machine).toMatchObject({
+      loadSteps: [90, 100],
+      setup: { addOnsKg: [1.25, 2.5], fineStepKg: 0.5, seat: '4' },
+    });
+    expect(machine.setup.notch).toBeUndefined();
+    const entry = (await listCatalog(db, DEFAULT_GYM_ID)).find(
+      (e) => e.exercise.id === 'Leg_Press',
+    );
+    expect(entry?.setup).toEqual(machine.setup);
   });
 
   it('stores text with quotes safely', async () => {
