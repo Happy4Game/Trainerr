@@ -40,4 +40,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Short buzz when a set is saved and at the end of the rest. -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Android 13+: the session notification (rest countdown) and the reminders. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 </manifest>

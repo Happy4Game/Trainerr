@@ -138,6 +138,17 @@ async function redoQuestionnaire(): Promise<void> {
             {{ t('settings.supersets') }}
           </ion-toggle>
         </ion-item>
+        <ion-item>
+          <ion-toggle
+            :checked="settings.sessionNotification !== false"
+            @ion-change="updateSettings({ sessionNotification: $event.detail.checked })"
+          >
+            <ion-label class="ion-text-wrap">
+              {{ t('settings.sessionNotification') }}
+              <p>{{ t('settings.sessionNotificationHelp') }}</p>
+            </ion-label>
+          </ion-toggle>
+        </ion-item>
         <ion-item button @click="redoQuestionnaire">
           <ion-label>{{ t('settings.redo') }}</ion-label>
         </ion-item>

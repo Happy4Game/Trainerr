@@ -9,6 +9,7 @@ import { dueTemplate, planFromToday } from '@/domain/planning';
 import { rotationFor } from '@/domain/trainingModels';
 import { TIPS } from '@/data/content/tips';
 import { i18n } from '@/i18n';
+import { REST_END_NOTIFICATION_ID } from '@/ui/session/sessionNotification';
 
 /** Asked after the questionnaire only, with a sentence explaining what they are for. */
 export async function askNotificationPermission(): Promise<boolean> {
@@ -31,11 +32,12 @@ function today(): string {
  */
 export async function rescheduleNotifications(settings: Settings): Promise<void> {
   try {
-    const pending = await LocalNotifications.getPending();
-    if (pending.notifications.length > 0) {
-      await LocalNotifications.cancel({
-        notifications: pending.notifications.map((n) => ({ id: n.id })),
-      });
+    // The end-of-rest alert of a session in progress is not a reminder: it stays.
+    const pending = (await LocalNotifications.getPending()).notifications.filter(
+      (n) => n.id !== REST_END_NOTIFICATION_ID,
+    );
+    if (pending.length > 0) {
+      await LocalNotifications.cancel({ notifications: pending.map((n) => ({ id: n.id })) });
     }
     if (!settings.notifications.enabled) return;
 

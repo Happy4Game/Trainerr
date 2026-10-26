@@ -29,6 +29,7 @@ import MobilityCard from '@/ui/MobilityCard.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import ReplaceCard from '@/ui/session/ReplaceCard.vue';
+import { useSessionNotification } from '@/ui/session/useSessionNotification';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionPlanList from '@/ui/session/SessionPlanList.vue';
 import SessionOverview from '@/ui/session/SessionOverview.vue';
@@ -45,6 +46,7 @@ import { todayIso } from '@/ui/useWeekPlan';
 const { t, n, locale } = useI18n();
 const templateLabel = useTemplateName();
 const session = useSession();
+useSessionNotification();
 const { phase, template, preview, readyMade, active, step, warmup, restEndsAt, summary, crowded } =
   session;
 const { previousExercise } = session;

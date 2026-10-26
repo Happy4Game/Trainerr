@@ -703,7 +703,9 @@
       "current": "Poids actuel : {weight}",
       "none": "Poids pas encore noté (75 kg estimés).",
       "help": "Sert aux tractions et dips assistés : charge réelle = poids du corps − aide. Chaque pesée s'ajoute aussi dans Historique → Corps."
-    }
+    },
+    "sessionNotification": "Notification pendant la séance",
+    "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android)."
   },
   "tips": {
     "title": "Bien débuter",
@@ -1215,5 +1217,14 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s}"
     }
+  },
+  "sessionNotification": {
+    "title": "Séance en cours · {name}",
+    "set": "{name} · série {current}/{total} · {load}",
+    "resting": "Repos · ensuite : {next}",
+    "finished": "Tout est fait : termine la séance dans l'appli.",
+    "restOver": "Repos terminé",
+    "channel": "Séance en cours",
+    "restChannel": "Fin du repos"
   }
 }

@@ -703,7 +703,9 @@
       "current": "Current weight: {weight}",
       "none": "Weight not entered yet (75 kg estimated).",
       "help": "Used for assisted pull-ups and dips: real load = body weight − help. Each weighing is also added in History → Body."
-    }
+    },
+    "sessionNotification": "Notification during the session",
+    "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android)."
   },
   "tips": {
     "title": "Getting started",
@@ -1215,5 +1217,14 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s} s"
     }
+  },
+  "sessionNotification": {
+    "title": "Session in progress · {name}",
+    "set": "{name} · set {current}/{total} · {load}",
+    "resting": "Rest · then: {next}",
+    "finished": "All done: finish the session in the app.",
+    "restOver": "Rest over",
+    "channel": "Session in progress",
+    "restChannel": "End of rest"
   }
 }

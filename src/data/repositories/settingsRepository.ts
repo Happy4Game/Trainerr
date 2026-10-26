@@ -47,6 +47,8 @@ export interface Settings {
   readonly account?: { readonly name: string; readonly token: string };
   /** Loads are hidden from friends by default. */
   readonly shareRecords: boolean;
+  /** Android notification during a session (rest countdown, end-of-rest alert). On by default. */
+  readonly sessionNotification?: boolean;
   /** The user agreed to send the summary of their week to the AI coach. */
   readonly aiConsent: boolean;
   /** Sessions built by the user: a name and exercises in order. */
