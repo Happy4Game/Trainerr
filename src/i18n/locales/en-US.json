@@ -442,7 +442,13 @@
       "none": "No other machine for this movement among your machines or the common ones.",
       "other": "Another exercise…"
     },
-    "restMore": "Fix, go back… ›"
+    "restMore": "Fix, go back… ›",
+    "bodyweight": {
+      "none": "body weight",
+      "extra": "body weight + {load}",
+      "label": "Extra load",
+      "short": "None"
+    }
   },
   "availability": {
     "day": "Day",

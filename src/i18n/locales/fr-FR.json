@@ -442,7 +442,13 @@
       "none": "Pas d'autre machine pour ce mouvement dans tes machines ni les machines courantes.",
       "other": "Un autre exercice…"
     },
-    "restMore": "Corriger, revenir… ›"
+    "restMore": "Corriger, revenir… ›",
+    "bodyweight": {
+      "none": "poids du corps",
+      "extra": "poids du corps + {load}",
+      "label": "Lest",
+      "short": "Aucun"
+    }
   },
   "availability": {
     "day": "Jour",

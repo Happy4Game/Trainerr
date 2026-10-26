@@ -70,6 +70,7 @@ import { isPopular } from '@/data/catalog/curated';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
 import { PRESET_PREFIX, resolvePreset } from '@/domain/presets';
+import { firstTimeEstimateKg } from '@/domain/firstLoad';
 import {
   afterMovingSets,
   movePending,
@@ -278,6 +279,7 @@ function proposalFor(exerciseId: string): Proposal | undefined {
     ...(!comeback && reference && referenceKg !== undefined
       ? { usual: { loadKg: referenceKg, reps: reference.reps } }
       : {}),
+    firstTimeKg: firstTimeEstimateKg(entry.exercise, bodyWeight.value ?? DEFAULT_BODY_WEIGHT_KG),
   });
   // A test set on a help machine: about half the body weight, not the full help.
   const startKg =
@@ -307,8 +309,11 @@ const warmup = computed(() => {
   if (setsInSession(s.exerciseId).length > 0) return undefined;
   const entry = entryOf(s.exerciseId);
   const proposal = proposalFor(s.exerciseId);
-  // No warm-up set with a help machine: lighter means more help, not a lighter plate.
-  if (!entry || !proposal || entry.exercise.assisted) return undefined;
+  // No warm-up set with a help machine (lighter means more help), nor before a
+  // first-time test set, which is already light.
+  if (!entry || !proposal || entry.exercise.assisted || proposal.reason === 'testSet') {
+    return undefined;
+  }
   return warmupSet({
     exercise: entry.exercise,
     workLoadKg: proposal.loadKg,

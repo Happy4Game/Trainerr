@@ -40,7 +40,7 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   await expect(first).toContainText('Développé épaules machine');
   await expect(first).toContainText('Même mouvement');
   await first.click();
-  await expect(page.getByText(/^Développé épaules machine — 2 kg × 10/)).toBeVisible();
+  await expect(page.getByText(/^Développé épaules machine — \d+ kg × 10/)).toBeVisible();
   // The right machine now has that set and comes next.
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   // And the session goes on, on that machine.

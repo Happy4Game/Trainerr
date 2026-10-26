@@ -128,10 +128,21 @@ const usual = computed(() =>
 );
 /** Assisted machine: the load is the help, less help is progress. */
 const assisted = computed(() => entry.value?.exercise.assisted === true);
+/** Body weight exercise (plank, back extension): 0 kg reads "body weight", extra load "+ 5 kg". */
+const bodyweight = computed(() => entry.value?.exercise.equipment === 'bodyweight');
+const loadText = (loadKg: number) =>
+  bodyweight.value
+    ? loadKg === 0
+      ? t('session.bodyweight.none')
+      : t('session.bodyweight.extra', { load: kg(loadKg) })
+    : kg(loadKg);
+/** Seconds held for a plank, reps otherwise. */
+const repsText = (reps: number) =>
+  timed.value ? t('presets.seconds', { reps: n(reps) }) : n(reps);
 const setText = (set: { loadKg: number; reps: number }) =>
   assisted.value
     ? t('session.assisted.set', { load: kg(set.loadKg), reps: n(set.reps) })
-    : `${kg(set.loadKg)} × ${n(set.reps)}`;
+    : `${loadText(set.loadKg)} × ${repsText(set.reps)}`;
 const lastTimeText = computed(() => lastTime.value.map(setText).join(', '));
 const real = (set: { loadKg: number; reps: number }) => ({
   ...set,
@@ -273,8 +284,8 @@ function listen(): void {
         <span class="arrow" aria-hidden="true">{{ ADVICE_ICON[advice] }}</span>
         {{
           t(`session.coach.${assisted ? 'assistedAdvice' : 'advice'}.${advice}`, {
-            load: kg(proposal.loadKg),
-            reps: n(proposal.targetReps),
+            load: loadText(proposal.loadKg),
+            reps: repsText(proposal.targetReps),
           })
         }}
       </p>
@@ -295,7 +306,11 @@ function listen(): void {
     <p v-if="learning" class="help">{{ t('session.steps.doHelp') }}</p>
     <div class="stepper">
       <span class="stepper-label">{{
-        assisted ? t('session.assisted.help') : t('session.load')
+        assisted
+          ? t('session.assisted.help')
+          : bodyweight
+            ? t('session.bodyweight.label')
+            : t('session.load')
       }}</span>
       <ion-button
         fill="outline"
@@ -322,7 +337,9 @@ function listen(): void {
         :aria-label="t('session.typeLoadNamed', { load: kg(load) })"
         @click="startTyping"
       >
-        <output class="value" data-testid="load">{{ kg(load) }}</output>
+        <output class="value" data-testid="load">{{
+          bodyweight && load === 0 ? t('session.bodyweight.short') : kg(load)
+        }}</output>
       </button>
       <ion-button
         fill="outline"

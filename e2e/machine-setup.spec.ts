@@ -28,11 +28,12 @@ test('fine loads: add-on weights, typed load, seat and notch recalled during the
   const entry = page.getByRole('region', { name: 'Développé épaules machine' });
   await expect(entry.getByTestId('machine-setup')).toHaveText('Réglage : siège 4 · cran 2');
 
-  // The + button goes through the add-on: 5 kg plate + 2.5 kg.
-  await expect(entry.getByTestId('load')).toHaveText('5 kg');
+  // The steps go through the add-on: 20 kg plate + 2.5 kg, then the 25 kg plate.
+  await expect(entry.getByTestId('load')).toHaveText('22,5 kg');
+  await expect(entry.getByTestId('breakdown')).toHaveText('Plaque 20 kg + appoint 2,5 kg');
   await entry.getByRole('button', { name: 'Palier plus lourd' }).click();
-  await expect(entry.getByTestId('load')).toHaveText('7,5 kg');
-  await expect(entry.getByTestId('breakdown')).toHaveText('Plaque 5 kg + appoint 2,5 kg');
+  await expect(entry.getByTestId('load')).toHaveText('25 kg');
+  await expect(entry.getByTestId('breakdown')).toHaveCount(0);
 
   // A load typed by hand is rounded to 0.5 kg.
   await entry.getByRole('button', { name: /Toucher pour la taper/ }).click();

@@ -97,6 +97,8 @@ describe('fine loads on a machine', () => {
       40, 41.25, 42.5, 43.75, 45, 46.25, 47.5, 48.75,
     ]);
     expect(withAddOns([40, 45])).toEqual([40, 45]);
+    // Body weight: no extra load is a step too.
+    expect(withAddOns([0, 5])).toEqual([0, 5]);
   });
 
   it('rounds a typed load to the machine precision, never finer than 0.5 kg', () => {

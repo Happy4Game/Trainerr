@@ -184,12 +184,14 @@ export function startingProposal(input: {
   comeback?: { referenceKg: number; pause: PauseLength };
   /** Usual load noted on the machine card: the start when nothing is logged yet. */
   usual?: { loadKg: number; reps: number };
+  /** Light estimate for a first time (see firstLoad.ts); the lightest step otherwise. */
+  firstTimeKg?: number;
 }): {
   loadKg: number;
   targetReps: number;
   kind: 'progression' | 'comeback' | 'usual' | 'testSet';
 } {
-  const { history, range, steps, comeback, usual } = input;
+  const { history, range, steps, comeback, usual, firstTimeKg } = input;
   const fromHistory = nextSessionProposal({ history, range, steps });
   if (fromHistory) {
     return { loadKg: fromHistory.loadKg, targetReps: fromHistory.targetReps, kind: 'progression' };
@@ -208,6 +210,10 @@ export function startingProposal(input: {
       kind: 'usual',
     };
   }
-  const test = firstTimeProposal({ range, steps });
+  const test = firstTimeProposal({
+    range,
+    steps,
+    ...(firstTimeKg !== undefined ? { estimateKg: firstTimeKg } : {}),
+  });
   return { loadKg: test.loadKg, targetReps: test.targetReps, kind: 'testSet' };
 }

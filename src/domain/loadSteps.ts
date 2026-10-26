@@ -105,7 +105,9 @@ export function withAddOns(steps: LoadSteps, addOnsKg: readonly number[] = []): 
   const sums = addOnsKg
     .filter((a) => a > 0)
     .reduce<number[]>((acc, addOn) => [...acc, ...acc.map((s) => roundKg(s + addOn))], [0]);
-  return normalizeSteps(steps.flatMap((step) => sums.map((sum) => roundKg(step + sum))));
+  // 0 stays a step: a body weight exercise starts with no extra load.
+  const loads = steps.flatMap((step) => sums.map((sum) => roundKg(step + sum)));
+  return [...new Set(loads.filter((load) => load >= 0))].sort((a, b) => a - b);
 }
 
 /** A load typed by hand, rounded to the machine precision (0.5 kg at least). */
