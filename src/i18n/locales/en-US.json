@@ -717,7 +717,9 @@
     "sessionNotification": "Notification during the session",
     "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android).",
     "keepAwake": "Screen on during the session",
-    "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions."
+    "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions.",
+    "restSound": "Beep at the end of the rest",
+    "restSoundHelp": "Three beeps and a buzz when the rest is over. The rest gets longer after a \"Hard\" set (+30 s) or a \"Failed\" set (+1 min), and shorter after \"Easy\" (−15 s)."
   },
   "tips": {
     "title": "Getting started",

@@ -17,6 +17,7 @@ import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
 import { useSession } from './useSession';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
+import { unlockSound } from './restSound';
 import { useUnits } from '@/ui/useUnits';
 import { DEFAULT_BODY_WEIGHT_KG } from '@/domain/assisted';
 
@@ -180,6 +181,8 @@ const DIFFICULTIES: { value: Difficulty; color: string }[] = [
 async function validate(difficulty: Difficulty): Promise<void> {
   // A short buzz: the set is saved, no need to look at the screen.
   navigator.vibrate?.(35);
+  // This tap allows the beep at the end of the rest.
+  unlockSound();
   await session.logSet({
     exerciseId: props.exerciseId,
     loadKg: load.value,

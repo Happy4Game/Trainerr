@@ -717,7 +717,9 @@
     "sessionNotification": "Notification pendant la séance",
     "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android).",
     "keepAwake": "Écran allumé pendant la séance",
-    "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances."
+    "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances.",
+    "restSound": "Bip à la fin du repos",
+    "restSoundHelp": "Trois bips et une vibration quand le repos est fini. Le repos s'allonge après une série « Limite » (+30 s) ou « Échec » (+1 min), et raccourcit après « Facile » (−15 s)."
   },
   "tips": {
     "title": "Bien débuter",

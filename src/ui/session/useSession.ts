@@ -71,6 +71,7 @@ import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
 import { PRESET_PREFIX, resolvePreset } from '@/domain/presets';
 import { firstTimeEstimateKg } from '@/domain/firstLoad';
+import { restAfterSet } from '@/domain/restTime';
 import {
   afterMovingSets,
   movePending,
@@ -531,9 +532,12 @@ async function logSet(set: SetLog): Promise<void> {
   if (superset.next) queue = startNow(queue, superset.next);
   if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
   const kind = entry?.exercise.kind ?? 'isolation';
-  const rest =
+  // Usual rest of the exercise, adapted to how hard the set was.
+  const rest = restAfterSet(
     active.value.plan.exercises.find((e) => e.exerciseId === set.exerciseId)?.restSeconds ??
-    REST_SECONDS[kind].max;
+      REST_SECONDS[kind].max,
+    set.difficulty,
+  );
   restEndsAt.value = superset.rest ? Date.now() + rest * 1000 : undefined;
 }
 

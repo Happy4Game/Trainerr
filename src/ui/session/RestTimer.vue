@@ -2,11 +2,14 @@
 import { IonButton } from '@ionic/vue';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useSettings } from '@/ui/useSettings';
+import { playRestOver } from './restSound';
 
 const props = defineProps<{ endsAt: number }>();
 const emit = defineEmits<{ done: []; adjust: [seconds: number] }>();
 
 const { t } = useI18n();
+const { settings } = useSettings();
 const now = ref(Date.now());
 // Full length of the rest, for the ring; grows when the rest is extended.
 const total = ref(Math.max(1, props.endsAt - Date.now()));
@@ -32,7 +35,8 @@ onMounted(() => {
     now.value = Date.now();
     if (remaining.value === 0) {
       clearInterval(timer);
-      navigator.vibrate?.([300, 150, 300]);
+      navigator.vibrate?.([300, 150, 300, 150, 300]);
+      if (settings.value?.restSound !== false) playRestOver();
       emit('done');
     }
   }, 250);

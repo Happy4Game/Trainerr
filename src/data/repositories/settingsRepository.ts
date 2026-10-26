@@ -49,6 +49,8 @@ export interface Settings {
   readonly shareRecords: boolean;
   /** Android: look for a new version on GitHub at launch (once a day). On by default. */
   readonly autoUpdateCheck?: boolean;
+  /** Beeps at the end of the rest (app open). On by default. */
+  readonly restSound?: boolean;
   /** Screen kept on during a session. On by default. */
   readonly keepAwake?: boolean;
   /** Android notification during a session (rest countdown, end-of-rest alert). On by default. */
