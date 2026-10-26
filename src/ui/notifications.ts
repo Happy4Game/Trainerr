@@ -5,7 +5,7 @@ import { listDoneSessions } from '@/data/repositories/sessionRepository';
 import type { Settings } from '@/data/repositories/settingsRepository';
 import { addDays, daysBetween, startOfWeek } from '@/domain/dates';
 import { planNotifications } from '@/domain/notifications';
-import { planWeek } from '@/domain/planning';
+import { dueTemplate, planFromToday } from '@/domain/planning';
 import { rotationFor } from '@/domain/trainingModels';
 import { TIPS } from '@/data/content/tips';
 import { i18n } from '@/i18n';
@@ -44,19 +44,22 @@ export async function rescheduleNotifications(settings: Settings): Promise<void>
     const last = done.at(-1);
     const rotation = rotationFor(settings.model);
     const date = today();
-    const plannedSessions = [0, 7].flatMap(
-      (offset) =>
-        planWeek({
-          weekStart: addDays(startOfWeek(date), offset),
-          rotation,
-          ...(last ? { lastDoneTemplateId: last.templateId } : {}),
-          sessionsPerWeek: settings.sessionsPerWeek,
-          sessionMinutes: settings.sessionMinutes,
-          freeSlots: settings.freeSlots,
-          blockedSlots: settings.blockedSlots,
-          otherSports: settings.otherSport ? [settings.otherSport] : [],
-        }).sessions,
-    );
+    const monday = startOfWeek(date);
+    const rotationDone = [...done]
+      .reverse()
+      .find((h) => rotation.some((t) => t.id === h.templateId));
+    const weeks = planFromToday({
+      today: date,
+      rotation,
+      nextTemplateId: dueTemplate(rotation, rotationDone, settings.nextChoice).id,
+      doneDates: done.map((h) => h.date).filter((d) => d >= monday && d < addDays(monday, 7)),
+      sessionsPerWeek: settings.sessionsPerWeek,
+      sessionMinutes: settings.sessionMinutes,
+      freeSlots: settings.freeSlots,
+      blockedSlots: settings.blockedSlots,
+      otherSports: settings.otherSport ? [settings.otherSport] : [],
+    });
+    const plannedSessions = [...weeks.thisWeek.sessions, ...weeks.nextWeek.sessions];
     const { notifications } = planNotifications({
       today: date,
       prefs: settings.notifications,

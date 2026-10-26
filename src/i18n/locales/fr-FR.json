@@ -427,7 +427,9 @@
     },
     "sessions": {
       "question": "Combien de séances par semaine ?",
-      "model": "Programme conseillé : {model}"
+      "model": "Programme conseillé : {model}",
+      "first": "Par quelle séance commences-tu ?",
+      "firstHelp": "Tu as déjà commencé ce programme ? Choisis ta prochaine séance, la suite s'enchaîne."
     },
     "level": {
       "question": "Ton niveau ?",
@@ -486,7 +488,22 @@
     "start": "C'est parti",
     "weekDone": "Semaine bouclée, bravo !",
     "noneLeft": "Plus de séance prévue cette semaine.",
-    "progress": "{done} sur {count} séance cette semaine | {done} sur {count} séances cette semaine"
+    "progress": "{done} sur {count} séance cette semaine | {done} sur {count} séances cette semaine",
+    "postponed": "Ta séance de {day} n'a pas été faite : rien n'est perdu, {template} est la prochaine.",
+    "missed": "Séance non faite",
+    "missedHelp": "Elle passe à la séance suivante",
+    "ifMissed": {
+      "ask": "Et si je la rate ?",
+      "intro": "Si tu rates {template}, elle n'est pas perdue : elle passe au créneau suivant et la suite se décale.",
+      "instead": "au lieu de {template}",
+      "nextWeek": "Elle passerait à la semaine prochaine.",
+      "pushed": "{template} passe à la semaine prochaine."
+    },
+    "order": {
+      "title": "Ordre des séances",
+      "help": "Touche une séance pour commencer par elle, par exemple si tu étais déjà en plein cycle. La suite se décale.",
+      "next": "Prochaine"
+    }
   },
   "notifications": {
     "reminder": "{template} à {time} aujourd'hui. Ta séance t'attend !",

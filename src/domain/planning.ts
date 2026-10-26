@@ -1,4 +1,11 @@
-import { addDays, minutesToTime, timeToMinutes, type Weekday } from './dates';
+import {
+  addDays,
+  daysBetween,
+  minutesToTime,
+  startOfWeek,
+  timeToMinutes,
+  type Weekday,
+} from './dates';
 import type { SessionTemplate } from './trainingModels';
 import type { IsoDate, PplGroup } from './types';
 
@@ -32,6 +39,12 @@ export interface PlanningInput {
   readonly weekStart: IsoDate;
   readonly rotation: readonly SessionTemplate[];
   readonly lastDoneTemplateId?: string;
+  /** Next session chosen by the user: wins over the one after the last session done. */
+  readonly nextTemplateId?: string;
+  /** Days before it are over: their slot stays, closed, with no session to come. */
+  readonly fromDate?: IsoDate;
+  /** Days with a finished session: closed too, and they count for the week. */
+  readonly doneDates?: readonly IsoDate[];
   readonly sessionsPerWeek: number;
   readonly sessionMinutes: number;
   readonly freeSlots: readonly WeeklySlot[];
@@ -42,12 +55,22 @@ export interface PlanningInput {
   }[];
 }
 
-export interface PlannedSession {
+export interface PlanSlot {
   readonly date: IsoDate;
   readonly weekday: Weekday;
   readonly start: string;
   readonly end: string;
+}
+
+export interface PlannedSession extends PlanSlot {
   readonly templateId: string;
+}
+
+/** The user's pick for the next session, valid until another session is done. */
+export interface NextChoice {
+  readonly templateId: string;
+  /** Last session done when the choice was made; none for a first session. */
+  readonly afterSessionId?: string;
 }
 
 export const MAX_SESSIONS_PER_WEEK = 6; // at least one full rest day
@@ -62,47 +85,108 @@ export function nextTemplate(
   return rotation[(index + 1) % rotation.length] as SessionTemplate;
 }
 
+/** Next session: the user's choice if no session was done since, the rotation otherwise. */
+export function dueTemplate(
+  rotation: readonly SessionTemplate[],
+  last: { readonly id: string; readonly templateId: string } | undefined,
+  choice: NextChoice | undefined,
+): SessionTemplate {
+  const chosen =
+    choice && choice.afterSessionId === last?.id
+      ? rotation.find((t) => t.id === choice.templateId)
+      : undefined;
+  return chosen ?? nextTemplate(rotation, last?.templateId);
+}
+
+/**
+ * The sessions of a week on the free slots. Past or done days keep their slot,
+ * closed; the coming slots take the rotation from the next session due, so a
+ * missed session moves to the next slot instead of being lost.
+ */
 export function planWeek(input: PlanningInput): {
   sessions: PlannedSession[];
+  closedSlots: PlanSlot[];
   unplaced: number;
 } {
-  const wanted = Math.min(input.sessionsPerWeek, MAX_SESSIONS_PER_WEEK);
+  const dateOf = (weekday: Weekday) => addDays(input.weekStart, weekday - 1);
+  const done = input.doneDates ?? [];
+  const closed = (weekday: Weekday) =>
+    (input.fromDate !== undefined && dateOf(weekday) < input.fromDate) ||
+    done.includes(dateOf(weekday));
   const windows = new Map<Weekday, number>();
   for (let weekday = 1; weekday <= 7; weekday++) {
     const start = earliestStart(input, weekday);
     if (start !== undefined) windows.set(weekday, start);
   }
   const candidates = [...windows.keys()];
+  const wanted = Math.min(input.sessionsPerWeek, MAX_SESSIONS_PER_WEEK);
   const preferred = spread(candidates, wanted);
   const fallback = candidates.filter((day) => !preferred.includes(day));
+  // Sessions done on another day of the week count too.
+  const doneElsewhere = done.filter((date) => {
+    const weekday = daysBetween(input.weekStart, date) + 1;
+    return weekday >= 1 && weekday <= 7 && !preferred.includes(weekday as Weekday);
+  }).length;
+  const target = Math.max(0, wanted - doneElsewhere);
 
-  const first = input.rotation.indexOf(nextTemplate(input.rotation, input.lastDoneTemplateId));
+  const chosen = input.rotation.find((t) => t.id === input.nextTemplateId);
+  const first = input.rotation.indexOf(
+    chosen ?? nextTemplate(input.rotation, input.lastDoneTemplateId),
+  );
   const queue = Array.from(
     { length: wanted },
     (_, i) => input.rotation[(first + i) % input.rotation.length] as SessionTemplate,
   );
 
-  const assigned = new Map<Weekday, SessionTemplate>();
+  const assigned = new Map<Weekday, SessionTemplate | 'closed'>();
   for (const weekday of [...preferred, ...fallback]) {
-    if (queue.length === 0) break;
+    if (assigned.size >= target) break;
+    if (closed(weekday)) {
+      if (preferred.includes(weekday)) assigned.set(weekday, 'closed');
+      continue;
+    }
     const index = queue.findIndex((t) => !conflictsWithSport(t, weekday, input.otherSports));
     if (index === -1) continue;
     assigned.set(weekday, queue.splice(index, 1)[0] as SessionTemplate);
   }
 
-  const sessions = [...assigned.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([weekday, t]) => {
-      const start = windows.get(weekday) as number;
-      return {
-        date: addDays(input.weekStart, weekday - 1),
-        weekday,
-        start: minutesToTime(start),
-        end: minutesToTime(start + input.sessionMinutes),
-        templateId: t.id,
-      };
-    });
-  return { sessions, unplaced: wanted - sessions.length };
+  const slot = (weekday: Weekday): PlanSlot => {
+    const start = windows.get(weekday) as number;
+    return {
+      date: dateOf(weekday),
+      weekday,
+      start: minutesToTime(start),
+      end: minutesToTime(start + input.sessionMinutes),
+    };
+  };
+  const byDay = [...assigned.entries()].sort(([a], [b]) => a - b);
+  const sessions = byDay.flatMap(([weekday, t]) =>
+    t === 'closed' ? [] : [{ ...slot(weekday), templateId: t.id }],
+  );
+  const closedSlots = byDay.flatMap(([weekday, t]) => (t === 'closed' ? [slot(weekday)] : []));
+  return { sessions, closedSlots, unplaced: target - assigned.size };
+}
+
+/** This week from today, then next week going on from this week's last session. */
+export function planFromToday(
+  input: Omit<PlanningInput, 'weekStart' | 'fromDate'> & { readonly today: IsoDate },
+): { thisWeek: ReturnType<typeof planWeek>; nextWeek: ReturnType<typeof planWeek> } {
+  const monday = startOfWeek(input.today);
+  const thisWeek = planWeek({ ...input, weekStart: monday, fromDate: input.today });
+  const last = thisWeek.sessions.at(-1)?.templateId;
+  const { nextTemplateId, doneDates: _done, lastDoneTemplateId: lastDone, ...rest } = input;
+  const nextWeek = planWeek({
+    ...rest,
+    weekStart: addDays(monday, 7),
+    ...(last
+      ? { lastDoneTemplateId: last }
+      : nextTemplateId
+        ? { nextTemplateId }
+        : lastDone
+          ? { lastDoneTemplateId: lastDone }
+          : {}),
+  });
+  return { thisWeek, nextWeek };
 }
 
 /** Earliest start on a day that fits the session in free time, avoiding everything blocked. */

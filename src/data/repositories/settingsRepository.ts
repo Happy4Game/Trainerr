@@ -1,7 +1,7 @@
 import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
 import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
-import type { SportId, WeeklySlot } from '@/domain/planning';
+import type { NextChoice, SportId, WeeklySlot } from '@/domain/planning';
 import type { Equipment } from '@/domain/types';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
@@ -38,6 +38,8 @@ export interface Settings {
   readonly currentGymId: string;
   /** Equipment available at home, for the home workout. */
   readonly homeEquipment: readonly Equipment[];
+  /** Next session picked by the user, to start the rotation elsewhere. */
+  readonly nextChoice?: NextChoice;
   /** First day of the current program: cycles and the "change program" reminder count from it. */
   readonly programStart?: string;
   /** Optional Trainerr server (challenges, AI advice); nothing is sent without it. */

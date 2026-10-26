@@ -1,7 +1,14 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import { timeToMinutes } from '@/domain/dates';
-import { nextTemplate, planWeek, type PlanningInput, type WeeklySlot } from '@/domain/planning';
+import { addDays, timeToMinutes } from '@/domain/dates';
+import {
+  dueTemplate,
+  nextTemplate,
+  planFromToday,
+  planWeek,
+  type PlanningInput,
+  type WeeklySlot,
+} from '@/domain/planning';
 import { rotationFor } from '@/domain/trainingModels';
 
 const weekStart = '2026-10-26'; // Monday
@@ -35,6 +42,64 @@ describe('next session (continuous rotation)', () => {
   it('starts at the beginning without history, or with an unknown template', () => {
     expect(nextTemplate(ppl, undefined).id).toBe('pushA');
     expect(nextTemplate(ppl, 'upperA').id).toBe('pushA');
+  });
+});
+
+describe('next session chosen by the user', () => {
+  const ppl = rotationFor('ppl');
+  const last = { id: 's1', templateId: 'pushA' };
+
+  it('starts the rotation where the user wants', () => {
+    expect(dueTemplate(ppl, undefined, { templateId: 'legsA' }).id).toBe('legsA');
+    expect(dueTemplate(ppl, last, { templateId: 'legsA', afterSessionId: 's1' }).id).toBe('legsA');
+  });
+
+  it('the choice ends once a session is done: the rotation goes on from it', () => {
+    expect(dueTemplate(ppl, last, { templateId: 'legsA' }).id).toBe('pullA');
+    expect(dueTemplate(ppl, last, { templateId: 'legsA', afterSessionId: 's0' }).id).toBe('pullA');
+  });
+
+  it('ignores a session that is not in the rotation', () => {
+    expect(dueTemplate(ppl, last, { templateId: 'upperA', afterSessionId: 's1' }).id).toBe('pullA');
+  });
+});
+
+describe('the week as it goes', () => {
+  const three = (overrides: Partial<PlanningInput> = {}) =>
+    planWeek(input({ sessionsPerWeek: 3, lastDoneTemplateId: 'legsB', ...overrides }));
+  const [monday, second, third] = three().sessions.map((s) => s.date) as [string, string, string];
+
+  it('a missed session is not lost: the next slot gets it', () => {
+    const plan = three({ fromDate: addDays(monday, 1) });
+    expect(plan.closedSlots.map((s) => s.date)).toEqual([monday]);
+    expect(plan.sessions.map((s) => [s.date, s.templateId])).toEqual([
+      [second, 'pushA'],
+      [third, 'pullA'],
+    ]);
+  });
+
+  it('the coming sessions stay in place once one is done', () => {
+    const before = three({ fromDate: monday });
+    const after = three({
+      fromDate: monday,
+      lastDoneTemplateId: 'pushA',
+      doneDates: [monday],
+    });
+    expect(after.sessions).toEqual(before.sessions.slice(1));
+  });
+
+  it('a session done on a free day counts for the week', () => {
+    const plan = three({ fromDate: monday, doneDates: [addDays(monday, 1)] });
+    expect(plan.sessions).toHaveLength(2);
+    expect(plan.unplaced).toBe(0);
+  });
+
+  it('can start from the session chosen by the user', () => {
+    expect(three({ nextTemplateId: 'legsA' }).sessions.map((s) => s.templateId)).toEqual([
+      'legsA',
+      'pushB',
+      'pullB',
+    ]);
   });
 });
 
@@ -184,3 +249,20 @@ function toTime(minutes: number): string {
   const m = String(minutes % 60).padStart(2, '0');
   return `${h}:${m}`;
 }
+
+describe('planning from today', () => {
+  it('next week goes on from the last session of this week', () => {
+    const { thisWeek, nextWeek } = planFromToday({
+      ...input({ sessionsPerWeek: 3 }),
+      today: '2026-10-28',
+      nextTemplateId: 'legsA',
+    });
+    expect(thisWeek.sessions[0]?.templateId).toBe('legsA');
+    const last = thisWeek.sessions.at(-1)?.templateId;
+    const rotation = rotationFor('ppl').map((t) => t.id);
+    expect(nextWeek.sessions[0]?.templateId).toBe(
+      rotation[(rotation.indexOf(last as string) + 1) % rotation.length],
+    );
+    expect(nextWeek.closedSlots).toEqual([]);
+  });
+});

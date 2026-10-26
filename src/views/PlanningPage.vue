@@ -21,7 +21,7 @@ import { useRouter } from 'vue-router';
 import { suggestProgramChange } from '@/domain/cycles';
 import { useI18n } from 'vue-i18n';
 import type { WeeklySlot } from '@/domain/planning';
-import { TRAINING_MODELS, type TrainingModelId } from '@/domain/trainingModels';
+import { rotationFor, TRAINING_MODELS, type TrainingModelId } from '@/domain/trainingModels';
 import AvailabilityGrid from '@/ui/AvailabilityGrid.vue';
 import { rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
@@ -31,7 +31,7 @@ import { weekOverview } from '@/domain/weekOverview';
 
 const { t, locale } = useI18n();
 const templateLabel = useTemplateName();
-const { settings, plan, days, frequencyNote, nextWeekFirst } = useWeekPlan();
+const { settings, plan, days, daysIfMissed, frequencyNote, nextWeekFirst } = useWeekPlan();
 const session = useSession();
 const router = useRouter();
 
@@ -40,6 +40,36 @@ const week = computed(() =>
 );
 const upcoming = computed(() => week.value.next ?? nextWeekFirst.value);
 const target = computed(() => settings.value?.sessionsPerWeek ?? 0);
+
+/** "And if I miss it?": the coming sessions of the week once the next one is missed. */
+const showIfMissed = ref(false);
+const ifMissed = computed(() => {
+  const next = week.value.next;
+  if (!next) return [];
+  return daysIfMissed(next.date)
+    .filter((d) => d.session)
+    .map((d) => ({
+      date: d.date,
+      templateId: d.session?.templateId ?? '',
+      before: week.value.days.find((w) => w.date === d.date)?.session?.templateId,
+    }));
+});
+
+/** The rotation from the next session due: touching another one starts there. */
+const order = computed(() => {
+  const rotation = settings.value ? rotationFor(settings.value.model) : [];
+  const first = rotation.findIndex((r) => r.id === session.template.value?.id);
+  return rotation.map((_, i) => rotation[(first + i) % rotation.length]?.id ?? '');
+});
+/** The last session of the week, pushed to next week when one is missed. */
+const pushedOut = computed(() => {
+  const coming = week.value.days.filter((d) => d.status === 'today' || d.status === 'planned');
+  return ifMissed.value.length < coming.length ? coming.at(-1)?.session?.templateId : undefined;
+});
+async function chooseNext(templateId: string): Promise<void> {
+  const after = session.lastDoneSessionId.value;
+  await save({ nextChoice: { templateId, ...(after ? { afterSessionId: after } : {}) } });
+}
 
 const editing = ref(false);
 const freeSlots = ref<WeeklySlot[]>([]);
@@ -96,6 +126,14 @@ const changeSuggested = computed(() =>
             <p class="when">
               {{ nextDay(upcoming.date) }} · {{ upcoming.start }}–{{ upcoming.end }}
             </p>
+            <p v-if="week.postponed" class="postponed" role="note">
+              {{
+                t('planning.postponed', {
+                  day: formatDay(week.postponed.missedDate, { weekday: 'long' }),
+                  template: templateLabel(week.postponed.templateId),
+                })
+              }}
+            </p>
             <ion-button
               v-if="upcoming.date === todayIso()"
               expand="block"
@@ -104,7 +142,42 @@ const changeSuggested = computed(() =>
               <Dumbbell :size="20" aria-hidden="true" class="icon" />
               {{ t('planning.start') }}
             </ion-button>
+            <ion-button
+              v-if="week.next"
+              fill="clear"
+              size="small"
+              class="if-missed-toggle"
+              :aria-expanded="showIfMissed"
+              @click="showIfMissed = !showIfMissed"
+            >
+              {{ t('planning.ifMissed.ask') }}
+            </ion-button>
           </template>
+          <div
+            v-if="showIfMissed && week.next"
+            class="if-missed"
+            role="region"
+            :aria-label="t('planning.ifMissed.ask')"
+          >
+            <p>
+              {{ t('planning.ifMissed.intro', { template: templateLabel(week.next.templateId) }) }}
+            </p>
+            <ul v-if="ifMissed.length > 0">
+              <li v-for="d in ifMissed" :key="d.date">
+                <span class="when-short">{{
+                  formatDay(d.date, { weekday: 'long', day: 'numeric' })
+                }}</span>
+                <strong>{{ templateLabel(d.templateId) }}</strong>
+                <span v-if="d.before && d.before !== d.templateId" class="instead">
+                  {{ t('planning.ifMissed.instead', { template: templateLabel(d.before) }) }}
+                </span>
+              </li>
+            </ul>
+            <p v-if="ifMissed.length === 0">{{ t('planning.ifMissed.nextWeek') }}</p>
+            <p v-else-if="pushedOut" class="pushed">
+              {{ t('planning.ifMissed.pushed', { template: templateLabel(pushedOut) }) }}
+            </p>
+          </div>
           <div class="progress">
             <span
               v-for="i in Math.max(target, week.doneCount)"
@@ -134,6 +207,10 @@ const changeSuggested = computed(() =>
             <div v-if="day.status === 'rest'" class="body">
               <span class="rest">{{ t('planning.rest') }}</span>
             </div>
+            <div v-else-if="day.status === 'missed' && day.slot" class="body">
+              <strong class="name">{{ t('planning.missed') }}</strong>
+              <span class="time">{{ t('planning.missedHelp') }}</span>
+            </div>
             <div v-else class="body">
               <strong class="name">
                 {{ templateLabel(day.doneTemplateId ?? day.session?.templateId ?? '') }}
@@ -153,6 +230,25 @@ const changeSuggested = computed(() =>
         <p v-if="plan.unplaced > 0" class="warning" role="note">
           {{ t('planning.unplaced', plan.unplaced) }}
         </p>
+
+        <section class="order" :aria-label="t('planning.order.title')">
+          <h2 class="section">{{ t('planning.order.title') }}</h2>
+          <p class="hint">{{ t('planning.order.help') }}</p>
+          <div class="chips">
+            <ion-button
+              v-for="(id, i) in order"
+              :key="id"
+              size="small"
+              :fill="i === 0 ? 'solid' : 'outline'"
+              :class="{ selected: i === 0 }"
+              :aria-pressed="i === 0"
+              @click="i > 0 && chooseNext(id)"
+            >
+              <span v-if="i === 0" class="chip-tag">{{ t('planning.order.next') }}</span>
+              {{ templateLabel(id) }}
+            </ion-button>
+          </div>
+        </section>
 
         <ion-card>
           <ion-card-header>
@@ -401,6 +497,74 @@ ion-card-title {
 .hero .icon {
   margin-inline-end: 8px;
   color: inherit;
+}
+.postponed {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: var(--app-radius-small);
+  background: rgb(255 255 255 / 16%);
+  font-size: 0.9rem;
+}
+.hero .if-missed-toggle {
+  --background: transparent;
+  --color: var(--ion-color-primary-contrast);
+  margin: 8px 0 0;
+  text-decoration: underline;
+}
+.if-missed {
+  margin-block-start: 8px;
+  padding: 10px 12px;
+  border-radius: var(--app-radius-small);
+  background: rgb(255 255 255 / 12%);
+  font-size: 0.9rem;
+}
+.if-missed p {
+  margin: 0 0 6px;
+}
+.if-missed ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.if-missed li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  padding-block: 3px;
+}
+.when-short::first-letter {
+  text-transform: uppercase;
+}
+.pushed {
+  margin: 6px 0 0 !important;
+  opacity: 0.85;
+}
+.instead {
+  opacity: 0.8;
+}
+.order {
+  margin-block-end: 8px;
+}
+.hint {
+  margin: 0 0 8px;
+  color: var(--ion-color-medium-shade);
+  font-size: 0.9rem;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chips ion-button {
+  margin: 0;
+  --border-width: 1.5px;
+}
+.chip-tag {
+  margin-inline-end: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.85;
 }
 .note {
   padding: 8px 12px;

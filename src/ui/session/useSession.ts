@@ -40,7 +40,7 @@ import {
   type Alternative,
 } from '@/domain/busyMachine';
 import { defaultStepsFor } from '@/domain/loadSteps';
-import { nextTemplate } from '@/domain/planning';
+import { dueTemplate } from '@/domain/planning';
 import { nextSetProposal, REST_SECONDS, repRangeFor, startingProposal } from '@/domain/progression';
 import {
   buildSession,
@@ -110,17 +110,18 @@ const entryOf = (id: string): CatalogEntry | undefined => byId.value.get(id);
 const stepsOf = (entry: CatalogEntry) =>
   entry.loadSteps.length > 0 ? entry.loadSteps : defaultStepsFor(entry.exercise.equipment);
 
-const lastDoneTemplateId = computed(() => {
+/** Last session of the rotation done (custom sessions are left out). */
+const lastDone = computed(() => {
   if (!settings.value) return undefined;
   const rotation = rotationFor(settings.value.model);
-  return [...history.value].reverse().find((s) => rotation.some((t) => t.id === s.templateId))
-    ?.templateId;
+  return [...history.value].reverse().find((s) => rotation.some((t) => t.id === s.templateId));
 });
+const lastDoneTemplateId = computed(() => lastDone.value?.templateId);
 
-/** Template of the next session: the rotation continues from the last session done. */
+/** Template of the next session: the user's pick, or the rotation after the last session done. */
 const template = computed<SessionTemplate | undefined>(() => {
   if (!settings.value) return undefined;
-  return nextTemplate(rotationFor(settings.value.model), lastDoneTemplateId.value);
+  return dueTemplate(rotationFor(settings.value.model), lastDone.value, settings.value.nextChoice);
 });
 
 /** Exercises proposed for the next session, from the favorite machines. */
@@ -707,6 +708,7 @@ export function useSession() {
     },
     supersetBlocks,
     lastDoneTemplateId,
+    lastDoneSessionId: computed(() => lastDone.value?.id),
     history,
     preview,
     active,

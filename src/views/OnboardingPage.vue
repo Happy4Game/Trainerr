@@ -11,7 +11,7 @@ import {
   IonToolbar,
   useIonRouter,
 } from '@ionic/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { DEFAULT_SETTINGS, type Settings } from '@/data/repositories/settingsRepository';
 import type { PauseLength } from '@/domain/comeback';
@@ -19,13 +19,15 @@ import type { ProtectedZone } from '@/domain/muscles';
 import type { SportId, WeeklySlot } from '@/domain/planning';
 import type { Goal, SessionMinutes } from '@/domain/sessionBuilder';
 import { supersetsSuggestedFor } from '@/domain/supersets';
-import { recommendModel } from '@/domain/trainingModels';
+import { recommendModel, rotationFor } from '@/domain/trainingModels';
 import AvailabilityGrid from '@/ui/AvailabilityGrid.vue';
+import { useTemplateName } from '@/ui/useTemplateName';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings } from '@/ui/useSettings';
 
 const { t } = useI18n();
+const templateLabel = useTemplateName();
 const router = useIonRouter();
 const session = useSession();
 
@@ -42,6 +44,11 @@ const sessionMinutes = ref<SessionMinutes>(60);
 const sport = ref<SportId | 'none'>('none');
 const sportSlots = ref<WeeklySlot[]>([]);
 const zone = ref<ProtectedZone | 'none'>('none');
+// Already mid-cycle: the first session can be any of the program's.
+const rotation = computed(() => rotationFor(recommendModel(sessionsPerWeek.value)));
+const firstSession = ref<string>();
+watch(rotation, () => (firstSession.value = undefined));
+const startsWith = computed(() => firstSession.value ?? rotation.value[0]?.id);
 
 const GOALS: Goal[] = ['hypertrophy', 'maintenance', 'strength'];
 const LEVELS: Settings['level'][] = ['beginner', 'trained', 'comeback'];
@@ -76,6 +83,7 @@ function answers(): Partial<Settings> {
       ? { otherSport: { sport: sport.value, slots: sportSlots.value } }
       : {}),
     ...(zone.value !== 'none' ? { protectedZone: zone.value } : {}),
+    ...(firstSession.value ? { nextChoice: { templateId: firstSession.value } } : {}),
   };
 }
 
@@ -154,6 +162,22 @@ async function skip(): Promise<void> {
             })
           }}
         </p>
+        <h2>{{ t('onboarding.sessions.first') }}</h2>
+        <p class="hint">{{ t('onboarding.sessions.firstHelp') }}</p>
+        <div class="row">
+          <ion-button
+            v-for="r in rotation"
+            :key="r.id"
+            :fill="startsWith === r.id ? 'solid' : 'outline'"
+            :aria-pressed="startsWith === r.id"
+            :class="{ selected: startsWith === r.id }"
+            class="session-choice"
+            @click="firstSession = r.id"
+          >
+            <Check v-if="startsWith === r.id" :size="18" class="check" aria-hidden="true" />
+            {{ templateLabel(r.id) }}
+          </ion-button>
+        </div>
       </section>
 
       <section v-else-if="step === 2">
@@ -333,6 +357,11 @@ h2 {
   min-width: 60px;
   min-height: 56px;
   font-size: 1.2rem;
+}
+.row ion-button.session-choice {
+  min-width: 0;
+  min-height: 48px;
+  font-size: 0.95rem;
 }
 .hint {
   color: var(--ion-color-medium-shade);

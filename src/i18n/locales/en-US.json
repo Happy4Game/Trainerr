@@ -427,7 +427,9 @@
     },
     "sessions": {
       "question": "How many workouts a week?",
-      "model": "Suggested program: {model}"
+      "model": "Suggested program: {model}",
+      "first": "Which session do you start with?",
+      "firstHelp": "Already on this program? Pick your next session, the rest follows."
     },
     "level": {
       "question": "Your level?",
@@ -486,7 +488,22 @@
     "start": "Let's go",
     "weekDone": "Week complete, well done!",
     "noneLeft": "No more sessions planned this week.",
-    "progress": "{done} of {count} session this week | {done} of {count} sessions this week"
+    "progress": "{done} of {count} session this week | {done} of {count} sessions this week",
+    "postponed": "Your {day} session was not done: nothing is lost, {template} is next.",
+    "missed": "Session not done",
+    "missedHelp": "It moves to the next session",
+    "ifMissed": {
+      "ask": "And if I miss it?",
+      "intro": "If you miss {template}, it is not lost: it moves to the next slot and the rest shifts.",
+      "instead": "instead of {template}",
+      "nextWeek": "It would move to next week.",
+      "pushed": "{template} moves to next week."
+    },
+    "order": {
+      "title": "Session order",
+      "help": "Tap a session to start with it, for example if you were already mid-cycle. The rest shifts.",
+      "next": "Next"
+    }
   },
   "notifications": {
     "reminder": "{template} at {time} today. Your workout is waiting!",

@@ -79,3 +79,28 @@ describe('weekOverview', () => {
     expect(week.next).toBeUndefined();
   });
 });
+
+describe('a missed session', () => {
+  const slot = (date: string) => ({ date, weekday: 1, start: '18:00', end: '19:00' });
+  const week = (doneLogs: SessionLog[]) =>
+    weekOverview({
+      days: [
+        { date: '2026-10-19', slot: slot('2026-10-19') },
+        { date: '2026-10-20' },
+        { date: '2026-10-21', session: planned('2026-10-21', 'push-a') },
+        { date: '2026-10-22' },
+      ],
+      done: doneLogs,
+      today: '2026-10-21',
+    });
+
+  it('is shown as not done, and the session it moves to is named', () => {
+    const view = week([]);
+    expect(view.days[0]).toMatchObject({ status: 'missed', slot: slot('2026-10-19') });
+    expect(view.postponed).toEqual({ missedDate: '2026-10-19', templateId: 'push-a' });
+  });
+
+  it('nothing is postponed once a session was done after it', () => {
+    expect(week([done('2026-10-20', 'legs-b')]).postponed).toBeUndefined();
+  });
+});
