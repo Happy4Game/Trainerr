@@ -54,6 +54,15 @@ const showBody = ref(false);
 const zoneMuscles = ref<MuscleId[]>([]);
 const zoneLabel = computed(() => zoneMuscles.value.map((m) => t(`muscles.${m}`)).join(', '));
 watch(zoneMuscles, () => (shown.value = PAGE_SIZE));
+/** A muscle touched shows all its exercises, whatever body part tab was open. */
+function pickZone(muscles: MuscleId[]): void {
+  zoneMuscles.value = muscles;
+  if (muscles.length > 0 && filter.value !== 'favorites') filter.value = 'all';
+}
+// Back to the normal search: the muscle touched is forgotten.
+watch(showBody, (open) => {
+  if (!open) zoneMuscles.value = [];
+});
 const loadOf = (entry: CatalogEntry) => session.myLoadFor(entry.exercise.id);
 const loadText = (entry: CatalogEntry) => {
   const l = loadOf(entry);
@@ -181,7 +190,7 @@ function onFilter(value: unknown): void {
       <template v-else>
         <section v-if="showBody" class="body-search" :aria-label="t('catalog.body.title')">
           <p class="body-help">{{ t('catalog.body.help') }}</p>
-          <BodyPicker :selected="zoneMuscles" @pick="zoneMuscles = $event" />
+          <BodyPicker :selected="zoneMuscles" @pick="pickZone" />
         </section>
         <div v-if="zoneMuscles.length > 0" class="zone-chip">
           <span>{{ t('catalog.body.zone', { muscles: zoneLabel }) }}</span>

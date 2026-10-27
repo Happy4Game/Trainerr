@@ -15,6 +15,7 @@ Les personnages viennent des séances test de [retour-utilisateur.md](retour-uti
 | 1.3 | pratiquant   | noter mes charges habituelles dès le départ             | ne pas repartir de séries test sur chaque machine | 🆕 « Tu connais déjà ta charge ? » dans le menu de séance |
 | 1.4 | pratiquant   | importer mon historique (CSV d'une autre appli)         | garder mes courbes                                | ✅ import CSV                                             |
 | 1.5 | pratiquant   | choisir mes machines favorites                          | que les séances utilisent ma salle                | ✅ catalogue, « Mes machines »                            |
+| 1.6 | pratiquant   | trouver un exercice en touchant un muscle               | voir tous ses exercices, sans filtre oublié       | 🆕 onglet « Tout », muscle oublié en sortant              |
 
 ## 2. Avant la séance
 
@@ -32,21 +33,23 @@ Les personnages viennent des séances test de [retour-utilisateur.md](retour-uti
 
 ## 3. Pendant la séance
 
-| #    | En tant que… | je veux…                                                          | pour…                                   | État                                     |
-| ---- | ------------ | ----------------------------------------------------------------- | --------------------------------------- | ---------------------------------------- |
-| 3.1  | pratiquant   | la charge et les reps déjà proposées                              | noter une série en un tap               | ✅                                       |
-| 3.2  | pratiquant   | voir ce que j'ai fait la dernière fois et le record à battre      | me dépasser                             | ✅                                       |
-| 3.3  | pratiquant   | des séries d'échauffement calculées avant les gros exercices      | charger sans me blesser                 | ✅                                       |
-| 3.4  | pratiquant   | un minuteur de repos qui sonne et vibre, visible écran verrouillé | ranger mon téléphone                    | ✅ notification (à tester sur téléphone) |
-| 3.5  | pratiquant   | savoir quels disques mettre sur la barre                          | ne pas calculer de tête                 | ✅ calculateur de disques                |
-| 3.6  | pratiquant   | une machine occupée remplacée par une équivalente                 | ne pas attendre                         | ✅ « Machine prise »                     |
-| 3.7  | pratiquant   | corriger une série notée sur la mauvaise machine                  | garder un historique juste              | ✅ « Mauvaise machine ? »                |
-| 3.8  | pratiquant   | ajouter ou retirer une série, déplacer un exercice                | adapter la séance à la salle            | ✅                                       |
-| 3.9  | pratiquant   | signaler une gêne (épaule, genou…)                                | que l'appli adapte la suite             | ✅                                       |
-| 3.10 | pratiquant   | les tractions assistées comptées à l'envers                       | voir ma progression quand l'aide baisse | ✅                                       |
-| 3.11 | pratiquant   | enchaîner en supersets                                            | gagner du temps                         | ✅                                       |
-| 3.12 | pratiquant   | l'écran qui reste allumé                                          | ne pas déverrouiller entre deux séries  | ✅                                       |
-| 3.13 | pratiquant   | reprendre la séance après avoir fermé l'appli                     | ne rien perdre                          | ✅                                       |
+| #    | En tant que…    | je veux…                                                          | pour…                                   | État                                     |
+| ---- | --------------- | ----------------------------------------------------------------- | --------------------------------------- | ---------------------------------------- |
+| 3.1  | pratiquant      | la charge et les reps déjà proposées                              | noter une série en un tap               | ✅                                       |
+| 3.2  | pratiquant      | voir ce que j'ai fait la dernière fois et le record à battre      | me dépasser                             | ✅                                       |
+| 3.3  | pratiquant      | des séries d'échauffement calculées avant les gros exercices      | charger sans me blesser                 | ✅                                       |
+| 3.4  | pratiquant      | un minuteur de repos qui sonne et vibre, visible écran verrouillé | ranger mon téléphone                    | ✅ notification (à tester sur téléphone) |
+| 3.5  | pratiquant      | savoir quels disques mettre sur la barre                          | ne pas calculer de tête                 | ✅ calculateur de disques                |
+| 3.6  | pratiquant      | une machine occupée remplacée par une équivalente                 | ne pas attendre                         | ✅ « Machine prise »                     |
+| 3.7  | pratiquant      | corriger une série notée sur la mauvaise machine                  | garder un historique juste              | ✅ « Mauvaise machine ? »                |
+| 3.8  | pratiquant      | ajouter ou retirer une série, déplacer un exercice                | adapter la séance à la salle            | ✅                                       |
+| 3.9  | pratiquant      | signaler une gêne (épaule, genou…)                                | que l'appli adapte la suite             | ✅                                       |
+| 3.10 | pratiquant      | les tractions assistées comptées à l'envers                       | voir ma progression quand l'aide baisse | ✅                                       |
+| 3.11 | pratiquant      | enchaîner en supersets                                            | gagner du temps                         | ✅                                       |
+| 3.12 | pratiquant      | l'écran qui reste allumé                                          | ne pas déverrouiller entre deux séries  | ✅                                       |
+| 3.13 | pratiquant      | reprendre la séance après avoir fermé l'appli                     | ne rien perdre                          | ✅                                       |
+| 3.14 | pratiquant      | ajouter un exercice depuis le programme de la séance              | compléter ma séance sans l'interrompre  | 🆕 ajouté à la fin                       |
+| 3.15 | pratiquant fort | monter la charge au-delà des valeurs par défaut                   | noter ce que je soulève vraiment        | 🆕 « + » sans plafond                    |
 
 ## 4. Après la séance
 

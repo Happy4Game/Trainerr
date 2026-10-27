@@ -180,3 +180,19 @@ test('exercises can be found by touching a body part', async ({ page }) => {
   await page.getByRole('button', { name: 'Retirer la zone' }).click();
   await expect(page.getByRole('status')).toHaveText('482 exercices');
 });
+
+test('touching a muscle leaves the body part tab, and the normal search forgets it', async ({
+  page,
+}) => {
+  await openCatalog(page);
+  await page.locator('ion-segment-button', { hasText: 'Jambes' }).click();
+  await page.getByRole('button', { name: 'Chercher par zone du corps' }).click();
+  await page.getByRole('button', { name: 'Biceps', exact: true }).locator('path').first().click();
+  // Not stuck on the legs: the biceps exercises are shown.
+  await expect(page.locator('ion-segment-button.segment-button-checked')).toHaveText('Tout');
+  await expect(page.getByRole('heading', { name: 'Curl marteau', exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Chercher par zone du corps' }).click();
+  await expect(page.getByText('Zone : Biceps')).toHaveCount(0);
+  await expect(page.getByRole('status')).toHaveText('482 exercices');
+});

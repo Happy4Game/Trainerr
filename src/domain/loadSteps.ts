@@ -27,6 +27,18 @@ export function stepUp(steps: LoadSteps, loadKg: number): number | undefined {
   return steps.find((step) => step > loadKg + EPSILON);
 }
 
+/**
+ * "+" on a load: the next step, or past the heaviest one by the last gap
+ * (a machine heavier than its known steps, weights added on top).
+ */
+export function stepUpOrBeyond(steps: LoadSteps, loadKg: number): number {
+  const next = stepUp(steps, loadKg);
+  if (next !== undefined) return next;
+  const [before, last] = steps.slice(-2);
+  const gap = before !== undefined && last !== undefined ? last - before : 5;
+  return roundKg(loadKg + gap);
+}
+
 /** Heaviest step strictly lighter than the load. */
 export function stepDown(steps: LoadSteps, loadKg: number): number | undefined {
   return steps.findLast((step) => step < loadKg - EPSILON);
@@ -74,14 +86,16 @@ export function parseLoad(text: string): number | undefined {
 export function defaultStepsFor(equipment: Equipment): number[] {
   switch (equipment) {
     case 'dumbbell':
-      return uniformSteps(2, 60, 2);
+      return uniformSteps(2, 80, 2);
     case 'barbell':
       // 20 kg bar, then a pair of 1.25 kg plates at a time.
       return uniformSteps(20, 250, 2.5);
     case 'bodyweight':
       // Extra weight on top of the body weight.
-      return uniformSteps(0, 50, 5);
+      return uniformSteps(0, 100, 5);
     case 'machine':
+      // Plate-loaded machines (leg press, hack squat) go well past a stack.
+      return uniformSteps(5, 400, 5);
     case 'cable':
       return uniformSteps(5, 200, 5);
   }

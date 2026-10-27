@@ -12,6 +12,7 @@ import {
   withAddOns,
   stepDown,
   stepUp,
+  stepUpOrBeyond,
   uniformSteps,
 } from '@/domain/loadSteps';
 import { dumbbellSteps, stackSteps } from '../fixtures/exercises';
@@ -77,6 +78,19 @@ describe('load steps', () => {
     expect(defaultStepsFor('machine').slice(0, 3)).toEqual([5, 10, 15]);
     expect(defaultStepsFor('cable').slice(0, 3)).toEqual([5, 10, 15]);
     expect(defaultStepsFor('bodyweight').slice(0, 3)).toEqual([0, 5, 10]);
+  });
+
+  it('does not stop a strong user at an arbitrary default maximum', () => {
+    // Back extension with a 60 kg plate, leg press loaded past a stack.
+    expect(defaultStepsFor('bodyweight').at(-1)).toBeGreaterThanOrEqual(100);
+    expect(defaultStepsFor('machine').at(-1)).toBeGreaterThanOrEqual(400);
+  });
+
+  it('"+" goes past the heaviest step by the last gap', () => {
+    expect(stepUpOrBeyond([0, 5, 10], 5)).toBe(10);
+    expect(stepUpOrBeyond([0, 5, 10], 10)).toBe(15);
+    expect(stepUpOrBeyond([0, 5, 10], 12.5)).toBe(17.5);
+    expect(stepUpOrBeyond([20], 20)).toBe(25);
   });
 
   it('always returns an existing step (property)', () => {
