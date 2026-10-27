@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { skipOnboarding } from './helpers';
+import { openCatalog, skipOnboarding } from './helpers';
 
 test('the first launch opens the questionnaire, skipping it leads to the catalog', async ({
   page,
@@ -12,7 +12,7 @@ test('the five tabs are reachable', async ({ page }) => {
   await skipOnboarding(page);
   for (const [label, path] of [
     ['Séance', 'session'],
-    ['Catalogue', 'catalog'],
+    ['Planning', 'planning'],
     ['Progrès', 'history'],
     ['Corps', 'body'],
     ["Aujourd'hui", 'today'],
@@ -20,11 +20,12 @@ test('the five tabs are reachable', async ({ page }) => {
     await page.getByRole('tab', { name: label }).click();
     await expect(page).toHaveURL(new RegExp(`/tabs/${path}$`));
   }
-  // The week plan opens from Today, with the old address still working.
-  await page.getByRole('link', { name: 'Planning', exact: true }).click();
-  await expect(page).toHaveURL(/\/tabs\/today\/planning$/);
-  await page.goto('/tabs/planning');
-  await expect(page).toHaveURL(/\/tabs\/today\/planning$/);
+  // The catalog opens from the Session tab; the former addresses still work.
+  await openCatalog(page);
+  await page.goto('/tabs/catalog');
+  await expect(page).toHaveURL(/\/tabs\/session\/catalog$/);
+  await page.goto('/tabs/today/planning');
+  await expect(page).toHaveURL(/\/tabs\/planning$/);
 });
 
 test('the questionnaire is not shown again after a reload', async ({ page }) => {

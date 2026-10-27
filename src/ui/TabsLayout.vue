@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/vue';
-import { BookOpen, Dumbbell, PersonStanding, Sun, TrendingUp } from 'lucide-vue-next';
+import { CalendarDays, Dumbbell, PersonStanding, Sun, TrendingUp } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useSession } from '@/ui/session/useSession';
@@ -23,7 +23,7 @@ const inProgress = computed(() => active.value !== undefined);
 const tabs = [
   { name: 'today', href: '/tabs/today', icon: Sun },
   { name: 'session', href: '/tabs/session', icon: Dumbbell },
-  { name: 'catalog', href: '/tabs/catalog', icon: BookOpen },
+  { name: 'planning', href: '/tabs/planning', icon: CalendarDays },
   { name: 'history', href: '/tabs/history', icon: TrendingUp },
   { name: 'body', href: '/tabs/body', icon: PersonStanding },
 ] as const;

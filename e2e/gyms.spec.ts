@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { skipOnboarding } from './helpers';
+import { skipOnboarding, openCatalog } from './helpers';
 
 test('each gym keeps its own favorite machines', async ({ page }) => {
   await skipOnboarding(page);
@@ -17,13 +17,13 @@ test('each gym keeps its own favorite machines', async ({ page }) => {
   await page.getByRole('button', { name: 'Ajouter', exact: true }).click();
   await expect(page.getByRole('radio', { name: 'Choisir Salle en vacances' })).toBeChecked();
 
-  await page.getByRole('tab', { name: 'Catalogue' }).click();
+  await openCatalog(page);
   await page.locator('ion-segment-button', { hasText: 'Mes machines' }).click();
   await expect(page.getByRole('status')).toHaveText('0 exercice');
 
   await page.goto('/tabs/settings');
   await page.getByRole('radio', { name: 'Choisir Ma salle' }).click();
-  await page.getByRole('tab', { name: 'Catalogue' }).click();
+  await openCatalog(page);
   await page.locator('ion-segment-button', { hasText: 'Mes machines' }).click();
   await expect(page.getByRole('status')).toHaveText('1 exercice');
 });

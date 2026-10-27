@@ -171,7 +171,12 @@ async function finish(withNotifications: boolean): Promise<void> {
 async function skip(): Promise<void> {
   await updateSettings({ onboarded: true });
   await session.reload();
-  router.replace('/tabs/catalog');
+  // The Session tab first, then its catalog: a tap on the Session tab or on
+  // "Back" leads to the session, not out of the app.
+  await router.replace('/tabs/session');
+  // Let Ionic record the Session page in the tab's history before going on.
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  await router.push('/tabs/session/catalog');
 }
 </script>
 

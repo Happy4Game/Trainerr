@@ -148,7 +148,7 @@ const insights = usePlanInsights(preview);
     </template>
     <template v-else-if="!readyMade">
       <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>
-      <ion-button expand="block" fill="outline" router-link="/tabs/catalog">
+      <ion-button expand="block" fill="outline" router-link="/tabs/session/catalog">
         {{ t('session.goToCatalog') }}
       </ion-button>
     </template>
@@ -180,7 +180,7 @@ const insights = usePlanInsights(preview);
       <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
         {{ t('session.readyMade.adopt', readyMade.suggestedIds.length) }}
       </ion-button>
-      <ion-button expand="block" fill="clear" router-link="/tabs/catalog">
+      <ion-button expand="block" fill="clear" router-link="/tabs/session/catalog">
         {{ t('session.goToCatalog') }}
       </ion-button>
     </section>

@@ -2,6 +2,7 @@
 import { vSearchLabel } from '@/ui/searchLabel';
 import EmptyState from '@/ui/EmptyState.vue';
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -168,6 +169,9 @@ function onFilter(value: unknown): void {
   <ion-page>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button default-href="/tabs/session" :text="t('common.back')" />
+        </ion-buttons>
         <ion-title>{{ t('tabs.catalog') }}</ion-title>
       </ion-toolbar>
       <ion-toolbar>
@@ -211,7 +215,7 @@ function onFilter(value: unknown): void {
           <ion-item
             v-for="m in cardioMachines"
             :key="m.id"
-            :router-link="`/tabs/catalog/cardio/${m.id}`"
+            :router-link="`/tabs/session/catalog/cardio/${m.id}`"
             detail
           >
             <span slot="start" class="cardio-icon"><CardioIcon :icon="m.icon" /></span>
@@ -257,7 +261,7 @@ function onFilter(value: unknown): void {
               <ion-label>{{ t(`catalog.sections.${sectionStart(index)}`) }}</ion-label>
             </ion-item-divider>
             <ion-item
-              :router-link="`/tabs/catalog/${encodeURIComponent(entry.exercise.id)}`"
+              :router-link="`/tabs/session/catalog/${encodeURIComponent(entry.exercise.id)}`"
               detail
             >
               <ion-thumbnail slot="start" class="thumbnail" aria-hidden="true">

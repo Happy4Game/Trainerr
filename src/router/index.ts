@@ -25,13 +25,21 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/ExercisePage.vue'),
         props: (route) => ({ id: route.params.id, fromSession: true }),
       },
-      { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
+      // The catalog opens from the Session tab: picking machines is part of it.
+      { path: 'session/catalog', component: () => import('@/views/CatalogPage.vue') },
       {
-        path: 'catalog/cardio/:id',
+        path: 'session/catalog/cardio/:id',
         component: () => import('@/views/CardioPage.vue'),
         props: true,
       },
-      { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
+      {
+        path: 'session/catalog/:id',
+        component: () => import('@/views/ExercisePage.vue'),
+        props: true,
+      },
+      // Former addresses, before the catalog moved into the Session tab.
+      { path: 'catalog', redirect: '/tabs/session/catalog' },
+      { path: 'catalog/:rest(.*)', redirect: (to) => `/tabs/session/catalog/${to.params.rest}` },
       { path: 'history', component: () => import('@/views/HistoryPage.vue') },
       // Moved to the Body tab (body photos) and under Today (planning).
       { path: 'history/photos', redirect: '/tabs/body/photos' },
@@ -48,9 +56,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'settings/changelog', component: () => import('@/views/ChangelogPage.vue') },
       { path: 'body', component: () => import('@/views/BodyPage.vue') },
       { path: 'body/photos', component: () => import('@/views/PhotosPage.vue') },
-      // The week plan opens from Today: it stays in that tab.
-      { path: 'today/planning', component: () => import('@/views/PlanningPage.vue') },
-      { path: 'planning', redirect: '/tabs/today/planning' },
+      { path: 'planning', component: () => import('@/views/PlanningPage.vue') },
+      { path: 'today/planning', redirect: '/tabs/planning' },
     ],
   },
 ];

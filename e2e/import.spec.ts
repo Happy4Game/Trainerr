@@ -50,7 +50,7 @@ test('imported sessions: the user picks the session the cycle goes on with', asy
   await next.getByRole('button', { name: 'Bas du corps B' }).click();
   await expect(next.getByRole('button', { pressed: true, name: /Bas du corps B/ })).toBeVisible();
 
-  await page.goto('/tabs/today/planning');
+  await page.goto('/tabs/planning');
   await expect(
     page.getByRole('region', { name: 'Prochaine séance' }).getByRole('heading', { level: 2 }),
   ).toHaveText(/Bas du corps B|Plus de séance/);
@@ -78,7 +78,7 @@ Presse à cuisses,107,10,2026-10-24
   await page.getByRole('button', { name: 'Importer 2 charges' }).click();
   await expect(page.getByText(/2 charges importées/)).toBeVisible();
 
-  await page.goto('/tabs/catalog');
+  await page.goto('/tabs/session/catalog');
   await page.getByRole('searchbox').fill('presse à cuisses');
   await expect(
     page.getByRole('button', { name: /Ma charge sur Presse à cuisses : 107\s*kg × 10/ }),

@@ -40,7 +40,7 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
     page.getByRole('region', { name: 'Séance du jour' }).getByRole('heading', { name: 'Push A' }),
   ).toBeVisible();
 
-  await page.getByRole('link', { name: 'Planning', exact: true }).click();
+  await page.getByRole('tab', { name: 'Planning' }).click();
   await expect(
     page.getByRole('region', { name: 'Prochaine séance' }).getByRole('heading', { level: 2 }),
   ).toBeVisible();
@@ -114,8 +114,7 @@ test('the planning changes the next session and shows what happens if it is miss
   // A Monday morning: this week's sessions are all to come.
   await page.clock.setFixedTime(new Date('2026-10-26T08:00:00'));
   await skipOnboarding(page);
-  await page.getByRole('tab', { name: "Aujourd'hui" }).click();
-  await page.getByRole('link', { name: 'Planning', exact: true }).click();
+  await page.getByRole('tab', { name: 'Planning' }).click();
   const hero = page.getByRole('region', { name: 'Prochaine séance' });
   await expect(hero.getByRole('heading', { name: 'Haut du corps A' })).toBeVisible();
 

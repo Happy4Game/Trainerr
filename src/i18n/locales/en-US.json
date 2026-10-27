@@ -1121,7 +1121,8 @@
       "cardio": "Cardio in sessions",
       "programChoice": "Pick your program from the start",
       "cameraFix": "Take a photo opens the camera",
-      "bodyTab": "A Body tab and a camera inside the app"
+      "bodyTab": "A Body tab and a camera inside the app",
+      "planningTab": "Planning is a tab again"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1173,7 +1174,8 @@
       "cameraFix": "“Take a photo” now opens the camera on Android instead of the gallery. For a photo already taken, use “Import”.",
       "bodyTab": "New Body tab: weight, measurements and photos, apart from the workouts. The History tab becomes Progress (workouts and stats), and Planning opens from Today (calendar icon).",
       "inAppCamera": "Body photos are taken inside the app: a framed preview, the pose chosen above (front, side, back), front or back camera, a self-timer and the last photo shown faintly to stand at the same place.",
-      "photoCount": "The number of photos shown on the Body tab updates right after adding or removing one in the gallery."
+      "photoCount": "The number of photos shown on the Body tab updates right after adding or removing one in the gallery.",
+      "planningTab": "Planning is back in the tab bar. The Catalog opens from the Workout tab, with the book icon at the top right, or from the \"Open the catalog\" button."
     }
   },
   "data": {
