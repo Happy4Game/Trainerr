@@ -28,6 +28,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
       { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
       { path: 'history', component: () => import('@/views/HistoryPage.vue') },
+      { path: 'history/photos', component: () => import('@/views/PhotosPage.vue') },
       {
         path: 'history/:id',
         component: () => import('@/views/HistorySessionPage.vue'),

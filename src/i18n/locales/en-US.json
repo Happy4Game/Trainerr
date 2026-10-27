@@ -830,6 +830,32 @@
       "install": "Open Health Connect on the Play Store",
       "denied": "Access denied: Trainerr cannot read your weight. You can allow it in the Health Connect settings.",
       "error": "Could not read: {message}"
+    },
+    "gallery": {
+      "title": "My photos",
+      "privacy": "Your photos stay in the app, on your phone: nothing is sent online. They are also in your backup, keep that file to yourself.",
+      "take": "Take a photo",
+      "import": "Import",
+      "tip": "To compare well: same light, same place, same pose (front, side or back), ideally in the morning.",
+      "pose": "Pose",
+      "poses": {
+        "all": "All",
+        "front": "Front",
+        "side": "Side",
+        "back": "Back"
+      },
+      "adding": "Adding the photos…",
+      "empty": "No photo yet. Take one in front of the mirror or import those from your gallery.",
+      "compareTitle": "Before / after",
+      "between": "{weeks} and {sessions} apart.",
+      "weeks": "{count} week | {count} weeks",
+      "sessions": "{count} session | {count} sessions",
+      "openNamed": "View the photo of {date}",
+      "date": "Date of the photo",
+      "delete": "Delete this photo",
+      "deleteConfirm": "Yes, delete for good",
+      "link": "My gallery ({count} photo) | My gallery ({count} photos)",
+      "linkEmpty": "Open my gallery"
     }
   },
   "settings": {
@@ -1037,7 +1063,8 @@
       "sessionInsights": "The Session page tells more",
       "longerRest": "More rest on the big lifts",
       "sessionSwap": "Swap a machine from Session",
-      "smootherStart": "Easier start"
+      "smootherStart": "Easier start",
+      "photoGallery": "Body photo gallery"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1078,7 +1105,10 @@
       "sessionSwap": "Today's ⇄ button is on the Session page too: a very close machine instead, kept for the next sessions, and \"Undo\" to go back.",
       "autoNext": "Shorter questionnaire: a single-answer question moves on as soon as you answer.",
       "testSetQuestion": "After a test set, the app asks plainly: \"Too light? Could you have done 3 more reps?\"",
-      "usualLoadsToday": "Already training? Note your usual loads right from Today, before your first session."
+      "usualLoadsToday": "Already training? Note your usual loads right from Today, before your first session.",
+      "photoGallery": "History › Body › My gallery: your photos month by month, with the sessions done at each photo.",
+      "photoImport": "Take a photo in front of the mirror or import those from your gallery, all at once. The date can be corrected.",
+      "photoCompare": "Sort them by pose (front, side, back) and compare the first and last side by side. They stay on your phone."
     }
   },
   "data": {
@@ -1145,7 +1175,8 @@
     }
   },
   "common": {
-    "back": "Back"
+    "back": "Back",
+    "close": "Close"
   },
   "badges": {
     "firstSession": "First workout",

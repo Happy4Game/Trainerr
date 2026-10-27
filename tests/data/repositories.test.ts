@@ -10,6 +10,7 @@ import {
   setMachineNote,
   setMachineSetup,
 } from '@/data/repositories/gymRepository';
+import { addMeasurement, listMeasurements, updatePhoto } from '@/data/repositories/bodyRepository';
 import { migrate } from '@/data/sqlite/migrate';
 import { SqlJsDatabase } from '../support/sqlJsDatabase';
 
@@ -175,5 +176,21 @@ describe('several gyms', () => {
       (await listCatalog(db, gym)).find((e) => e.exercise.id === 'Butterfly');
     expect(await at(DEFAULT_GYM_ID)).toMatchObject({ favorite: true, loadSteps: [] });
     expect(await at('holiday')).toMatchObject({ favorite: false, loadSteps: [40, 50] });
+  });
+});
+
+describe('body photos', () => {
+  it('keeps the pose and lets the date and pose be corrected', async () => {
+    const saved = await addMeasurement(db, {
+      date: '2026-10-27',
+      measurements: {},
+      photo: 'data:image/jpeg;base64,AA',
+      pose: 'front',
+    });
+    expect((await listMeasurements(db))[0]).toMatchObject({ pose: 'front', date: '2026-10-27' });
+    await updatePhoto(db, saved.id, { date: '2026-09-01', pose: 'back' });
+    expect((await listMeasurements(db))[0]).toMatchObject({ pose: 'back', date: '2026-09-01' });
+    await updatePhoto(db, saved.id, { date: '2026-09-01' });
+    expect((await listMeasurements(db))[0]?.pose).toBeUndefined();
   });
 });

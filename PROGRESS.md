@@ -9,7 +9,7 @@ Suit l'ordre de construction de [SPEC.md](SPEC.md) (section « Choix techniques 
 | 3     | Catalogue                                                  | ✅ Fait                         |
 | 4     | Séance                                                     | ✅ Fait                         |
 | 5     | Parcours utilisateur                                       | ✅ Fait                         |
-| 6     | Suivi                                                      | ✅ Fait (sauf photo du corps)   |
+| 6     | Suivi                                                      | ✅ Fait                         |
 | 7     | Pages de contenu                                           | ✅ Fait (contact à choisir)     |
 | 8     | Connecté                                                   | 🔄 En partie (Health Connect)   |
 | 9     | Finition                                                   | 🔄 En partie (sauvegarde faite) |
@@ -244,6 +244,12 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Série test : le titre de l'étape 2 devient « Trop léger ? Tu aurais pu faire 3 reps de plus ? ».
 - « Tu connais déjà ta charge ? » (`UsualLoads.vue`) est aussi sur Aujourd'hui, où arrive le questionnaire.
 
+## Galerie de photos du corps (27 oct. 2026)
+
+- Page `PhotosPage.vue` (Historique › Corps › Ma galerie) : prise de vue (`<input capture="user">`) ou import multiple depuis la galerie du téléphone, classement par mois, nombre de séances faites à chaque photo, pose (face, profil, dos), avant/après de la même pose, date et pose modifiables, suppression en deux temps.
+- Stockage : photo réduite à 900 px en JPEG (`src/ui/photo.ts`) dans la table `body_measurement` de la base locale ; migration 7 ajoute `photo_pose`. Rien n'est envoyé ; les photos sont dans la sauvegarde JSON.
+- Logique pure et testée dans `src/domain/photos.ts`.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.
@@ -253,6 +259,5 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 
 - `npm audit` signale 3 failles « modérées » dans `uuid`, utilisé par l'outil iOS de `@capacitor/cli` (développement seulement, pas dans l'appli). Le correctif proposé rétrograde Capacitor : à revoir quand Capacitor publiera une mise à jour.
 - sql.js est figé en 1.12.0 pour rester compatible avec jeep-sqlite (voir [ADR 0002](docs/adr/0002-sqlite-local.md)).
-- Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
 - Notification de séance, mises à jour et import Health Connect : compilés par la CI (APK signé publié à chaque merge sur `main`), pas encore essayés sur un vrai téléphone.
