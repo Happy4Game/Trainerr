@@ -288,13 +288,17 @@
     "howWasIt": "How was it?",
     "busy": "Machine taken",
     "busyTitle": "{name} is taken",
-    "busyHelp": "Do something else meanwhile, the app asks again after the next exercise.",
+    "busyHelp": "Two choices: \"Meanwhile\" has you do another machine now, and {name} is offered again right after. \"Replace\" takes it out of the session for good.",
     "alternative": {
       "substitute": "Same muscles",
       "swap": "Next exercise of the workout",
       "take": "I'll take this one",
       "choose": "Take {name}",
-      "none": "No other machine for these muscles in your favorites: wait a bit or move on."
+      "none": "No other machine for these muscles in your favorites: wait a bit or move on.",
+      "meanwhile": "Meanwhile",
+      "meanwhileNamed": "Do {name} meanwhile",
+      "replace": "Replace",
+      "replaceNamed": "Replace {busy} with {name}"
     },
     "continue": "Go on with the rest",
     "isFree": "Is {name} free?",
@@ -529,7 +533,8 @@
       "take": "Do {name} instead"
     },
     "saved": "✓ Set saved: {set}",
-    "testSetQuestion": "Too light? Could you have done 3 more reps?"
+    "testSetQuestion": "Too light? Could you have done 3 more reps?",
+    "seeMovementOf": "See the card of {name}"
   },
   "availability": {
     "day": "Day",
@@ -961,7 +966,15 @@
     "keepAwake": "Screen on during the session",
     "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions.",
     "restSound": "Beep at the end of the rest",
-    "restSoundHelp": "Three beeps and a buzz when the rest is over. The rest gets longer after a \"Hard\" set (+30 s) or a \"Failed\" set (+1 min), and shorter after \"Easy\" (−15 s)."
+    "restSoundHelp": "Three beeps and a buzz when the rest is over. The rest gets longer after a \"Hard\" set (+30 s) or a \"Failed\" set (+1 min), and shorter after \"Easy\" (−15 s).",
+    "repRange": {
+      "own": "My own rep range",
+      "auto": "Off: the app fits the range to each exercise ({heavy} reps on big lifts, {machine} on machines, {isolation} on isolation). On: the same for all.",
+      "min": "Minimum reps",
+      "max": "Maximum reps",
+      "invalid": "Pick between {lowest} and {highest} reps, at least {width} reps apart.",
+      "why": "Muscle grows over a wide range of reps, from 6 to over 20, as long as the set ends close to failure. 8 to 12 is a very good choice. The app raises the load when you reach the top of the range."
+    }
   },
   "tips": {
     "title": "Getting started",
@@ -1122,7 +1135,8 @@
       "programChoice": "Pick your program from the start",
       "cameraFix": "Take a photo opens the camera",
       "bodyTab": "A Body tab and a camera inside the app",
-      "planningTab": "Planning is a tab again"
+      "planningTab": "Planning is a tab again",
+      "flexibleSession": "A more flexible workout"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1175,7 +1189,13 @@
       "bodyTab": "New Body tab: weight, measurements and photos, apart from the workouts. The History tab becomes Progress (workouts and stats), and Planning opens from Today (calendar icon).",
       "inAppCamera": "Body photos are taken inside the app: a framed preview, the pose chosen above (front, side, back), front or back camera, a self-timer and the last photo shown faintly to stand at the same place.",
       "photoCount": "The number of photos shown on the Body tab updates right after adding or removing one in the gallery.",
-      "planningTab": "Planning is back in the tab bar. The Catalog opens from the Workout tab, with the book icon at the top right, or from the \"Open the catalog\" button."
+      "planningTab": "Planning is back in the tab bar. The Catalog opens from the Workout tab, with the book icon at the top right, or from the \"Open the catalog\" button.",
+      "precisionEdit": "Fixing a set is precise: type the exact load and reps (47.5 kg, 8.5 reps), the reps in reserve and a note.",
+      "busyChoice": "Machine taken: \"Meanwhile\" does another machine and offers the first one again after, \"Replace\" takes it out of the session. Back to it, its card opens with a tap on the drawing.",
+      "addFocus": "\"Add an exercise\" first shows those for the muscles of the workout (legs on a legs day), the others below.",
+      "restKept": "The rest goes on even if you force-close the app.",
+      "ownRepRange": "Settings: your own rep range for every exercise (8 to 12 by default), with the studies behind it.",
+      "newestFirst": "The workout sets are listed newest first: the last one, the one most often fixed, is at the top."
     }
   },
   "data": {
@@ -1418,7 +1438,9 @@
     "cancel": "Cancel",
     "mine": "In my machines",
     "popular": "Popular machine",
-    "sameMovement": "Same movement"
+    "sameMovement": "Same movement",
+    "forSession": "For this workout",
+    "others": "Other exercises"
   },
   "historyEdit": {
     "title": "Edit the session",
@@ -1459,7 +1481,10 @@
       "all": "Move the {count} sets of {name}",
       "pick": "Choose the right machine",
       "where": "Where did you do these {name} sets?"
-    }
+    },
+    "typeHint": "Type the exact value (47.5 kg, 8.5 reps) or adjust with − and +.",
+    "invalid": "Check the load and the reps: a load of 0 or more, at least half a rep.",
+    "load": "Load ({unit})"
   },
   "customSession": {
     "mine": "My sessions",

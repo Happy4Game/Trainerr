@@ -5,7 +5,7 @@ import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/not
 import type { NextChoice, SportId, WeeklySlot } from '@/domain/planning';
 import type { PlateConfig } from '@/domain/plates';
 import type { SessionLine } from '@/domain/presets';
-import type { Equipment } from '@/domain/types';
+import type { Equipment, RepRange } from '@/domain/types';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
 import type { Goal, SessionMinutes } from '@/domain/sessionBuilder';
@@ -57,6 +57,8 @@ export interface Settings {
   readonly shareRecords: boolean;
   /** Android: look for a new version on GitHub at launch and back to the app (every 30 min at most). On by default. */
   readonly autoUpdateCheck?: boolean;
+  /** The user's own rep range for every exercise (8–12…); absent: the range of each exercise. */
+  readonly repRange?: RepRange;
   /** Beeps at the end of the rest (app open). On by default. */
   readonly restSound?: boolean;
   /** Bar and plates of the gym, for the plate calculator (20 kg bar and usual plates by default). */

@@ -21,6 +21,7 @@ import DataSection from '@/ui/DataSection.vue';
 import GymsSection from '@/ui/GymsSection.vue';
 import PlatesSection from '@/ui/PlatesSection.vue';
 import ProfileSection from '@/ui/ProfileSection.vue';
+import RepRangeSection from '@/ui/RepRangeSection.vue';
 import UpdatesSection from '@/ui/UpdatesSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
 import type { WeightUnit } from '@/domain/units';
@@ -133,6 +134,7 @@ async function redoQuestionnaire(): Promise<void> {
             </ion-label>
           </ion-toggle>
         </ion-item>
+        <RepRangeSection />
         <ion-item button @click="redoQuestionnaire">
           <ion-label>{{ t('settings.redo') }}</ion-label>
         </ion-item>

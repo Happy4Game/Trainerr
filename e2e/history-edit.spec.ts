@@ -87,6 +87,16 @@ test('a set validated too fast can be fixed or deleted during the session', asyn
   await page.locator('ion-modal ion-button', { hasText: 'Une rep de moins' }).click();
   await page.getByRole('button', { name: 'Enregistrer la correction' }).click();
   await expect(page.getByText(/Dernière série : .*× 8/)).toBeVisible();
+  // Typed exactly too: a load between two steps, a half rep.
+  await page.getByRole('button', { name: /^Corriger : .*× 8/ }).click();
+  await page.getByRole('textbox', { name: 'Charge (kg)', disabled: false }).fill('7,5');
+  await page.getByRole('textbox', { name: 'Reps', disabled: false }).fill('8,5');
+  await page.getByRole('button', { name: 'Enregistrer la correction' }).click();
+  await expect(page.getByText(/Dernière série : .*7,5 kg × 8,5/)).toBeVisible();
+  await page.getByRole('button', { name: /^Corriger : .*× 8,5/ }).click();
+  await page.getByRole('textbox', { name: 'Reps', disabled: false }).fill('8');
+  await page.getByRole('button', { name: 'Enregistrer la correction' }).click();
+  await expect(page.getByText(/Dernière série : .*× 8$/)).toBeVisible();
 
   // Finish the exercise, then delete one of its sets: it reopens.
   for (let i = 0; i < 2; i++) {
@@ -94,6 +104,11 @@ test('a set validated too fast can be fixed or deleted during the session', asyn
     await page.getByRole('button', { name: 'Correct', exact: true }).click();
   }
   await expect(page.getByRole('region', { name: 'Machine suivante' })).toBeVisible();
+  // Newest set first: the corrected first set is now at the bottom of the list.
+  const logged = page.locator('section.logged li');
+  await expect(logged).toHaveCount(3);
+  await expect(logged.last()).toContainText(/× 8 /);
+  await expect(logged.first()).not.toContainText(/× 8 /);
   await page.getByRole('button', { name: new RegExp(`Corriger : ${first} .*× 8`) }).click();
   await page.getByRole('button', { name: 'Supprimer cette série' }).click();
   await page.getByRole('button', { name: 'Oui, supprimer' }).click();

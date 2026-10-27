@@ -34,17 +34,25 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   // One tap on the difficulty records the pre-filled set and starts the rest timer.
   await page.getByRole('button', { name: 'Correct', exact: true }).click();
   await expect(page.getByRole('timer')).toBeVisible();
+  // The rest goes on after the app is closed and opened again.
+  await page.reload();
+  await expect(page.getByRole('timer')).toBeVisible({ timeout: 20_000 });
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
 
-  // The machine gets taken: the next exercise is offered, and the machine comes back after it.
+  // The machine gets taken: two clear choices, another machine meanwhile, or a replacement for good.
   await page.getByRole('button', { name: 'Machine occupée' }).click();
   await expect(page.getByText('Développé épaules machine est occupée')).toBeVisible();
   // Each machine offered comes with a preview: drawing, muscles, load, movement.
   const offer = page.getByRole('listitem').filter({ hasText: 'Écarté à la machine' });
   await expect(offer.getByText(/Pectoraux/)).toBeVisible();
   await expect(offer.getByRole('link', { name: 'Voir le mouvement' })).toBeVisible();
-  await offer.getByRole('button', { name: 'Prendre Écarté à la machine' }).click();
+  await expect(
+    offer.getByRole('button', {
+      name: 'Remplacer Développé épaules machine par Écarté à la machine',
+    }),
+  ).toBeVisible();
+  await offer.getByRole('button', { name: 'Faire Écarté à la machine en attendant' }).click();
   await expect(page.getByRole('region', { name: 'Écarté à la machine' })).toBeVisible();
 
   // Survives a reload in the middle of the workout.
@@ -53,11 +61,22 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
     timeout: 20_000,
   });
 
+  // Adding an exercise: those for the muscles of this session come first.
+  await page.getByRole('button', { name: '+ Ajouter un exercice' }).click();
+  const picker = page.locator('ion-modal').filter({ hasText: 'Pour cette séance' });
+  await expect(picker.getByText('Autres exercices')).toBeVisible();
+  await picker.getByRole('button', { name: 'Annuler' }).click();
+  await expect(picker).toHaveCount(0);
+
   for (let set = 1; set <= 3; set++) {
     await expect(page.getByText(`Série ${set} sur 3`)).toBeVisible();
     await page.getByRole('button', { name: 'Correct', exact: true }).click();
   }
   await expect(page.getByText('Développé épaules machine est libre ?')).toBeVisible();
+  // Back to the busy machine: its drawing, which opens its card.
+  await expect(
+    page.getByRole('link', { name: 'Voir la fiche de Développé épaules machine' }),
+  ).toBeVisible();
   await page.getByRole('button', { name: "Oui, j'y vais" }).click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
 

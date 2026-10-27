@@ -7,6 +7,7 @@ import {
   nextSessionProposal,
   nextSetProposal,
   repRangeFor,
+  validRepRange,
 } from '@/domain/progression';
 import type { Difficulty, SetLog } from '@/domain/types';
 import { dumbbellSteps, ex, stackSteps } from '../fixtures/exercises';
@@ -265,5 +266,22 @@ describe('first time on a machine', () => {
     ).toMatchObject({
       loadKg: 45,
     });
+  });
+});
+
+describe('own rep range', () => {
+  const machine = { kind: 'machineCompound' } as Parameters<typeof repRangeFor>[0];
+
+  it('replaces the range of every exercise when set', () => {
+    expect(repRangeFor(machine)).toEqual({ min: 10, max: 12 });
+    expect(repRangeFor(machine, { min: 8, max: 12 })).toEqual({ min: 8, max: 12 });
+  });
+
+  it('stays between 1 and 30 reps, at least 2 reps wide', () => {
+    expect(validRepRange({ min: 8, max: 12 })).toBe(true);
+    expect(validRepRange({ min: 8, max: 9 })).toBe(false);
+    expect(validRepRange({ min: 0, max: 12 })).toBe(false);
+    expect(validRepRange({ min: 20, max: 31 })).toBe(false);
+    expect(validRepRange({ min: 8.5, max: 12 })).toBe(false);
   });
 });

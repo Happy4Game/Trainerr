@@ -93,7 +93,9 @@ const displayed = computed(() =>
   showOriginal.value && shown.value?.original ? shown.value.original : shown.value,
 );
 const illustration = computed(() => illustrationFor(props.id));
-const range = computed(() => (exercise.value ? repRangeFor(exercise.value) : undefined));
+const range = computed(() =>
+  exercise.value ? repRangeFor(exercise.value, settings.value?.repRange) : undefined,
+);
 
 const stepsSaved = ref(false);
 async function onStepsChange(id: string, steps: number[]): Promise<void> {

@@ -223,8 +223,16 @@ async function onBusy(): Promise<void> {
 function openReplace(id: string): void {
   replacing.value = id;
 }
+/** Another machine now; the busy one is offered again after it. */
 async function choose(alternative: Alternative): Promise<void> {
   await session.chooseAlternative(alternative);
+  busyFor.value = undefined;
+}
+/** The busy machine leaves the session for good: the other one takes its place. */
+async function replaceBusy(alternative: Alternative): Promise<void> {
+  const id = busyFor.value;
+  if (!id) return;
+  await session.replaceBusyMachine(id, alternative.exercise.id);
   busyFor.value = undefined;
 }
 
@@ -252,6 +260,8 @@ const loggedSets = computed(() =>
     label: `${nameOf(set.exerciseId)} — ${loadOf(set.exerciseId, set.loadKg)} × ${n(set.reps)}`,
   })),
 );
+
+const newestFirst = computed(() => [...loggedSets.value].reverse());
 
 /** Set being corrected, and the last set logged (shown under the rest timer). */
 const editing = ref<(typeof loggedSets.value)[number]>();
@@ -437,7 +447,7 @@ async function logWarmup(): Promise<void> {
             <ion-card-title>{{ t('session.busyTitle', { name: nameOf(busyFor) }) }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <p>{{ t('session.busyHelp') }}</p>
+            <p>{{ t('session.busyHelp', { name: nameOf(busyFor) }) }}</p>
             <ul class="alternatives">
               <li
                 v-for="alternative in busyAlternatives"
@@ -463,13 +473,26 @@ async function logWarmup(): Promise<void> {
                     <ion-button
                       size="small"
                       :aria-label="
-                        t('session.alternative.choose', {
+                        t('session.alternative.meanwhileNamed', {
                           name: exerciseName(alternative.exercise),
                         })
                       "
                       @click="choose(alternative)"
                     >
-                      {{ t('session.alternative.take') }}
+                      {{ t('session.alternative.meanwhile') }}
+                    </ion-button>
+                    <ion-button
+                      size="small"
+                      fill="outline"
+                      :aria-label="
+                        t('session.alternative.replaceNamed', {
+                          busy: nameOf(busyFor),
+                          name: exerciseName(alternative.exercise),
+                        })
+                      "
+                      @click="replaceBusy(alternative)"
+                    >
+                      {{ t('session.alternative.replace') }}
                     </ion-button>
                     <ion-button
                       size="small"
@@ -633,6 +656,19 @@ async function logWarmup(): Promise<void> {
             }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <router-link
+              :to="cardLink(step.exerciseId)"
+              class="free-machine"
+              :aria-label="t('session.seeMovementOf', { name: nameOf(step.exerciseId) })"
+            >
+              <img
+                v-if="thumbnailOf(step.exerciseId)"
+                :src="thumbnailOf(step.exerciseId)"
+                alt=""
+                class="alt-thumb"
+              />
+              <span>{{ t('session.seeMovement') }}</span>
+            </router-link>
             <ion-button expand="block" @click="session.machineFree(step.exerciseId)">
               {{ t('session.free') }}
             </ion-button>
@@ -663,14 +699,16 @@ async function logWarmup(): Promise<void> {
           :open="pickingExercise"
           :title="t('session.addExercise')"
           :exclude="step?.kind === 'exercise' ? [step.exerciseId] : []"
+          :focus="session.sessionMuscles.value"
           @pick="addExercise"
           @close="pickingExercise = false"
         />
 
         <section v-if="loggedSets.length > 0" class="logged">
           <h3>{{ t('session.logged') }}</h3>
-          <ol>
-            <li v-for="set in loggedSets" :key="set.id">
+          <!-- Newest first: the set to fix is usually the last one, at the top. -->
+          <ol reversed>
+            <li v-for="set in newestFirst" :key="set.id">
               <button
                 type="button"
                 class="logged-set"
@@ -876,7 +914,17 @@ async function logWarmup(): Promise<void> {
 .alt-actions {
   display: flex;
   flex-wrap: wrap;
+  gap: 4px;
   margin-inline-start: -6px;
+}
+.free-machine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-block-end: 12px;
+  color: var(--ion-color-primary);
+  font-weight: 700;
+  text-decoration: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .just-logged {

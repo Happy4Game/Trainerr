@@ -22,8 +22,28 @@ export const REST_SECONDS: Readonly<Record<ExerciseKind, { min: number; max: num
 /** When the next step is missing, the range is stretched by this many reps before jumping. */
 export const MISSING_STEP_EXTRA_REPS = 3;
 
-export function repRangeFor(exercise: Exercise): RepRange {
-  return exercise.repRange ?? DEFAULT_REP_RANGES[exercise.kind];
+/**
+ * Rep range of an exercise: the user's own when set in the settings (8–12 for
+ * every exercise, say), else the exercise's. Muscle grows over a wide range of
+ * reps when the sets end close to failure (Schoenfeld et al. 2017,
+ * doi:10.1519/JSC.0000000000002200; Schoenfeld et al. 2021, doi:10.3390/sports9020032):
+ * the default only fits the range to the kind of exercise.
+ */
+export function repRangeFor(exercise: Exercise, own?: RepRange): RepRange {
+  return own ?? exercise.repRange ?? DEFAULT_REP_RANGES[exercise.kind];
+}
+
+/** Bounds of a range the user can set: from 1 to 30 reps, at least 2 reps wide. */
+export const OWN_REP_RANGE = { lowest: 1, highest: 30, width: 2 } as const;
+
+export function validRepRange(range: RepRange): boolean {
+  return (
+    Number.isInteger(range.min) &&
+    Number.isInteger(range.max) &&
+    range.min >= OWN_REP_RANGE.lowest &&
+    range.max <= OWN_REP_RANGE.highest &&
+    range.max - range.min >= OWN_REP_RANGE.width
+  );
 }
 
 export type Reminder = 'rangeOfMotion' | 'technique';

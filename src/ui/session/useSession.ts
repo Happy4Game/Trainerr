@@ -1,6 +1,7 @@
 import { sessionMinutes, volumeGainPercent, workload } from '@/domain/sessionPreview';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
+import { restoredRest, saveRest } from './restClock';
 import type { SqlDatabase } from '@/data/sqlite/database';
 import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
@@ -28,7 +29,7 @@ import {
   type ReferenceLoad,
 } from '@/data/repositories/referenceRepository';
 import { CUSTOM_PREFIX, getSettings, type Settings } from '@/data/repositories/settingsRepository';
-import { loadSettings, updateSettings } from '@/ui/useSettings';
+import { loadSettings, updateSettings, useSettings } from '@/ui/useSettings';
 import {
   addExercise,
   appendExercise,
@@ -129,6 +130,7 @@ const references = ref<ReferenceLoad[]>([]);
 const weighings = ref<BodyMeasurement[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
+watch(restEndsAt, (endsAt) => saveRest(active.value?.id, endsAt));
 /** Record just beaten, for the celebration on the screen (cleared at the next set). */
 const recordBeaten = ref<{ exerciseId: string; loadKg: number; reps: number }>();
 /** What the end-of-session screen shows. */
@@ -301,11 +303,17 @@ function previousFor(exerciseId: string): SetLog | undefined {
   return lastTimeSets(exerciseId)[0];
 }
 
-/** Rep range of an exercise today: the ready-made session's own, else the exercise default. */
+/** Settings shared with the Settings screen: a range changed there applies at once. */
+const sharedSettings = useSettings().settings;
+
+/**
+ * Rep range of an exercise today: the ready-made session's own, else the
+ * user's own range from the settings, else the exercise default.
+ */
 function rangeOf(entry: CatalogEntry) {
   return (
     active.value?.plan.exercises.find((e) => e.exerciseId === entry.exercise.id)?.repRange ??
-    repRangeFor(entry.exercise)
+    repRangeFor(entry.exercise, sharedSettings.value?.repRange)
   );
 }
 
@@ -422,6 +430,8 @@ async function load(): Promise<void> {
     references.value = await listReferences(db);
     weighings.value = await listMeasurements(db);
     active.value = await getActiveSession(db);
+    // A rest still running when the app was closed goes on where it was.
+    restEndsAt.value ??= restoredRest(active.value?.id, Date.now());
     phase.value = active.value ? 'active' : 'idle';
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : String(error);
@@ -700,14 +710,23 @@ async function undoLastSet(): Promise<void> {
 /** Correction of a set validated too fast: load, reps or feeling. */
 async function editSessionSet(
   setId: string,
-  values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'>,
+  values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'> & {
+    readonly rir?: number | undefined;
+    readonly note?: string | undefined;
+  },
 ): Promise<void> {
   if (!active.value) return;
   const { db } = await openAppDatabase();
   await updateSet(db, setId, values);
   active.value = {
     ...active.value,
-    sets: active.value.sets.map((s) => (s.id === setId ? { ...s, ...values } : s)),
+    sets: active.value.sets.map((s) => {
+      if (s.id !== setId) return s;
+      const { rir: _rir, note: _note, ...rest } = { ...s, ...values };
+      const rir = 'rir' in values ? values.rir : s.rir;
+      const note = 'note' in values ? values.note?.trim() : s.note;
+      return { ...rest, ...(rir !== undefined ? { rir } : {}), ...(note ? { note } : {}) };
+    }),
   };
 }
 
@@ -768,6 +787,27 @@ async function chooseAlternative(alternative: Alternative): Promise<void> {
         { exerciseId: alternative.exercise.id, sets: plannedSets(alternative.exercise.id) },
       ];
   await updatePlan({ ...plan, exercises, queue: startNow(plan.queue, alternative.exercise.id) });
+}
+
+/** Muscles of the session in progress: the main muscles of its planned exercises. */
+const sessionMuscles = computed<MuscleId[]>(() => {
+  const plan = active.value?.plan;
+  if (!plan) return [];
+  const due = template.value;
+  const muscles = new Set<MuscleId>(due && due.id === active.value?.templateId ? due.muscles : []);
+  for (const line of plan.exercises)
+    for (const m of entryOf(line.exerciseId)?.exercise.primaryMuscles ?? []) muscles.add(m);
+  return [...muscles];
+});
+
+/**
+ * The busy machine replaced for good: the other one is done now, and the
+ * busy one is not offered again in this session.
+ */
+async function replaceBusyMachine(busyId: string, withId: string): Promise<void> {
+  await replaceExercise(busyId, withId);
+  if (!active.value) return;
+  await updatePlan({ ...active.value.plan, queue: startNow(active.value.plan.queue, withId) });
 }
 
 async function machineFree(exerciseId: string): Promise<void> {
@@ -1260,6 +1300,8 @@ export function useSession() {
     removeSessionSet,
     markMachineBusy,
     chooseAlternative,
+    replaceBusyMachine,
+    sessionMuscles,
     machineFree,
     machineStillBusy,
     skipExercise,
