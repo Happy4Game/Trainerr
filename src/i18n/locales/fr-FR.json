@@ -515,7 +515,7 @@
       "intro": "Tu connais déjà ta charge sur cette machine ? Note-la : la séance partira de là au lieu d'une série test. | Tu connais déjà tes charges sur ces {count} machines ? Note-les : la séance partira de là au lieu de séries test.",
       "add": "+ {name}"
     },
-    "testSetFeel": "Série test : sois honnête. Si tu aurais pu faire 3 reps de plus, choisis Facile, la charge montera tout de suite.",
+    "testSetFeel": "Si oui, choisis Facile : la charge monte dès la série suivante. Sinon, Correct la garde.",
     "testSetHint": {
       "easy": "trop léger : la charge monte",
       "ok": "bonne charge : on la garde",
@@ -526,7 +526,8 @@
       "title": "Pas cette machine ? Très proches :",
       "take": "Faire {name} à la place"
     },
-    "saved": "✓ Série enregistrée : {set}"
+    "saved": "✓ Série enregistrée : {set}",
+    "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?"
   },
   "availability": {
     "day": "Jour",
@@ -1035,7 +1036,8 @@
       "carryOverOrder": "Ordre des machines respecté",
       "sessionInsights": "La page Séance en dit plus",
       "longerRest": "Plus de repos sur les gros mouvements",
-      "sessionSwap": "Remplacer une machine depuis Séance"
+      "sessionSwap": "Remplacer une machine depuis Séance",
+      "smootherStart": "Démarrage plus simple"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1073,7 +1075,10 @@
       "sessionInsights": "Comme sur Aujourd'hui, la séance proposée indique les charges qui montent (+2,5 kg, 1re fois) et les muscles qu'elle rattrape sur ta semaine.",
       "longerRest": "Le repos passe à 3 min sur les gros mouvements (squat, développé couché…) et à 2 min sur les machines guidées : les études montrent plus de force et de muscle avec un repos plus long.",
       "searchLabel": "Le champ de recherche et son bouton d'effacement sont lus en français par les lecteurs d'écran.",
-      "sessionSwap": "Le bouton ⇄ d'Aujourd'hui est aussi sur la page Séance : une machine très proche à la place, gardée pour les séances suivantes, et « Annuler » pour revenir."
+      "sessionSwap": "Le bouton ⇄ d'Aujourd'hui est aussi sur la page Séance : une machine très proche à la place, gardée pour les séances suivantes, et « Annuler » pour revenir.",
+      "autoNext": "Questionnaire plus court : une question à une seule réponse passe à la suivante dès que tu réponds.",
+      "testSetQuestion": "Après une série test, l'appli demande clairement : « Trop léger ? Tu aurais pu faire 3 reps de plus ? »",
+      "usualLoadsToday": "Tu t'entraînes déjà ? Note tes charges habituelles dès la page Aujourd'hui, avant ta première séance."
     }
   },
   "data": {

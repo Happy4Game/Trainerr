@@ -94,5 +94,5 @@ _26 octobre 2026, même méthode (360 × 760 px, tactile, build de production)._
 
 - **Avancé, première séance** : chaque nouvel exercice demande de taper sa charge de travail. Piste : à la fin du questionnaire « Je m'entraîne déjà », proposer de noter ses charges habituelles (l'import CSV et « Ma charge » sur la fiche existent, mais ne sont pas proposés à ce moment).
 - **Série test du débutant** : après « Correct » sur la série test, la charge reste la même ; il faut dire « Facile » pour monter. Le texte d'aide le dit, mais une question explicite (« C'était trop léger ? ») serait plus claire.
-- **Questionnaire** : 14 taps ; « Suivant » pourrait être implicite quand une seule réponse est possible.
+- **Questionnaire** : 14 taps ; « Suivant » pourrait être implicite quand une seule réponse est possible. ✅ Fait le 27 oct. 2026 (avec les deux pistes ci-dessus).
 - **Notification de séance et mise à jour** : vérifiées à la compilation de l'APK (debug et release signé) et par les tests web, pas encore sur un vrai téléphone (Android 13+ : permission, compte à rebours écran verrouillé, alerte de fin de repos, installation d'une mise à jour).

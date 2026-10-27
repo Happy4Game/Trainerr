@@ -238,6 +238,12 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 
 - La liste de la séance proposée, sur la page Séance, a le même bouton ⇄ que Aujourd'hui (`SwappableRow.vue`) : machines très proches, choix gardé, « Annuler ».
 
+## Démarrage plus simple (27 oct. 2026)
+
+- Questionnaire : les écrans à une seule question (objectif, niveau sans reprise, durée, pas d'autre sport, zone) passent à la suite 250 ms après la réponse.
+- Série test : le titre de l'étape 2 devient « Trop léger ? Tu aurais pu faire 3 reps de plus ? ».
+- « Tu connais déjà ta charge ? » (`UsualLoads.vue`) est aussi sur Aujourd'hui, où arrive le questionnaire.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.
@@ -250,4 +256,3 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
 - Notification de séance, mises à jour et import Health Connect : compilés par la CI (APK signé publié à chaque merge sur `main`), pas encore essayés sur un vrai téléphone.
-- Pistes du retour utilisateur non traitées : proposer de noter ses charges habituelles après « Je m'entraîne déjà », question explicite après la série test, questionnaire plus court.
