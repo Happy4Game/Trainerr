@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { skipOnboarding } from './helpers';
+import { skipOnboarding, openCatalog } from './helpers';
 
 /** Visible texts of buttons, tabs, titles and headings: data (exercise names, numbers) excluded. */
 async function interfaceTexts(page: Page): Promise<string[]> {
@@ -15,9 +15,9 @@ test('pseudo-language: every interface text comes from the translation files', a
   for (const path of [
     '/tabs/today',
     '/tabs/session',
-    '/tabs/catalog',
+    '/tabs/session/catalog',
     '/tabs/history',
-    '/tabs/today/planning',
+    '/tabs/planning',
     '/tabs/settings',
   ]) {
     await page.goto(`${path}?pseudo`);
@@ -40,12 +40,13 @@ test('the language can be switched to English without restarting', async ({ page
     .click();
   await page.getByRole('radio', { name: 'English' }).click();
   await expect(page.locator('ion-title:visible')).toHaveText('Settings');
-  await page.getByRole('tab', { name: 'Catalog' }).click();
+  await page.getByRole('tab', { name: /^Workout/ }).click();
+  await page.getByRole('link', { name: 'Catalog', exact: true }).click();
   await expect(page.getByRole('status').filter({ hasText: /exercises/ })).toHaveText(
     /\d+ exercises/,
   );
   await page.reload();
-  await expect(page.getByRole('tab', { name: 'Catalog' })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByRole('tab', { name: 'Progress' })).toBeVisible({ timeout: 20_000 });
 });
 
 test('loads can be shown in pounds', async ({ page }) => {
@@ -56,7 +57,7 @@ test('loads can be shown in pounds', async ({ page }) => {
     .filter({ hasText: /Unité de poids/ })
     .click();
   await page.getByRole('radio', { name: 'Livres (lb)' }).click();
-  await page.getByRole('tab', { name: 'Catalogue' }).click();
+  await openCatalog(page);
   await page.getByRole('searchbox').fill('pec deck');
   await page.getByRole('heading', { name: 'Écarté à la machine' }).click();
   await expect(page.getByText(/Paliers par défaut.*\d+ lb/)).toBeVisible({ timeout: 20_000 });

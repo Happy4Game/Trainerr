@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { skipOnboarding } from './helpers';
+import { skipOnboarding, openCatalog } from './helpers';
 
 test('ready-made Pull session: order explained, assisted pull-ups used when they are my machine', async ({
   page,
@@ -70,7 +70,7 @@ test('the machines of a ready-made session join my machines in one tap', async (
   await page.getByRole('button', { name: 'Ajouter cette machine à mes machines' }).click();
   await expect(page.getByText('Tu as utilisé Développé couché barre')).toHaveCount(0);
 
-  await page.getByRole('tab', { name: 'Catalogue' }).click();
+  await openCatalog(page);
   await page.getByRole('searchbox').fill('bench press medium');
   await expect(
     page.getByRole('button', { name: 'Retirer Développé couché barre de mes machines' }),

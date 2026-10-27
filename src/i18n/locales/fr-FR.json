@@ -1121,7 +1121,8 @@
       "cardio": "Cardio dans les séances",
       "programChoice": "Choisis ton programme dès le départ",
       "cameraFix": "Prendre une photo ouvre l'appareil photo",
-      "bodyTab": "Un onglet Corps et la caméra dans l'appli"
+      "bodyTab": "Un onglet Corps et la caméra dans l'appli",
+      "planningTab": "Le Planning revient en onglet"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1173,7 +1174,8 @@
       "cameraFix": "« Prendre une photo » ouvre maintenant l'appareil photo sur Android, et plus la galerie. Pour une photo déjà prise, utilise « Importer ».",
       "bodyTab": "Nouvel onglet Corps : poids, mensurations et photos, à part des séances. L'onglet Historique devient Progrès (séances et stats), et le Planning s'ouvre depuis Aujourd'hui (icône calendrier).",
       "inAppCamera": "Les photos du corps se prennent dans l'appli : aperçu dans un cadre, pose choisie au-dessus (face, profil, dos), caméra avant ou arrière, retardateur et dernière photo en transparence pour te placer au même endroit.",
-      "photoCount": "Le nombre de photos affiché sur l'onglet Corps se met à jour tout de suite après un ajout ou une suppression dans la galerie."
+      "photoCount": "Le nombre de photos affiché sur l'onglet Corps se met à jour tout de suite après un ajout ou une suppression dans la galerie.",
+      "planningTab": "Le Planning retrouve sa place dans la barre d'onglets. Le Catalogue s'ouvre depuis l'onglet Séance, avec l'icône livre en haut à droite, ou depuis le bouton « Ouvrir le catalogue »."
     }
   },
   "data": {

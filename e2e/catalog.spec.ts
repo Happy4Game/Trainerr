@@ -59,7 +59,7 @@ test('the machine card shows the muscles and keeps the load steps', async ({ pag
   await search(page, 'pec deck');
   await page.getByRole('heading', { name: 'Écarté à la machine' }).click();
 
-  await expect(page).toHaveURL(/\/tabs\/catalog\/Butterfly$/);
+  await expect(page).toHaveURL(/\/tabs\/session\/catalog\/Butterfly$/);
   await expect(page.getByRole('img', { name: 'Silhouette : Pectoraux' })).toBeVisible();
   await expect(
     page.getByRole('img', { name: 'Illustration du mouvement : Écarté à la machine' }),
@@ -112,7 +112,7 @@ test('a photo of the machine plate is kept with the machine', async ({ page }) =
 
 test('instructions are machine-translated, with the original text on demand', async ({ page }) => {
   await openCatalog(page);
-  await page.goto('/tabs/catalog/Arnold_Dumbbell_Press');
+  await page.goto('/tabs/session/catalog/Arnold_Dumbbell_Press');
   await expect(page.getByText(/Traduction automatique de l'anglais/)).toBeVisible();
   await expect(page.getByText(/Monte les haltères en tournant les paumes/)).toBeVisible();
 

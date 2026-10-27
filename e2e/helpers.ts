@@ -5,5 +5,14 @@ export async function skipOnboarding(page: Page): Promise<void> {
   await page.goto('/');
   await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
   await page.getByRole('button', { name: 'Passer' }).click();
-  await expect(page).toHaveURL(/\/tabs\/catalog$/);
+  await expect(page).toHaveURL(/\/tabs\/session\/catalog$/);
+}
+
+/** The catalog lives in the Session tab, behind the book icon of its header. */
+export async function openCatalog(page: Page): Promise<void> {
+  await page.getByRole('tab', { name: /^Séance/ }).click();
+  // Ionic reopens the tab where it was left: maybe the catalog already.
+  if (!/\/tabs\/session\/catalog$/.test(page.url()))
+    await page.getByRole('link', { name: 'Catalogue', exact: true }).click();
+  await expect(page).toHaveURL(/\/tabs\/session\/catalog$/);
 }

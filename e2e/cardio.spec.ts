@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { skipOnboarding } from './helpers';
+import { skipOnboarding, openCatalog } from './helpers';
 
 test('cardio: chosen before the session, logged in it, kept in the history and catalog', async ({
   page,
@@ -50,7 +50,7 @@ test('cardio: chosen before the session, logged in it, kept in the history and c
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await expect(page.getByText(/10 min de cardio · 10 \/ 150 min cette semaine/)).toBeVisible();
 
-  await page.getByRole('tab', { name: 'Catalogue' }).click();
+  await openCatalog(page);
   await page.locator('ion-segment-button', { hasText: 'Cardio' }).click();
   await page.getByRole('link', { name: /Rameur/ }).click();
   await expect(page.getByText('Muscles qui travaillent')).toBeVisible();
