@@ -206,6 +206,12 @@ async function capture(browser, scheme) {
   await scrollContent(page, 0);
   await shot(page, p('04-repos'));
 
+  // Fin de séance : le récap.
+  await page.getByRole('button', { name: 'Terminer la séance' }).click();
+  await page.getByText('Séance terminée').waitFor();
+  await shot(page, p('04b-recap'));
+  await page.getByRole('button', { name: 'Fermer' }).first().click();
+
   await page.goto(`${baseURL}/tabs/history`);
   await page.waitForTimeout(800);
   await shot(page, p('05-historique'));
