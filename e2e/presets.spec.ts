@@ -83,19 +83,16 @@ test('a beginner is offered the beginner full body first, with realistic loads',
   await page.goto('/');
   await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
   const next = () => page.getByRole('button', { name: 'Suivant' }).click();
+  // Single-question screens go on by themselves once answered.
   await page.getByRole('button', { name: 'Prendre du muscle' }).click();
-  await next();
   await page.getByRole('button', { name: '3', exact: true }).click();
   await next();
   await page.getByRole('button', { name: 'Je débute' }).click();
-  await next();
+  await expect(page.getByText('Quand es-tu disponible ?')).toBeVisible();
   await next(); // availability as it is
   await page.getByRole('button', { name: '1 h', exact: true }).click();
-  await next();
   await page.getByRole('button', { name: 'Non', exact: true }).click();
-  await next();
   await page.getByRole('button', { name: 'Aucune' }).click();
-  await next();
   await page.getByRole('button', { name: 'Plus tard' }).click();
 
   await page.getByRole('tab', { name: 'Séance' }).click();
@@ -105,6 +102,10 @@ test('a beginner is offered the beginner full body first, with realistic loads',
   await expect(legPress).toBeVisible();
   // A light test set, not the lightest plate of the machine.
   await expect(legPress.getByTestId('load')).toHaveText('45 kg');
+  // The test set asks plainly whether it was too light.
+  await expect(
+    legPress.getByRole('heading', { name: /Trop léger \? Tu aurais pu faire 3 reps de plus \?/ }),
+  ).toBeVisible();
 });
 
 test('a ready-made session is copied, changed and started with its own sets and reps', async ({

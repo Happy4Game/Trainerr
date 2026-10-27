@@ -53,6 +53,9 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   const later = page.getByRole('button', { name: 'Faire plus tard : Écarté à la machine' });
   await expect(later).toBeVisible();
   await later.click();
+  // Wait for the new order before the next tap: on a slow machine the list is
+  // redrawn after the move, and a tap on the old row would be lost.
+  await expect(page.locator('ion-modal li').last()).toContainText('Écarté à la machine');
   await page.getByRole('button', { name: 'Retirer de la séance : Écarté à la machine' }).click();
   await expect(page.getByText('Écarté à la machine', { exact: true })).toHaveCount(0);
 });

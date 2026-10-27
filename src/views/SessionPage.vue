@@ -46,7 +46,7 @@ import { usePlanInsights } from '@/ui/session/usePlanInsights';
 import { useLoadLabel } from '@/ui/session/useLoadLabel';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionPlanList from '@/ui/session/SessionPlanList.vue';
-import LoadNoteModal from '@/ui/LoadNoteModal.vue';
+import UsualLoads from '@/ui/session/UsualLoads.vue';
 import SessionOverview from '@/ui/session/SessionOverview.vue';
 import SetEditModal from '@/ui/session/SetEditModal.vue';
 import { useUnits } from '@/ui/useUnits';
@@ -209,16 +209,6 @@ const planSets = computed(() =>
   preview.value.reduce((total, e) => total + session.plannedSets(e.id), 0),
 );
 const planMinutes = computed(() => estimateMinutes(planSets.value));
-/**
- * Someone who already trains, on machines the app has never seen them use:
- * noting the usual load beats a light test set on each one.
- */
-const unknownLoads = computed(() =>
-  appSettings.value?.level === 'beginner'
-    ? []
-    : preview.value.filter((e) => !session.myLoadFor(e.id)),
-);
-const noting = ref<{ id: string; name: string }>();
 /** Card of a machine; a banner there leads back to the session. */
 const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
@@ -418,20 +408,9 @@ async function logWarmup(): Promise<void> {
               :detail="planDetail"
               :to="cardLink"
               :badge="insights.changeText"
+              swappable
             />
-            <div v-if="unknownLoads.length > 0" class="usual-loads" role="note">
-              <p>{{ t('session.usualLoads.intro', unknownLoads.length) }}</p>
-              <ion-button
-                v-for="e in unknownLoads"
-                :key="e.id"
-                size="small"
-                fill="outline"
-                :aria-label="t('myLoad.add', { name: exerciseName(e) })"
-                @click="noting = { id: e.id, name: exerciseName(e) }"
-              >
-                {{ t('session.usualLoads.add', { name: exerciseName(e) }) }}
-              </ion-button>
-            </div>
+            <UsualLoads :exercises="preview" />
             <ion-button
               class="day-start"
               expand="block"
@@ -1068,11 +1047,6 @@ async function logWarmup(): Promise<void> {
         }}</ion-button>
       </section>
 
-      <LoadNoteModal
-        :exercise-id="noting?.id"
-        :name="noting?.name ?? ''"
-        @close="noting = undefined"
-      />
       <ion-modal :is-open="platesLoad !== undefined" @did-dismiss="platesLoad = undefined">
         <ion-header>
           <ion-toolbar>
@@ -1391,26 +1365,6 @@ async function logWarmup(): Promise<void> {
 }
 .share-icon {
   margin-inline-end: 8px;
-}
-.usual-loads {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-block-start: var(--tr-space-3);
-  padding: var(--tr-space-3);
-  border-radius: var(--tr-radius-m);
-  background: var(--tr-surface-2);
-}
-.usual-loads p {
-  flex-basis: 100%;
-  margin: 0 0 4px;
-  color: var(--tr-text-muted);
-  font-size: 0.9rem;
-}
-.usual-loads ion-button {
-  --border-radius: var(--tr-radius-pill);
-  margin: 0;
-  text-transform: none;
 }
 .day-start {
   margin-block-start: var(--tr-space-3);

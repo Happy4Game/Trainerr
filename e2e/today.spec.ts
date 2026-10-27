@@ -13,7 +13,7 @@ test('today shows the whole next session, and a lighter one when not in shape', 
 
   await page.getByRole('tab', { name: "Aujourd'hui" }).click();
   const hero = page.getByRole('region', { name: 'Séance du jour' });
-  await expect(hero.getByText('Développé épaules machine')).toBeVisible();
+  await expect(hero.getByText('Développé épaules machine', { exact: true })).toBeVisible();
   await expect(hero.getByText('6 séries')).toBeVisible();
 
   await hero.getByRole('button', { name: 'Pas en forme ? Alléger la séance' }).click();
@@ -53,6 +53,24 @@ test('someone who already trains notes a usual load instead of a test set', asyn
   await expect(page.getByText(/séries? · 45\s*kg/).first()).toBeVisible();
 });
 
+test('right after the questionnaire, Today offers to note the usual loads too', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('searchbox').fill('pec deck');
+  await page.getByRole('button', { name: 'Ajouter Écarté à la machine à mes machines' }).click();
+
+  await page.getByRole('tab', { name: "Aujourd'hui" }).click();
+  const hero = page.getByRole('region', { name: 'Séance du jour' });
+  const usual = hero.getByRole('note').filter({ hasText: 'Tu connais déjà ta charge' });
+  await usual.getByRole('button', { name: 'Noter ma charge sur Écarté à la machine' }).click();
+  await page.getByRole('textbox', { name: 'Charge (kg)' }).fill('45');
+  await page.getByRole('textbox', { name: 'Reps' }).fill('10');
+  await page.getByRole('button', { name: 'Enregistrer' }).click();
+  await expect(usual).toHaveCount(0);
+});
+
 test('a machine of the session is swapped for a very close one, before and during', async ({
   page,
 }) => {
@@ -84,4 +102,25 @@ test('a machine of the session is swapped for a very close one, before and durin
   const instead = (await chip.textContent())?.trim() ?? '';
   await chip.click();
   await expect(page.getByRole('region', { name: instead })).toBeVisible();
+});
+
+test('the Session page offers the same swap as Today', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  for (const name of ['Développé épaules machine', 'Écarté à la machine']) {
+    await page.getByRole('searchbox').fill(name);
+    await page.getByRole('button', { name: `Ajouter ${name} à mes machines` }).click();
+  }
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  const day = page.getByRole('region', { name: /^Séance du jour : / });
+
+  await day.getByRole('button', { name: 'Remplacer Développé épaules machine' }).click();
+  const choices = day.getByRole('group', { name: 'À la place de Développé épaules machine :' });
+  const first = choices.getByRole('button').first();
+  const other = (await first.textContent())?.trim() ?? '';
+  await first.click();
+  await expect(day.getByText('à la place de Développé épaules machine')).toBeVisible();
+  await expect(day.getByText(other, { exact: true }).first()).toBeVisible();
+  await day.getByRole('button', { name: 'Reprendre Développé épaules machine' }).click();
+  await expect(day.getByText('Développé épaules machine', { exact: true }).first()).toBeVisible();
 });

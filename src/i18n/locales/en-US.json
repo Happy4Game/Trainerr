@@ -515,7 +515,7 @@
       "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
       "add": "+ {name}"
     },
-    "testSetFeel": "Test set: be honest. If you could have done 3 more reps, pick Easy and the load goes up right away.",
+    "testSetFeel": "If so, pick Easy: the load goes up from the next set. Otherwise, OK keeps it.",
     "testSetHint": {
       "easy": "too light: the load goes up",
       "ok": "right load: we keep it",
@@ -526,7 +526,8 @@
       "title": "Not this machine? Very close ones:",
       "take": "Do {name} instead"
     },
-    "saved": "✓ Set saved: {set}"
+    "saved": "✓ Set saved: {set}",
+    "testSetQuestion": "Too light? Could you have done 3 more reps?"
   },
   "availability": {
     "day": "Day",
@@ -1034,7 +1035,9 @@
       "clearFeedback": "Every tap shows",
       "carryOverOrder": "Machine order kept",
       "sessionInsights": "The Session page tells more",
-      "longerRest": "More rest on the big lifts"
+      "longerRest": "More rest on the big lifts",
+      "sessionSwap": "Swap a machine from Session",
+      "smootherStart": "Easier start"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1071,7 +1074,11 @@
       "carryOverOrder": "A machine that stayed taken last session comes back early, but always after the big lifts: an isolation exercise no longer comes before a compound.",
       "sessionInsights": "As on Today, the proposed session shows the loads going up (+2.5 kg, first time) and the muscles it catches up on your week.",
       "longerRest": "Rest goes up to 3 min on the big lifts (squat, bench press…) and 2 min on guided machines: studies show more strength and muscle with longer rest.",
-      "searchLabel": "The search field and its clear button are read in your language by screen readers."
+      "searchLabel": "The search field and its clear button are read in your language by screen readers.",
+      "sessionSwap": "Today's ⇄ button is on the Session page too: a very close machine instead, kept for the next sessions, and \"Undo\" to go back.",
+      "autoNext": "Shorter questionnaire: a single-answer question moves on as soon as you answer.",
+      "testSetQuestion": "After a test set, the app asks plainly: \"Too light? Could you have done 3 more reps?\"",
+      "usualLoadsToday": "Already training? Note your usual loads right from Today, before your first session."
     }
   },
   "data": {

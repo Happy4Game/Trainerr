@@ -11,7 +11,7 @@ import {
   IonToolbar,
   useIonRouter,
 } from '@ionic/vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { DEFAULT_SETTINGS, type Settings } from '@/data/repositories/settingsRepository';
 import type { PauseLength } from '@/domain/comeback';
@@ -66,6 +66,47 @@ const SPORTS: (SportId | 'none')[] = [
 const ZONES: (ProtectedZone | 'none')[] = ['none', 'shoulders', 'knees', 'back'];
 
 const canGoOn = computed(() => step.value !== 3 || freeSlots.value.length > 0);
+
+/**
+ * Screens with a single question go on by themselves once answered: no
+ * "Suivant" to tap. A short pause lets the chosen answer show first.
+ */
+const AUTO_NEXT_MS = 250;
+let autoNext: ReturnType<typeof setTimeout> | undefined;
+function answered(): void {
+  clearTimeout(autoNext);
+  const from = step.value;
+  autoNext = setTimeout(() => {
+    if (step.value === from) step.value++;
+  }, AUTO_NEXT_MS);
+}
+onUnmounted(() => clearTimeout(autoNext));
+function pickGoal(g: Goal): void {
+  goal.value = g;
+  answered();
+}
+/** "Coming back" asks for the pause length on the same screen. */
+function pickLevel(l: Settings['level']): void {
+  level.value = l;
+  if (l !== 'comeback') answered();
+}
+function pickPause(p: PauseLength): void {
+  pause.value = p;
+  answered();
+}
+function pickDuration(d: SessionMinutes): void {
+  sessionMinutes.value = d;
+  answered();
+}
+/** Another sport asks when it is played, on the same screen. */
+function pickSport(s: SportId | 'none'): void {
+  sport.value = s;
+  if (s === 'none') answered();
+}
+function pickZone(z: ProtectedZone | 'none'): void {
+  zone.value = z;
+  answered();
+}
 
 function answers(): Partial<Settings> {
   return {
@@ -131,7 +172,7 @@ async function skip(): Promise<void> {
             :fill="goal === g ? 'solid' : 'outline'"
             :aria-pressed="goal === g"
             :class="{ selected: goal === g }"
-            @click="goal = g"
+            @click="pickGoal(g)"
           >
             <Check v-if="goal === g" :size="20" class="check" aria-hidden="true" />
             {{ t(`onboarding.goal.${g}`) }}
@@ -190,7 +231,7 @@ async function skip(): Promise<void> {
             :fill="level === l ? 'solid' : 'outline'"
             :aria-pressed="level === l"
             :class="{ selected: level === l }"
-            @click="level = l"
+            @click="pickLevel(l)"
           >
             <Check v-if="level === l" :size="20" class="check" aria-hidden="true" />
             {{ t(`onboarding.level.${l}`) }}
@@ -206,7 +247,7 @@ async function skip(): Promise<void> {
               :fill="pause === p ? 'solid' : 'outline'"
               :aria-pressed="pause === p"
               :class="{ selected: pause === p }"
-              @click="pause = p"
+              @click="pickPause(p)"
             >
               <Check v-if="pause === p" :size="20" class="check" aria-hidden="true" />
               {{ t(`onboarding.pauses.${p}`) }}
@@ -232,7 +273,7 @@ async function skip(): Promise<void> {
             :fill="sessionMinutes === d ? 'solid' : 'outline'"
             :aria-pressed="sessionMinutes === d"
             :class="{ selected: sessionMinutes === d }"
-            @click="sessionMinutes = d"
+            @click="pickDuration(d)"
           >
             <Check v-if="sessionMinutes === d" :size="20" class="check" aria-hidden="true" />
             {{ t(`onboarding.duration.${d}`) }}
@@ -250,7 +291,7 @@ async function skip(): Promise<void> {
             :fill="sport === s ? 'solid' : 'outline'"
             :aria-pressed="sport === s"
             :class="{ selected: sport === s }"
-            @click="sport = s"
+            @click="pickSport(s)"
           >
             <Check v-if="sport === s" :size="20" class="check" aria-hidden="true" />
             {{ t(`sports.${s}`) }}
@@ -272,7 +313,7 @@ async function skip(): Promise<void> {
             :fill="zone === z ? 'solid' : 'outline'"
             :aria-pressed="zone === z"
             :class="{ selected: zone === z }"
-            @click="zone = z"
+            @click="pickZone(z)"
           >
             <Check v-if="zone === z" :size="20" class="check" aria-hidden="true" />
             {{ t(`zones.${z}`) }}

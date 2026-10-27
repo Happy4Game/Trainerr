@@ -8,15 +8,14 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
   const next = () => page.getByRole('button', { name: 'Suivant' }).click();
 
   await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
+  // One question on the screen: answering goes on by itself.
   await page.getByRole('button', { name: 'Prendre du muscle' }).click();
-  await next();
 
   await page.getByRole('button', { name: '6', exact: true }).click();
   await expect(page.getByText('Programme conseillé : Push / Pull / Legs')).toBeVisible();
   await next();
 
   await page.getByRole('button', { name: "Je m'entraîne déjà" }).click();
-  await next();
 
   // Evenings every day.
   for (const day of ['sam.', 'dim.']) {
@@ -26,14 +25,12 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
   await next();
 
   await page.getByRole('button', { name: '1 h', exact: true }).click();
-  await next();
 
   await page.getByRole('button', { name: 'Vélo (dont livraison)' }).click();
   await page.getByRole('button', { name: 'mer. Midi' }).click();
   await next();
 
   await page.getByRole('button', { name: 'Aucune' }).click();
-  await next();
 
   await expect(page.getByText('Des rappels ?')).toBeVisible();
   await page.getByRole('button', { name: 'Plus tard' }).click();
@@ -79,10 +76,8 @@ test('the chosen answer is always the only one highlighted', async ({ page }) =>
 
   // The answer chosen by default is shown as chosen.
   await expect.poll(() => highlighted('.choices')).toEqual(['Prendre du muscle']);
+  // Answering goes on to the next question by itself.
   await page.getByRole('button', { name: 'Gagner en force' }).tap();
-  await expect.poll(() => highlighted('.choices')).toEqual(['Gagner en force']);
-
-  await page.getByRole('button', { name: 'Suivant' }).tap();
   // The number of sessions, and the first session of the program.
   await expect.poll(() => highlighted('.row')).toEqual(['4', 'Haut du corps A']);
   await page.getByRole('button', { name: '3', exact: true }).tap();

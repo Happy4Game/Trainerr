@@ -24,6 +24,7 @@ import { estimateMinutes, type LoadChange } from '@/domain/sessionPreview';
 import { usePlanInsights } from '@/ui/session/usePlanInsights';
 import { useLoadLabel } from '@/ui/session/useLoadLabel';
 import AdviceCard from '@/ui/AdviceCard.vue';
+import UsualLoads from '@/ui/session/UsualLoads.vue';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
@@ -237,6 +238,7 @@ const streak = computed(() =>
               </div>
             </li>
           </ol>
+          <UsualLoads v-if="!active && !doneToday" :exercises="preview" on-hero />
           <ion-button expand="block" size="large" :disabled="starting" @click="go">
             {{ active ? t('today.resume') : doneToday ? t('today.goExtra') : t('today.go') }}
           </ion-button>

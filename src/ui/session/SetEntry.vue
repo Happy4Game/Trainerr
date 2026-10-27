@@ -507,7 +507,10 @@ function listen(): void {
       </ion-button>
     </div>
 
-    <h3 class="step"><span class="badge">2</span> {{ t('session.howWasIt') }}</h3>
+    <h3 class="step">
+      <span class="badge">2</span>
+      {{ testSet ? t('session.testSetQuestion') : t('session.howWasIt') }}
+    </h3>
     <p v-if="testSet" class="help test-help">{{ t('session.testSetFeel') }}</p>
     <p v-else-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
     <div class="difficulties">
