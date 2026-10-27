@@ -13,7 +13,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { Check, Settings, TrendingUp } from 'lucide-vue-next';
+import { ArrowLeftRight, Check, Settings, TrendingUp } from 'lucide-vue-next';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { openAppDatabase } from '@/data/appDatabase';
@@ -89,6 +89,24 @@ const totalSets = computed(() =>
 const minutes = computed(() => estimateMinutes(totalSets.value));
 const doneCount = computed(() => rows.value.filter((r) => r.done).length);
 const goingUp = computed(() => rows.value.filter((r) => r.change?.kind === 'up').length);
+/** Muscles behind on their week that this session works: "it catches up calves". */
+const catchUp = computed(() => {
+  if (active.value) return [];
+  const worked = new Set(preview.value.flatMap((e) => e.primaryMuscles));
+  return session.neglected.value.filter((m) => worked.has(m));
+});
+
+/** Very close machines for an exercise of the preview, opened one row at a time. */
+const choosing = ref<string>();
+const nameOf = (id: string) => {
+  const e = session.entryOf(id)?.exercise;
+  return e ? (locale.value.startsWith('fr') ? e.name : e.nameEn) : id;
+};
+async function swap(fromId: string, toId: string): Promise<void> {
+  choosing.value = undefined;
+  await session.swapPlanned(fromId, toId);
+}
+
 const changeLabel = (change: LoadChange) =>
   change.kind === 'up'
     ? t('today.change.up', { delta: kg(change.deltaKg) })
@@ -172,13 +190,40 @@ const streak = computed(() =>
             {{ t('today.doneOf', { done: doneCount, total: planCount }) }}
           </p>
           <p v-else-if="goingUp > 0" class="hint">{{ t('today.goingUp', goingUp) }}</p>
+          <p v-if="catchUp.length > 0" class="hint">
+            {{ t('today.catchUp', { muscles: catchUp.map((m) => t(`muscles.${m}`)).join(', ') }) }}
+          </p>
           <ol v-if="rows.length > 0" class="preview">
             <li v-for="row in rows" :key="row.id" :class="{ done: row.done }">
               <img v-if="row.thumbnail" :src="row.thumbnail" alt="" />
               <span class="preview-text">
                 <span class="preview-name">{{ row.name }}</span>
                 <span class="preview-detail">{{ row.detail }}</span>
+                <span v-if="!active && session.swappedFrom(row.id)" class="preview-detail">
+                  {{ t('today.swap.insteadOf', { name: nameOf(session.swappedFrom(row.id)!) }) }}
+                  ·
+                  <button
+                    type="button"
+                    class="link"
+                    :aria-label="
+                      t('today.swap.undoNamed', { name: nameOf(session.swappedFrom(row.id)!) })
+                    "
+                    @click="session.unswap(row.id)"
+                  >
+                    {{ t('today.swap.undo') }}
+                  </button>
+                </span>
               </span>
+              <button
+                v-if="!active && session.replacements(row.id).length > 0"
+                type="button"
+                class="swap-open"
+                :aria-expanded="choosing === row.id"
+                :aria-label="t('today.swap.openNamed', { name: row.name })"
+                @click="choosing = choosing === row.id ? undefined : row.id"
+              >
+                <ArrowLeftRight :size="18" aria-hidden="true" />
+              </button>
               <Check v-if="row.done" :size="20" :aria-label="t('today.exerciseDone')" />
               <span v-else-if="row.change?.kind === 'up'" class="change">
                 <TrendingUp :size="14" aria-hidden="true" />
@@ -187,6 +232,23 @@ const streak = computed(() =>
               <span v-else-if="row.change?.kind === 'first'" class="change first">
                 {{ changeLabel(row.change) }}
               </span>
+              <div
+                v-if="choosing === row.id"
+                class="swap-choices"
+                role="group"
+                :aria-label="t('today.swap.title', { name: row.name })"
+              >
+                <span class="swap-title">{{ t('today.swap.title', { name: row.name }) }}</span>
+                <button
+                  v-for="alt in session.replacements(row.id)"
+                  :key="alt.id"
+                  type="button"
+                  class="swap-choice"
+                  @click="swap(row.id, alt.id)"
+                >
+                  {{ nameOf(alt.id) }}
+                </button>
+              </div>
             </li>
           </ol>
           <ion-button expand="block" size="large" :disabled="starting" @click="go">
@@ -327,6 +389,53 @@ const streak = computed(() =>
   padding: 6px;
   border-radius: 12px;
   background: rgb(0 0 0 / 14%);
+}
+.preview li {
+  flex-wrap: wrap;
+}
+.swap-open {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--tr-radius-pill);
+  background: rgb(255 255 255 / 18%);
+  color: inherit;
+}
+.swap-choices {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-block-start: 4px;
+}
+.swap-title {
+  flex-basis: 100%;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+.swap-choice {
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--tr-radius-pill);
+  background: var(--tr-hero-text);
+  color: var(--ion-color-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
 }
 .preview li.done {
   opacity: 0.6;

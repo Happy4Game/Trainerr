@@ -44,6 +44,8 @@ export function buildSession(input: {
   priorityIds?: ReadonlySet<string>;
   /** Muscles already worked by other exercises of the session. */
   alreadyWorked?: readonly MuscleId[];
+  /** Muscles short of their weekly sets: on a tie, the exercise working them wins. */
+  neglected?: readonly MuscleId[];
 }): Exercise[] {
   const { template, count, protectedZone, priorityIds } = input;
   const spared = protectedZone ? PROTECTED_ZONE_MUSCLES[protectedZone] : [];
@@ -62,11 +64,12 @@ export function buildSession(input: {
 
   const compoundTarget = Math.min(MAX_COMPOUNDS, Math.ceil(count * 0.6), compounds.length);
   const covered = new Set<MuscleId>(input.alreadyWorked);
-  const chosen = pickCovering(compounds, compoundTarget, covered);
-  chosen.push(...pickCovering(isolations, count - chosen.length, covered));
+  const neglected = new Set(input.neglected);
+  const chosen = pickCovering(compounds, compoundTarget, covered, neglected);
+  chosen.push(...pickCovering(isolations, count - chosen.length, covered, neglected));
   if (chosen.length < count) {
     const leftovers = compounds.filter((e) => !chosen.includes(e));
-    chosen.push(...pickCovering(leftovers, count - chosen.length, covered));
+    chosen.push(...pickCovering(leftovers, count - chosen.length, covered, neglected));
   }
   return chosen
     .map((e, index) => ({ e, index }))
@@ -88,9 +91,13 @@ export function readyMadeSession(input: {
   popular: readonly Exercise[];
   count: number;
   protectedZone?: ProtectedZone;
+  neglected?: readonly MuscleId[];
 }): { exercises: Exercise[]; suggestedIds: string[] } {
   const { template, count, protectedZone } = input;
-  const zone = protectedZone ? { protectedZone } : {};
+  const zone = {
+    ...(protectedZone ? { protectedZone } : {}),
+    ...(input.neglected ? { neglected: input.neglected } : {}),
+  };
   const mine = buildSession({ template, favorites: input.favorites, count, ...zone });
   if (mine.length >= count) return { exercises: mine, suggestedIds: [] };
 
@@ -110,14 +117,25 @@ export function readyMadeSession(input: {
   return { exercises, suggestedIds: suggested.map((e) => e.id) };
 }
 
-function pickCovering(candidates: readonly Exercise[], count: number, covered: Set<MuscleId>) {
+/**
+ * Greedy: each time the exercise adding the most muscles not worked yet in the
+ * session (2 points each), then working muscles behind on their week (1 point).
+ */
+function pickCovering(
+  candidates: readonly Exercise[],
+  count: number,
+  covered: Set<MuscleId>,
+  neglected: ReadonlySet<MuscleId> = new Set(),
+) {
   const pool = [...candidates];
   const picked: Exercise[] = [];
   while (picked.length < count && pool.length > 0) {
     let bestIndex = 0;
     let bestGain = -1;
     pool.forEach((e, index) => {
-      const gain = e.primaryMuscles.filter((m) => !covered.has(m)).length;
+      const gain =
+        e.primaryMuscles.filter((m) => !covered.has(m)).length * 2 +
+        e.primaryMuscles.filter((m) => neglected.has(m)).length;
       if (gain > bestGain) {
         bestGain = gain;
         bestIndex = index;

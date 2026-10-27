@@ -33,7 +33,15 @@
     "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges",
     "doneToday": "✓ Séance du jour faite, bravo ! La prochaine :",
     "goExtra": "Faire une séance en plus",
-    "heroLabel": "Séance du jour"
+    "heroLabel": "Séance du jour",
+    "catchUp": "Elle rattrape ce que ta semaine a peu travaillé : {muscles}.",
+    "swap": {
+      "openNamed": "Remplacer {name}",
+      "title": "À la place de {name} :",
+      "insteadOf": "à la place de {name}",
+      "undo": "Annuler",
+      "undoNamed": "Reprendre {name}"
+    }
   },
   "gym": {
     "defaultName": "Ma salle"
@@ -511,6 +519,10 @@
       "ok": "bonne charge : on la garde",
       "hard": "lourd : on la garde",
       "fail": "trop lourd : la charge baisse"
+    },
+    "closeOnes": {
+      "title": "Pas cette machine ? Très proches :",
+      "take": "Faire {name} à la place"
     }
   },
   "availability": {

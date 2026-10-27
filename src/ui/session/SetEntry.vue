@@ -43,6 +43,14 @@ const thumbnail = computed(() => {
 });
 const steps = computed(() => (entry.value ? session.stepsOf(entry.value) : []));
 const done = computed(() => session.workSetsInSession(props.exerciseId).length);
+/** Before the first set: the very close machines, one tap away (same main muscle, same kind). */
+const closeOnes = computed(() =>
+  done.value === 0 ? session.replacements(props.exerciseId).slice(0, 3) : [],
+);
+const closeName = (id: string) => {
+  const e = session.entryOf(id)?.exercise;
+  return e ? (locale.value.startsWith('fr') ? e.name : e.nameEn) : id;
+};
 const target = computed(() => session.plannedSets(props.exerciseId));
 
 const load = ref(0);
@@ -266,6 +274,23 @@ function listen(): void {
         <span class="hint">{{ t('session.seeMovement') }} ›</span>
       </span>
     </router-link>
+
+    <div
+      v-if="closeOnes.length > 0"
+      class="close-ones"
+      role="group"
+      :aria-label="t('session.closeOnes.title')"
+    >
+      <span class="close-title">{{ t('session.closeOnes.title') }}</span>
+      <ion-chip
+        v-for="alt in closeOnes"
+        :key="alt.id"
+        :aria-label="t('session.closeOnes.take', { name: closeName(alt.id) })"
+        @click="session.replaceExercise(exerciseId, alt.id)"
+      >
+        {{ closeName(alt.id) }}
+      </ion-chip>
+    </div>
 
     <div class="set-number">
       <strong>{{
@@ -588,6 +613,18 @@ function listen(): void {
   --padding-start: 8px;
   --padding-end: 8px;
   text-transform: none;
+}
+.close-ones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  margin-block: 4px;
+}
+.close-title {
+  flex-basis: 100%;
+  color: var(--tr-text-muted);
+  font-size: 0.85rem;
 }
 .header {
   display: flex;

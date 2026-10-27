@@ -19,17 +19,19 @@ Les personnages viennent des séances test de [retour-utilisateur.md](retour-uti
 
 ## 2. Avant la séance
 
-| #   | En tant que…           | je veux…                                                                    | pour…                                    | État                               |
-| --- | ---------------------- | --------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------------- |
-| 2.1 | pratiquant             | voir d'un coup d'œil la séance du jour, ses exercices, séries et charges    | savoir à quoi m'attendre                 | 🆕 aperçu complet sur Aujourd'hui  |
-| 2.2 | pratiquant             | savoir combien de temps elle va durer                                       | caler ma séance entre deux rendez-vous   | 🆕 durée estimée                   |
-| 2.3 | pratiquant             | voir où je monte en charge aujourd'hui                                      | arriver motivé                           | 🆕 badge « +2,5 kg »               |
-| 2.4 | pratiquant pressé      | une séance express de 20 à 30 min                                           | ne pas sauter la séance                  | ✅                                 |
-| 2.5 | pratiquant             | lancer la séance en un seul tap                                             | ne pas perdre de temps                   | ✅ « Commencer » lance directement |
-| 2.6 | pratiquant             | choisir une séance type (Push, Pull, Jambes…) et la copier pour la modifier | avoir mes propres séries et reps         | 🆕 « Copier et modifier »          |
-| 2.7 | pratiquant fatigué     | dire que je suis fatigué                                                    | avoir une séance allégée plutôt que rien | 🆕 « Pas en forme aujourd'hui »    |
-| 2.8 | pratiquant à la maison | une séance avec mon matériel                                                | m'entraîner sans salle                   | ✅                                 |
-| 2.9 | pratiquant             | un échauffement articulaire court                                           | préparer épaules et hanches              | ✅ 3 min                           |
+| #    | En tant que…           | je veux…                                                                    | pour…                                         | État                                |
+| ---- | ---------------------- | --------------------------------------------------------------------------- | --------------------------------------------- | ----------------------------------- |
+| 2.1  | pratiquant             | voir d'un coup d'œil la séance du jour, ses exercices, séries et charges    | savoir à quoi m'attendre                      | 🆕 aperçu complet sur Aujourd'hui   |
+| 2.2  | pratiquant             | savoir combien de temps elle va durer                                       | caler ma séance entre deux rendez-vous        | 🆕 durée estimée                    |
+| 2.3  | pratiquant             | voir où je monte en charge aujourd'hui                                      | arriver motivé                                | 🆕 badge « +2,5 kg »                |
+| 2.4  | pratiquant pressé      | une séance express de 20 à 30 min                                           | ne pas sauter la séance                       | ✅                                  |
+| 2.5  | pratiquant             | lancer la séance en un seul tap                                             | ne pas perdre de temps                        | ✅ « Commencer » lance directement  |
+| 2.6  | pratiquant             | choisir une séance type (Push, Pull, Jambes…) et la copier pour la modifier | avoir mes propres séries et reps              | 🆕 « Copier et modifier »           |
+| 2.7  | pratiquant fatigué     | dire que je suis fatigué                                                    | avoir une séance allégée plutôt que rien      | 🆕 « Pas en forme aujourd'hui »     |
+| 2.8  | pratiquant à la maison | une séance avec mon matériel                                                | m'entraîner sans salle                        | ✅                                  |
+| 2.9  | pratiquant             | un échauffement articulaire court                                           | préparer épaules et hanches                   | ✅ 3 min                            |
+| 2.10 | pratiquant             | que mes séances travaillent tous les muscles sur la semaine                 | ne pas oublier mollets, lombaires, avant-bras | 🆕 rattrapage des muscles en retard |
+| 2.11 | pratiquant             | remplacer une machine de la séance par une très proche, avant de partir     | utiliser celles de ma salle                   | 🆕 bouton ⇄ dans l'aperçu           |
 
 ## 3. Pendant la séance
 

@@ -187,6 +187,12 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - **Charge plafonnée** : « + » continue au-delà du dernier palier connu (même écart). Charges par défaut relevées (PR #4) : 150 kg de lest au poids du corps, 500 kg sur machine, poulie et barre, 100 kg en haltères.
 - **Catalogue, recherche par muscle** : toucher un muscle repasse sur « Tout » (pas bloqué sur l'onglet Jambes) ; refermer la silhouette oublie le muscle choisi.
 
+## Tous les muscles et machines proches (27 oct. 2026)
+
+- **Couverture sur la semaine** : `neglectedMuscles` (stats.ts) liste les muscles de la séance sous 10 séries de travail sur 7 jours glissants ; `buildSession` les préfère à égalité (un muscle nouveau dans la séance compte 2, un muscle en retard 1). Sources : ACSM 2009 (travailler tous les grands groupes), Schoenfeld 2017 (10 à 20 séries par muscle et par semaine). L'aperçu dit ce que la séance rattrape.
+- **Avant la séance** : bouton ⇄ sur chaque exercice de l'aperçu, machines du même mouvement (même muscle principal, même type) ; le choix est gardé dans `settings.swaps` et annulable.
+- **Pendant la séance** : « Pas cette machine ? Très proches : » sous l'exercice, avant la première série.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

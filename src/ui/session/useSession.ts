@@ -26,7 +26,7 @@ import {
   type ReferenceLoad,
 } from '@/data/repositories/referenceRepository';
 import { CUSTOM_PREFIX, getSettings, type Settings } from '@/data/repositories/settingsRepository';
-import { loadSettings } from '@/ui/useSettings';
+import { loadSettings, updateSettings } from '@/ui/useSettings';
 import {
   addExercise,
   appendExercise,
@@ -66,7 +66,14 @@ import { warmupRamp } from '@/domain/warmup';
 import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
 import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/domain/achievements';
-import { beatsRecord, personalRecords, weeksOnPace, type PersonalRecord } from '@/domain/stats';
+import {
+  beatsRecord,
+  neglectedMuscles,
+  personalRecords,
+  weeksOnPace,
+  type PersonalRecord,
+} from '@/domain/stats';
+import type { MuscleId } from '@/domain/muscles';
 import { addBadges } from '@/data/repositories/badgeRepository';
 import { rescheduleNotifications } from '@/ui/notifications';
 import { isPopular } from '@/data/catalog/curated';
@@ -77,6 +84,7 @@ import { firstTimeEstimateKg } from '@/domain/firstLoad';
 import { restAfterSet } from '@/domain/restTime';
 import {
   afterMovingSets,
+  applySwaps,
   movePending,
   removeFromQueue,
   replaceInQueue,
@@ -219,16 +227,37 @@ const template = computed<SessionTemplate | undefined>(() => {
   return dueTemplate(rotationFor(settings.value.model), lastDone.value, settings.value.nextChoice);
 });
 
+/**
+ * Muscles of the next session short of 10 sets over the last 7 days: the
+ * session picks the exercises that catch them up, so that every muscle gets
+ * its turn over the week.
+ */
+const neglected = computed<MuscleId[]>(() => {
+  if (!template.value) return [];
+  const exercises = new Map(entries.value.map((e) => [e.exercise.id, e.exercise]));
+  return neglectedMuscles(history.value, exercises, today(), template.value.muscles);
+});
+/** Options shared by every proposed session: the spared zone, the muscles to catch up. */
+const builderOptions = () => ({
+  ...(settings.value?.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
+  neglected: neglected.value,
+});
+/** The machines chosen instead of others from the preview, in their place. */
+const withSwaps = <E extends Exercise>(list: readonly E[]): E[] =>
+  applySwaps(list, settings.value?.swaps ?? {}, (id) => entryOf(id)?.exercise as E | undefined);
+
 /** Exercises proposed for the next session, from the favorite machines. */
 const preview = computed<Exercise[]>(() => {
   if (!settings.value || !template.value) return [];
   const count = exercisesPerSession(settings.value.sessionMinutes);
-  const built = buildSession({
-    template: template.value,
-    favorites: favorites.value.map((e) => e.exercise),
-    count,
-    ...(settings.value.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
-  });
+  const built = withSwaps(
+    buildSession({
+      template: template.value,
+      favorites: favorites.value.map((e) => e.exercise),
+      count,
+      ...builderOptions(),
+    }),
+  );
   // Machines that stayed taken last time come back first.
   const lastSame = [...history.value].reverse().find((s) => s.templateId === template.value?.id);
   const carried = (lastSame?.plan.carryOver ?? [])
@@ -407,12 +436,14 @@ const EXPRESS_EXERCISES = 3;
 
 const expressPreview = computed<Exercise[]>(() => {
   if (!settings.value || !template.value) return [];
-  return buildSession({
-    template: template.value,
-    favorites: favorites.value.map((e) => e.exercise),
-    count: EXPRESS_EXERCISES,
-    ...(settings.value.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
-  });
+  return withSwaps(
+    buildSession({
+      template: template.value,
+      favorites: favorites.value.map((e) => e.exercise),
+      count: EXPRESS_EXERCISES,
+      ...builderOptions(),
+    }),
+  );
 });
 
 /**
@@ -433,9 +464,15 @@ const readyMade = computed(() => {
     favorites: favorites.value.map((e) => e.exercise),
     popular,
     count,
-    ...(settings.value.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
+    ...builderOptions(),
   });
-  return session.suggestedIds.length > 0 ? session : undefined;
+  if (session.suggestedIds.length === 0) return undefined;
+  const exercises = withSwaps(session.exercises);
+  return {
+    exercises,
+    // A suggested machine replaced by one of mine is no longer a suggestion.
+    suggestedIds: session.suggestedIds.filter((id) => exercises.some((e) => e.id === id)),
+  };
 });
 
 /** Stars the machines of the pre-session: the next sessions will use them. */
@@ -453,7 +490,7 @@ const homePreview = computed<Exercise[]>(() => {
     template: template.value,
     favorites: entries.value.map((e) => e.exercise).filter((e) => available.has(e.equipment)),
     count: exercisesPerSession(settings.value.sessionMinutes),
-    ...(settings.value.protectedZone ? { protectedZone: settings.value.protectedZone } : {}),
+    ...builderOptions(),
   });
 });
 
@@ -800,18 +837,44 @@ const addExerciseLater = (exerciseId: string) => addExerciseTo(appendExercise, e
 /** Same movement on another machine: my machines and the common ones, not already in the session. */
 function replacements(exerciseId: string): CatalogExercise[] {
   const exercise = entryOf(exerciseId)?.exercise;
+  if (!exercise) return [];
   const queue = active.value?.plan.queue;
-  if (!exercise || !queue) return [];
-  const inSession = new Set([
-    ...queue.pending,
-    ...queue.done,
-    ...queue.waiting.map((w) => w.exerciseId),
-  ]);
+  // Before the session: the machines of the proposed session.
+  const inSession = new Set(
+    queue
+      ? [...queue.pending, ...queue.done, ...queue.waiting.map((w) => w.exerciseId)]
+      : [...preview.value, ...(readyMade.value?.exercises ?? [])].map((e) => e.id),
+  );
   const candidates = entries.value
     .filter((e) => (e.favorite || isPopular(e.exercise.id)) && !inSession.has(e.exercise.id))
     .map((e) => e.exercise);
   return replacementsFor(exercise, candidates, (id) => entryOf(id)?.favorite === true);
 }
+
+/** The machine replaced from the preview by this one, if any. */
+function swappedFrom(exerciseId: string): string | undefined {
+  const swaps = settings.value?.swaps ?? {};
+  return Object.keys(swaps).find((from) => swaps[from] === exerciseId);
+}
+
+/**
+ * From the preview, before the session: this machine instead of that one,
+ * kept for the next sessions until undone. Choosing the original back undoes it.
+ */
+async function swapPlanned(fromId: string, toId: string): Promise<void> {
+  const original = swappedFrom(fromId) ?? fromId;
+  const swaps = Object.fromEntries(
+    Object.entries(settings.value?.swaps ?? {}).filter(
+      ([from, to]) => from !== original && from !== toId && to !== toId,
+    ),
+  );
+  if (toId !== original) swaps[original] = toId;
+  settings.value = await updateSettings({ swaps });
+}
+const unswap = async (exerciseId: string): Promise<void> => {
+  const original = swappedFrom(exerciseId);
+  if (original) await swapPlanned(exerciseId, original);
+};
 
 /**
  * Where sets of this machine may really have been done: the same movement,
@@ -1189,6 +1252,10 @@ export function useSession() {
     addPastSession,
     extraSet,
     replacements,
+    neglected,
+    swappedFrom,
+    swapPlanned,
+    unswap,
     sameMovement,
     replaceExercise,
     moveExercise,

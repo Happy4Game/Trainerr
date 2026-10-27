@@ -66,6 +66,8 @@ export interface Settings {
   readonly sessionNotification?: boolean;
   /** The user agreed to send the summary of their week to the AI coach. */
   readonly aiConsent: boolean;
+  /** Machines replaced from the session preview: "instead of this one, propose that one". */
+  readonly swaps?: Readonly<Record<string, string>>;
   /** Sessions built by the user: a name and exercises in order. */
   readonly customSessions?: readonly CustomSession[];
   readonly language: LanguagePreference;
