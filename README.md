@@ -49,7 +49,7 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 - **Statistiques** : régularité, évolution de la force (1RM estimé), séries par muscle, records.
 - **Récap de fin de séance** : volume gagné depuis la dernière fois, durée, records, et une image à partager.
 - **Historique modifiable**, avec trophées sur les records. Téléphone oublié ? **Ajoute après coup une séance faite sans l'appli** : elle compte dans les stats et le cycle.
-- **Suivi du poids du corps** (Historique → Corps) : pesée du jour ou d'une date passée, courbe sur 3 mois et tendance par semaine, mensurations et photo du mois. Tes pesées faites ailleurs s'importent en CSV ([docs/import.md](docs/import.md#mes-pesées)).
+- **Suivi du poids du corps** (Historique → Corps) : pesée du jour ou d'une date passée, courbe sur 3 mois et tendance par semaine, mensurations et photo du mois. Sur Android, **« Importer depuis Health Connect »** récupère les pesées de ta balance connectée, de Samsung Health ou de Google Fit (lecture seule, [docs/health-connect.md](docs/health-connect.md)) ; sinon, elles s'importent en CSV ([docs/import.md](docs/import.md#mes-pesées)).
 - Badges, récap du mois à partager.
 - **Défis entre amis** et **conseils d'un coach IA**, optionnels, via un petit serveur ([server/](server/README.md)).
 

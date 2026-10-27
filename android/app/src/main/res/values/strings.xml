@@ -4,4 +4,5 @@
     <string name="title_activity_main">Trainerr</string>
     <string name="package_name">fr.trainerr.app</string>
     <string name="custom_url_scheme">fr.trainerr.app</string>
+    <string name="health_rationale">Trainerr lit seulement ton poids dans Health Connect, quand tu touches « Importer depuis Health Connect » dans Historique › Corps. Les pesées sont copiées dans Trainerr et restent sur ton téléphone : rien n\'est envoyé ailleurs, et Trainerr n\'écrit rien dans Health Connect. Tu peux retirer l\'accès à tout moment dans les réglages de Health Connect.</string>
 </resources>

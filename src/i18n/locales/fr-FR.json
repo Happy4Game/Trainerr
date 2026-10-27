@@ -815,7 +815,19 @@
     "front": "Face",
     "back": "Dos",
     "date": "Date de la pesée",
-    "importHint": "Tu as tes pesées ailleurs (balance connectée, tableur) ? Exporte-les en CSV (une date et un poids par ligne) puis importe-les dans Réglages › Mes données."
+    "importHint": "Tes pesées sont dans un tableur ou une autre appli ? Exporte-les en CSV (une date et un poids par ligne) puis importe-les dans Réglages › Mes données.",
+    "health": {
+      "import": "Importer depuis Health Connect",
+      "reading": "Lecture de Health Connect…",
+      "help": "Récupère les pesées de ta balance connectée, de Samsung Health ou de Google Fit via Health Connect (Android). Trainerr lit seulement ton poids, et les pesées restent sur ton téléphone.",
+      "done": "{count} pesée importée depuis Health Connect. | {count} pesées importées depuis Health Connect.",
+      "nothing": "Aucune nouvelle pesée dans Health Connect.",
+      "unavailable": "Health Connect n'est pas installé sur ce téléphone (Android 9 ou plus).",
+      "updateRequired": "Health Connect doit être mis à jour.",
+      "install": "Ouvrir Health Connect sur le Play Store",
+      "denied": "Accès refusé : Trainerr ne peut pas lire ton poids. Tu peux l'autoriser dans les réglages de Health Connect.",
+      "error": "Lecture impossible : {message}"
+    }
   },
   "settings": {
     "theme": {
@@ -1015,7 +1027,8 @@
       "newLook": "Nouveau look et statistiques",
       "firstRelease": "Première version publiée",
       "bodyWeight": "Suivi du poids",
-      "easySwitch": "Changer de machine en un geste"
+      "easySwitch": "Changer de machine en un geste",
+      "healthConnect": "Pesées depuis Health Connect"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1045,7 +1058,8 @@
       "weightDate": "Tu peux noter une pesée à une date passée.",
       "weightImport": "Import de tes pesées en CSV (balance connectée, tableur) dans Réglages › Mes données.",
       "switchButton": "Un bouton « Changer » à côté du nom de la machine, à chaque série : la liste des machines proches s'ouvre tout en haut de l'écran.",
-      "switchNext": "L'écran « Machine suivante » propose aussi de changer de machine avant d'y aller."
+      "switchNext": "L'écran « Machine suivante » propose aussi de changer de machine avant d'y aller.",
+      "healthConnectImport": "Historique › Corps › « Importer depuis Health Connect » récupère les pesées de ta balance connectée, de Samsung Health ou de Google Fit (Android)."
     }
   },
   "data": {
