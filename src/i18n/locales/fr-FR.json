@@ -524,7 +524,8 @@
     "closeOnes": {
       "title": "Pas cette machine ? Très proches :",
       "take": "Faire {name} à la place"
-    }
+    },
+    "saved": "✓ Série enregistrée : {set}"
   },
   "availability": {
     "day": "Jour",
@@ -1028,7 +1029,8 @@
       "firstRelease": "Première version publiée",
       "bodyWeight": "Suivi du poids",
       "easySwitch": "Changer de machine en un geste",
-      "healthConnect": "Pesées depuis Health Connect"
+      "healthConnect": "Pesées depuis Health Connect",
+      "clearFeedback": "Chaque geste se voit"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1059,7 +1061,9 @@
       "weightImport": "Import de tes pesées en CSV (balance connectée, tableur) dans Réglages › Mes données.",
       "switchButton": "Un bouton « Changer » à côté du nom de la machine, à chaque série : la liste des machines proches s'ouvre tout en haut de l'écran.",
       "switchNext": "L'écran « Machine suivante » propose aussi de changer de machine avant d'y aller.",
-      "healthConnectImport": "Historique › Corps › « Importer depuis Health Connect » récupère les pesées de ta balance connectée, de Samsung Health ou de Google Fit (Android)."
+      "healthConnectImport": "Historique › Corps › « Importer depuis Health Connect » récupère les pesées de ta balance connectée, de Samsung Health ou de Google Fit (Android).",
+      "setSaved": "Après une série, l'écran remonte sur le minuteur de repos et un bandeau confirme « Série enregistrée ».",
+      "switchSheet": "« Changer de machine » s'ouvre par-dessus l'écran, plus besoin de remonter pour le trouver."
     }
   },
   "data": {

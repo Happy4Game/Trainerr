@@ -69,11 +69,23 @@ test('switching machine is at hand: next to the name after a set, and on the nex
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
   const machine = page.getByRole('region', { name: 'Développé épaules machine' });
   await expect(machine).toBeVisible();
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  // "Correct" is low on the screen: once tapped, the set is confirmed and the
+  // view goes back up to the rest timer.
+  const scrollTop = () =>
+    page
+      .locator('ion-content.ion-padding:visible')
+      .first()
+      .evaluate(async (el) => (await (el as HTMLIonContentElement).getScrollElement()).scrollTop);
+  const correct = page.getByRole('button', { name: 'Correct', exact: true });
+  await correct.scrollIntoViewIfNeeded();
+  expect(await scrollTop()).toBeGreaterThan(0);
+  await correct.click();
+  await expect(page.getByText(/Série enregistrée : Développé épaules machine/)).toBeVisible();
+  await expect.poll(scrollTop).toBe(0);
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
 
-  // After a set, the button sits next to the name, and its card shows at once.
+  // After a set, the button sits next to the name, and its sheet opens over the screen.
   const switchButton = machine.getByRole('button', { name: 'Changer de machine' });
   await expect(switchButton).toBeInViewport();
   await switchButton.click();

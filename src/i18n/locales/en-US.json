@@ -524,7 +524,8 @@
     "closeOnes": {
       "title": "Not this machine? Very close ones:",
       "take": "Do {name} instead"
-    }
+    },
+    "saved": "✓ Set saved: {set}"
   },
   "availability": {
     "day": "Day",
@@ -1028,7 +1029,8 @@
       "firstRelease": "First public version",
       "bodyWeight": "Weight tracking",
       "easySwitch": "Switch machine in one tap",
-      "healthConnect": "Weighings from Health Connect"
+      "healthConnect": "Weighings from Health Connect",
+      "clearFeedback": "Every tap shows"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1059,7 +1061,9 @@
       "weightImport": "Import your weighings as CSV (smart scale, spreadsheet) in Settings › My data.",
       "switchButton": "A \"Switch\" button next to the machine name, at every set: the list of close machines opens at the top of the screen.",
       "switchNext": "The \"Next machine\" screen also offers to switch before you go.",
-      "healthConnectImport": "History › Body › \"Import from Health Connect\" gets the weighings of your smart scale, Samsung Health or Google Fit (Android)."
+      "healthConnectImport": "History › Body › \"Import from Health Connect\" gets the weighings of your smart scale, Samsung Health or Google Fit (Android).",
+      "setSaved": "After a set, the screen goes back up to the rest timer and a banner confirms \"Set saved\".",
+      "switchSheet": "\"Switch machine\" opens over the screen, no need to scroll up to find it."
     }
   },
   "data": {
