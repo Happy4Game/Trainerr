@@ -37,6 +37,6 @@ test('a custom session is created, reordered, started and kept in the history', 
   await page.getByRole('button', { name: 'Correct', exact: true }).click();
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await page.getByRole('button', { name: 'Fermer' }).first().click();
-  await page.getByRole('tab', { name: 'Historique' }).click();
+  await page.getByRole('tab', { name: 'Progrès' }).click();
   await expect(page.getByRole('heading', { name: /Bras du vendredi/ })).toBeVisible();
 });

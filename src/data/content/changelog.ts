@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'bodyTab',
+    date: '2026-10-27',
+    items: ['bodyTab', 'inAppCamera', 'photoCount'],
+  },
+  {
     id: 'cameraFix',
     date: '2026-10-27',
     items: ['cameraFix'],

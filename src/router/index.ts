@@ -33,7 +33,8 @@ const routes: RouteRecordRaw[] = [
       },
       { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
       { path: 'history', component: () => import('@/views/HistoryPage.vue') },
-      { path: 'history/photos', component: () => import('@/views/PhotosPage.vue') },
+      // Moved to the Body tab (body photos) and under Today (planning).
+      { path: 'history/photos', redirect: '/tabs/body/photos' },
       {
         path: 'history/:id',
         component: () => import('@/views/HistorySessionPage.vue'),
@@ -45,7 +46,11 @@ const routes: RouteRecordRaw[] = [
       { path: 'settings/friends', component: () => import('@/views/FriendsPage.vue') },
       { path: 'settings/about', component: () => import('@/views/AboutPage.vue') },
       { path: 'settings/changelog', component: () => import('@/views/ChangelogPage.vue') },
-      { path: 'planning', component: () => import('@/views/PlanningPage.vue') },
+      { path: 'body', component: () => import('@/views/BodyPage.vue') },
+      { path: 'body/photos', component: () => import('@/views/PhotosPage.vue') },
+      // The week plan opens from Today: it stays in that tab.
+      { path: 'today/planning', component: () => import('@/views/PlanningPage.vue') },
+      { path: 'planning', redirect: '/tabs/today/planning' },
     ],
   },
 ];

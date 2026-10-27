@@ -3,7 +3,8 @@
     "today": "Aujourd'hui",
     "session": "Séance",
     "catalog": "Catalogue",
-    "history": "Historique",
+    "history": "Progrès",
+    "body": "Corps",
     "planning": "Planning",
     "inProgress": "séance en cours"
   },
@@ -672,8 +673,7 @@
     "empty": "Pas encore de séance terminée.",
     "views": {
       "sessions": "Séances",
-      "stats": "Stats",
-      "body": "Corps"
+      "stats": "Stats"
     },
     "edit": "Modifier {session}",
     "sessions": "{count} séance | {count} séances",
@@ -820,9 +820,9 @@
       "source": "Source : Morton et al. 2018, voir les Crédits."
     },
     "photo": {
-      "title": "Photo du mois",
-      "help": "Une photo par mois, même lumière, même angle : plus parlant que le miroir. Elle reste sur ton téléphone.",
-      "take": "Prendre la photo du mois",
+      "title": "Photos du corps",
+      "help": "Une photo par mois, même lumière, même endroit, même pose : plus parlant que le miroir. Elles restent sur ton téléphone.",
+      "take": "Prendre une photo",
       "alt": "Photo du {date}"
     },
     "front": "Face",
@@ -856,6 +856,7 @@
       },
       "adding": "Ajout des photos…",
       "empty": "Aucune photo pour l'instant. Prends-en une devant le miroir ou importe celles de ta galerie.",
+      "emptyPose": "Aucune photo pour cette pose.",
       "compareTitle": "Avant / après",
       "between": "{weeks} et {sessions} d'écart.",
       "weeks": "{count} semaine | {count} semaines",
@@ -866,6 +867,32 @@
       "deleteConfirm": "Oui, supprimer définitivement",
       "link": "Ma galerie ({count} photo) | Ma galerie ({count} photos)",
       "linkEmpty": "Ouvrir ma galerie"
+    },
+    "camera": {
+      "title": "Prendre une photo",
+      "live": "Aperçu de la caméra",
+      "preview": "Photo prise",
+      "shoot": "Prendre la photo",
+      "toBack": "Passer à la caméra arrière",
+      "toFront": "Passer à la caméra avant (selfie)",
+      "timer": "Retardateur : {seconds} s. Toucher pour changer.",
+      "timerOff": "Non",
+      "overlay": "Voir la dernière photo de cette pose en transparence",
+      "retake": "Reprendre",
+      "keep": "Garder cette photo",
+      "useCameraApp": "Ouvrir l'appareil photo du téléphone",
+      "howTo": {
+        "front": "De face, bras le long du corps, téléphone à hauteur du nombril.",
+        "side": "De profil, bras le long du corps, toujours du même côté.",
+        "back": "De dos : pose le téléphone et mets le retardateur à 10 s."
+      },
+      "problems": {
+        "unsupported": "Ce téléphone ne permet pas d'utiliser la caméra dans l'appli.",
+        "denied": "Trainerr n'a pas accès à la caméra. Tu peux l'autoriser dans les réglages Android, ou utiliser l'appareil photo du téléphone.",
+        "missing": "Aucune caméra trouvée.",
+        "busy": "La caméra est déjà utilisée par une autre appli.",
+        "other": "La caméra n'a pas pu démarrer."
+      }
     }
   },
   "settings": {
@@ -1093,7 +1120,8 @@
       "photoGallery": "Galerie de photos du corps",
       "cardio": "Cardio dans les séances",
       "programChoice": "Choisis ton programme dès le départ",
-      "cameraFix": "Prendre une photo ouvre l'appareil photo"
+      "cameraFix": "Prendre une photo ouvre l'appareil photo",
+      "bodyTab": "Un onglet Corps et la caméra dans l'appli"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1142,7 +1170,10 @@
       "cardioLog": "Pendant la séance, saisis tes perfs de cardio : durée, distance, vitesse, pente, niveau, cadence, fréquence cardiaque et calories, selon la machine.",
       "cardioCatalog": "Catalogue › Cardio : chaque machine avec les muscles travaillés et tes perfs, et ta semaine comparée au repère de l'OMS (150 min).",
       "programChoice": "Questionnaire › « Quel type de séances ? » : full body, haut/bas, PPL… ou laisse l'appli choisir selon ton nombre de séances. Chaque programme est expliqué, avec la fréquence par muscle.",
-      "cameraFix": "« Prendre une photo » ouvre maintenant l'appareil photo sur Android, et plus la galerie. Pour une photo déjà prise, utilise « Importer »."
+      "cameraFix": "« Prendre une photo » ouvre maintenant l'appareil photo sur Android, et plus la galerie. Pour une photo déjà prise, utilise « Importer ».",
+      "bodyTab": "Nouvel onglet Corps : poids, mensurations et photos, à part des séances. L'onglet Historique devient Progrès (séances et stats), et le Planning s'ouvre depuis Aujourd'hui (icône calendrier).",
+      "inAppCamera": "Les photos du corps se prennent dans l'appli : aperçu dans un cadre, pose choisie au-dessus (face, profil, dos), caméra avant ou arrière, retardateur et dernière photo en transparence pour te placer au même endroit.",
+      "photoCount": "Le nombre de photos affiché sur l'onglet Corps se met à jour tout de suite après un ajout ou une suppression dans la galerie."
     }
   },
   "data": {

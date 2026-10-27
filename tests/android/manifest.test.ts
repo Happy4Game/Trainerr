@@ -14,4 +14,12 @@ describe('Android manifest', () => {
       /<queries>[\s\S]*<intent>\s*<action android:name="android\.media\.action\.IMAGE_CAPTURE" \/>\s*<\/intent>[\s\S]*<\/queries>/,
     );
   });
+
+  it('may use the camera inside the app, without requiring one to install', () => {
+    // Capacitor grants getUserMedia only if the CAMERA permission is declared.
+    expect(manifest).toContain('<uses-permission android:name="android.permission.CAMERA" />');
+    expect(manifest).toMatch(
+      /<uses-feature android:name="android\.hardware\.camera" android:required="false" \/>/,
+    );
+  });
 });

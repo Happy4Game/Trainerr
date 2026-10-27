@@ -7,15 +7,9 @@ import {
   IonCardTitle,
   IonInput,
 } from '@ionic/vue';
-import { computed, onMounted, ref } from 'vue';
+import { Camera } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { openAppDatabase } from '@/data/appDatabase';
-import {
-  addMeasurement,
-  deleteMeasurement,
-  listMeasurements,
-  type BodyMeasurement,
-} from '@/data/repositories/bodyRepository';
 import { weighingsToAdd } from '@/domain/healthWeights';
 import { bodyWeightTrend } from '@/domain/insights';
 import { parseLoad } from '@/domain/loadSteps';
@@ -25,8 +19,10 @@ import {
   healthConnectSupported,
   readHealthWeighings,
 } from '@/ui/healthConnect';
+import { lastPhotoOfPose, type PhotoPose } from '@/domain/photos';
 import { proteinTargetGrams } from '@/domain/tracking';
-import { readPhoto } from '@/ui/photo';
+import CameraCapture from '@/ui/body/CameraCapture.vue';
+import { useBodyMeasurements } from '@/ui/body/useBodyMeasurements';
 import { todayIso } from '@/ui/useWeekPlan';
 import { useUnits } from '@/ui/useUnits';
 import { useSession } from '@/ui/session/useSession';
@@ -34,17 +30,13 @@ import { useSession } from '@/ui/session/useSession';
 const { t, n, locale } = useI18n();
 const session = useSession();
 const { load, symbol, fromInput, toDisplay } = useUnits();
-const measurements = ref<BodyMeasurement[]>([]);
+const body = useBodyMeasurements();
+const measurements = body.measurements;
 const weight = ref('');
 /** Today by default; an earlier day to log a weighing done elsewhere. */
 const date = ref(todayIso());
 const arm = ref('');
 const waist = ref('');
-
-onMounted(async () => {
-  const { db } = await openAppDatabase();
-  measurements.value = await listMeasurements(db);
-});
 
 const lastWeight = computed(
   () => [...measurements.value].reverse().find((m) => m.weightKg !== undefined)?.weightKg,
@@ -73,14 +65,12 @@ async function save(): Promise<void> {
     Object.entries(values).filter((entry): entry is [string, number] => entry[1] !== undefined),
   );
   if (weightKg === undefined && Object.keys(measured).length === 0) return;
-  const { db } = await openAppDatabase();
   const day = date.value && date.value <= todayIso() ? date.value : todayIso();
-  const saved = await addMeasurement(db, {
+  await body.add({
     date: day,
     ...(weightKg !== undefined ? { weightKg } : {}),
     measurements: measured,
   });
-  measurements.value = [...measurements.value, saved].sort((a, b) => a.date.localeCompare(b.date));
   weight.value = arm.value = waist.value = '';
   date.value = todayIso();
   // Assisted pull-ups and dips use the latest weight.
@@ -108,13 +98,9 @@ async function importFromHealthConnect(): Promise<void> {
       measurements.value.filter((m) => m.weightKg !== undefined).map((m) => m.date),
     );
     const toAdd = weighingsToAdd(result.weighings, known);
-    const { db } = await openAppDatabase();
     for (const w of toAdd) {
-      measurements.value.push(
-        await addMeasurement(db, { date: w.date, weightKg: w.weightKg, measurements: {} }),
-      );
+      await body.add({ date: w.date, weightKg: w.weightKg, measurements: {} });
     }
-    measurements.value = [...measurements.value].sort((a, b) => a.date.localeCompare(b.date));
     if (toAdd.length > 0) await session.reloadWeighings();
     healthMessage.value =
       toAdd.length > 0 ? t('body.health.done', toAdd.length) : t('body.health.nothing');
@@ -130,28 +116,20 @@ async function importFromHealthConnect(): Promise<void> {
 const addYears = (date: string, years: number) =>
   `${Number(date.slice(0, 4)) + years}${date.slice(4, 10)}`.replace(/-02-29$/, '-02-28');
 
-const photos = computed(() => measurements.value.filter((m) => m.photo));
+const photos = body.photos;
 const comparison = computed(() =>
   photos.value.length >= 2 ? [photos.value[0], photos.value.at(-1)] : [],
 );
+/** Weighings and measurements; the photos are in the gallery. */
+const entries = computed(() => [...measurements.value].reverse().filter((m) => !m.photo));
 
-async function onPhoto(event: Event): Promise<void> {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file) return;
-  const { db } = await openAppDatabase();
-  const saved = await addMeasurement(db, {
-    date: todayIso(),
-    measurements: {},
-    photo: await readPhoto(file),
-  });
-  measurements.value = [...measurements.value, saved];
+const camera = ref(false);
+async function onPhoto(photo: string, pose: PhotoPose): Promise<void> {
+  await body.add({ date: todayIso(), measurements: {}, photo, pose });
 }
 
 async function remove(id: string): Promise<void> {
-  const { db } = await openAppDatabase();
-  const removed = measurements.value.find((m) => m.id === id);
-  await deleteMeasurement(db, id);
-  measurements.value = measurements.value.filter((m) => m.id !== id);
+  const removed = await body.remove(id);
   if (removed?.weightKg !== undefined) await session.reloadWeighings();
 }
 </script>
@@ -256,15 +234,15 @@ async function remove(id: string): Promise<void> {
     </ion-card-header>
     <ion-card-content>
       <p class="small">{{ t('body.photo.help') }}</p>
-      <label class="photo-button">
+      <ion-button expand="block" @click="camera = true">
+        <Camera :size="20" aria-hidden="true" class="icon" />
         {{ t('body.photo.take') }}
-        <input type="file" accept="image/*" capture="user" @change="onPhoto" />
-      </label>
+      </ion-button>
       <ion-button
         class="gallery-link"
         expand="block"
         fill="outline"
-        router-link="/tabs/history/photos"
+        router-link="/tabs/body/photos"
       >
         {{
           photos.length > 0 ? t('body.gallery.link', photos.length) : t('body.gallery.linkEmpty')
@@ -276,6 +254,12 @@ async function remove(id: string): Promise<void> {
           <figcaption>{{ shortDate(m!.date) }}</figcaption>
         </figure>
       </div>
+      <CameraCapture
+        :open="camera"
+        :last-of-pose="lastPhotoOfPose(photos)"
+        @take="onPhoto"
+        @close="camera = false"
+      />
     </ion-card-content>
   </ion-card>
 
@@ -292,7 +276,7 @@ async function remove(id: string): Promise<void> {
   </ion-card>
 
   <ul class="list">
-    <li v-for="m in [...measurements].reverse()" :key="m.id">
+    <li v-for="m in entries" :key="m.id">
       <span>
         {{ shortDate(m.date) }} ·
         <template v-if="m.weightKg !== undefined">{{ load(m.weightKg) }}</template>
@@ -341,20 +325,8 @@ async function remove(id: string): Promise<void> {
 .date {
   margin-block-end: 8px;
 }
-.photo-button {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding-inline: 12px;
-  border: 1px solid var(--ion-color-primary);
-  border-radius: 8px;
-  color: var(--ion-color-primary);
-}
-.photo-button input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
+.icon {
+  margin-inline-end: 8px;
 }
 .gallery-link {
   margin-block-start: 12px;

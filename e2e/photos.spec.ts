@@ -12,8 +12,7 @@ test('body photos: imported, dated, sorted by pose and compared, on the phone on
   page,
 }) => {
   await skipOnboarding(page);
-  await page.getByRole('tab', { name: 'Historique' }).click();
-  await page.locator('ion-segment-button', { hasText: 'Corps' }).click();
+  await page.getByRole('tab', { name: 'Corps' }).click();
   await page.getByRole('link', { name: 'Ouvrir ma galerie' }).click();
   await expect(page.getByRole('note')).toContainText("rien n'est envoyé sur internet");
 
