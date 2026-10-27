@@ -206,6 +206,12 @@ async function capture(browser, scheme) {
   await scrollContent(page, 0);
   await shot(page, p('04-repos'));
 
+  // Dernière série de l'exercice : l'écran « Machine suivante ».
+  await page.getByRole('button', { name: 'Passer', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Correct', exact: true }).first().click();
+  await page.getByRole('region', { name: 'Machine suivante' }).waitFor();
+  await shot(page, p('04a-machine-suivante'));
+
   // Fin de séance : le récap.
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await page.getByText('Séance terminée').waitFor();

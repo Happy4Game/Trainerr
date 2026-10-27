@@ -14,10 +14,10 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 <br>
 
-<img src="docs/screenshots/1-today.png" width="160" alt="Écran Aujourd'hui : la prochaine séance et la semaine en un coup d'œil">
-<img src="docs/screenshots/2-set.png" width="160" alt="Une série en cours : conseil de charge, charge et reps pré-remplies, ressenti">
-<img src="docs/screenshots/3-next.png" width="160" alt="Changement de machine : exercice terminé, machine suivante">
-<img src="docs/screenshots/4-catalog.png" width="160" alt="Catalogue : recherche en touchant une zone du corps">
+<img src="docs/screenshots/1-today.png" width="160" alt="Écran Aujourd'hui : la séance du jour, ses exercices, charges, durée et les muscles qu'elle rattrape">
+<img src="docs/screenshots/2-set.png" width="160" alt="Une série en cours : charge et reps pré-remplies dans leurs cartes, ressenti">
+<img src="docs/screenshots/3-next.png" width="160" alt="Changement de machine : repos, exercice terminé, machine suivante">
+<img src="docs/screenshots/4-catalog.png" width="160" alt="Catalogue : mes machines et ma charge sur chacune">
 <img src="docs/screenshots/5-stats.png" width="160" alt="Statistiques : synthèse, évolution de la force">
 <img src="docs/screenshots/6-summary.png" width="160" alt="Fin de séance : bravo, séries, charge soulevée, badges">
 

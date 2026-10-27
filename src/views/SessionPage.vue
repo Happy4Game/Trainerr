@@ -17,7 +17,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
 import { House, LayoutList, Pencil, Play, Plus, Share2, Zap } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
@@ -105,13 +105,18 @@ const nextMachine = computed(() => {
 watch(phase, (now, before) => {
   if (now === 'active' && before !== 'active') void content.value?.$el.scrollToTop(0);
 });
-// A new exercise starts at the top of the screen.
-watch(
-  () => (step.value?.kind === 'exercise' ? step.value.exerciseId : undefined),
-  (id, previous) => {
-    if (id && previous && id !== previous) void content.value?.$el.scrollToTop(300);
-  },
+// Each new screen starts at the top: the next machine, then the machine once
+// there ("Je suis sur la machine" is low on the screen, the sets start above).
+const screen = computed(() =>
+  step.value?.kind !== 'exercise'
+    ? undefined
+    : `${nextMachine.value ? 'next' : 'exercise'}:${step.value.exerciseId}`,
 );
+watch(screen, async (now, before) => {
+  if (!now || !before || now === before) return;
+  await nextTick();
+  void content.value?.$el.scrollToTop(300);
+});
 const pickingExercise = ref(false);
 async function addExercise(id: string): Promise<void> {
   pickingExercise.value = false;

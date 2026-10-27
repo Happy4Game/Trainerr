@@ -138,3 +138,29 @@ test('another exercise is added from the session plan, after the others', async 
   await page.getByRole('button', { name: 'Fermer' }).click();
   await expect(page.getByRole('region', { name: first })).toBeVisible();
 });
+
+test('the next machine, then the machine once there, start at the top of the screen', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  const scrollTop = () =>
+    page
+      .locator('ion-content.ion-padding:visible')
+      .last()
+      .evaluate(async (el) => (await (el as HTMLIonContentElement).getScrollElement()).scrollTop);
+  for (let set = 1; set <= 3; set++) {
+    await page.getByRole('button', { name: 'Correct', exact: true }).click();
+    if (set < 3) await page.getByRole('button', { name: 'Passer', exact: true }).click();
+  }
+  const next = page.getByRole('region', { name: 'Machine suivante' });
+  await expect(next).toBeVisible();
+  await expect.poll(scrollTop).toBe(0);
+
+  // The button is low on the screen: the sets of the new machine start above it.
+  await next.getByRole('button', { name: 'Je suis sur la machine' }).click();
+  await expect(page.getByText('Série 1 sur 3')).toBeVisible();
+  await expect.poll(scrollTop).toBe(0);
+});
