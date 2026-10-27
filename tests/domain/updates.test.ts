@@ -54,7 +54,8 @@ describe('app updates', () => {
     expect(isNewer(undefined, 1)).toBe(false);
   });
 
-  it('check automatically at most once a day', () => {
+  it('check automatically every half hour at most', () => {
+    expect(CHECK_INTERVAL_MS).toBe(30 * 60 * 1000);
     expect(checkDue(undefined, 1000)).toBe(true);
     expect(checkDue(1000, 1000 + CHECK_INTERVAL_MS - 1)).toBe(false);
     expect(checkDue(1000, 1000 + CHECK_INTERVAL_MS)).toBe(true);

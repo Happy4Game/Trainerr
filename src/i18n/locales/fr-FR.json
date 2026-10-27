@@ -1425,8 +1425,8 @@
     "allow": "Autoriser",
     "retry": "Réessayer",
     "error": "Impossible de vérifier pour l'instant ({message}).",
-    "auto": "Chercher les mises à jour au démarrage",
-    "autoHelp": "Une fois par jour au plus, l'appli demande à GitHub la dernière version publiée. Rien d'autre n'est envoyé."
+    "auto": "Chercher les mises à jour automatiquement",
+    "autoHelp": "Au démarrage et quand tu reviens dans l'appli, toutes les 30 minutes au plus, elle demande à GitHub la dernière version publiée. Rien d'autre n'est envoyé."
   },
   "pastSession": {
     "open": "Ajouter une séance faite sans l'appli",

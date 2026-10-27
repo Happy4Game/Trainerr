@@ -54,7 +54,7 @@ export interface Settings {
   readonly account?: { readonly name: string; readonly token: string };
   /** Loads are hidden from friends by default. */
   readonly shareRecords: boolean;
-  /** Android: look for a new version on GitHub at launch (once a day). On by default. */
+  /** Android: look for a new version on GitHub at launch and back to the app (every 30 min at most). On by default. */
   readonly autoUpdateCheck?: boolean;
   /** Beeps at the end of the rest (app open). On by default. */
   readonly restSound?: boolean;
