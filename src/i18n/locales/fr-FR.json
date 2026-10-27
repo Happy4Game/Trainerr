@@ -490,6 +490,10 @@
     "tired": {
       "toggle": "Pas en forme aujourd'hui",
       "help": "Une série de moins par exercice et pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser."
+    },
+    "usualLoads": {
+      "intro": "Tu connais déjà ta charge sur cette machine ? Note-la : la séance partira de là au lieu d'une série test. | Tu connais déjà tes charges sur ces {count} machines ? Note-les : la séance partira de là au lieu de séries test.",
+      "add": "+ {name}"
     }
   },
   "availability": {

@@ -490,6 +490,10 @@
     "tired": {
       "toggle": "Not in shape today",
       "help": "One set less per exercise and no load increase: you still train, without wearing yourself out."
+    },
+    "usualLoads": {
+      "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
+      "add": "+ {name}"
     }
   },
   "availability": {

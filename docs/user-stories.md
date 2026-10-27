@@ -8,13 +8,13 @@ Les personnages viennent des séances test de [retour-utilisateur.md](retour-uti
 
 ## 1. Premier lancement
 
-| #   | En tant que… | je veux…                                                | pour…                                             | État                                        |
-| --- | ------------ | ------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------- |
-| 1.1 | débutante    | répondre à quelques questions (niveau, objectif, jours) | avoir un programme sans rien connaître            | ✅ questionnaire                            |
-| 1.2 | débutante    | une première séance simple sur des machines guidées     | ne pas me blesser ni me perdre                    | ✅ « Tu débutes ? » vers Full body débutant |
-| 1.3 | pratiquant   | noter mes charges habituelles dès le départ             | ne pas repartir de séries test sur chaque machine | 🔜                                          |
-| 1.4 | pratiquant   | importer mon historique (CSV d'une autre appli)         | garder mes courbes                                | ✅ import CSV                               |
-| 1.5 | pratiquant   | choisir mes machines favorites                          | que les séances utilisent ma salle                | ✅ catalogue, « Mes machines »              |
+| #   | En tant que… | je veux…                                                | pour…                                             | État                                                      |
+| --- | ------------ | ------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------- |
+| 1.1 | débutante    | répondre à quelques questions (niveau, objectif, jours) | avoir un programme sans rien connaître            | ✅ questionnaire                                          |
+| 1.2 | débutante    | une première séance simple sur des machines guidées     | ne pas me blesser ni me perdre                    | ✅ « Tu débutes ? » vers Full body débutant               |
+| 1.3 | pratiquant   | noter mes charges habituelles dès le départ             | ne pas repartir de séries test sur chaque machine | 🆕 « Tu connais déjà ta charge ? » dans le menu de séance |
+| 1.4 | pratiquant   | importer mon historique (CSV d'une autre appli)         | garder mes courbes                                | ✅ import CSV                                             |
+| 1.5 | pratiquant   | choisir mes machines favorites                          | que les séances utilisent ma salle                | ✅ catalogue, « Mes machines »                            |
 
 ## 2. Avant la séance
 
