@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'programChoice',
+    date: '2026-10-27',
+    items: ['programChoice'],
+  },
+  {
     id: 'cardio',
     date: '2026-10-27',
     items: ['cardioSessions', 'cardioLog', 'cardioCatalog'],

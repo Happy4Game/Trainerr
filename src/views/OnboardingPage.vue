@@ -19,14 +19,21 @@ import type { ProtectedZone } from '@/domain/muscles';
 import type { SportId, WeeklySlot } from '@/domain/planning';
 import type { Goal, SessionMinutes } from '@/domain/sessionBuilder';
 import { supersetsSuggestedFor } from '@/domain/supersets';
-import { recommendModel, rotationFor } from '@/domain/trainingModels';
+import {
+  frequencyPerMuscle,
+  needsFrequencyNote,
+  recommendModel,
+  rotationFor,
+  TRAINING_MODELS,
+  type TrainingModelId,
+} from '@/domain/trainingModels';
 import AvailabilityGrid from '@/ui/AvailabilityGrid.vue';
 import { useTemplateName } from '@/ui/useTemplateName';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings } from '@/ui/useSettings';
 
-const { t } = useI18n();
+const { t, n } = useI18n();
 const templateLabel = useTemplateName();
 const router = useIonRouter();
 const session = useSession();
@@ -44,8 +51,27 @@ const sessionMinutes = ref<SessionMinutes>(60);
 const sport = ref<SportId | 'none'>('none');
 const sportSlots = ref<WeeklySlot[]>([]);
 const zone = ref<ProtectedZone | 'none'>('none');
+/**
+ * The type of sessions: the app's pick for the number of sessions, or the
+ * user's own. Split or full body build as much muscle and strength at equal
+ * volume (Ramos-Campo et al. 2024): the choice is a matter of taste.
+ */
+const PROGRAMS: readonly ('auto' | TrainingModelId)[] = [
+  'auto',
+  ...(Object.keys(TRAINING_MODELS) as TrainingModelId[]),
+];
+const program = ref<'auto' | TrainingModelId>('auto');
+const model = computed(() =>
+  program.value === 'auto' ? recommendModel(sessionsPerWeek.value) : program.value,
+);
+function programRange(id: TrainingModelId): string {
+  const { min, max } = TRAINING_MODELS[id].sessionsPerWeek;
+  return min === max
+    ? t('onboarding.program.sessionsOne', { n: min })
+    : t('onboarding.program.sessionsRange', { min, max });
+}
 // Already mid-cycle: the first session can be any of the program's.
-const rotation = computed(() => rotationFor(recommendModel(sessionsPerWeek.value)));
+const rotation = computed(() => rotationFor(model.value));
 const firstSession = ref<string>();
 watch(rotation, () => (firstSession.value = undefined));
 const startsWith = computed(() => firstSession.value ?? rotation.value[0]?.id);
@@ -112,7 +138,7 @@ function answers(): Partial<Settings> {
   return {
     goal: goal.value,
     sessionsPerWeek: sessionsPerWeek.value,
-    model: recommendModel(sessionsPerWeek.value),
+    model: model.value,
     level: level.value,
     ...(level.value === 'comeback'
       ? { comeback: { pause: pause.value, startedOn: new Date().toISOString().slice(0, 10) } }
@@ -202,6 +228,42 @@ async function skip(): Promise<void> {
               model: t(`models.${recommendModel(sessionsPerWeek)}`),
             })
           }}
+        </p>
+        <h2>{{ t('onboarding.program.question') }}</h2>
+        <p class="hint">{{ t('onboarding.program.why') }}</p>
+        <div class="programs" role="group" :aria-label="t('onboarding.program.question')">
+          <button
+            v-for="p in PROGRAMS"
+            :key="p"
+            type="button"
+            class="program"
+            :class="{ selected: program === p }"
+            :aria-pressed="program === p"
+            @click="program = p"
+          >
+            <strong>
+              <Check v-if="program === p" :size="18" class="check" aria-hidden="true" />
+              {{
+                p === 'auto'
+                  ? t('onboarding.program.auto', {
+                      model: t(`models.${recommendModel(sessionsPerWeek)}`),
+                    })
+                  : t(`models.${p}`)
+              }}
+            </strong>
+            <span>{{ p === 'auto' ? t('onboarding.program.autoHelp') : t(`modelInfo.${p}`) }}</span>
+            <span v-if="p !== 'auto'" class="meta">
+              {{ programRange(p) }} ·
+              {{
+                t('onboarding.program.frequency', {
+                  n: n(frequencyPerMuscle(p, sessionsPerWeek), { maximumFractionDigits: 1 }),
+                })
+              }}
+            </span>
+          </button>
+        </div>
+        <p v-if="needsFrequencyNote(model, sessionsPerWeek)" class="warning" role="note">
+          {{ t('planning.frequencyNote') }}
         </p>
         <h2>{{ t('onboarding.sessions.first') }}</h2>
         <p class="hint">{{ t('onboarding.sessions.firstHelp') }}</p>
@@ -406,6 +468,45 @@ h2 {
 }
 .hint {
   color: var(--ion-color-medium-shade);
+}
+.programs {
+  display: grid;
+  gap: 8px;
+}
+.program {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--ion-color-light-shade);
+  border-radius: var(--tr-radius-m);
+  background: var(--ion-card-background);
+  color: var(--ion-text-color, #000);
+  font: inherit;
+  text-align: start;
+}
+.program strong {
+  display: flex;
+  align-items: center;
+}
+.program span {
+  font-size: 0.9rem;
+}
+.program .meta {
+  color: var(--ion-color-medium-shade);
+  font-size: 0.8rem;
+}
+.program.selected {
+  border-color: var(--ion-color-primary);
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+.program.selected .meta {
+  color: inherit;
+  opacity: 0.85;
+}
+.warning {
+  color: var(--ion-color-warning-shade);
+  font-size: 0.9rem;
 }
 .ai {
   margin-block-start: 24px;
