@@ -450,36 +450,36 @@ async function logWarmup(): Promise<void> {
 
         <!-- Other ways to train today: big tiles, one tap each. -->
         <h2 class="menu-heading">{{ t('session.menu.other') }}</h2>
-        <div class="tiles">
+        <div class="ways">
           <button
             v-if="session.expressPreview.value.length > 0"
             type="button"
-            class="tile"
+            class="way"
             @click="session.start({ express: true, supersets: useSupersets })"
           >
             <Zap :size="26" aria-hidden="true" />
-            <span class="tile-title">{{ t('session.express') }}</span>
-            <span class="tile-help">{{ t('session.menu.expressHelp') }}</span>
+            <span class="way-title">{{ t('session.express') }}</span>
+            <span class="way-help">{{ t('session.menu.expressHelp') }}</span>
           </button>
-          <router-link class="tile" to="/tabs/session/presets">
+          <router-link class="way" to="/tabs/session/presets">
             <LayoutList :size="26" aria-hidden="true" />
-            <span class="tile-title">{{ t('presets.open') }}</span>
-            <span class="tile-help">{{ t('session.menu.presetsHelp') }}</span>
+            <span class="way-title">{{ t('presets.open') }}</span>
+            <span class="way-help">{{ t('session.menu.presetsHelp') }}</span>
           </router-link>
           <button
             v-if="session.homePreview.value.length > 0"
             type="button"
-            class="tile"
+            class="way"
             @click="session.start({ home: true, supersets: useSupersets })"
           >
             <House :size="26" aria-hidden="true" />
-            <span class="tile-title">{{ t('session.home') }}</span>
-            <span class="tile-help">{{ t('session.menu.homeHelp') }}</span>
+            <span class="way-title">{{ t('session.home') }}</span>
+            <span class="way-help">{{ t('session.menu.homeHelp') }}</span>
           </button>
-          <router-link class="tile" to="/tabs/session/custom/new">
+          <router-link class="way" to="/tabs/session/custom/new">
             <Plus :size="26" aria-hidden="true" />
-            <span class="tile-title">{{ t('customSession.create') }}</span>
-            <span class="tile-help">{{ t('customSession.intro') }}</span>
+            <span class="way-title">{{ t('customSession.create') }}</span>
+            <span class="way-help">{{ t('customSession.intro') }}</span>
           </router-link>
         </div>
 
@@ -1333,12 +1333,12 @@ async function logWarmup(): Promise<void> {
   font-size: 1.15rem;
   font-weight: 800;
 }
-.tiles {
+.ways {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--tr-space-3);
 }
-.tile {
+.way {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1356,17 +1356,18 @@ async function logWarmup(): Promise<void> {
   cursor: pointer;
   transition: transform var(--tr-duration-fast) ease;
 }
-.tile:active {
+.way:active {
   transform: scale(0.97);
 }
-.tile svg {
+.way svg {
   color: var(--ion-color-primary);
 }
-.tile-title {
+.way-title {
+  color: var(--tr-text);
   font-weight: 800;
   line-height: 1.2;
 }
-.tile-help {
+.way-help {
   font-size: 0.8rem;
   line-height: 1.3;
   color: var(--tr-text-muted);
