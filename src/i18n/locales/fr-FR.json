@@ -830,6 +830,32 @@
       "install": "Ouvrir Health Connect sur le Play Store",
       "denied": "Accès refusé : Trainerr ne peut pas lire ton poids. Tu peux l'autoriser dans les réglages de Health Connect.",
       "error": "Lecture impossible : {message}"
+    },
+    "gallery": {
+      "title": "Mes photos",
+      "privacy": "Tes photos restent dans l'appli, sur ton téléphone : rien n'est envoyé sur internet. Elles sont aussi dans ta sauvegarde, garde ce fichier pour toi.",
+      "take": "Prendre une photo",
+      "import": "Importer",
+      "tip": "Pour bien comparer : même lumière, même endroit, même pose (face, profil ou dos), idéalement le matin.",
+      "pose": "Pose",
+      "poses": {
+        "all": "Toutes",
+        "front": "Face",
+        "side": "Profil",
+        "back": "Dos"
+      },
+      "adding": "Ajout des photos…",
+      "empty": "Aucune photo pour l'instant. Prends-en une devant le miroir ou importe celles de ta galerie.",
+      "compareTitle": "Avant / après",
+      "between": "{weeks} et {sessions} d'écart.",
+      "weeks": "{count} semaine | {count} semaines",
+      "sessions": "{count} séance | {count} séances",
+      "openNamed": "Voir la photo du {date}",
+      "date": "Date de la photo",
+      "delete": "Supprimer cette photo",
+      "deleteConfirm": "Oui, supprimer définitivement",
+      "link": "Ma galerie ({count} photo) | Ma galerie ({count} photos)",
+      "linkEmpty": "Ouvrir ma galerie"
     }
   },
   "settings": {
@@ -1037,7 +1063,8 @@
       "sessionInsights": "La page Séance en dit plus",
       "longerRest": "Plus de repos sur les gros mouvements",
       "sessionSwap": "Remplacer une machine depuis Séance",
-      "smootherStart": "Démarrage plus simple"
+      "smootherStart": "Démarrage plus simple",
+      "photoGallery": "Galerie de photos du corps"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1078,7 +1105,10 @@
       "sessionSwap": "Le bouton ⇄ d'Aujourd'hui est aussi sur la page Séance : une machine très proche à la place, gardée pour les séances suivantes, et « Annuler » pour revenir.",
       "autoNext": "Questionnaire plus court : une question à une seule réponse passe à la suivante dès que tu réponds.",
       "testSetQuestion": "Après une série test, l'appli demande clairement : « Trop léger ? Tu aurais pu faire 3 reps de plus ? »",
-      "usualLoadsToday": "Tu t'entraînes déjà ? Note tes charges habituelles dès la page Aujourd'hui, avant ta première séance."
+      "usualLoadsToday": "Tu t'entraînes déjà ? Note tes charges habituelles dès la page Aujourd'hui, avant ta première séance.",
+      "photoGallery": "Historique › Corps › Ma galerie : tes photos mois par mois, avec le nombre de séances faites à chaque photo.",
+      "photoImport": "Prends une photo devant le miroir ou importe celles de ta galerie, en une fois. La date se corrige si besoin.",
+      "photoCompare": "Classe-les par pose (face, profil, dos) et compare la première et la dernière côte à côte. Elles restent sur ton téléphone."
     }
   },
   "data": {
@@ -1145,7 +1175,8 @@
     }
   },
   "common": {
-    "back": "Retour"
+    "back": "Retour",
+    "close": "Fermer"
   },
   "badges": {
     "firstSession": "Première séance",

@@ -129,7 +129,8 @@ const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
 /** Record just beaten, for the celebration on the screen (cleared at the next set). */
 const recordBeaten = ref<{ exerciseId: string; loadKg: number; reps: number }>();
-const summary = ref<{
+/** What the end-of-session screen shows. */
+export interface SessionSummary {
   /** Session type, for the title of the shared card. */
   templateId: string;
   sets: number;
@@ -145,7 +146,8 @@ const summary = ref<{
   minutes?: number;
   /** Volume gained since the last session of the same type, in percent. */
   volumeGain?: number;
-}>();
+}
+const summary = ref<SessionSummary>();
 
 const { entries, state: catalogState, toggleFavorite } = useCatalog();
 

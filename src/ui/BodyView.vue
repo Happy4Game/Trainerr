@@ -260,6 +260,16 @@ async function remove(id: string): Promise<void> {
         {{ t('body.photo.take') }}
         <input type="file" accept="image/*" capture="user" @change="onPhoto" />
       </label>
+      <ion-button
+        class="gallery-link"
+        expand="block"
+        fill="outline"
+        router-link="/tabs/history/photos"
+      >
+        {{
+          photos.length > 0 ? t('body.gallery.link', photos.length) : t('body.gallery.linkEmpty')
+        }}
+      </ion-button>
       <div v-if="comparison.length === 2" class="compare">
         <figure v-for="m in comparison" :key="m!.id">
           <img :src="m!.photo" :alt="t('body.photo.alt', { date: shortDate(m!.date) })" />
@@ -345,6 +355,9 @@ async function remove(id: string): Promise<void> {
   width: 1px;
   height: 1px;
   opacity: 0;
+}
+.gallery-link {
+  margin-block-start: 12px;
 }
 .compare {
   display: grid;

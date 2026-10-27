@@ -165,6 +165,14 @@ export const migrations: readonly Migration[] = [
       ALTER TABLE set_log ADD COLUMN note TEXT;
     `,
   },
+  {
+    version: 7,
+    description: 'Pose of a body photo (front, side, back) for the gallery',
+    sql: `
+      ALTER TABLE body_measurement ADD COLUMN photo_pose TEXT
+        CHECK (photo_pose IN ('front', 'side', 'back'));
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;
