@@ -19,6 +19,7 @@ import { useSettings } from '@/ui/useSettings';
 import { useTemplateName } from '@/ui/useTemplateName';
 import SessionPlanList from './SessionPlanList.vue';
 import UsualLoads from './UsualLoads.vue';
+import CardioChooser from '@/ui/cardio/CardioChooser.vue';
 import { useLoadLabel } from './useLoadLabel';
 import { usePlanInsights } from './usePlanInsights';
 import { useSession } from './useSession';
@@ -143,6 +144,7 @@ const insights = usePlanInsights(preview);
           <span class="toggle-help">{{ t('session.supersetToggleHelp') }}</span>
         </ion-toggle>
       </ion-item>
+      <CardioChooser :template="template" />
     </template>
     <template v-else-if="!readyMade">
       <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>

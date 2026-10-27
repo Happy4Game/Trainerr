@@ -94,7 +94,8 @@
       "push": "Push",
       "pull": "Pull",
       "legs": "Legs",
-      "core": "Core"
+      "core": "Core",
+      "cardio": "Cardio"
     },
     "loading": "Loading the catalog…",
     "error": "Could not load the catalog: {message}",
@@ -1002,6 +1003,18 @@
       "etiquette": {
         "title": "Gym etiquette",
         "body": "Wipe the machine, put the weights back, and share the machine between sets if someone is waiting."
+      },
+      "cardioOrder": {
+        "title": "Cardio: before or after weights?",
+        "body": "For muscle, endurance or fat loss, the order makes no difference. For leg strength, lift first. Cardio holds back neither muscle gain nor maximal strength. Only explosiveness (sprints, jumps) drops a little when both are in the same session: 3 h apart is enough to avoid it."
+      },
+      "cardioAmount": {
+        "title": "How much cardio a week",
+        "body": "The WHO advises adults 150 to 300 min of moderate activity a week, or 75 to 150 min of vigorous activity, plus strength training of all major muscles on at least 2 days a week."
+      },
+      "cardioIntensity": {
+        "title": "Moderate or vigorous: the talk test",
+        "body": "Moderate: you can talk, but not sing. Vigorous: only a few words before pausing for breath. No heart rate monitor needed to tell."
       }
     }
   },
@@ -1064,7 +1077,8 @@
       "longerRest": "More rest on the big lifts",
       "sessionSwap": "Swap a machine from Session",
       "smootherStart": "Easier start",
-      "photoGallery": "Body photo gallery"
+      "photoGallery": "Body photo gallery",
+      "cardio": "Cardio in sessions"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1108,7 +1122,10 @@
       "usualLoadsToday": "Already training? Note your usual loads right from Today, before your first session.",
       "photoGallery": "History › Body › My gallery: your photos month by month, with the sessions done at each photo.",
       "photoImport": "Take a photo in front of the mirror or import those from your gallery, all at once. The date can be corrected.",
-      "photoCompare": "Sort them by pose (front, side, back) and compare the first and last side by side. They stay on your phone."
+      "photoCompare": "Sort them by pose (front, side, back) and compare the first and last side by side. They stay on your phone.",
+      "cardioSessions": "Session › “Add cardio to my sessions”: pick the machine, the duration, and before or after the weights, with the advice of the studies for today's session.",
+      "cardioLog": "During the session, log your cardio results: time, distance, speed, incline, level, cadence, heart rate and calories, depending on the machine.",
+      "cardioCatalog": "Catalog › Cardio: each machine with the muscles worked and your results, and your week against the WHO bar (150 min)."
     }
   },
   "data": {
@@ -1567,5 +1584,116 @@
     "prefilled": "It starts from the exercises, loads and reps of your last session of this type: just fix what changed.",
     "empty": "You will then add the exercises and sets you did.",
     "create": "Create and fill in"
+  },
+  "cardio": {
+    "title": "Cardio",
+    "machines": {
+      "treadmill": "Treadmill",
+      "outdoorRun": "Outdoor run",
+      "bike": "Exercise bike",
+      "recumbentBike": "Recumbent bike",
+      "spinBike": "Spin bike",
+      "elliptical": "Elliptical",
+      "rower": "Rowing machine",
+      "stairClimber": "Stair climber",
+      "jumpRope": "Jump rope"
+    },
+    "descriptions": {
+      "treadmill": "Walking or running in place. The incline works the glutes and calves harder without running faster.",
+      "outdoorRun": "Running outside. Note the distance and time from your watch or phone.",
+      "bike": "Classic exercise bike: little impact on the knees and back.",
+      "recumbentBike": "Bike with a backrest, seated lower: the back is supported, handy for an easy restart.",
+      "spinBike": "Spin class bike with a heavy flywheel: the resistance is set with the knob.",
+      "elliptical": "A running motion with no impact on the ground; the arms push and pull the handles.",
+      "rower": "Each stroke starts with the legs, then the back and arms finish the movement.",
+      "stairClimber": "Endless stairs: very demanding for the glutes and thighs.",
+      "jumpRope": "Small hops on the balls of the feet: calves and coordination."
+    },
+    "fields": {
+      "minutes": "Duration (min)",
+      "distance": "Distance (km)",
+      "speed": "Speed (km/h)",
+      "incline": "Incline (%)",
+      "level": "Level or resistance",
+      "cadence": "Cadence (turns or strokes per min)",
+      "heartRate": "Average heart rate (bpm)",
+      "calories": "Calories shown (kcal)"
+    },
+    "units": {
+      "minutes": "{n} min",
+      "km": "{n} km",
+      "kmh": "{n} km/h",
+      "pace": "{pace} /km",
+      "pace500": "{pace} /500 m",
+      "incline": "incline {n}%",
+      "level": "level {n}",
+      "cadence": "{n} /min",
+      "bpm": "{n} bpm",
+      "kcal": "{n} kcal"
+    },
+    "effort": {
+      "title": "How hard it felt",
+      "light": "Easy",
+      "lightHelp": "You could sing.",
+      "moderate": "Moderate",
+      "moderateHelp": "You can talk, but not sing.",
+      "vigorous": "Vigorous",
+      "vigorousHelp": "Only a few words before pausing for breath."
+    },
+    "positions": {
+      "before": "Before weights",
+      "after": "After weights"
+    },
+    "choose": {
+      "title": "Cardio of the session",
+      "toggle": "Add cardio to my sessions",
+      "help": "The choice stays for the next sessions. You can remove it at any time.",
+      "minutes": "Cardio duration",
+      "when": "When to do the cardio",
+      "advised": "advised"
+    },
+    "advice": {
+      "lowerStrength": "Your goal is strength: do the cardio after the weights. Lifting first gives more lower-body strength (Eddens 2018).",
+      "legsDay": "Legs day: keep the cardio for after, so your legs are fresh for the loads. Lifting first gives more lower-body strength (Eddens 2018).",
+      "noDifference": "Before or after, pick what you like: the order changes neither muscle gained nor endurance (Eddens 2018), and cardio does not hold back muscle gain (Schumann 2022).",
+      "more": "Why? See the tips"
+    },
+    "session": {
+      "beforeTitle": "Cardio first",
+      "afterTitle": "Cardio to finish",
+      "target": "{machine} · {minutes} min planned",
+      "log": "Log my results",
+      "skip": "No cardio today",
+      "skipped": "Cardio removed from this session.",
+      "unskip": "Put it back",
+      "add": "Add cardio",
+      "edit": "Edit the cardio: {machine}"
+    },
+    "entry": {
+      "title": "Cardio",
+      "machine": "Machine",
+      "lastTime": "Last time: {detail}",
+      "save": "Save",
+      "delete": "Delete this cardio",
+      "deleteConfirm": "Confirm deletion",
+      "invalid": "Check: {fields}"
+    },
+    "summary": "{minutes} min of cardio",
+    "week": {
+      "short": "{minutes} / {target} min this week (WHO)",
+      "long": "This week: {minutes} min of the {target} min advised by the WHO.",
+      "help": "WHO guideline: 150 to 300 min of moderate activity a week, or 75 to 150 min of vigorous activity. A vigorous minute counts double, an easy minute does not count."
+    },
+    "catalogIntro": "The cardio machines. No free-licensed drawings of these machines exist: an icon and the map of the muscles worked stand for them.",
+    "page": {
+      "unknown": "This machine does not exist.",
+      "worked": "Muscles worked",
+      "week": "My week",
+      "logToday": "Log cardio done today",
+      "history": "My results",
+      "noHistory": "No result on this machine yet.",
+      "longest": "Longest distance: {km} km",
+      "editNamed": "Edit the cardio of {date}"
+    }
   }
 }

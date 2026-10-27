@@ -1,4 +1,5 @@
 import type { ExerciseQueue } from '@/domain/busyMachine';
+import type { CardioPlan } from '@/domain/cardio';
 import type { Difficulty, IsoDate, RepRange, SessionLog, SetLog } from '@/domain/types';
 import type { SqlDatabase } from '../sqlite/database';
 import { sqlLiteral as q } from '../sqlite/sqlLiteral';
@@ -29,6 +30,8 @@ export interface SessionPlan {
   readonly tired?: boolean;
   /** When the session started (ms since 1970), for its length in the summary. */
   readonly startedAt?: number;
+  /** Cardio before or after the weights, chosen before starting; skipped on the day. */
+  readonly cardio?: CardioPlan & { readonly skipped?: boolean };
 }
 
 export interface StoredSet extends SetLog {
@@ -132,11 +135,13 @@ export async function updateSet(
 
 export async function setSessionDate(db: SqlDatabase, sessionId: string, date: IsoDate) {
   await db.run('UPDATE session SET date = ? WHERE id = ?', [date, sessionId]);
+  await db.run('UPDATE cardio_log SET date = ? WHERE session_id = ?', [date, sessionId]);
 }
 
-/** A whole session removed from the history, its sets with it. */
+/** A whole session removed from the history, its sets and cardio with it. */
 export async function deleteSession(db: SqlDatabase, sessionId: string): Promise<void> {
   await db.run('DELETE FROM set_log WHERE session_id = ?', [sessionId]);
+  await db.run('DELETE FROM cardio_log WHERE session_id = ?', [sessionId]);
   await db.run('DELETE FROM session WHERE id = ?', [sessionId]);
 }
 

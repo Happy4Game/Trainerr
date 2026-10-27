@@ -250,6 +250,13 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Stockage : photo réduite à 900 px en JPEG (`src/ui/photo.ts`) dans la table `body_measurement` de la base locale ; migration 7 ajoute `photo_pose`. Rien n'est envoyé ; les photos sont dans la sauvegarde JSON.
 - Logique pure et testée dans `src/domain/photos.ts`.
 
+## Cardio (27 oct. 2026)
+
+- 9 machines (`src/domain/cardio.ts`) : tapis, course dehors, vélo, vélo semi-allongé, biking, elliptique, rameur, escalier, corde à sauter. Chaque machine a ses champs (distance, vitesse, pente, niveau, cadence, FC, calories) et ses muscles, montrés sur la carte du corps. Ni Everkinetic ni wger n'ont de dessins libres de ces machines : icônes Lucide à la place.
+- Avant la séance (`CardioChooser.vue`) : avec ou sans cardio, machine, durée, avant ou après, gardés dans les réglages pour les séances suivantes. Conseil selon l'objectif et le jour (Eddens 2018, Schumann 2022).
+- Pendant la séance (`SessionCardio.vue`) : carte « Cardio d'abord » en haut ou « Cardio pour finir » en bas, saisie dans `CardioEntryModal.vue`, possibilité de passer. Une séance avec seulement du cardio est gardée.
+- Table `cardio_log` (migration 8), dans la sauvegarde ; suit la date et la suppression de sa séance. Catalogue › Cardio et page par machine (`CardioPage.vue`) avec les perfs et la semaine comparée au repère OMS (150 min modérées, une minute intense compte double).
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

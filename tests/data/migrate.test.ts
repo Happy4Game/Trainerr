@@ -11,6 +11,7 @@ const TABLES = [
   'availability',
   'badge',
   'body_measurement',
+  'cardio_log',
   'exercise',
   'exercise_muscle',
   'gym',

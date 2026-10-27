@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
 import { Share2 } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { drawRecap } from '@/ui/recapImage';
 import { shareOrDownload } from '@/ui/shareFile';
 import { useTemplateName } from '@/ui/useTemplateName';
 import { useUnits } from '@/ui/useUnits';
 import { todayIso } from '@/ui/useWeekPlan';
+import { WHO_WEEKLY_MINUTES } from '@/domain/cardio';
+import { useCardio } from './useCardio';
 import { useSession, type SessionSummary } from './useSession';
 
 /** End of the session: what was done, records, badges, and a picture to share. */
@@ -17,6 +19,14 @@ const { t, n, locale } = useI18n();
 const session = useSession();
 const templateLabel = useTemplateName();
 const { load: kg } = useUnits();
+const cardio = useCardio();
+/** Where the week stands against the WHO bar, in moderate minutes. */
+const cardioWeek = computed(() =>
+  t('cardio.week.short', {
+    minutes: n(cardio.week.value.moderate),
+    target: WHO_WEEKLY_MINUTES.min,
+  }),
+);
 
 const nameOf = (id: string) => {
   const entry = session.entryOf(id);
@@ -41,6 +51,9 @@ async function shareSummary(): Promise<void> {
           : []),
         ...(done.volumeGain !== undefined
           ? [t('session.summary.shareGain', { percent: n(done.volumeGain) })]
+          : []),
+        ...(done.cardioMinutes !== undefined
+          ? [t('cardio.summary', { minutes: n(done.cardioMinutes) })]
           : []),
         ...done.records.map((r) => `🏆 ${nameOf(r.exerciseId)} : ${kg(r.loadKg)} × ${n(r.reps)}`),
       ],
@@ -83,6 +96,9 @@ async function shareSummary(): Promise<void> {
     </p>
     <p v-if="summary.minutes !== undefined" class="note-line">
       ⏱️ {{ t('session.summary.minutes', { minutes: n(summary.minutes) }) }}
+    </p>
+    <p v-if="summary.cardioMinutes !== undefined" class="note-line">
+      ❤️ {{ t('cardio.summary', { minutes: n(summary.cardioMinutes) }) }} · {{ cardioWeek }}
     </p>
     <p v-for="record in summary.records" :key="record.exerciseId" class="highlight">
       🏆
