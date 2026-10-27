@@ -1,3 +1,4 @@
+import { recommendedOrder } from './exerciseOrder';
 import { PROTECTED_ZONE_MUSCLES, type MuscleId, type ProtectedZone } from './muscles';
 import type { SessionTemplate } from './trainingModels';
 import type { Exercise, ExerciseKind } from './types';
@@ -77,6 +78,19 @@ export function buildSession(input: {
       (a, b) => KIND_ORDER.indexOf(a.e.kind) - KIND_ORDER.indexOf(b.e.kind) || a.index - b.index,
     )
     .map(({ e }) => e);
+}
+
+/**
+ * Machines left over last time (they stayed taken) come back first, but each
+ * in its place in the order: a carried isolation still comes after the
+ * compounds, so the small muscle is not tired before the big lift.
+ */
+export function withCarryOver<E extends Exercise>(
+  carried: readonly E[],
+  built: readonly E[],
+  count: number,
+): E[] {
+  return recommendedOrder([...carried, ...built].slice(0, Math.max(count, carried.length)));
 }
 
 /**

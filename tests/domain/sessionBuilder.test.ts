@@ -5,8 +5,10 @@ import {
   readyMadeSession,
   withExtraSet,
   setsPerExercise,
+  withCarryOver,
 } from '@/domain/sessionBuilder';
 import { TRAINING_MODELS } from '@/domain/trainingModels';
+import type { Exercise } from '@/domain/types';
 import { allExercises, ex } from '../fixtures/exercises';
 
 const [pushA, pullA, legsA, pushB, pullB] = TRAINING_MODELS.ppl.rotation as [
@@ -97,6 +99,14 @@ describe('building a session from the favorites', () => {
   it('returns fewer exercises when there are not enough favorites', () => {
     const session = buildSession({ template: pushA, favorites: [ex.pecFly], count: 5 });
     expect(ids(session)).toEqual(['pec-fly']);
+  });
+});
+
+describe('machines left over last time', () => {
+  it('come back, but an isolation one still waits for the compounds', () => {
+    const built = [ex.dbBench, ex.chestPress, ex.lateralRaise];
+    const session = withCarryOver<Exercise>([ex.pecFly, ex.shoulderPress], built, 4);
+    expect(ids(session)).toEqual(['db-bench', 'shoulder-press', 'chest-press', 'pec-fly']);
   });
 });
 

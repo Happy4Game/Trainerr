@@ -48,6 +48,7 @@ import { dueTemplate } from '@/domain/planning';
 import { nextSetProposal, REST_SECONDS, repRangeFor, startingProposal } from '@/domain/progression';
 import {
   buildSession,
+  withCarryOver,
   exercisesPerSession,
   readyMadeSession,
   withExtraSet,
@@ -258,12 +259,12 @@ const preview = computed<Exercise[]>(() => {
       ...builderOptions(),
     }),
   );
-  // Machines that stayed taken last time come back first.
+  // Machines that stayed taken last time come back.
   const lastSame = [...history.value].reverse().find((s) => s.templateId === template.value?.id);
   const carried = (lastSame?.plan.carryOver ?? [])
     .map((id) => entryOf(id)?.exercise)
     .filter((e): e is CatalogExercise => !!e && !built.some((b) => b.id === e.id));
-  return [...carried, ...built].slice(0, Math.max(count, carried.length));
+  return withCarryOver(carried, built, count);
 });
 
 function historyFor(exerciseId: string): SetLog[][] {

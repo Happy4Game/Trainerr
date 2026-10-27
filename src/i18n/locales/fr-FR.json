@@ -1030,7 +1030,8 @@
       "bodyWeight": "Suivi du poids",
       "easySwitch": "Changer de machine en un geste",
       "healthConnect": "Pesées depuis Health Connect",
-      "clearFeedback": "Chaque geste se voit"
+      "clearFeedback": "Chaque geste se voit",
+      "carryOverOrder": "Ordre des machines respecté"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1063,7 +1064,8 @@
       "switchNext": "L'écran « Machine suivante » propose aussi de changer de machine avant d'y aller.",
       "healthConnectImport": "Historique › Corps › « Importer depuis Health Connect » récupère les pesées de ta balance connectée, de Samsung Health ou de Google Fit (Android).",
       "setSaved": "Après une série, l'écran remonte sur le minuteur de repos et un bandeau confirme « Série enregistrée ».",
-      "switchSheet": "« Changer de machine » s'ouvre par-dessus l'écran, plus besoin de remonter pour le trouver."
+      "switchSheet": "« Changer de machine » s'ouvre par-dessus l'écran, plus besoin de remonter pour le trouver.",
+      "carryOverOrder": "Une machine restée occupée à la dernière séance revient en début de séance, mais toujours après les gros mouvements : une isolation ne passe plus avant un polyarticulaire."
     }
   },
   "data": {
