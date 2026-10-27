@@ -1130,6 +1130,11 @@ export function useSession() {
     stepsOf,
     proposalFor,
     tiredToday,
+    /** Reps to aim for on an exercise in this session. */
+    repRangeOf: (exerciseId: string) => {
+      const entry = entryOf(exerciseId);
+      return entry ? rangeOf(entry) : undefined;
+    },
     lastTimeSets,
     previousFor,
     plannedSets,

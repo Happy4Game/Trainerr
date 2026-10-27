@@ -188,6 +188,20 @@ const record = computed(() => session.recordFor(props.exerciseId));
 
 /** Ready-made session lines: a plank is held for seconds, lunges count per leg. */
 const timed = computed(() => session.planned(props.exerciseId)?.timed === true);
+/**
+ * Double progression made visible: every set at the top of the range, and
+ * the load goes up next time (less help on an assisted machine).
+ */
+const goal = computed(() => {
+  const p = proposal.value;
+  const range = session.repRangeOf(props.exerciseId);
+  if (!p || !range || timed.value || p.reason === 'testSet') return undefined;
+  const next = assisted.value ? stepDown(steps.value, p.loadKg) : stepUp(steps.value, p.loadKg);
+  if (next === undefined) return undefined;
+  const label = (kgValue: number) =>
+    assisted.value ? t('session.assisted.load', { load: kg(kgValue) }) : loadText(kgValue);
+  return t('session.coach.goal', { reps: n(range.max), load: label(p.loadKg), next: label(next) });
+});
 const perSide = computed(() => session.planned(props.exerciseId)?.perSide === true);
 const ADVICE_ICON: Record<SetAdvice, string> = {
   moreLoad: '↑',
@@ -335,6 +349,7 @@ function listen(): void {
         }}
       </p>
       <p class="why">{{ t(`session.reason.${proposal.reason}`) }}</p>
+      <p v-if="goal" class="goal" data-testid="goal">🎯 {{ goal }}</p>
     </div>
     <p v-if="proposal.reminders.includes('rangeOfMotion')" class="reminder" role="note">
       {{ t('session.reminder.rangeOfMotion') }}
@@ -683,6 +698,11 @@ h2 {
   margin-block: 2px 6px;
   font-size: 0.85rem;
   color: var(--ion-color-medium);
+}
+.goal {
+  margin-block: 6px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 .test-help {
   color: var(--tr-text);

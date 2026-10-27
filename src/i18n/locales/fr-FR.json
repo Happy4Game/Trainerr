@@ -380,7 +380,8 @@
         "lighter": "Remets un peu d'aide : {load} × {reps}",
         "first": "Commence avec {load} d'aide × {reps}",
         "comeback": "Reprise en douceur : aide {load} × {reps}"
-      }
+      },
+      "goal": "Objectif : toutes tes séries à {reps} reps avec {load}, et la prochaine fois tu passes à {next}."
     },
     "steps": {
       "do": "Fais ta série",

@@ -380,7 +380,8 @@
         "lighter": "Add a bit of help: {load} × {reps}",
         "first": "Start with {load} of help × {reps}",
         "comeback": "Easy restart: help {load} × {reps}"
-      }
+      },
+      "goal": "Goal: every set at {reps} reps with {load}, and next time you move to {next}."
     },
     "steps": {
       "do": "Do your set",

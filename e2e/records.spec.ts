@@ -31,6 +31,10 @@ test('the record to beat is shown, and beating it is celebrated', async ({ page 
   // Second session: the best set is the record to beat.
   await oneSetSession(page);
   await expect(page.getByTestId('record')).toContainText(`Record à battre : ${first} × `);
+  // Not on a test set, but from the second time: the way up is spelled out.
+  await expect(page.getByTestId('goal')).toContainText(
+    `Objectif : toutes tes séries à 15 reps avec ${first}`,
+  );
   await page.getByRole('button', { name: 'Palier plus lourd' }).click();
   await page.getByRole('button', { name: 'Correct', exact: true }).click();
   await expect(page.getByText('Nouveau record !')).toBeVisible();
