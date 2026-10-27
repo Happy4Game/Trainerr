@@ -10,7 +10,11 @@ export async function skipOnboarding(page: Page): Promise<void> {
 
 /** The catalog lives in the Session tab, behind the book icon of its header. */
 export async function openCatalog(page: Page): Promise<void> {
-  await page.getByRole('tab', { name: /^Séance/ }).click();
+  // In the tab bar only: the Progress tab has a "Séances" segment, a tab too.
+  await page
+    .locator('ion-tab-bar')
+    .getByRole('tab', { name: /^Séance(\s|$)/ })
+    .click();
   // Ionic reopens the tab where it was left: maybe the catalog already.
   if (!/\/tabs\/session\/catalog$/.test(page.url()))
     await page.getByRole('link', { name: 'Catalogue', exact: true }).click();

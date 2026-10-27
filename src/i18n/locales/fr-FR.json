@@ -288,13 +288,17 @@
     "howWasIt": "Comment c'était ?",
     "busy": "Machine occupée",
     "busyTitle": "{name} est occupée",
-    "busyHelp": "Fais autre chose en attendant, l'appli te repropose la machine après l'exercice suivant.",
+    "busyHelp": "Deux choix : « En attendant » te fait faire une autre machine maintenant, et {name} t'est reproposée juste après. « Remplacer » la retire de la séance pour de bon.",
     "alternative": {
       "substitute": "Mêmes muscles",
       "swap": "Exercice suivant de la séance",
       "take": "Je prends celle-ci",
       "choose": "Prendre {name}",
-      "none": "Pas d'autre machine pour ces muscles dans tes favoris : attends un peu ou passe à la suite."
+      "none": "Pas d'autre machine pour ces muscles dans tes favoris : attends un peu ou passe à la suite.",
+      "meanwhile": "En attendant",
+      "meanwhileNamed": "Faire {name} en attendant",
+      "replace": "Remplacer",
+      "replaceNamed": "Remplacer {busy} par {name}"
     },
     "continue": "Continuer avec la suite",
     "isFree": "{name} est libre ?",
@@ -529,7 +533,8 @@
       "take": "Faire {name} à la place"
     },
     "saved": "✓ Série enregistrée : {set}",
-    "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?"
+    "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
+    "seeMovementOf": "Voir la fiche de {name}"
   },
   "availability": {
     "day": "Jour",
@@ -961,7 +966,15 @@
     "keepAwake": "Écran allumé pendant la séance",
     "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances.",
     "restSound": "Bip à la fin du repos",
-    "restSoundHelp": "Trois bips et une vibration quand le repos est fini. Le repos s'allonge après une série « Limite » (+30 s) ou « Échec » (+1 min), et raccourcit après « Facile » (−15 s)."
+    "restSoundHelp": "Trois bips et une vibration quand le repos est fini. Le repos s'allonge après une série « Limite » (+30 s) ou « Échec » (+1 min), et raccourcit après « Facile » (−15 s).",
+    "repRange": {
+      "own": "Ma propre fourchette de reps",
+      "auto": "Désactivé : l'appli adapte la fourchette à chaque exercice ({heavy} reps sur les gros mouvements, {machine} sur machine, {isolation} en isolation). Activé : la même pour tous.",
+      "min": "Reps minimum",
+      "max": "Reps maximum",
+      "invalid": "Choisis entre {lowest} et {highest} reps, avec au moins {width} reps d'écart.",
+      "why": "Le muscle grossit sur une large plage de reps, de 6 à plus de 20, tant que la série finit proche de l'échec. 8 à 12 est un très bon choix. L'appli monte la charge quand tu atteins le haut de la fourchette."
+    }
   },
   "tips": {
     "title": "Bien débuter",
@@ -1122,7 +1135,8 @@
       "programChoice": "Choisis ton programme dès le départ",
       "cameraFix": "Prendre une photo ouvre l'appareil photo",
       "bodyTab": "Un onglet Corps et la caméra dans l'appli",
-      "planningTab": "Le Planning revient en onglet"
+      "planningTab": "Le Planning revient en onglet",
+      "flexibleSession": "Séance plus souple"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1175,7 +1189,13 @@
       "bodyTab": "Nouvel onglet Corps : poids, mensurations et photos, à part des séances. L'onglet Historique devient Progrès (séances et stats), et le Planning s'ouvre depuis Aujourd'hui (icône calendrier).",
       "inAppCamera": "Les photos du corps se prennent dans l'appli : aperçu dans un cadre, pose choisie au-dessus (face, profil, dos), caméra avant ou arrière, retardateur et dernière photo en transparence pour te placer au même endroit.",
       "photoCount": "Le nombre de photos affiché sur l'onglet Corps se met à jour tout de suite après un ajout ou une suppression dans la galerie.",
-      "planningTab": "Le Planning retrouve sa place dans la barre d'onglets. Le Catalogue s'ouvre depuis l'onglet Séance, avec l'icône livre en haut à droite, ou depuis le bouton « Ouvrir le catalogue »."
+      "planningTab": "Le Planning retrouve sa place dans la barre d'onglets. Le Catalogue s'ouvre depuis l'onglet Séance, avec l'icône livre en haut à droite, ou depuis le bouton « Ouvrir le catalogue ».",
+      "precisionEdit": "Corriger une série est précis : tape la charge et les reps exactes (47,5 kg, 8,5 reps), les reps en réserve et une note.",
+      "busyChoice": "Machine occupée : « En attendant » fait une autre machine et te repropose la première ensuite, « Remplacer » la retire de la séance. En y revenant, sa fiche s'ouvre d'un appui sur le dessin.",
+      "addFocus": "« Ajouter un exercice » montre d'abord ceux pour les muscles de la séance (les jambes un jour jambes), les autres en dessous.",
+      "restKept": "Le repos continue même si tu fermes l'appli de force.",
+      "ownRepRange": "Réglages : ta propre fourchette de reps pour tous les exercices (8 à 12 par défaut), avec les études qui l'expliquent.",
+      "newestFirst": "Les séries de la séance s'affichent de la plus récente à la plus ancienne : la dernière, celle qu'on corrige le plus souvent, est en haut."
     }
   },
   "data": {
@@ -1418,7 +1438,9 @@
     "cancel": "Annuler",
     "mine": "Dans mes machines",
     "popular": "Machine populaire",
-    "sameMovement": "Même mouvement"
+    "sameMovement": "Même mouvement",
+    "forSession": "Pour cette séance",
+    "others": "Autres exercices"
   },
   "historyEdit": {
     "title": "Modifier la séance",
@@ -1459,7 +1481,10 @@
       "all": "Déplacer les {count} séries de {name}",
       "pick": "Choisir la bonne machine",
       "where": "Où as-tu fait ces séries de {name} ?"
-    }
+    },
+    "typeHint": "Tape la valeur exacte (47,5 kg, 8,5 reps) ou ajuste avec − et +.",
+    "invalid": "Vérifie la charge et les reps : une charge de 0 ou plus, au moins une demi-rep.",
+    "load": "Charge ({unit})"
   },
   "customSession": {
     "mine": "Mes séances",

@@ -61,6 +61,20 @@ export const SOURCES: readonly Source[] = [
     theme: 'programme',
   },
   {
+    id: 'schoenfeld2017load',
+    label:
+      'Schoenfeld, Grgic, Ogborn & Krieger, 2017 — charges lourdes ou légères : force et muscle (Journal of Strength and Conditioning Research)',
+    url: 'https://doi.org/10.1519/JSC.0000000000002200',
+    theme: 'programme',
+  },
+  {
+    id: 'schoenfeld2021',
+    label:
+      'Schoenfeld, Grgic, Van Every & Plotkin, 2021 — le continuum des répétitions réexaminé (Sports)',
+    url: 'https://doi.org/10.3390/sports9020032',
+    theme: 'programme',
+  },
+  {
     id: 'sbs',
     label: 'Stronger By Science — synthèse sur le volume d’entraînement',
     url: 'https://www.strongerbyscience.com/?p=56687',

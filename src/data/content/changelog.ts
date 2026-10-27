@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'flexibleSession',
+    date: '2026-10-27',
+    items: ['precisionEdit', 'newestFirst', 'busyChoice', 'addFocus', 'restKept', 'ownRepRange'],
+  },
+  {
     id: 'planningTab',
     date: '2026-10-27',
     items: ['planningTab'],

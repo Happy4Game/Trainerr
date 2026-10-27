@@ -2,8 +2,10 @@
 import {
   IonButton,
   IonButtons,
+  IonChip,
   IonContent,
   IonHeader,
+  IonInput,
   IonModal,
   IonSegment,
   IonSegmentButton,
@@ -19,21 +21,34 @@ import type { StoredSet } from '@/data/repositories/sessionRepository';
 import { stepDown, stepUp } from '@/domain/loadSteps';
 import type { Difficulty } from '@/domain/types';
 import { useUnits } from '@/ui/useUnits';
+import { useRirText } from './useRirText';
 import { useSession } from './useSession';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 
-/** Correction of a set already validated during the session. */
+/**
+ * Correction of a set already validated during the session: the load and the
+ * reps typed exactly (47,5 kg, 8,5 reps) or by steps, how it went, the reps in
+ * reserve and the note.
+ */
 const props = defineProps<{ set?: StoredSet | undefined; name: string }>();
 const emit = defineEmits<{ close: [] }>();
 
 const DIFFICULTIES: readonly Difficulty[] = ['easy', 'ok', 'hard', 'fail'];
 const { t, n } = useI18n();
 const session = useSession();
-const { load: kg } = useUnits();
+const { symbol, toDisplay, fromInput } = useUnits();
+const rirText = useRirText();
+const RIR_VALUES = [0, 1, 2, 3, 4] as const;
 
 const load = ref(0);
 const reps = ref(0);
 const difficulty = ref<Difficulty>('ok');
+const rir = ref<number>();
+const note = ref('');
+/** What is typed in the fields, kept as text while typing. */
+const loadText = ref('');
+const repsText = ref('');
+const invalid = ref(false);
 const confirmingDelete = ref(false);
 /** Logged on the wrong machine: moved to the right one, with the other sets of that machine. */
 const pickingMachine = ref(false);
@@ -63,9 +78,12 @@ watch(
   () => props.set,
   (set) => {
     if (!set) return;
-    load.value = set.loadKg;
-    reps.value = set.reps;
+    setLoad(set.loadKg);
+    setReps(set.reps);
     difficulty.value = set.difficulty;
+    rir.value = set.rir;
+    note.value = set.note ?? '';
+    invalid.value = false;
     confirmingDelete.value = false;
   },
   { immediate: true },
@@ -76,12 +94,32 @@ const steps = computed(() => {
   return entry ? session.stepsOf(entry) : [];
 });
 
+const round = (value: number, step: number) => Math.round(value / step) * step;
+function setLoad(kg: number): void {
+  load.value = kg;
+  loadText.value = n(round(toDisplay(kg), 0.01));
+}
+function setReps(value: number): void {
+  reps.value = value;
+  repsText.value = n(value);
+}
+const parse = (text: string) => Number(text.trim().replace(',', '.'));
+
 async function save(): Promise<void> {
   if (!props.set) return;
+  const typedLoad = parse(loadText.value);
+  const typedReps = round(parse(repsText.value), 0.5);
+  invalid.value = !(loadText.value.trim() !== '' && typedLoad >= 0 && typedReps > 0);
+  if (invalid.value) return;
+  // The typed load, unless it is only the rounded display of the same load.
+  const loadKg =
+    loadText.value === n(round(toDisplay(load.value), 0.01)) ? load.value : fromInput(typedLoad);
   await session.editSessionSet(props.set.id, {
-    loadKg: load.value,
-    reps: reps.value,
+    loadKg,
+    reps: typedReps,
     difficulty: difficulty.value,
+    rir: rir.value,
+    note: note.value,
   });
   emit('close');
 }
@@ -96,8 +134,8 @@ async function remove(): Promise<void> {
 <template>
   <ion-modal
     :is-open="set !== undefined"
-    :initial-breakpoint="0.75"
-    :breakpoints="[0, 0.75, 1]"
+    :initial-breakpoint="1"
+    :breakpoints="[0, 1]"
     @did-dismiss="emit('close')"
   >
     <ion-header>
@@ -111,29 +149,44 @@ async function remove(): Promise<void> {
     <ion-content class="ion-padding">
       <p class="name">{{ name }}</p>
       <div class="stepper">
-        <span class="label">{{ t('session.load') }}</span>
-        <ion-button fill="outline" @click="load = stepDown(steps, load) ?? load">
+        <ion-button fill="outline" @click="setLoad(stepDown(steps, load) ?? load)">
           <span class="visually-hidden">{{ t('session.lighter') }}</span>
           <Minus :size="22" aria-hidden="true" />
         </ion-button>
-        <output class="value">{{ kg(load) }}</output>
-        <ion-button fill="outline" @click="load = stepUp(steps, load) ?? load">
+        <ion-input
+          v-model="loadText"
+          class="value"
+          type="text"
+          inputmode="decimal"
+          fill="outline"
+          label-placement="stacked"
+          :label="t('setEdit.load', { unit: symbol })"
+        />
+        <ion-button fill="outline" @click="setLoad(stepUp(steps, load) ?? load)">
           <span class="visually-hidden">{{ t('session.heavier') }}</span>
           <Plus :size="22" aria-hidden="true" />
         </ion-button>
       </div>
       <div class="stepper">
-        <span class="label">{{ t('session.reps') }}</span>
-        <ion-button fill="outline" @click="reps = Math.max(0, reps - 1)">
+        <ion-button fill="outline" @click="setReps(Math.max(0.5, parse(repsText) - 1 || 0.5))">
           <span class="visually-hidden">{{ t('session.fewerReps') }}</span>
           <Minus :size="22" aria-hidden="true" />
         </ion-button>
-        <output class="value">{{ n(reps) }}</output>
-        <ion-button fill="outline" @click="reps = reps + 1">
+        <ion-input
+          v-model="repsText"
+          class="value"
+          type="text"
+          inputmode="decimal"
+          fill="outline"
+          label-placement="stacked"
+          :label="t('historyEdit.reps')"
+        />
+        <ion-button fill="outline" @click="setReps((parse(repsText) || 0) + 1)">
           <span class="visually-hidden">{{ t('session.moreReps') }}</span>
           <Plus :size="22" aria-hidden="true" />
         </ion-button>
       </div>
+      <p class="hint">{{ t('setEdit.typeHint') }}</p>
       <p class="label">{{ t('session.howWasIt') }}</p>
       <ion-segment
         :value="difficulty"
@@ -144,6 +197,30 @@ async function remove(): Promise<void> {
         </ion-segment-button>
       </ion-segment>
 
+      <fieldset class="rir">
+        <legend>{{ t('session.rir.label') }}</legend>
+        <ion-chip
+          v-for="value in RIR_VALUES"
+          :key="value"
+          :outline="rir !== value"
+          v-bind="rir === value ? { color: 'primary' } : {}"
+          role="radio"
+          :aria-checked="rir === value"
+          :aria-label="rirText(value)"
+          @click="rir = rir === value ? undefined : value"
+        >
+          <ion-label>{{ value === 4 ? '4+' : value }}</ion-label>
+        </ion-chip>
+      </fieldset>
+      <ion-input
+        v-model="note"
+        class="note"
+        fill="outline"
+        label-placement="stacked"
+        :label="t('session.setNote.label')"
+        :placeholder="t('session.setNote.placeholder')"
+      />
+      <p v-if="invalid" class="invalid" role="alert">{{ t('setEdit.invalid') }}</p>
       <ion-button expand="block" size="large" class="save" @click="save">
         {{ t('setEdit.save') }}
       </ion-button>
@@ -204,19 +281,43 @@ async function remove(): Promise<void> {
   min-height: 48px;
 }
 .label {
-  width: 4.5em;
+  margin-block: 14px 6px;
   color: var(--ion-color-medium-shade);
 }
-p.label {
-  width: auto;
-  margin-block: 14px 6px;
-}
 .value {
-  min-width: 5.5ch;
-  font-size: 1.5rem;
+  flex: 1;
+  font-size: 1.3rem;
   font-weight: 700;
-  text-align: center;
   font-variant-numeric: tabular-nums;
+}
+.hint {
+  margin-block: 4px 0;
+  color: var(--ion-color-medium-shade);
+  font-size: 0.85rem;
+}
+.rir {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 14px 0 0;
+  padding: 0;
+  border: 0;
+}
+.rir legend {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.rir ion-chip {
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+}
+.note {
+  margin-block-start: 12px;
+}
+.invalid {
+  color: var(--ion-color-danger);
 }
 .visually-hidden {
   position: absolute;

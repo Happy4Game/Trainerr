@@ -184,6 +184,7 @@ const inSession = () => props.exercises.filter((e) => e.status !== 'done').map((
         :open="picking"
         :title="t('session.addExercise')"
         :exclude="inSession()"
+        :focus="session.sessionMuscles.value"
         @pick="addLater"
         @close="picking = false"
       />
