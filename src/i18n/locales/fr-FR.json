@@ -315,7 +315,9 @@
       "heavier": "Charge réalisable plus lourde",
       "closest": "Charge exacte impossible : {below} ou {above}",
       "perSide": "Par côté : {plates} kg",
-      "bar": "barre de {kg} kg"
+      "bar": "barre de {kg} kg",
+      "perSideLine": "Par côté : {plates} {unit}",
+      "barOnly": "Barre seule"
     },
     "summary": {
       "title": "Séance terminée",

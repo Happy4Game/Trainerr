@@ -315,7 +315,9 @@
       "heavier": "Heavier achievable load",
       "closest": "Exact load impossible: {below} or {above}",
       "perSide": "Per side: {plates} kg",
-      "bar": "{kg} kg bar"
+      "bar": "{kg} kg bar",
+      "perSideLine": "Each side: {plates} {unit}",
+      "barOnly": "Empty bar"
     },
     "summary": {
       "title": "Workout finished",

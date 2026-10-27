@@ -20,6 +20,8 @@ import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
 import { unlockSound } from './restSound';
 import { useUnits } from '@/ui/useUnits';
+import { useSettings } from '@/ui/useSettings';
+import { DEFAULT_PLATE_CONFIG, platesFor } from '@/domain/plates';
 import { DEFAULT_BODY_WEIGHT_KG } from '@/domain/assisted';
 
 const props = defineProps<{ exerciseId: string }>();
@@ -80,7 +82,8 @@ const name = computed(() =>
       : entry.value.exercise.nameEn
     : '',
 );
-const { load: kg, fromInput, toDisplay } = useUnits();
+const { load: kg, fromInput, toDisplay, symbol } = useUnits();
+const { settings: appSettings } = useSettings();
 
 // A load between two steps (e.g. 52.5 kg with an add-on) can be typed: tap the value.
 const typing = ref(false);
@@ -107,6 +110,18 @@ const breakdown = computed(() => {
   const plates = e.loadSteps.length > 0 ? e.loadSteps : defaultStepsFor(e.exercise.equipment);
   const found = stackBreakdown(load.value, plates, addOns);
   return found && found.addOnsKg.length > 0 ? found : undefined;
+});
+/** On a barbell, the plates to put on each side, without opening the calculator. */
+const platesPerSide = computed(() => {
+  if (entry.value?.exercise.equipment !== 'barbell') return undefined;
+  const result = platesFor(load.value, appSettings.value?.barbell ?? DEFAULT_PLATE_CONFIG);
+  if (!result.exact) return undefined;
+  return result.loading.perSide.length === 0
+    ? t('session.plates.barOnly')
+    : t('session.plates.perSideLine', {
+        plates: result.loading.perSide.map((p) => n(toDisplay(p))).join(' + '),
+        unit: symbol.value,
+      });
 });
 /** Seat and notch noted on the machine card, recalled at each set. */
 const setupText = computed(() => {
@@ -391,6 +406,7 @@ function listen(): void {
         {{ t('session.assisted.noWeight') }}
       </router-link>
     </p>
+    <p v-if="platesPerSide" class="breakdown" data-testid="per-side">{{ platesPerSide }}</p>
     <p v-if="breakdown" class="breakdown" data-testid="breakdown">
       {{
         t('session.breakdown', {

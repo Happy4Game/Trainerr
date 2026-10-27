@@ -20,6 +20,8 @@ test('the plate calculator only uses the plates set for the gym', async ({ page 
   await bench.getByRole('button', { name: /Toucher pour la taper/ }).click();
   await bench.getByRole('textbox').fill('70');
   await bench.getByRole('textbox').press('Enter');
+  // Shown under the load, without opening the calculator.
+  await expect(bench.getByTestId('per-side')).toHaveText('Par côté : 20 + 5 kg');
   await bench.getByRole('button', { name: 'Disques', exact: true }).click();
-  await expect(page.getByText('Par côté : 20 + 5 kg')).toBeVisible();
+  await expect(page.locator('ion-modal').getByText('Par côté : 20 + 5 kg')).toBeVisible();
 });
