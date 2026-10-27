@@ -643,7 +643,8 @@
     "sessions": "{count} session | {count} sessions",
     "sets": "{count} set | {count} sets",
     "exercisesOf": "Exercises of {session}",
-    "lifted": "{load} lifted"
+    "lifted": "{load} lifted",
+    "record": "Record beaten that day"
   },
   "comeback": {
     "load": "Load ({unit})",

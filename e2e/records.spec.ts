@@ -34,4 +34,10 @@ test('the record to beat is shown, and beating it is celebrated', async ({ page 
   await page.getByRole('button', { name: 'Palier plus lourd' }).click();
   await page.getByRole('button', { name: 'Correct', exact: true }).click();
   await expect(page.getByText('Nouveau record !')).toBeVisible();
+
+  // The history keeps the trophy on that day.
+  await page.getByRole('button', { name: 'Terminer la séance' }).click();
+  await page.getByRole('button', { name: 'Fermer' }).first().click();
+  await page.getByRole('tab', { name: 'Historique' }).click();
+  await expect(page.getByRole('img', { name: 'Record battu ce jour-là' })).toHaveCount(1);
 });

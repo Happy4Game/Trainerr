@@ -643,7 +643,8 @@
     "sessions": "{count} séance | {count} séances",
     "sets": "{count} série | {count} séries",
     "exercisesOf": "Exercices de {session}",
-    "lifted": "{load} soulevés"
+    "lifted": "{load} soulevés",
+    "record": "Record battu ce jour-là"
   },
   "comeback": {
     "load": "Charge ({unit})",

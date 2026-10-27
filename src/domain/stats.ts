@@ -145,6 +145,34 @@ export function personalRecords(sessions: readonly SessionLog[]): Map<string, Pe
   return records;
 }
 
+/**
+ * For each session, the exercises where it beat the best load of all the
+ * sessions before it. A first time on an exercise is not a record.
+ */
+export function recordsBySession(sessions: readonly SessionLog[]): Map<string, Set<string>> {
+  type Top = { loadKg: number; reps: number };
+  const beats = (a: Top, b: Top | undefined) =>
+    !b || a.loadKg > b.loadKg || (a.loadKg === b.loadKg && a.reps > b.reps);
+  const best = new Map<string, Top>();
+  const result = new Map<string, Set<string>>();
+  for (const session of sortByDate(sessions)) {
+    const today = new Map<string, Top>();
+    for (const set of session.sets) {
+      if (set.warmup || set.completeReps === false) continue;
+      if (beats(set, today.get(set.exerciseId))) today.set(set.exerciseId, set);
+    }
+    const beaten = new Set<string>();
+    for (const [exerciseId, top] of today) {
+      const previous = best.get(exerciseId);
+      if (!beats(top, previous)) continue;
+      if (previous) beaten.add(exerciseId);
+      best.set(exerciseId, top);
+    }
+    if (beaten.size > 0) result.set(session.id, beaten);
+  }
+  return result;
+}
+
 function sortByDate(sessions: readonly SessionLog[]): SessionLog[] {
   return [...sessions].sort((a, b) => a.date.localeCompare(b.date));
 }

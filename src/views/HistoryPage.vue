@@ -14,7 +14,7 @@ import {
 } from '@ionic/vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { sessionWorkload } from '@/domain/stats';
+import { recordsBySession, sessionWorkload } from '@/domain/stats';
 import BodyView from '@/ui/BodyView.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useUnits } from '@/ui/useUnits';
@@ -29,6 +29,10 @@ const session = useSession();
 const { load } = useUnits();
 
 const sessions = computed(() => [...session.history.value].reverse());
+/** Records on the real load: less help on an assisted machine is a record too. */
+const records = computed(() => recordsBySession(session.realHistory.value));
+const isRecord = (sessionId: string, exerciseId: string) =>
+  records.value.get(sessionId)?.has(exerciseId) === true;
 
 const formatDate = (date: string, options: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat(locale.value, { ...options, timeZone: 'UTC' }).format(
@@ -143,7 +147,16 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
                 :aria-label="t('history.exercisesOf', { session: templateLabel(s.templateId) })"
               >
                 <li v-for="e in exercises(s.sets)" :key="e.id">
-                  <span class="exercise-name">{{ e.name }}</span>
+                  <span class="exercise-name">
+                    {{ e.name }}
+                    <span
+                      v-if="isRecord(s.id, e.id)"
+                      class="record"
+                      role="img"
+                      :aria-label="t('history.record')"
+                      >🏆</span
+                    >
+                  </span>
                   <span class="chips">
                     <span v-for="(set, i) in e.sets" :key="i" class="chip">{{ set }}</span>
                   </span>
@@ -259,6 +272,9 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
 }
 .exercise-name {
   font-weight: 600;
+}
+.record {
+  margin-inline-start: 4px;
 }
 .chips {
   display: flex;
