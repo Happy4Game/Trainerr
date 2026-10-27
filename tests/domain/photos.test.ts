@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   importedPhotoDate,
+  lastPhotoOfPose,
   photoComparison,
   photosOfPose,
   photoTimeline,
@@ -50,5 +51,12 @@ describe('photo gallery', () => {
     expect(importedPhotoDate(local, '2026-10-27')).toBe('2026-09-12');
     expect(importedPhotoDate(new Date(2030, 0, 1).getTime(), '2026-10-27')).toBe('2026-10-27');
     expect(importedPhotoDate(0, '2026-10-27')).toBe('2026-10-27');
+  });
+});
+
+describe('camera overlay', () => {
+  it('shows the newest photo of each pose', () => {
+    const shots = photos.map((p) => ({ ...p, photo: `data:${p.id}` }));
+    expect(lastPhotoOfPose(shots)).toEqual({ front: 'data:c', side: 'data:b' });
   });
 });

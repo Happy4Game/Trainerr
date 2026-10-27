@@ -70,6 +70,11 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Updates from the project's GitHub Releases: Android asks the user before installing. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- Body photos taken inside the app (getUserMedia): Capacitor asks for it the
+         first time (BridgeWebChromeClient.onPermissionRequest). -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- The app still installs on a phone without a camera (Play Store filter). -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <!-- Health Connect, read only: weighings from smart scales and health apps. -->
     <uses-permission android:name="android.permission.health.READ_WEIGHT" />
     <!-- Weighings older than 30 days; Health Connect asks the user separately. -->

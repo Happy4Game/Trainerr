@@ -14,7 +14,12 @@ export default defineConfig({
     ...devices['Pixel 7'],
     locale: 'fr-FR',
     screenshot: 'only-on-failure',
-    ...(executablePath ? { launchOptions: { executablePath } } : {}),
+    // A fake camera (moving test pattern) for the body photos taken in the app.
+    permissions: ['camera'],
+    launchOptions: {
+      args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'],
+      ...(executablePath ? { executablePath } : {}),
+    },
   },
   webServer: {
     command: 'npx vite build && npx vite preview --port 4173 --strictPort',

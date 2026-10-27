@@ -17,7 +17,7 @@ test('pseudo-language: every interface text comes from the translation files', a
     '/tabs/session',
     '/tabs/catalog',
     '/tabs/history',
-    '/tabs/planning',
+    '/tabs/today/planning',
     '/tabs/settings',
   ]) {
     await page.goto(`${path}?pseudo`);

@@ -43,6 +43,8 @@
       </array>
     </dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Trainerr uses the camera for your body photos. They stay on your phone.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

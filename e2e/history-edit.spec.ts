@@ -33,7 +33,7 @@ test('a past session can be corrected, completed and deleted', async ({ page }) 
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await page.getByRole('button', { name: 'Fermer' }).first().click();
 
-  await page.getByRole('tab', { name: 'Historique' }).click();
+  await page.getByRole('tab', { name: 'Progrès' }).click();
   await page.getByRole('link', { name: /Modifier Haut du corps A/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Haut du corps A' })).toBeVisible();
 

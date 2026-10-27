@@ -13,7 +13,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { ArrowLeftRight, Check, Settings, TrendingUp } from 'lucide-vue-next';
+import { ArrowLeftRight, CalendarDays, Check, Settings, TrendingUp } from 'lucide-vue-next';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { openAppDatabase } from '@/data/appDatabase';
@@ -144,6 +144,9 @@ const streak = computed(() =>
       <ion-toolbar>
         <ion-title>{{ t('tabs.today') }}</ion-title>
         <ion-buttons slot="end">
+          <ion-button router-link="/tabs/today/planning" :aria-label="t('tabs.planning')">
+            <CalendarDays :size="24" aria-hidden="true" />
+          </ion-button>
           <ion-button router-link="/tabs/settings" :aria-label="t('settings.title')">
             <Settings :size="24" aria-hidden="true" />
           </ion-button>
@@ -296,7 +299,7 @@ const streak = computed(() =>
                 <span aria-hidden="true">🏅</span> {{ t(`badges.${badge.code}`) }}
               </span>
             </p>
-            <ion-button fill="clear" router-link="/tabs/planning">{{
+            <ion-button fill="clear" router-link="/tabs/today/planning">{{
               t('today.seePlanning')
             }}</ion-button>
           </ion-card-content>

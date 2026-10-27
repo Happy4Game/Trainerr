@@ -3,7 +3,8 @@
     "today": "Today",
     "session": "Workout",
     "catalog": "Catalog",
-    "history": "History",
+    "history": "Progress",
+    "body": "Body",
     "planning": "Planning",
     "inProgress": "session in progress"
   },
@@ -672,8 +673,7 @@
     "empty": "No finished workout yet.",
     "views": {
       "sessions": "Workouts",
-      "stats": "Stats",
-      "body": "Body"
+      "stats": "Stats"
     },
     "edit": "Edit {session}",
     "sessions": "{count} session | {count} sessions",
@@ -820,9 +820,9 @@
       "source": "Source: Morton et al. 2018, see the Credits."
     },
     "photo": {
-      "title": "Monthly photo",
-      "help": "One photo a month, same light, same angle: it tells more than the mirror. It stays on your phone.",
-      "take": "Take this month's photo",
+      "title": "Body photos",
+      "help": "One photo a month, same light, same place, same pose: it tells more than the mirror. They stay on your phone.",
+      "take": "Take a photo",
       "alt": "Photo of {date}"
     },
     "front": "Front",
@@ -856,6 +856,7 @@
       },
       "adding": "Adding the photos…",
       "empty": "No photo yet. Take one in front of the mirror or import those from your gallery.",
+      "emptyPose": "No photo for this pose.",
       "compareTitle": "Before / after",
       "between": "{weeks} and {sessions} apart.",
       "weeks": "{count} week | {count} weeks",
@@ -866,6 +867,32 @@
       "deleteConfirm": "Yes, delete for good",
       "link": "My gallery ({count} photo) | My gallery ({count} photos)",
       "linkEmpty": "Open my gallery"
+    },
+    "camera": {
+      "title": "Take a photo",
+      "live": "Camera preview",
+      "preview": "Photo taken",
+      "shoot": "Take the photo",
+      "toBack": "Switch to the back camera",
+      "toFront": "Switch to the front camera (selfie)",
+      "timer": "Self-timer: {seconds} s. Tap to change.",
+      "timerOff": "Off",
+      "overlay": "Show the last photo of this pose faintly",
+      "retake": "Retake",
+      "keep": "Keep this photo",
+      "useCameraApp": "Open the phone's camera app",
+      "howTo": {
+        "front": "From the front, arms by your sides, phone at navel height.",
+        "side": "From the side, arms by your sides, always the same side.",
+        "back": "From the back: put the phone down and set the timer to 10 s."
+      },
+      "problems": {
+        "unsupported": "This phone can't use the camera inside the app.",
+        "denied": "Trainerr has no access to the camera. You can allow it in the Android settings, or use the phone's camera app.",
+        "missing": "No camera found.",
+        "busy": "The camera is already used by another app.",
+        "other": "The camera couldn't start."
+      }
     }
   },
   "settings": {
@@ -1093,7 +1120,8 @@
       "photoGallery": "Body photo gallery",
       "cardio": "Cardio in sessions",
       "programChoice": "Pick your program from the start",
-      "cameraFix": "Take a photo opens the camera"
+      "cameraFix": "Take a photo opens the camera",
+      "bodyTab": "A Body tab and a camera inside the app"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1142,7 +1170,10 @@
       "cardioLog": "During the session, log your cardio results: time, distance, speed, incline, level, cadence, heart rate and calories, depending on the machine.",
       "cardioCatalog": "Catalog › Cardio: each machine with the muscles worked and your results, and your week against the WHO bar (150 min).",
       "programChoice": "Questionnaire › “What type of sessions?”: full body, upper/lower, PPL… or let the app choose from your number of sessions. Each program is explained, with the frequency per muscle.",
-      "cameraFix": "“Take a photo” now opens the camera on Android instead of the gallery. For a photo already taken, use “Import”."
+      "cameraFix": "“Take a photo” now opens the camera on Android instead of the gallery. For a photo already taken, use “Import”.",
+      "bodyTab": "New Body tab: weight, measurements and photos, apart from the workouts. The History tab becomes Progress (workouts and stats), and Planning opens from Today (calendar icon).",
+      "inAppCamera": "Body photos are taken inside the app: a framed preview, the pose chosen above (front, side, back), front or back camera, a self-timer and the last photo shown faintly to stand at the same place.",
+      "photoCount": "The number of photos shown on the Body tab updates right after adding or removing one in the gallery."
     }
   },
   "data": {

@@ -13,13 +13,18 @@ test('the five tabs are reachable', async ({ page }) => {
   for (const [label, path] of [
     ['Séance', 'session'],
     ['Catalogue', 'catalog'],
-    ['Historique', 'history'],
-    ['Planning', 'planning'],
+    ['Progrès', 'history'],
+    ['Corps', 'body'],
     ["Aujourd'hui", 'today'],
   ] as const) {
     await page.getByRole('tab', { name: label }).click();
     await expect(page).toHaveURL(new RegExp(`/tabs/${path}$`));
   }
+  // The week plan opens from Today, with the old address still working.
+  await page.getByRole('link', { name: 'Planning', exact: true }).click();
+  await expect(page).toHaveURL(/\/tabs\/today\/planning$/);
+  await page.goto('/tabs/planning');
+  await expect(page).toHaveURL(/\/tabs\/today\/planning$/);
 });
 
 test('the questionnaire is not shown again after a reload', async ({ page }) => {

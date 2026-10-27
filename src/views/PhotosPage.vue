@@ -16,46 +16,40 @@ import {
 import { Camera, ImagePlus } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { openAppDatabase } from '@/data/appDatabase';
-import {
-  addMeasurement,
-  deleteMeasurement,
-  listMeasurements,
-  updatePhoto,
-  type BodyMeasurement,
-} from '@/data/repositories/bodyRepository';
 import {
   importedPhotoDate,
+  lastPhotoOfPose,
   PHOTO_POSES,
   photoComparison,
   photosOfPose,
   photoTimeline,
   type PhotoPose,
 } from '@/domain/photos';
+import CameraCapture from '@/ui/body/CameraCapture.vue';
+import { useBodyMeasurements, type BodyPhoto } from '@/ui/body/useBodyMeasurements';
 import { readPhoto } from '@/ui/photo';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso } from '@/ui/useWeekPlan';
 
 /**
- * Body photos over time: taken in front of the mirror or imported from the
- * phone's gallery, dated, sorted by pose. They stay in the app's own database
- * on the phone: nothing is sent anywhere.
+ * Body photos over time: taken with the camera inside the app or imported
+ * from the phone's gallery, dated, sorted by pose. They stay in the app's own
+ * database on the phone: nothing is sent anywhere.
  */
-type Photo = BodyMeasurement & { readonly photo: string };
+type Photo = BodyPhoto;
 
 const { t, locale } = useI18n();
 const session = useSession();
 
-const photos = ref<Photo[]>([]);
+const body = useBodyMeasurements();
+const photos = body.photos;
 const pose = ref<PhotoPose | 'all'>('all');
 const busy = ref(false);
 const opened = ref<Photo>();
 const confirmDelete = ref(false);
+const camera = ref(false);
 
-onMounted(async () => {
-  const { db } = await openAppDatabase();
-  photos.value = (await listMeasurements(db)).filter((m): m is Photo => !!m.photo);
-});
+onMounted(body.reload);
 
 const sessionDates = computed(() => session.history.value.map((s) => s.date));
 const shown = computed(() =>
@@ -82,27 +76,29 @@ const shortDate = (date: string) =>
     timeZone: 'UTC',
   }).format(new Date(`${date}T00:00:00Z`));
 
-async function add(event: Event, imported: boolean): Promise<void> {
+async function importFiles(event: Event): Promise<void> {
   const input = event.target as HTMLInputElement;
   const files = [...(input.files ?? [])];
   input.value = '';
   if (files.length === 0) return;
   busy.value = true;
   try {
-    const { db } = await openAppDatabase();
     const today = todayIso();
     for (const file of files) {
-      const saved = await addMeasurement(db, {
-        date: imported ? importedPhotoDate(file.lastModified, today) : today,
+      await body.add({
+        date: importedPhotoDate(file.lastModified, today),
         measurements: {},
         photo: await readPhoto(file),
         ...(pose.value === 'all' ? {} : { pose: pose.value }),
       });
-      photos.value = [...photos.value, saved as Photo];
     }
   } finally {
     busy.value = false;
   }
+}
+
+async function taken(photo: string, takenPose: PhotoPose): Promise<void> {
+  await body.add({ date: todayIso(), measurements: {}, photo, pose: takenPose });
 }
 
 function open(photo: Photo): void {
@@ -116,20 +112,14 @@ async function change(edit: { date?: string; pose?: PhotoPose | undefined }): Pr
   const date = edit.date ?? current.date;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || date > todayIso()) return;
   const nextPose = 'pose' in edit ? edit.pose : current.pose;
-  const { db } = await openAppDatabase();
-  await updatePhoto(db, current.id, { date, ...(nextPose ? { pose: nextPose } : {}) });
-  const { pose: _old, ...rest } = current;
-  const updated: Photo = { ...rest, date, ...(nextPose ? { pose: nextPose } : {}) };
-  photos.value = photos.value.map((p) => (p.id === current.id ? updated : p));
-  opened.value = updated;
+  await body.changePhoto(current.id, { date, ...(nextPose ? { pose: nextPose } : {}) });
+  opened.value = photos.value.find((p) => p.id === current.id);
 }
 
 async function remove(): Promise<void> {
   const current = opened.value;
   if (!current) return;
-  const { db } = await openAppDatabase();
-  await deleteMeasurement(db, current.id);
-  photos.value = photos.value.filter((p) => p.id !== current.id);
+  await body.remove(current.id);
   opened.value = undefined;
 }
 </script>
@@ -139,7 +129,7 @@ async function remove(): Promise<void> {
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/tabs/history" :text="t('common.back')" />
+          <ion-back-button default-href="/tabs/body" :text="t('common.back')" />
         </ion-buttons>
         <ion-title>{{ t('body.gallery.title') }}</ion-title>
       </ion-toolbar>
@@ -148,27 +138,14 @@ async function remove(): Promise<void> {
       <p class="privacy" role="note">{{ t('body.gallery.privacy') }}</p>
 
       <div class="add">
-        <label class="add-button primary">
+        <button type="button" class="add-button primary" :disabled="busy" @click="camera = true">
           <Camera :size="20" aria-hidden="true" />
           {{ t('body.gallery.take') }}
-          <input
-            type="file"
-            accept="image/*"
-            capture="user"
-            :disabled="busy"
-            @change="add($event, false)"
-          />
-        </label>
+        </button>
         <label class="add-button">
           <ImagePlus :size="20" aria-hidden="true" />
           {{ t('body.gallery.import') }}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            :disabled="busy"
-            @change="add($event, true)"
-          />
+          <input type="file" accept="image/*" multiple :disabled="busy" @change="importFiles" />
         </label>
       </div>
       <p class="hint">{{ t('body.gallery.tip') }}</p>
@@ -186,6 +163,7 @@ async function remove(): Promise<void> {
 
       <p v-if="busy" role="status">{{ t('body.gallery.adding') }}</p>
       <p v-else-if="photos.length === 0" class="empty">{{ t('body.gallery.empty') }}</p>
+      <p v-else-if="shown.length === 0" class="empty">{{ t('body.gallery.emptyPose') }}</p>
 
       <section v-if="comparison" class="compare-card" :aria-label="t('body.gallery.compareTitle')">
         <h2>{{ t('body.gallery.compareTitle') }}</h2>
@@ -224,6 +202,14 @@ async function remove(): Promise<void> {
           </button>
         </div>
       </section>
+
+      <CameraCapture
+        :open="camera"
+        :start-pose="pose === 'all' ? undefined : pose"
+        :last-of-pose="lastPhotoOfPose(photos)"
+        @take="taken"
+        @close="camera = false"
+      />
 
       <ion-modal :is-open="opened !== undefined" @did-dismiss="opened = undefined">
         <ion-header>
@@ -308,7 +294,10 @@ async function remove(): Promise<void> {
   font-weight: 700;
 }
 .add-button.primary {
+  border: 0;
   background: var(--ion-color-primary);
+  font: inherit;
+  font-weight: 700;
   color: var(--ion-color-primary-contrast);
 }
 .add-button input {

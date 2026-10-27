@@ -90,3 +90,12 @@ export function importedPhotoDate(lastModified: number, today: IsoDate): IsoDate
   const local = new Date(d.getTime() - d.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
   return local > today ? today : local;
 }
+
+/** Newest photo of each pose: shown faintly over the camera, to stand at the same place. */
+export function lastPhotoOfPose<P extends DatedPhoto & { readonly photo: string }>(
+  photos: readonly P[],
+): Partial<Record<PhotoPose, string>> {
+  const last: Partial<Record<PhotoPose, string>> = {};
+  for (const p of [...photos].sort(byDate)) if (p.pose) last[p.pose] = p.photo;
+  return last;
+}

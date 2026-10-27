@@ -7,7 +7,7 @@ test('a session done without the app is added to the history afterwards', async 
   const iso = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
   await skipOnboarding(page);
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
-  await page.getByRole('tab', { name: 'Historique' }).click();
+  await page.getByRole('tab', { name: 'Progrès' }).click();
 
   await page.getByRole('button', { name: "Ajouter une séance faite sans l'appli" }).click();
   const form = page.getByRole('region', { name: "Séance faite sans l'appli" });
@@ -52,7 +52,7 @@ test('a session done without the app is added to the history afterwards', async 
 test('a session added but left empty is not kept', async ({ page }) => {
   await skipOnboarding(page);
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
-  await page.getByRole('tab', { name: 'Historique' }).click();
+  await page.getByRole('tab', { name: 'Progrès' }).click();
   await page.getByRole('button', { name: "Ajouter une séance faite sans l'appli" }).click();
   await page.getByRole('button', { name: 'Créer et remplir' }).click();
   await expect(page.getByText('Ajoute les exercices que tu as faits.')).toBeVisible();

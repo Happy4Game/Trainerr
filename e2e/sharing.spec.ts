@@ -38,17 +38,3 @@ test('a readable report for a coach and a monthly recap image', async ({ page })
   expect(html).toContain('<h1>Mon programme d&#39;entraînement</h1>');
   expect(html).toContain('Haut / Bas');
 });
-
-test('monthly body photos are compared side by side', async ({ page }) => {
-  await skipOnboarding(page);
-  await page.goto('/tabs/history');
-  await page.locator('ion-segment-button', { hasText: 'Corps' }).click();
-  const png = Buffer.from(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-    'base64',
-  );
-  const input = page.locator('input[type=file][capture="user"]');
-  await input.setInputFiles({ name: 'a.png', mimeType: 'image/png', buffer: png });
-  await input.setInputFiles({ name: 'b.png', mimeType: 'image/png', buffer: png });
-  await expect(page.getByRole('img', { name: /^Photo du / })).toHaveCount(2);
-});

@@ -16,12 +16,11 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { recordsBySession, sessionWorkload } from '@/domain/stats';
 import AddPastSession from '@/ui/AddPastSession.vue';
-import BodyView from '@/ui/BodyView.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useUnits } from '@/ui/useUnits';
 import StatsView from '@/ui/StatsView.vue';
 
-const VIEWS = ['sessions', 'stats', 'body'] as const;
+const VIEWS = ['sessions', 'stats'] as const;
 const view = ref<(typeof VIEWS)[number]>('sessions');
 
 const { t, n, locale } = useI18n();
@@ -97,7 +96,6 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
     </ion-header>
     <ion-content class="ion-padding">
       <StatsView v-if="view === 'stats'" />
-      <BodyView v-else-if="view === 'body'" />
       <AddPastSession v-if="view === 'sessions'" />
       <EmptyState
         v-if="view === 'sessions' && sessions.length === 0"
