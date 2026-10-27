@@ -1,6 +1,7 @@
 // Icône de l'appli : l'haltère de Lucide (ISC, https://lucide.dev/license),
 // en blanc sur l'indigo du thème. Génère les icônes Android (classique,
-// ronde, adaptative et monochrome), les écrans de démarrage et le favicon.
+// ronde, adaptative et monochrome), l'icône et l'écran de démarrage iOS,
+// les écrans de démarrage Android et le favicon.
 // Usage : node scripts/generate-icons.mjs (demande rsvg-convert, paquet librsvg)
 import { execFileSync } from 'node:child_process';
 import { readdirSync, writeFileSync } from 'node:fs';
@@ -37,6 +38,12 @@ const ROUND = svg(
   512,
   `<circle cx="256" cy="256" r="256" fill="${INDIGO}"/>${glyph(256, 256, 280)}`,
 );
+// iOS rounds the corners itself and wants a square, opaque icon.
+const ICON_IOS = svg(
+  1024,
+  1024,
+  `<rect width="1024" height="1024" fill="${INDIGO}"/>${glyph(512, 512, 600)}`,
+);
 // Adaptive icon: 108 units, only the centre 66 are always visible.
 const FOREGROUND = svg(108, 108, glyph(54, 54, 56));
 const splash = (w, h) =>
@@ -71,6 +78,13 @@ for (const dir of readdirSync(res).filter((d) => d.startsWith('drawable'))) {
   }
   const [w, h] = size.split(' ').map(Number);
   render(splash(w, h), file, w, h);
+}
+
+// iOS: one 1024 icon (Xcode makes the other sizes) and the 2732 splash in its three slots.
+const assets = join(root, 'ios/App/App/Assets.xcassets');
+render(ICON_IOS, join(assets, 'AppIcon.appiconset/AppIcon-512@2x.png'), 1024);
+for (const suffix of ['', '-1', '-2']) {
+  render(splash(2732, 2732), join(assets, `Splash.imageset/splash-2732x2732${suffix}.png`), 2732);
 }
 
 writeFileSync(

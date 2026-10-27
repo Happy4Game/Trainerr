@@ -1,0 +1,61 @@
+name: iOS
+
+# Compile l'appli iOS sans signature, donc sans compte Apple Developer payant :
+# - une version pour le simulateur d'iPhone (Xcode sur un Mac) ;
+# - un .ipa non signé, à signer soi-même avant de l'installer sur un iPhone.
+# Mode d'emploi : docs/ios.md.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    # Gratuit sur un dépôt public. Capacitor 8 demande Xcode 26, fourni par macOS 26.
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Construire l'appli web et la copier dans iOS
+        run: npm run ios:sync
+
+      - name: Compiler pour le simulateur
+        run: |
+          xcodebuild build \
+            -project ios/App/App.xcodeproj -scheme App \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build/ios
+          cd build/ios/Build/Products/Debug-iphonesimulator
+          ditto -c -k --keepParent App.app "$GITHUB_WORKSPACE/trainerr-simulator.zip"
+
+      - name: Compiler pour iPhone, sans signature
+        run: |
+          xcodebuild build \
+            -project ios/App/App.xcodeproj -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+          # Un .ipa n'est qu'un zip contenant Payload/App.app.
+          mkdir -p build/ipa/Payload
+          cp -R build/ios/Build/Products/Release-iphoneos/App.app build/ipa/Payload/
+          cd build/ipa
+          zip -qry "$GITHUB_WORKSPACE/trainerr-unsigned.ipa" Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: trainerr-ios-simulator
+          path: trainerr-simulator.zip
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: trainerr-ios-unsigned-ipa
+          path: trainerr-unsigned.ipa
+          retention-days: 30
