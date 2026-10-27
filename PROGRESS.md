@@ -184,7 +184,7 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 ## Retours de Thibaut en salle (27 oct. 2026)
 
 - **Programme de la séance** : « + Ajouter un exercice » en haut de la liste. L'exercice s'ajoute à la fin, avec le nombre de séries habituel ; l'exercice en cours n'est pas interrompu, on peut ensuite le remonter ou le faire maintenant.
-- **Charge plafonnée** : « + » continue au-delà du dernier palier connu (même écart). Charges par défaut relevées : 100 kg de lest au poids du corps, 400 kg sur machine (presse à disques), 80 kg en haltères.
+- **Charge plafonnée** : « + » continue au-delà du dernier palier connu (même écart). Charges par défaut relevées (PR #4) : 150 kg de lest au poids du corps, 500 kg sur machine, poulie et barre, 100 kg en haltères.
 - **Catalogue, recherche par muscle** : toucher un muscle repasse sur « Tout » (pas bloqué sur l'onglet Jambes) ; refermer la silhouette oublie le muscle choisi.
 
 ## Reste à faire (fonctions du cahier des charges)

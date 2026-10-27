@@ -80,10 +80,13 @@ describe('load steps', () => {
     expect(defaultStepsFor('bodyweight').slice(0, 3)).toEqual([0, 5, 10]);
   });
 
-  it('does not stop a strong user at an arbitrary default maximum', () => {
-    // Back extension with a 60 kg plate, leg press loaded past a stack.
-    expect(defaultStepsFor('bodyweight').at(-1)).toBeGreaterThanOrEqual(100);
-    expect(defaultStepsFor('machine').at(-1)).toBeGreaterThanOrEqual(400);
+  it('never caps a strong lifter before the machine is set up', () => {
+    expect(stepUp(defaultStepsFor('bodyweight'), 50)).toBe(55);
+    expect(defaultStepsFor('bodyweight').at(-1)).toBe(150);
+    expect(defaultStepsFor('machine').at(-1)).toBe(500);
+    expect(defaultStepsFor('cable').at(-1)).toBe(500);
+    expect(defaultStepsFor('dumbbell').at(-1)).toBe(100);
+    expect(defaultStepsFor('barbell').at(-1)).toBe(500);
   });
 
   it('"+" goes past the heaviest step by the last gap', () => {
