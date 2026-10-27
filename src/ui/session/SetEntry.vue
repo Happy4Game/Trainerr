@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonButton, IonChip, IonInput, IonLabel } from '@ionic/vue';
-import { Mic, Minus, Plus } from 'lucide-vue-next';
+import { Mic, Minus, Pencil, Plus } from 'lucide-vue-next';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
@@ -399,11 +399,12 @@ function listen(): void {
             : t('session.load')
       }}</span>
       <ion-button
-        fill="outline"
+        class="step-button"
+        fill="clear"
         :aria-label="assisted ? t('session.assisted.lessHelp') : t('session.lighter')"
         @click="lighter"
       >
-        <Minus :size="24" aria-hidden="true" />
+        <Minus :size="26" aria-hidden="true" />
       </ion-button>
       <ion-input
         v-if="typing"
@@ -423,16 +424,21 @@ function listen(): void {
         :aria-label="t('session.typeLoadNamed', { load: kg(load) })"
         @click="startTyping"
       >
-        <output class="value" data-testid="load">{{
-          bodyweight && load === 0 ? t('session.bodyweight.short') : kg(load)
-        }}</output>
+        <output class="value" data-testid="load">
+          <template v-if="bodyweight && load === 0">{{ t('session.bodyweight.short') }}</template>
+          <template v-else
+            >{{ n(toDisplay(load)) }}<span class="unit">&nbsp;{{ symbol }}</span></template
+          >
+        </output>
+        <Pencil :size="14" aria-hidden="true" class="edit-hint" />
       </button>
       <ion-button
-        fill="outline"
+        class="step-button"
+        fill="clear"
         :aria-label="assisted ? t('session.assisted.moreHelp') : t('session.heavier')"
         @click="heavier"
       >
-        <Plus :size="24" aria-hidden="true" />
+        <Plus :size="26" aria-hidden="true" />
       </ion-button>
     </div>
     <p v-if="assisted" class="breakdown" data-testid="real-load">
@@ -461,28 +467,31 @@ function listen(): void {
         timed ? t('session.seconds') : perSide ? t('session.repsPerSide') : t('session.reps')
       }}</span>
       <ion-button
-        fill="outline"
-        :aria-label="timed ? t('session.fewerSeconds') : t('session.fewerReps')"
-        @click="changeReps(timed ? -5 : -1)"
-      >
-        <Minus :size="24" aria-hidden="true" />
-      </ion-button>
-      <output class="value" data-testid="reps">{{ n(reps) }}</output>
-      <ion-button
-        fill="outline"
-        :aria-label="timed ? t('session.moreSeconds') : t('session.moreReps')"
-        @click="changeReps(timed ? 5 : 1)"
-      >
-        <Plus :size="24" aria-hidden="true" />
-      </ion-button>
-      <ion-button
         v-if="!timed"
         class="half"
+        size="small"
         fill="clear"
         :aria-label="t('session.halfRep')"
         @click="changeReps(0.5)"
       >
         +½
+      </ion-button>
+      <ion-button
+        class="step-button"
+        fill="clear"
+        :aria-label="timed ? t('session.fewerSeconds') : t('session.fewerReps')"
+        @click="changeReps(timed ? -5 : -1)"
+      >
+        <Minus :size="26" aria-hidden="true" />
+      </ion-button>
+      <output class="value" data-testid="reps">{{ n(reps) }}</output>
+      <ion-button
+        class="step-button"
+        fill="clear"
+        :aria-label="timed ? t('session.moreSeconds') : t('session.moreReps')"
+        @click="changeReps(timed ? 5 : 1)"
+      >
+        <Plus :size="26" aria-hidden="true" />
       </ion-button>
     </div>
 
@@ -792,17 +801,20 @@ h2 {
   color: var(--ion-color-warning-contrast);
 }
 .stepper {
-  /* Même grille pour la charge et les reps : les − et + restent alignés, et le
-     « +½ » des reps tient dans sa colonne. Le libellé passe au-dessus : la valeur
-     garde toute la largeur pour de gros chiffres, même sur un écran de 360 px. */
+  /* Une carte par réglage : libellé en haut, puis − valeur +. Les deux cartes
+     ont la même grille, les boutons restent alignés d'une carte à l'autre. */
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) 56px 44px;
+  grid-template-columns: 60px minmax(0, 1fr) 60px;
   align-items: center;
-  gap: 2px 6px;
-  margin-block: 8px;
+  gap: 6px 8px;
+  margin-block: 10px;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius-l);
+  background: var(--tr-surface);
 }
 .stepper-label {
-  grid-column: 1 / -1;
+  grid-column: 1 / 3;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -810,24 +822,63 @@ h2 {
   color: var(--tr-text-muted);
 }
 .stepper ion-button {
-  min-width: 0;
-  min-height: 52px;
   margin: 0;
 }
-.stepper ion-button.half {
+/* − valeur + toujours sur la 2e ligne, même sans le « +½ » en haut à droite. */
+.stepper > .step-button,
+.stepper > .value-button,
+.stepper > .value,
+.stepper > .value-input {
+  grid-row: 2;
+}
+.step-button {
+  --border-radius: 50%;
   --padding-start: 0;
   --padding-end: 0;
-  min-height: 48px;
+  --background: color-mix(in srgb, var(--ion-color-primary) 16%, transparent);
+  --background-activated: color-mix(in srgb, var(--ion-color-primary) 30%, transparent);
+  --color: var(--ion-color-primary);
+  width: 60px;
+  height: 60px;
+}
+.stepper ion-button.half {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --border-radius: var(--tr-radius-pill);
+  --background: color-mix(in srgb, var(--ion-color-primary) 12%, transparent);
+  --color: var(--ion-color-primary);
+  height: 32px;
+  font-weight: 800;
 }
 .value-button {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
   width: 100%;
-  min-height: 52px;
+  min-height: 60px;
   padding: 0 4px;
   border: 0;
-  border-block-end: 2px dashed var(--ion-color-medium);
+  border-radius: var(--tr-radius-m);
   background: transparent;
   color: inherit;
   font: inherit;
+}
+.value-button:active {
+  background: var(--tr-surface-2);
+}
+.edit-hint {
+  flex: none;
+  color: var(--tr-text-muted);
+}
+.unit {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--tr-text-muted);
 }
 .value-input {
   max-width: 7ch;
@@ -847,7 +898,8 @@ h2 {
 }
 .value {
   min-width: 0;
-  font-size: 1.9rem;
+  font-size: 2.4rem;
+  line-height: 1.1;
   font-weight: var(--tr-weight-black);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;

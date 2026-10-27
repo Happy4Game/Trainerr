@@ -193,6 +193,12 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - **Avant la séance** : bouton ⇄ sur chaque exercice de l'aperçu, machines du même mouvement (même muscle principal, même type) ; le choix est gardé dans `settings.swaps` et annulable.
 - **Pendant la séance** : « Pas cette machine ? Très proches : » sous l'exercice, avant la première série.
 
+## Séance plus lisible (27 oct. 2026)
+
+- **Changement de machine** : chaque nouvel écran (« Machine suivante », puis la machine une fois dessus) repart en haut. Avant, seul le premier remontait, et après « Je suis sur la machine » la vue restait 400 px plus bas.
+- **Charge et reps** : une carte par réglage, gros chiffres avec l'unité à part, boutons ronds − et +, « +½ » en haut à droite, crayon pour saisir la charge au clavier.
+- **Captures du README** refaites avec `scripts/capture-design.mjs`, qui capture aussi l'écran « Machine suivante ».
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.
