@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'bodyWeight',
+    date: '2026-10-27',
+    items: ['weightCurve', 'weightDate', 'weightImport'],
+  },
+  {
     id: 'clearerSession',
     date: '2026-10-27',
     items: ['feedback', 'changelog', 'scrollTop', 'steppers'],

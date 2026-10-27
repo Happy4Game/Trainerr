@@ -812,7 +812,9 @@
       "alt": "Photo of {date}"
     },
     "front": "Front",
-    "back": "Back"
+    "back": "Back",
+    "date": "Weighing date",
+    "importHint": "Your weighings are elsewhere (smart scale, spreadsheet)? Export them as CSV (one date and one weight per line), then import them in Settings › My data."
   },
   "settings": {
     "theme": {
@@ -1010,7 +1012,8 @@
       "clearerSession": "A clearer session",
       "wholeWeek": "Every muscle over the week",
       "newLook": "New look and statistics",
-      "firstRelease": "First public version"
+      "firstRelease": "First public version",
+      "bodyWeight": "Weight tracking"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1035,7 +1038,10 @@
       "machineSetup": "Seat setting and exact load are remembered for each machine.",
       "assisted": "Assisted pull-ups and dips counted correctly.",
       "restScreen": "Simpler rest screen, with a notification when rest is over.",
-      "autoUpdate": "The app updates itself from Settings."
+      "autoUpdate": "The app updates itself from Settings.",
+      "weightCurve": "Your weight curve and weekly trend are now in History › Body, where you weigh in.",
+      "weightDate": "You can log a weighing on a past date.",
+      "weightImport": "Import your weighings as CSV (smart scale, spreadsheet) in Settings › My data."
     }
   },
   "data": {
@@ -1180,7 +1186,7 @@
   },
   "importCsv": {
     "title": "Import from another app",
-    "choose": "Choose a CSV file (sessions or loads)",
+    "choose": "Choose a CSV file (sessions, loads or weighings)",
     "found": "{sessions} workout(s) found in the {app} export.",
     "apps": {
       "strong": "Strong",
@@ -1196,7 +1202,12 @@
     "continueHelp": "Your imported sessions may not follow the app's program: pick the next session, the rest follows.",
     "loadsFound": "{count} load found, one per machine. | {count} loads found, one per machine.",
     "loadsConfirm": "Import {count} load | Import {count} loads",
-    "loadsDone": "{count} load imported: it is the starting point on the machine. | {count} loads imported: they are the starting point on each machine."
+    "loadsDone": "{count} load imported: it is the starting point on the machine. | {count} loads imported: they are the starting point on each machine.",
+    "weightsFound": "Weighings found: {count}, from {from} to {to}.",
+    "weightsConfirm": "Import {count} weighing | Import {count} weighings",
+    "weightsDone": "{count} weighing imported: it shows in History › Body and in Stats. | {count} weighings imported: they show in History › Body and in Stats.",
+    "weightsNone": "No readable weighing in this file (one date and a weight between 20 and 400 kg per line).",
+    "weightsAlready": "No new weighing: those days are already logged."
   },
   "coach": {
     "section": "Share with a coach",

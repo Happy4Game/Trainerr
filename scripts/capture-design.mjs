@@ -199,7 +199,7 @@ async function capture(browser, scheme) {
   const skip = page.getByRole('button', { name: "Passer l'échauffement" });
   if (await skip.isVisible()) await skip.click();
   await shot(page, p('02-seance'));
-  await scrollContent(page, 520);
+  await scrollContent(page, 330);
   await shot(page, p('03-seance-saisie'));
 
   await page.getByRole('button', { name: 'Correct', exact: true }).first().click();

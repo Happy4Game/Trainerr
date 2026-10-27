@@ -204,6 +204,13 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - **Envoyer un retour** (Réglages › Infos, et le bouton d'À propos, désactivé jusqu'ici) : lien `mailto:` vers dufeutrel.thibaut@gmail.com, sujet et corps préremplis (version installée, Android et modèle tirés du user agent, langue). Lignes en CRLF et encodage `%20` comme le demande la RFC 6068. L'appli n'envoie rien elle-même.
 - **Nouveautés** (Réglages › Infos) : `src/data/content/changelog.ts`, du plus récent au plus ancien, textes pour l'utilisateur dans `changelog.*`. Un test vérifie que chaque ligne a son texte en français et en anglais.
 
+## Suivi du poids (27 oct. 2026)
+
+- **Historique → Corps** montre la courbe du poids (3 mois) et la tendance par semaine au-dessus de la saisie, comme dans les Stats. Une pesée peut être datée d'un jour passé. Supprimer une pesée met à jour les tractions assistées.
+- **Import CSV des pesées** (`parseWeightsCsv`) : une colonne date (ISO, heure ignorée, ou JJ/MM/AAAA) et une colonne poids (`weight_kg`, `poids`, `Weight (kg)`, en lb si le nom le dit). Un jour déjà pesé n'est pas doublé.
+- **Basic-Fit, JOY (L'Appart Fitness)** : ni API publique ni export documenté dans leurs fiches Google Play et App Store. Basic-Fit se connecte à Apple Santé, JOY lit le poids d'Apple Santé : aucune des deux ne fournit le poids à d'autres applis. Piste suivante : lire les pesées de Health Connect (balances connectées, Samsung Health, Google Fit).
+- **Captures du README** renommées (noms en clair) pour que GitHub et les navigateurs n'affichent plus les anciennes en cache ; la capture de la série montre le haut de l'écran.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

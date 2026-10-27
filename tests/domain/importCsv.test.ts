@@ -3,6 +3,7 @@ import {
   detectFormat,
   parseCsv,
   parseLoadsCsv,
+  parseWeightsCsv,
   parseWorkoutCsv,
   suggestMatches,
   toIsoDate,
@@ -115,5 +116,37 @@ Tirage vertical,47.5,8,2026-10-22`;
 
   it('refuses a file without loads', () => {
     expect(() => parseLoadsCsv('foo,bar\n1,2')).toThrow(/non reconnu/);
+  });
+});
+
+describe('import of body weighings', () => {
+  it('reads a date and a weight, one weighing a day, oldest first', () => {
+    const csv = 'date,weight_kg\n2026-10-24,78.4\n2026-10-20,"78,9"\n2026-10-24,78.1\n';
+    expect(detectFormat(['date', 'weight_kg'])).toBe('weights');
+    expect(parseWeightsCsv(csv)).toEqual([
+      { date: '2026-10-20', weightKg: 78.9 },
+      { date: '2026-10-24', weightKg: 78.1 },
+    ]);
+  });
+
+  it('understands a scale export: time after the date, other columns, French dates', () => {
+    const withings = '"Date","Weight (kg)","Fat mass (kg)"\n"2026-10-24 07:12:03","78.42","15.1"\n';
+    expect(parseWeightsCsv(withings)).toEqual([{ date: '2026-10-24', weightKg: 78.4 }]);
+    const typed = 'Date;Poids\n24/10/2026;78,4\n3/9/2026;80\n';
+    expect(parseWeightsCsv(typed)).toEqual([
+      { date: '2026-09-03', weightKg: 80 },
+      { date: '2026-10-24', weightKg: 78.4 },
+    ]);
+  });
+
+  it('converts pounds and skips what cannot be a body weight', () => {
+    const csv = 'date,body weight (lb)\n2026-10-24,172.8\n2026-10-25,\n2026-10-26,1728\nhier,170\n';
+    expect(parseWeightsCsv(csv)).toEqual([{ date: '2026-10-24', weightKg: 78.4 }]);
+  });
+
+  it('does not take a session export for weighings', () => {
+    expect(detectFormat(['Date', 'Exercise Name', 'Set Order', 'Weight', 'Reps'])).toBe('strong');
+    expect(detectFormat(['date', 'note'])).toBeUndefined();
+    expect(() => parseWeightsCsv('date,note\n2026-10-24,ok')).toThrow();
   });
 });

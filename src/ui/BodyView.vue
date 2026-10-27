@@ -16,7 +16,9 @@ import {
   listMeasurements,
   type BodyMeasurement,
 } from '@/data/repositories/bodyRepository';
+import { bodyWeightTrend } from '@/domain/insights';
 import { parseLoad } from '@/domain/loadSteps';
+import TrendChart from '@/ui/charts/TrendChart.vue';
 import { proteinTargetGrams } from '@/domain/tracking';
 import { readPhoto } from '@/ui/photo';
 import { todayIso } from '@/ui/useWeekPlan';
@@ -25,9 +27,11 @@ import { useSession } from '@/ui/session/useSession';
 
 const { t, n, locale } = useI18n();
 const session = useSession();
-const { load, symbol, fromInput } = useUnits();
+const { load, symbol, fromInput, toDisplay } = useUnits();
 const measurements = ref<BodyMeasurement[]>([]);
 const weight = ref('');
+/** Today by default; an earlier day to log a weighing done elsewhere. */
+const date = ref(todayIso());
 const arm = ref('');
 const waist = ref('');
 
@@ -39,6 +43,14 @@ onMounted(async () => {
 const lastWeight = computed(
   () => [...measurements.value].reverse().find((m) => m.weightKg !== undefined)?.weightKg,
 );
+const trend = computed(() => bodyWeightTrend(measurements.value, todayIso()));
+/** "+0,3 kg", "−0,5 kg", "0 kg". */
+const signed = (kg: number) => (kg > 0 ? `+${load(kg)}` : kg < 0 ? `−${load(-kg)}` : load(0));
+const dayMonth = (day: string) =>
+  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(
+    new Date(`${day}T00:00:00Z`),
+  );
+
 const shortDate = (date: string) =>
   new Intl.DateTimeFormat(locale.value, {
     day: 'numeric',
@@ -56,13 +68,15 @@ async function save(): Promise<void> {
   );
   if (weightKg === undefined && Object.keys(measured).length === 0) return;
   const { db } = await openAppDatabase();
+  const day = date.value && date.value <= todayIso() ? date.value : todayIso();
   const saved = await addMeasurement(db, {
-    date: todayIso(),
+    date: day,
     ...(weightKg !== undefined ? { weightKg } : {}),
     measurements: measured,
   });
-  measurements.value = [...measurements.value, saved];
+  measurements.value = [...measurements.value, saved].sort((a, b) => a.date.localeCompare(b.date));
   weight.value = arm.value = waist.value = '';
+  date.value = todayIso();
   // Assisted pull-ups and dips use the latest weight.
   if (weightKg !== undefined) await session.reloadWeighings();
 }
@@ -86,12 +100,43 @@ async function onPhoto(event: Event): Promise<void> {
 
 async function remove(id: string): Promise<void> {
   const { db } = await openAppDatabase();
+  const removed = measurements.value.find((m) => m.id === id);
   await deleteMeasurement(db, id);
   measurements.value = measurements.value.filter((m) => m.id !== id);
+  if (removed?.weightKg !== undefined) await session.reloadWeighings();
 }
 </script>
 
 <template>
+  <ion-card v-if="trend">
+    <ion-card-header>
+      <ion-card-title>{{ t('stats.body.title') }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="headline">
+        <div>
+          <span class="big tr-number">{{ load(trend.latestKg) }}</span>
+          <span class="small">{{ t('stats.body.latest') }}</span>
+        </div>
+        <span v-if="trend.perWeekKg !== undefined" class="badge">
+          {{ t('stats.body.perWeek', { change: signed(trend.perWeekKg) }) }}
+        </span>
+      </div>
+      <TrendChart
+        v-if="trend.points.length > 1"
+        :points="
+          trend.points.map((p) => ({ label: dayMonth(p.date), value: toDisplay(p.weightKg) }))
+        "
+        :format="(v) => n(Math.round(v * 10) / 10)"
+        :legend="t('stats.body.legend', { unit: symbol })"
+        :description="t('stats.body.description', { count: trend.points.length })"
+      />
+      <p class="small">
+        {{ trend.perWeekKg === undefined ? t('stats.body.needMore') : t('stats.body.help') }}
+      </p>
+    </ion-card-content>
+  </ion-card>
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>{{ t('body.title') }}</ion-card-title>
@@ -120,7 +165,17 @@ async function remove(id: string): Promise<void> {
           inputmode="decimal"
         />
       </div>
+      <ion-input
+        v-model="date"
+        class="date"
+        type="date"
+        fill="outline"
+        :max="todayIso()"
+        :label="t('body.date')"
+        label-placement="stacked"
+      />
       <ion-button expand="block" @click="save">{{ t('body.save') }}</ion-button>
+      <p class="small">{{ t('body.importHint') }}</p>
       <p class="small">{{ t('body.privacy') }}</p>
     </ion-card-content>
   </ion-card>
@@ -179,6 +234,33 @@ async function remove(id: string): Promise<void> {
 </template>
 
 <style scoped>
+.headline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.headline > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.big {
+  font-size: var(--tr-font-xxl);
+  color: var(--tr-text);
+}
+.badge {
+  padding: 6px 12px;
+  border-radius: var(--tr-radius-pill);
+  font-size: var(--tr-font-xs);
+  font-weight: 800;
+  white-space: nowrap;
+  background: var(--tr-surface-2);
+  color: var(--tr-text);
+}
+.date {
+  margin-block-end: 8px;
+}
 .photo-button {
   display: inline-flex;
   align-items: center;

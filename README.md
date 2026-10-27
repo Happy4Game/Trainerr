@@ -14,12 +14,12 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 <br>
 
-<img src="docs/screenshots/1-today.png" width="160" alt="Écran Aujourd'hui : la séance du jour, ses exercices, charges, durée et les muscles qu'elle rattrape">
-<img src="docs/screenshots/2-set.png" width="160" alt="Une série en cours : charge et reps pré-remplies dans leurs cartes, ressenti">
-<img src="docs/screenshots/3-next.png" width="160" alt="Changement de machine : repos, exercice terminé, machine suivante">
-<img src="docs/screenshots/4-catalog.png" width="160" alt="Catalogue : mes machines et ma charge sur chacune">
-<img src="docs/screenshots/5-stats.png" width="160" alt="Statistiques : synthèse, évolution de la force">
-<img src="docs/screenshots/6-summary.png" width="160" alt="Fin de séance : bravo, séries, charge soulevée, badges">
+<img src="docs/screenshots/aujourdhui.png" width="160" alt="Écran Aujourd'hui : la séance du jour, ses exercices, charges, durée et les muscles qu'elle rattrape">
+<img src="docs/screenshots/serie.png" width="160" alt="Une série en cours : charge et reps pré-remplies dans leurs cartes, ressenti">
+<img src="docs/screenshots/machine-suivante.png" width="160" alt="Changement de machine : repos, exercice terminé, machine suivante">
+<img src="docs/screenshots/catalogue.png" width="160" alt="Catalogue : mes machines et ma charge sur chacune">
+<img src="docs/screenshots/stats.png" width="160" alt="Statistiques : synthèse, évolution de la force">
+<img src="docs/screenshots/fin-de-seance.png" width="160" alt="Fin de séance : bravo, séries, charge soulevée, badges">
 
 </div>
 
@@ -48,14 +48,15 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 - **Statistiques** : régularité, évolution de la force (1RM estimé), séries par muscle, records.
 - **Récap de fin de séance** : volume gagné depuis la dernière fois, durée, records, et une image à partager.
 - **Historique modifiable**, avec trophées sur les records. Téléphone oublié ? **Ajoute après coup une séance faite sans l'appli** : elle compte dans les stats et le cycle.
-- Suivi du corps, badges, récap du mois à partager.
+- **Suivi du poids du corps** (Historique → Corps) : pesée du jour ou d'une date passée, courbe sur 3 mois et tendance par semaine, mensurations et photo du mois. Tes pesées faites ailleurs s'importent en CSV ([docs/import.md](docs/import.md#mes-pesées)).
+- Badges, récap du mois à partager.
 - **Défis entre amis** et **conseils d'un coach IA**, optionnels, via un petit serveur ([server/](server/README.md)).
 
 ### Pour tous
 
 - **Hors ligne d'abord** : base SQLite sur le téléphone, aucune donnée envoyée sans action de ta part (RGPD).
 - **Français et anglais**, kilos ou livres, thème clair et sombre, grandes zones tactiles.
-- Export (via le menu Partager d'Android), import (Strong, Hevy, tes séances ou tes charges en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
+- Export (via le menu Partager d'Android), import (Strong, Hevy, tes séances, tes charges ou tes pesées en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
 - **Mises à jour intégrées** sur Android : l'appli trouve toute seule la nouvelle version (au démarrage et quand tu y reviens) et l'installe avec ton accord ([docs/mises-a-jour.md](docs/mises-a-jour.md)). La page **Nouveautés** des Réglages dit ce qui change à chaque version.
 - **Envoyer un retour** depuis les Réglages : ça ouvre ton appli mail avec un message prérempli (version de l'appli, téléphone, langue). Rien n'est envoyé sans toi.
 
