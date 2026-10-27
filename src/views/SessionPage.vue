@@ -18,7 +18,16 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
-import { House, LayoutList, Pencil, Play, Plus, Share2, Zap } from 'lucide-vue-next';
+import {
+  ArrowLeftRight,
+  House,
+  LayoutList,
+  Pencil,
+  Play,
+  Plus,
+  Share2,
+  Zap,
+} from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import type { Alternative } from '@/domain/busyMachine';
@@ -251,12 +260,22 @@ const currentId = computed(() =>
   step.value?.kind === 'exercise' ? step.value.exerciseId : undefined,
 );
 
+/** The busy and replace cards sit at the top of the screen: bring them into view. */
+async function showTop(): Promise<void> {
+  await nextTick();
+  void content.value?.$el.scrollToTop(300);
+}
 async function onBusy(): Promise<void> {
   const id = currentId.value;
   if (!id) return;
   busyAlternatives.value = session.alternatives(id);
   busyFor.value = id;
+  void showTop();
   await session.markMachineBusy(id);
+}
+function openReplace(id: string): void {
+  replacing.value = id;
+  void showTop();
 }
 async function choose(alternative: Alternative): Promise<void> {
   await session.chooseAlternative(alternative);
@@ -777,9 +796,15 @@ async function logWarmup(): Promise<void> {
           <ion-button expand="block" fill="clear" :router-link="cardLink(nextMachine.id)">
             {{ t('session.seeMovement') }}
           </ion-button>
-          <ion-button expand="block" fill="clear" color="medium" @click="onBusy">
-            {{ t('session.busy') }}
-          </ion-button>
+          <div class="next-tools">
+            <ion-button fill="outline" color="medium" @click="openReplace(nextMachine.id)">
+              <ArrowLeftRight :size="18" aria-hidden="true" class="icon" />
+              {{ t('session.replaceCard.open') }}
+            </ion-button>
+            <ion-button fill="outline" color="medium" @click="onBusy">
+              {{ t('session.busy') }}
+            </ion-button>
+          </div>
         </section>
 
         <template v-else-if="step?.kind === 'exercise'">
@@ -814,7 +839,7 @@ async function logWarmup(): Promise<void> {
           <SetEntry
             :exercise-id="step.exerciseId"
             @busy="onBusy"
-            @replace="replacing = step.exerciseId"
+            @replace="openReplace(step.exerciseId)"
             @plates="platesLoad = $event"
           />
           <ion-button fill="outline" color="warning" @click="reportingDiscomfort = true">
@@ -1111,6 +1136,19 @@ async function logWarmup(): Promise<void> {
   object-fit: contain;
   border-radius: 12px;
   background: #fff;
+}
+.next-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.next-tools ion-button {
+  margin: 0;
+  min-height: 48px;
+}
+.next-tools .icon {
+  margin-inline-end: 6px;
 }
 .plan-line {
   margin-block: 0 12px;

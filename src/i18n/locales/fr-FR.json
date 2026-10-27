@@ -481,7 +481,8 @@
       "keepDone": "{count} série déjà faite reste sur {name}. La nouvelle machine reprend les séries qui restent. | {count} séries déjà faites restent sur {name}. La nouvelle machine reprend les séries qui restent.",
       "mine": "Ma machine",
       "none": "Pas d'autre machine pour ce mouvement dans tes machines ni les machines courantes.",
-      "other": "Un autre exercice…"
+      "other": "Un autre exercice…",
+      "short": "Changer"
     },
     "restMore": "Corriger, revenir… ›",
     "bodyweight": {
@@ -1013,7 +1014,8 @@
       "wholeWeek": "Tous les muscles de la semaine",
       "newLook": "Nouveau look et statistiques",
       "firstRelease": "Première version publiée",
-      "bodyWeight": "Suivi du poids"
+      "bodyWeight": "Suivi du poids",
+      "easySwitch": "Changer de machine en un geste"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1041,7 +1043,9 @@
       "autoUpdate": "L'appli se met à jour toute seule depuis les Réglages.",
       "weightCurve": "La courbe de ton poids et sa tendance par semaine sont maintenant dans Historique › Corps, là où tu te pèses.",
       "weightDate": "Tu peux noter une pesée à une date passée.",
-      "weightImport": "Import de tes pesées en CSV (balance connectée, tableur) dans Réglages › Mes données."
+      "weightImport": "Import de tes pesées en CSV (balance connectée, tableur) dans Réglages › Mes données.",
+      "switchButton": "Un bouton « Changer » à côté du nom de la machine, à chaque série : la liste des machines proches s'ouvre tout en haut de l'écran.",
+      "switchNext": "L'écran « Machine suivante » propose aussi de changer de machine avant d'y aller."
     }
   },
   "data": {
