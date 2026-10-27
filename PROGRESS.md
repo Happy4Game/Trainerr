@@ -199,6 +199,11 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - **Charge et reps** : une carte par réglage, gros chiffres avec l'unité à part, boutons ronds − et +, « +½ » en haut à droite, crayon pour saisir la charge au clavier.
 - **Captures du README** refaites avec `scripts/capture-design.mjs`, qui capture aussi l'écran « Machine suivante ».
 
+## Retours et nouveautés (27 oct. 2026)
+
+- **Envoyer un retour** (Réglages › Infos, et le bouton d'À propos, désactivé jusqu'ici) : lien `mailto:` vers dufeutrel.thibaut@gmail.com, sujet et corps préremplis (version installée, Android et modèle tirés du user agent, langue). Lignes en CRLF et encodage `%20` comme le demande la RFC 6068. L'appli n'envoie rien elle-même.
+- **Nouveautés** (Réglages › Infos) : `src/data/content/changelog.ts`, du plus récent au plus ancien, textes pour l'utilisateur dans `changelog.*`. Un test vérifie que chaque ligne a son texte en français et en anglais.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

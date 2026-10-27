@@ -995,8 +995,48 @@
     "p3": "À la base, je ne suis pas fan de l'IA. Mais ici, c'est pour la bonne cause, et je trouve que ça marche bien.",
     "p4": "Toute aide est bonne à prendre : une erreur repérée, une idée, un conseil, n'hésite pas à me le dire.",
     "report": "Signaler une erreur ou proposer une idée",
-    "reportSoon": "Le moyen de contact arrive bientôt.",
     "credits": "Voir les crédits et les sources"
+  },
+  "feedback": {
+    "title": "Envoyer un retour",
+    "help": "Un bug, une idée ? Ça ouvre ton appli mail avec un message prêt à compléter. Rien n'est envoyé sans toi.",
+    "subject": "Trainerr : mon retour",
+    "intro": "Bonjour Thibaut,\n\n(Écris ici ce qui ne va pas ou ton idée. Les infos sous le trait aident à reproduire un bug, tu peux les effacer.)"
+  },
+  "changelog": {
+    "title": "Nouveautés",
+    "help": "Ce qui a changé à chaque mise à jour",
+    "titles": {
+      "clearerSession": "Séance plus lisible",
+      "wholeWeek": "Tous les muscles de la semaine",
+      "newLook": "Nouveau look et statistiques",
+      "firstRelease": "Première version publiée"
+    },
+    "items": {
+      "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
+      "changelog": "Cette page, pour voir ce qui change à chaque mise à jour.",
+      "scrollTop": "En passant à la machine suivante, l'écran repart tout en haut.",
+      "steppers": "Le choix du poids et des répétitions est plus grand et plus clair, avec des boutons ronds.",
+      "neglected": "La séance du jour rattrape les muscles peu travaillés ces 7 derniers jours.",
+      "closeMachines": "Des machines très proches sont proposées si la tienne est prise, avant ou pendant la séance.",
+      "addToPlan": "Tu peux ajouter des exercices au programme de la séance.",
+      "noLoadCap": "Plus de charge maximale bloquée sur une machine pas encore réglée.",
+      "muscleSearch": "La recherche par muscle montre tous les exercices et s'oublie quand tu la fermes.",
+      "updateCheck": "Les mises à jour sont détectées aussi quand tu reviens dans l'appli.",
+      "pastSession": "Tu peux ajouter dans l'Historique une séance faite sans l'appli.",
+      "design": "Nouveau design, en sombre et en clair.",
+      "stats": "Des statistiques sur ta progression, ton volume et tes muscles.",
+      "exports": "Export de tes séances et sauvegarde complète en fichier.",
+      "notInShape": "« Pas en forme » allège la séance du jour.",
+      "trophies": "Des trophées pour fêter les étapes.",
+      "shareRecap": "Le récap de fin de séance peut être partagé.",
+      "presets": "5 séances types prêtes à l'emploi, dans le bon ordre.",
+      "swapMachine": "Changer de machine ou retoucher la séance en cours.",
+      "machineSetup": "Le réglage du siège et la charge précise de chaque machine sont mémorisés.",
+      "assisted": "Tractions et dips assistés comptés correctement.",
+      "restScreen": "Écran de repos simplifié, avec une notification à la fin du repos.",
+      "autoUpdate": "L'appli se met à jour toute seule depuis les Réglages."
+    }
   },
   "data": {
     "title": "Mes données",

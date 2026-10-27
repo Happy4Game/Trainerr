@@ -26,3 +26,23 @@ test('settings lead to the getting started, about and credits pages', async ({ p
   await expect(page.getByText(/passées en niveaux de gris/)).toBeVisible();
   await expect(page.getByText(/bibliothèques libres embarquées/)).toBeVisible();
 });
+
+test('settings offer a prefilled feedback mail and the list of changes', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.getByRole('tab', { name: "Aujourd'hui" }).click();
+  await page.getByRole('link', { name: 'Réglages' }).click();
+
+  // The mail is only prepared: the link opens the mail app, nothing is sent.
+  const feedback = page.locator('ion-item', { hasText: 'Envoyer un retour' }).locator('a');
+  const href = await feedback.getAttribute('href');
+  expect(href).toMatch(/^mailto:dufeutrel\.thibaut@gmail\.com\?subject=/);
+  const body = new URL(href ?? '').searchParams.get('body') ?? '';
+  expect(body).toContain('Bonjour Thibaut');
+  expect(body).toContain('Trainerr web');
+  expect(body).toContain('fr-FR');
+
+  await page.getByText('Nouveautés').click();
+  await expect(page.getByText('Séance plus lisible')).toBeVisible();
+  await expect(page.getByText('Première version publiée')).toBeVisible();
+  await expect(page.getByText('27 octobre 2026').first()).toBeVisible();
+});

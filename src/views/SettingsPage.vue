@@ -27,6 +27,7 @@ import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
 import type { ThemePreference } from '@/data/repositories/settingsRepository';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
+import { useFeedbackLink } from '@/ui/feedback';
 import { useSession } from '@/ui/session/useSession';
 import { useSettings } from '@/ui/useSettings';
 
@@ -34,6 +35,7 @@ const { t } = useI18n();
 const router = useIonRouter();
 const { settings, updateSettings } = useSettings();
 const session = useSession();
+const feedback = useFeedbackLink();
 
 const LANGUAGES: LanguagePreference[] = ['system', 'fr-FR', 'en-US'];
 const UNITS: WeightUnit[] = ['kg', 'lb'];
@@ -215,6 +217,18 @@ async function redoQuestionnaire(): Promise<void> {
         <DataSection />
 
         <ion-list-header>{{ t('settings.content') }}</ion-list-header>
+        <ion-item :href="feedback" detail>
+          <ion-label class="ion-text-wrap">
+            {{ t('feedback.title') }}
+            <p>{{ t('feedback.help') }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item router-link="/tabs/settings/changelog" detail>
+          <ion-label class="ion-text-wrap">
+            {{ t('changelog.title') }}
+            <p>{{ t('changelog.help') }}</p>
+          </ion-label>
+        </ion-item>
         <ion-item router-link="/tabs/settings/tips" detail>
           <ion-label>{{ t('tips.title') }}</ion-label>
         </ion-item>
