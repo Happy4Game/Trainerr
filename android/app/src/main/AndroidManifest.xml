@@ -75,8 +75,14 @@
     <!-- Weighings older than 30 days; Health Connect asks the user separately. -->
     <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_HISTORY" />
 
-    <!-- Check if Health Connect is installed. -->
     <queries>
+        <!-- Check if Health Connect is installed. -->
         <package android:name="com.google.android.apps.healthdata" />
+        <!-- "Take a photo": since Android 11 the camera app is hidden from this app
+             without this line, so Capacitor finds no camera and opens the gallery
+             instead (BridgeWebChromeClient.showImageCapturePicker). -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
     </queries>
 </manifest>

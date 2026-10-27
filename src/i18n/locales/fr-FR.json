@@ -1092,7 +1092,8 @@
       "smootherStart": "Démarrage plus simple",
       "photoGallery": "Galerie de photos du corps",
       "cardio": "Cardio dans les séances",
-      "programChoice": "Choisis ton programme dès le départ"
+      "programChoice": "Choisis ton programme dès le départ",
+      "cameraFix": "Prendre une photo ouvre l'appareil photo"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1140,7 +1141,8 @@
       "cardioSessions": "Séance › « Ajouter du cardio à mes séances » : choisis la machine, la durée, et avant ou après la muscu, avec le conseil des études pour ta séance du jour.",
       "cardioLog": "Pendant la séance, saisis tes perfs de cardio : durée, distance, vitesse, pente, niveau, cadence, fréquence cardiaque et calories, selon la machine.",
       "cardioCatalog": "Catalogue › Cardio : chaque machine avec les muscles travaillés et tes perfs, et ta semaine comparée au repère de l'OMS (150 min).",
-      "programChoice": "Questionnaire › « Quel type de séances ? » : full body, haut/bas, PPL… ou laisse l'appli choisir selon ton nombre de séances. Chaque programme est expliqué, avec la fréquence par muscle."
+      "programChoice": "Questionnaire › « Quel type de séances ? » : full body, haut/bas, PPL… ou laisse l'appli choisir selon ton nombre de séances. Chaque programme est expliqué, avec la fréquence par muscle.",
+      "cameraFix": "« Prendre une photo » ouvre maintenant l'appareil photo sur Android, et plus la galerie. Pour une photo déjà prise, utilise « Importer »."
     }
   },
   "data": {
