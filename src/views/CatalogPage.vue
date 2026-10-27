@@ -148,7 +148,7 @@ function onFilter(value: unknown): void {
         <ion-searchbar
           v-model="query"
           :debounce="150"
-          :placeholder="t('catalog.search')"
+          :placeholder="t('catalog.searchShort')"
           :aria-label="t('catalog.search')"
         />
         <ion-buttons slot="end">

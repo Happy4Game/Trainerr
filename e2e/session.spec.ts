@@ -20,12 +20,14 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await star(page, 'pec deck', 'Écarté à la machine');
 
   await tab(page, 'Séance');
-  await expect(page.getByText('Séance du jour : Haut du corps A')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Haut du corps A', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
 
   // First exercise: compound first. First time on it: a light test set, no warm-up below it.
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   await expect(page.getByText(/série test légère/)).toBeVisible();
+  // Each feeling says what it does to the load: the test set finds the right one.
+  await expect(page.getByText('trop léger : la charge monte')).toBeVisible();
   await expect(page.getByText(/Échauffement conseillé/)).toHaveCount(0);
   await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 
@@ -70,10 +72,13 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await expect(page.getByText('Séance terminée')).toBeVisible();
   await expect(page.getByRole('group', { name: '4 séries' })).toBeVisible();
   await expect(page.getByText('Badge obtenu : Première séance')).toBeVisible();
+  const card = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Partager ma séance' }).click();
+  expect((await card).suggestedFilename()).toMatch(/^trainerr-\d{4}-\d{2}-\d{2}\.png$/);
   await page.getByRole('button', { name: 'Fermer' }).click();
 
   // The rotation goes on.
-  await expect(page.getByText('Séance du jour : Bas du corps A')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Bas du corps A', exact: true })).toBeVisible();
   await page.getByRole('tab', { name: "Aujourd'hui" }).click();
   await expect(page.getByText('Première séance')).toBeVisible();
 
@@ -81,8 +86,10 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await tab(page, 'Historique');
   await expect(page.getByRole('heading', { level: 3, name: 'Haut du corps A' })).toBeVisible();
   await page.locator('ion-segment-button', { hasText: 'Stats' }).click();
-  await expect(page.getByText('Évolution de la force')).toBeVisible();
-  await expect(page.getByRole('img', { name: /1RM estimé/ })).toBeVisible();
-  await expect(page.getByText('Records', { exact: true })).toBeVisible();
-  await expect(page.getByRole('group', { name: /séances? sur 30 jours/ })).toBeVisible();
+  await expect(page.getByText('Est-ce que je progresse ?')).toBeVisible();
+  await expect(page.getByTestId('trend')).toHaveText(
+    'Une seule séance : la tendance arrive à la prochaine.',
+  );
+  await expect(page.getByText('Suis-je régulier ?')).toBeVisible();
+  await expect(page.getByRole('group', { name: "Dernière séance aujourd'hui" })).toBeVisible();
 });

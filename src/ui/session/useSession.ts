@@ -1,3 +1,4 @@
+import { sessionMinutes, volumeGainPercent, workload } from '@/domain/sessionPreview';
 import { computed, ref } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import type { SqlDatabase } from '@/data/sqlite/database';
@@ -59,11 +60,11 @@ import {
 } from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise, SessionLog, SetLog } from '@/domain/types';
-import { warmupSet } from '@/domain/warmup';
+import { warmupRamp } from '@/domain/warmup';
 import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
 import { earnedBadges, newRecords, type BadgeCode, type NewRecord } from '@/domain/achievements';
-import { weeksOnPace } from '@/domain/stats';
+import { beatsRecord, personalRecords, weeksOnPace, type PersonalRecord } from '@/domain/stats';
 import { addBadges } from '@/data/repositories/badgeRepository';
 import { rescheduleNotifications } from '@/ui/notifications';
 import { isPopular } from '@/data/catalog/curated';
@@ -71,6 +72,7 @@ import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
 import { PRESET_PREFIX, resolvePreset } from '@/domain/presets';
 import { firstTimeEstimateKg } from '@/domain/firstLoad';
+import { restAfterSet } from '@/domain/restTime';
 import {
   afterMovingSets,
   movePending,
@@ -114,7 +116,11 @@ const references = ref<ReferenceLoad[]>([]);
 const weighings = ref<BodyMeasurement[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
+/** Record just beaten, for the celebration on the screen (cleared at the next set). */
+const recordBeaten = ref<{ exerciseId: string; loadKg: number; reps: number }>();
 const summary = ref<{
+  /** Session type, for the title of the shared card. */
+  templateId: string;
   sets: number;
   workloadKg: number;
   carryOver: readonly string[];
@@ -124,6 +130,10 @@ const summary = ref<{
   weeksOnPace: number;
   /** Machines used today that are not in "my machines" yet (ready-made session…). */
   newMachines: readonly string[];
+  /** Length of the session, when known. */
+  minutes?: number;
+  /** Volume gained since the last session of the same type, in percent. */
+  volumeGain?: number;
 }>();
 
 const { entries, state: catalogState, toggleFavorite } = useCatalog();
@@ -178,6 +188,20 @@ const realHistory = computed(() =>
     (date) => bodyWeightOn(date, weighings.value) ?? DEFAULT_BODY_WEIGHT_KG,
   ),
 );
+
+/** Records of each exercise before today, on the real load. */
+const records = computed(() => personalRecords(realHistory.value));
+
+/** Record to beat on an exercise: the best of past sessions and of today. */
+function recordFor(exerciseId: string): PersonalRecord | undefined {
+  const past = records.value.get(exerciseId);
+  const today = recordBeaten.value;
+  if (!past || today?.exerciseId !== exerciseId) return past;
+  return {
+    ...past,
+    bestLoad: { loadKg: today.loadKg, reps: today.reps, date: past.bestLoad.date },
+  };
+}
 
 /** Last session of the rotation done (custom sessions are left out). */
 const lastDone = computed(() => {
@@ -287,26 +311,51 @@ function proposalFor(exerciseId: string): Proposal | undefined {
       ? firstAssistedRealKg(scale, bodyWeight.value ?? DEFAULT_BODY_WEIGHT_KG)
       : start.loadKg;
   return {
-    loadKg: toMachine(startKg),
+    loadKg: tired() ? noHigherThanLastTime(exerciseId, toMachine(startKg)) : toMachine(startKg),
     targetReps: start.targetReps,
     reason: start.kind,
     reminders: [],
   };
 }
 
+const tired = () => active.value?.plan.tired ?? tiredToday.value;
+
+/** Not in shape: last time's load at most (on a help machine, at least last time's help). */
+function noHigherThanLastTime(exerciseId: string, loadKg: number): number {
+  const last = lastTimeSets(exerciseId).map((s) => s.loadKg);
+  if (last.length === 0) return loadKg;
+  return entryOf(exerciseId)?.exercise.assisted
+    ? Math.max(loadKg, Math.min(...last))
+    : Math.min(loadKg, Math.max(...last));
+}
+
+/**
+ * "Not in shape today", chosen before starting: one set less per exercise and
+ * no load increase. Training anyway, without digging a hole.
+ */
+const tiredToday = ref(false);
+/** Lighter today: a light week of the cycle, or the user said so. */
+const lighter = () => cycle.value.light || tiredToday.value;
+
 function plannedSets(exerciseId: string): number {
   return (
     active.value?.plan.exercises.find((e) => e.exerciseId === exerciseId)?.sets ??
-    setsPerExercise(settings.value?.goal ?? 'hypertrophy')
+    // Before the session: what start() will plan, one set less in a light week.
+    setsForWeek(setsPerExercise(settings.value?.goal ?? 'hypertrophy'), lighter())
   );
 }
 
 const step = computed(() => (active.value ? nextStep(active.value.plan.queue) : undefined));
 
+/** Exercises whose warm-up the user skipped in this session. */
+const warmupSkipped = ref<string[]>([]);
+
+/** Next warm-up set to do before the first work set, with its place in the ramp. */
 const warmup = computed(() => {
   const s = step.value;
   if (s?.kind !== 'exercise' || !active.value) return undefined;
-  if (setsInSession(s.exerciseId).length > 0) return undefined;
+  if (workSetsInSession(s.exerciseId).length > 0) return undefined;
+  if (warmupSkipped.value.includes(s.exerciseId)) return undefined;
   const entry = entryOf(s.exerciseId);
   const proposal = proposalFor(s.exerciseId);
   // No warm-up set with a help machine (lighter means more help), nor before a
@@ -314,12 +363,16 @@ const warmup = computed(() => {
   if (!entry || !proposal || entry.exercise.assisted || proposal.reason === 'testSet') {
     return undefined;
   }
-  return warmupSet({
+  const done = setsInSession(s.exerciseId).filter((set) => set.warmup).length;
+  const ramp = warmupRamp({
     exercise: entry.exercise,
     workLoadKg: proposal.loadKg,
     steps: stepsOf(entry),
-    isFirst: active.value.sets.length === 0,
+    // First exercise: nothing logged yet, or only its own warm-up sets.
+    isFirst: active.value.sets.every((set) => set.exerciseId === s.exerciseId && set.warmup),
   });
+  const next = ramp[done];
+  return next ? { ...next, index: done + 1, total: ramp.length } : undefined;
 });
 
 async function load(): Promise<void> {
@@ -426,13 +479,14 @@ async function startPreset(presetId: string): Promise<void> {
   const plan: SessionPlan = {
     exercises: lines.map((line) => ({
       exerciseId: line.chosenId,
-      sets: setsForWeek(line.sets, cycle.value.light),
+      sets: setsForWeek(line.sets, lighter()),
       repRange: line.reps,
       restSeconds: line.restSeconds,
       ...(line.timed ? { timed: true } : {}),
       ...(line.perSide ? { perSide: true } : {}),
     })),
     queue: startQueue(ids),
+    ...(tiredToday.value ? { tired: true } : {}),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -443,6 +497,7 @@ async function startPreset(presetId: string): Promise<void> {
   });
   active.value = await getActiveSession(db);
   restEndsAt.value = undefined;
+  tiredToday.value = false;
   phase.value = 'active';
 }
 
@@ -472,7 +527,7 @@ async function start(
           ? (readyMade.value?.exercises ?? [])
           : preview.value;
   if (!template.value || exercises.length === 0 || !settings.value) return;
-  const sets = setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light);
+  const sets = setsForWeek(setsPerExercise(settings.value.goal), lighter());
   const pairs =
     (options.supersets ?? settings.value.supersets) ? supersetPairs(supersetBlocks(exercises)) : [];
   // Partners side by side in the order.
@@ -484,10 +539,24 @@ async function start(
     if (pair) ids.push(pair[1]);
   }
   const plan: SessionPlan = {
-    exercises: ids.map((exerciseId) => ({ exerciseId, sets })),
+    exercises: ids.map((exerciseId) => {
+      // A copied ready-made session keeps its own sets, reps and rests.
+      const line = custom?.lines?.[exerciseId];
+      return line
+        ? {
+            exerciseId,
+            sets: setsForWeek(line.sets, lighter()),
+            repRange: line.reps,
+            restSeconds: line.restSeconds,
+            ...(line.timed ? { timed: true } : {}),
+            ...(line.perSide ? { perSide: true } : {}),
+          }
+        : { exerciseId, sets };
+    }),
     queue: startQueue(ids),
     ...(pairs.length > 0 ? { supersets: pairs } : {}),
     ...(options.express ? { express: true } : {}),
+    ...(tiredToday.value ? { tired: true } : {}),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -498,6 +567,7 @@ async function start(
   });
   active.value = await getActiveSession(db);
   restEndsAt.value = undefined;
+  tiredToday.value = false;
   phase.value = 'active';
 }
 
@@ -505,9 +575,18 @@ async function start(
 async function logSet(set: SetLog): Promise<void> {
   if (!active.value) return;
   const { db } = await openAppDatabase();
+  // Compared before the set joins today's sets: the record to beat is the one shown.
+  const realLoad = realLoadFor(set.exerciseId, set.loadKg);
+  const beaten = beatsRecord({ ...set, loadKg: realLoad }, recordFor(set.exerciseId));
   const stored = await addSet(db, active.value.id, set);
   active.value = { ...active.value, sets: [...active.value.sets, stored] };
   if (set.warmup) return;
+  recordBeaten.value = beaten
+    ? { exerciseId: set.exerciseId, loadKg: realLoad, reps: set.reps }
+    : recordBeaten.value?.exerciseId === set.exerciseId
+      ? recordBeaten.value
+      : undefined;
+  lastSetBeatRecord.value = beaten;
 
   const entry = entryOf(set.exerciseId);
   const done = workSetsInSession(set.exerciseId).length;
@@ -531,11 +610,17 @@ async function logSet(set: SetLog): Promise<void> {
   if (superset.next) queue = startNow(queue, superset.next);
   if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
   const kind = entry?.exercise.kind ?? 'isolation';
-  const rest =
+  // Usual rest of the exercise, adapted to how hard the set was.
+  const rest = restAfterSet(
     active.value.plan.exercises.find((e) => e.exerciseId === set.exerciseId)?.restSeconds ??
-    REST_SECONDS[kind].max;
+      REST_SECONDS[kind].max,
+    set.difficulty,
+  );
   restEndsAt.value = superset.rest ? Date.now() + rest * 1000 : undefined;
 }
+
+/** The set just logged beat the record: the screen celebrates it. */
+const lastSetBeatRecord = ref(false);
 
 async function undoLastSet(): Promise<void> {
   const last = active.value?.sets.at(-1);
@@ -909,11 +994,16 @@ async function finish(): Promise<void> {
       }),
       finished.date,
     );
+    const workloadKg = workload(real.sets);
+    const previous = realHistory.value.filter((s) => s.templateId === finished.templateId).at(-1);
+    const minutes = sessionMinutes(active.value.plan.startedAt, Date.now());
+    const volumeGain = previous && volumeGainPercent(workload(previous.sets), workloadKg);
     summary.value = {
+      templateId: finished.templateId,
       sets: work.length,
-      workloadKg: real.sets
-        .filter((s) => !s.warmup)
-        .reduce((total, s) => total + s.loadKg * s.reps, 0),
+      workloadKg,
+      ...(minutes !== undefined ? { minutes } : {}),
+      ...(volumeGain !== undefined ? { volumeGain } : {}),
       carryOver,
       records,
       backToLevel,
@@ -926,6 +1016,8 @@ async function finish(): Promise<void> {
   }
   active.value = undefined;
   restEndsAt.value = undefined;
+  recordBeaten.value = undefined;
+  lastSetBeatRecord.value = false;
   history.value = await listDoneSessions(db);
   if (settings.value) await rescheduleNotifications(settings.value);
   phase.value = summary.value ? 'finished' : 'idle';
@@ -1013,6 +1105,7 @@ export function useSession() {
     history,
     realHistory,
     bodyWeight,
+    weighings,
     saveBodyWeight,
     reloadWeighings: async () => {
       const { db } = await openAppDatabase();
@@ -1023,6 +1116,12 @@ export function useSession() {
     active,
     step,
     warmup,
+    recordFor,
+    lastSetBeatRecord,
+    recordBeaten,
+    skipWarmup: (exerciseId: string) => {
+      warmupSkipped.value = [...warmupSkipped.value, exerciseId];
+    },
     restEndsAt,
     summary,
     favoriteExercises: computed(() => favorites.value.map((e) => e.exercise)),
@@ -1030,6 +1129,12 @@ export function useSession() {
     entryOf,
     stepsOf,
     proposalFor,
+    tiredToday,
+    /** Reps to aim for on an exercise in this session. */
+    repRangeOf: (exerciseId: string) => {
+      const entry = entryOf(exerciseId);
+      return entry ? rangeOf(entry) : undefined;
+    },
     lastTimeSets,
     previousFor,
     plannedSets,

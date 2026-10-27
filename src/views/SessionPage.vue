@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { estimateMinutes } from '@/domain/sessionPreview';
 import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonButton,
@@ -16,7 +17,8 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
+import { House, LayoutList, Pencil, Play, Plus, Share2, Zap } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import type { Alternative } from '@/domain/busyMachine';
@@ -33,9 +35,9 @@ import { useSessionNotification } from '@/ui/session/useSessionNotification';
 import { useLoadLabel } from '@/ui/session/useLoadLabel';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionPlanList from '@/ui/session/SessionPlanList.vue';
+import LoadNoteModal from '@/ui/LoadNoteModal.vue';
 import SessionOverview from '@/ui/session/SessionOverview.vue';
 import SetEditModal from '@/ui/session/SetEditModal.vue';
-import { Pencil } from 'lucide-vue-next';
 import { useUnits } from '@/ui/useUnits';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
@@ -43,6 +45,8 @@ import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
 import { useSession } from '@/ui/session/useSession';
 import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/useWeekPlan';
+import { drawRecap } from '@/ui/recapImage';
+import { shareOrDownload } from '@/ui/shareFile';
 
 const { t, n, locale } = useI18n();
 const templateLabel = useTemplateName();
@@ -167,6 +171,21 @@ const loadOf = useLoadLabel();
 /** "3 sets · 20 kg" under an exercise of the plan. */
 const planDetail = (id: string) =>
   `${t('session.nextMachine.plan', session.plannedSets(id))} · ${loadOf(id, session.proposalFor(id)?.loadKg ?? 0)}`;
+/** Work sets of the session of the day, and a rough length. */
+const planSets = computed(() =>
+  preview.value.reduce((total, e) => total + session.plannedSets(e.id), 0),
+);
+const planMinutes = computed(() => estimateMinutes(planSets.value));
+/**
+ * Someone who already trains, on machines the app has never seen them use:
+ * noting the usual load beats a light test set on each one.
+ */
+const unknownLoads = computed(() =>
+  appSettings.value?.level === 'beginner'
+    ? []
+    : preview.value.filter((e) => !session.myLoadFor(e.id)),
+);
+const noting = ref<{ id: string; name: string }>();
 /** Card of a machine; a banner there leads back to the session. */
 const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
@@ -174,6 +193,45 @@ const suggestedBadge = (id: string) =>
     : undefined;
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
+
+/** Minutes since the start, refreshed every 30 s: "where am I in my hour?". */
+const now = ref(Date.now());
+const clock = setInterval(() => (now.value = Date.now()), 30_000);
+onUnmounted(() => clearInterval(clock));
+const elapsed = computed(() => {
+  const startedAt = active.value?.plan.startedAt;
+  return startedAt === undefined
+    ? undefined
+    : Math.max(0, Math.floor((now.value - startedAt) / 60_000));
+});
+
+/** The summary as an image, to show the session to friends. */
+const sharing = ref(false);
+async function shareSummary(): Promise<void> {
+  const done = summary.value;
+  if (!done || sharing.value) return;
+  sharing.value = true;
+  try {
+    const blob = await drawRecap({
+      title: templateLabel(done.templateId),
+      lines: [
+        `${n(done.sets)} ${t('session.summary.setsLabel', done.sets)}`,
+        `${kg(Math.round(done.workloadKg))} ${t('session.summary.workloadLabel')}`,
+        ...(done.minutes !== undefined
+          ? [t('session.summary.minutes', { minutes: n(done.minutes) })]
+          : []),
+        ...(done.volumeGain !== undefined
+          ? [t('session.summary.shareGain', { percent: n(done.volumeGain) })]
+          : []),
+        ...done.records.map((r) => `🏆 ${nameOf(r.exerciseId)} : ${kg(r.loadKg)} × ${n(r.reps)}`),
+      ],
+      footer: t('recap.footer'),
+    });
+    await shareOrDownload(`trainerr-${todayIso()}.png`, blob, t('session.summary.share'));
+  } finally {
+    sharing.value = false;
+  }
+}
 
 /** Ends the session, then updates the challenges in the background: offline is fine. */
 async function finishSession(): Promise<void> {
@@ -283,20 +341,63 @@ async function logWarmup(): Promise<void> {
             </ion-button>
           </ion-card-content>
         </ion-card>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>
-              {{ t('session.next', { template: templateLabel(template.id) }) }}
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="muted">
-              {{
-                session.cycle.value.light
-                  ? t('cycle.light', session.cycle.value)
-                  : t('cycle.week', session.cycle.value)
-              }}
-            </p>
+        <!-- The session of the day first: what, how long, and one big button. -->
+        <section
+          class="day-card"
+          :aria-label="t('session.next', { template: templateLabel(template.id) })"
+        >
+          <p class="day-eyebrow">
+            {{
+              session.cycle.value.light
+                ? t('cycle.light', session.cycle.value)
+                : t('cycle.week', session.cycle.value)
+            }}
+          </p>
+          <h2 class="day-title">{{ templateLabel(template.id) }}</h2>
+          <p v-if="preview.length > 0" class="day-meta">
+            <span>{{ t('customSession.exercises', preview.length) }}</span>
+            <span>{{ t('session.menu.sets', planSets) }}</span>
+            <span>{{ t('session.menu.minutes', { minutes: planMinutes }) }}</span>
+          </p>
+          <template v-if="preview.length > 0">
+            <SessionPlanList
+              :exercises="preview"
+              :supersets="useSupersets"
+              :name="exerciseName"
+              :detail="planDetail"
+              :to="cardLink"
+            />
+            <div v-if="unknownLoads.length > 0" class="usual-loads" role="note">
+              <p>{{ t('session.usualLoads.intro', unknownLoads.length) }}</p>
+              <ion-button
+                v-for="e in unknownLoads"
+                :key="e.id"
+                size="small"
+                fill="outline"
+                :aria-label="t('myLoad.add', { name: exerciseName(e) })"
+                @click="noting = { id: e.id, name: exerciseName(e) }"
+              >
+                {{ t('session.usualLoads.add', { name: exerciseName(e) }) }}
+              </ion-button>
+            </div>
+            <ion-button
+              class="day-start"
+              expand="block"
+              size="large"
+              @click="session.start({ supersets: useSupersets })"
+            >
+              <Play :size="22" aria-hidden="true" />
+              {{ t('session.start') }}
+            </ion-button>
+            <ion-item lines="none" class="superset-choice">
+              <ion-toggle
+                :checked="session.tiredToday.value"
+                @ion-change="session.tiredToday.value = $event.detail.checked"
+              >
+                <span class="toggle-title">{{ t('session.tired.toggle') }}</span>
+                <span class="toggle-help">{{ t('session.tired.help') }}</span>
+              </ion-toggle>
+            </ion-item>
             <ion-item lines="none" class="superset-choice">
               <ion-toggle
                 :checked="useSupersets"
@@ -306,98 +407,88 @@ async function logWarmup(): Promise<void> {
                 <span class="toggle-help">{{ t('session.supersetToggleHelp') }}</span>
               </ion-toggle>
             </ion-item>
-            <template v-if="preview.length > 0">
-              <SessionPlanList
-                :exercises="preview"
-                :supersets="useSupersets"
-                :name="exerciseName"
-                :detail="planDetail"
-                :to="cardLink"
-              />
-              <ion-button
-                expand="block"
-                size="large"
-                @click="session.start({ supersets: useSupersets })"
-              >
-                {{ t('session.start') }}
-              </ion-button>
-              <ion-button
-                v-if="session.expressPreview.value.length > 0"
-                expand="block"
-                fill="outline"
-                @click="session.start({ express: true, supersets: useSupersets })"
-              >
-                {{ t('session.express') }}
-              </ion-button>
-              <ion-button expand="block" fill="clear" router-link="/tabs/session/presets">
-                {{ t('presets.shortcut') }}
-              </ion-button>
-            </template>
-            <template v-else-if="!readyMade">
-              <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>
-              <ion-button expand="block" fill="outline" router-link="/tabs/catalog">
-                {{ t('session.goToCatalog') }}
-              </ion-button>
-            </template>
-            <!-- Not enough favorites: a ready-made session with popular machines. -->
-            <section v-if="readyMade" class="ready-made" :aria-label="t('session.readyMade.title')">
-              <h3>{{ t('session.readyMade.title') }}</h3>
-              <p class="muted">
-                {{
-                  preview.length === 0
-                    ? t('session.readyMade.introNone')
-                    : t('session.readyMade.intro', preview.length)
-                }}
-              </p>
-              <SessionPlanList
-                :exercises="readyMade.exercises"
-                :supersets="useSupersets"
-                :name="exerciseName"
-                :detail="planDetail"
-                :to="cardLink"
-                :badge="suggestedBadge"
-              />
-              <ion-button
-                expand="block"
-                size="large"
-                @click="session.start({ readyMade: true, supersets: useSupersets })"
-              >
-                {{ t('session.readyMade.start') }}
-              </ion-button>
-              <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
-                {{ t('session.readyMade.adopt', readyMade.suggestedIds.length) }}
-              </ion-button>
-              <ion-button expand="block" fill="clear" router-link="/tabs/session/presets">
-                {{ t('presets.shortcut') }}
-              </ion-button>
-              <ion-button expand="block" fill="clear" router-link="/tabs/catalog">
-                {{ t('session.goToCatalog') }}
-              </ion-button>
-            </section>
-            <!-- At home, any exercise doable with the declared equipment: no favorite needed. -->
-            <ion-button
-              v-if="session.homePreview.value.length > 0"
-              expand="block"
-              fill="clear"
-              @click="session.start({ home: true, supersets: useSupersets })"
-            >
-              {{ t('session.home') }}
+          </template>
+          <template v-else-if="!readyMade">
+            <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>
+            <ion-button expand="block" fill="outline" router-link="/tabs/catalog">
+              {{ t('session.goToCatalog') }}
             </ion-button>
-            <MobilityCard :muscles="template.muscles" />
-          </ion-card-content>
-        </ion-card>
-
-        <section class="my-sessions" :aria-label="t('presets.title')">
-          <h2>{{ t('presets.title') }}</h2>
-          <p class="muted">{{ t('presets.intro') }}</p>
-          <ion-button expand="block" fill="outline" router-link="/tabs/session/presets">
-            {{ t('presets.open') }}
-          </ion-button>
+          </template>
+          <!-- Not enough favorites: a ready-made session with popular machines. -->
+          <section v-if="readyMade" class="ready-made" :aria-label="t('session.readyMade.title')">
+            <h3>{{ t('session.readyMade.title') }}</h3>
+            <p class="muted">
+              {{
+                preview.length === 0
+                  ? t('session.readyMade.introNone')
+                  : t('session.readyMade.intro', preview.length)
+              }}
+            </p>
+            <SessionPlanList
+              :exercises="readyMade.exercises"
+              :supersets="useSupersets"
+              :name="exerciseName"
+              :detail="planDetail"
+              :to="cardLink"
+              :badge="suggestedBadge"
+            />
+            <ion-button
+              expand="block"
+              size="large"
+              @click="session.start({ readyMade: true, supersets: useSupersets })"
+            >
+              {{ t('session.readyMade.start') }}
+            </ion-button>
+            <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
+              {{ t('session.readyMade.adopt', readyMade.suggestedIds.length) }}
+            </ion-button>
+            <ion-button expand="block" fill="clear" router-link="/tabs/catalog">
+              {{ t('session.goToCatalog') }}
+            </ion-button>
+          </section>
         </section>
 
-        <section class="my-sessions" :aria-label="t('customSession.mine')">
-          <h2>{{ t('customSession.mine') }}</h2>
-          <p v-if="customSessions.length === 0" class="muted">{{ t('customSession.intro') }}</p>
+        <!-- Other ways to train today: big tiles, one tap each. -->
+        <h2 class="menu-heading">{{ t('session.menu.other') }}</h2>
+        <div class="ways">
+          <button
+            v-if="session.expressPreview.value.length > 0"
+            type="button"
+            class="way"
+            @click="session.start({ express: true, supersets: useSupersets })"
+          >
+            <Zap :size="26" aria-hidden="true" />
+            <span class="way-title">{{ t('session.express') }}</span>
+            <span class="way-help">{{ t('session.menu.expressHelp') }}</span>
+          </button>
+          <router-link class="way" to="/tabs/session/presets">
+            <LayoutList :size="26" aria-hidden="true" />
+            <span class="way-title">{{ t('presets.open') }}</span>
+            <span class="way-help">{{ t('session.menu.presetsHelp') }}</span>
+          </router-link>
+          <button
+            v-if="session.homePreview.value.length > 0"
+            type="button"
+            class="way"
+            @click="session.start({ home: true, supersets: useSupersets })"
+          >
+            <House :size="26" aria-hidden="true" />
+            <span class="way-title">{{ t('session.home') }}</span>
+            <span class="way-help">{{ t('session.menu.homeHelp') }}</span>
+          </button>
+          <router-link class="way" to="/tabs/session/custom/new">
+            <Plus :size="26" aria-hidden="true" />
+            <span class="way-title">{{ t('customSession.create') }}</span>
+            <span class="way-help">{{ t('customSession.intro') }}</span>
+          </router-link>
+        </div>
+
+        <section
+          v-if="customSessions.length > 0"
+          class="my-sessions"
+          :aria-label="t('customSession.mine')"
+        >
+          <h2 class="menu-heading">{{ t('customSession.mine') }}</h2>
           <div v-for="c in customSessions" :key="c.id" class="custom">
             <div class="custom-text">
               <strong>{{ c.name }}</strong>
@@ -409,24 +500,41 @@ async function logWarmup(): Promise<void> {
               :router-link="`/tabs/session/custom/${c.id}`"
               :aria-label="t('customSession.editNamed', { name: c.name })"
             >
-              {{ t('customSession.edit') }}
+              <Pencil :size="18" aria-hidden="true" />
             </ion-button>
             <ion-button
               size="small"
               :aria-label="t('customSession.startNamed', { name: c.name })"
               @click="session.start({ custom: c.id, supersets: useSupersets })"
             >
+              <Play :size="18" aria-hidden="true" />
               {{ t('customSession.start') }}
             </ion-button>
           </div>
-          <ion-button expand="block" fill="outline" router-link="/tabs/session/custom/new">
-            {{ t('customSession.create') }}
-          </ion-button>
         </section>
+
+        <MobilityCard :muscles="template.muscles" />
       </template>
 
       <!-- Pendant la séance -->
       <template v-else-if="phase === 'active' && active">
+        <div
+          v-if="session.lastSetBeatRecord.value && session.recordBeaten.value"
+          :key="`${session.recordBeaten.value.exerciseId}-${session.recordBeaten.value.loadKg}-${session.recordBeaten.value.reps}`"
+          class="record-banner"
+          role="status"
+        >
+          <span class="trophy" aria-hidden="true">🏆</span>
+          <span>
+            <strong>{{ t('session.record.beaten') }}</strong>
+            {{
+              t('session.record.beatenDetail', {
+                name: nameOf(session.recordBeaten.value.exerciseId),
+                set: `${kg(session.recordBeaten.value.loadKg)} × ${n(session.recordBeaten.value.reps)}`,
+              })
+            }}
+          </span>
+        </div>
         <RestTimer
           v-if="restEndsAt"
           :ends-at="restEndsAt"
@@ -625,6 +733,9 @@ async function logWarmup(): Promise<void> {
                   })
                 : t('session.progress.done', progress.filter((e) => e.status === 'done').length)
             }}
+            <span v-if="elapsed !== undefined" class="elapsed">
+              {{ t('session.progress.elapsed', { minutes: n(elapsed) }) }}
+            </span>
           </span>
           <span class="segments" aria-hidden="true">
             <span v-for="e in progress" :key="e.id" class="segment" :class="e.status" />
@@ -670,9 +781,29 @@ async function logWarmup(): Promise<void> {
           <ion-card v-if="warmup" class="warmup">
             <ion-card-content>
               <p>
-                {{ t('session.warmup', { load: kg(warmup.loadKg), reps: warmup.reps }) }}
+                {{
+                  warmup.total > 1
+                    ? t('session.warmupStep', {
+                        index: warmup.index,
+                        total: warmup.total,
+                        load: kg(warmup.loadKg),
+                        reps: warmup.reps,
+                      })
+                    : t('session.warmup', { load: kg(warmup.loadKg), reps: warmup.reps })
+                }}
               </p>
-              <ion-button size="small" @click="logWarmup">{{ t('session.warmupDone') }}</ion-button>
+              <div class="warmup-actions">
+                <ion-button size="small" @click="logWarmup">{{
+                  t('session.warmupDone')
+                }}</ion-button>
+                <ion-button
+                  size="small"
+                  fill="clear"
+                  @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId)"
+                >
+                  {{ t('session.warmupSkip') }}
+                </ion-button>
+              </div>
             </ion-card-content>
           </ion-card>
           <SetEntry
@@ -807,6 +938,12 @@ async function logWarmup(): Promise<void> {
             <span>{{ t('session.summary.recordsLabel', summary.records.length) }}</span>
           </div>
         </div>
+        <p v-if="summary.volumeGain !== undefined" class="highlight">
+          📈 {{ t('session.summary.volumeGain', { percent: n(summary.volumeGain) }) }}
+        </p>
+        <p v-if="summary.minutes !== undefined" class="note-line">
+          ⏱️ {{ t('session.summary.minutes', { minutes: n(summary.minutes) }) }}
+        </p>
         <p v-for="record in summary.records" :key="record.exerciseId" class="highlight">
           🏆
           {{
@@ -847,11 +984,20 @@ async function logWarmup(): Promise<void> {
             {{ t('session.summary.adoptMachines', summary.newMachines.length) }}
           </ion-button>
         </div>
+        <ion-button expand="block" fill="outline" :disabled="sharing" @click="shareSummary">
+          <Share2 :size="20" aria-hidden="true" class="share-icon" />
+          {{ t('session.summary.share') }}
+        </ion-button>
         <ion-button expand="block" size="large" @click="session.closeSummary()">{{
           t('session.summary.close')
         }}</ion-button>
       </section>
 
+      <LoadNoteModal
+        :exercise-id="noting?.id"
+        :name="noting?.name ?? ''"
+        @close="noting = undefined"
+      />
       <ion-modal :is-open="platesLoad !== undefined" @did-dismiss="platesLoad = undefined">
         <ion-header>
           <ion-toolbar>
@@ -895,8 +1041,16 @@ async function logWarmup(): Promise<void> {
   text-align: start;
 }
 .progress-title {
+  display: flex;
+  flex-direction: column;
   font-weight: 700;
   white-space: nowrap;
+}
+.elapsed {
+  color: var(--tr-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 .segments {
   display: flex;
@@ -1111,6 +1265,113 @@ async function logWarmup(): Promise<void> {
   border-radius: var(--app-radius-small);
   background: var(--ion-card-background);
 }
+.day-card {
+  margin-block: 0 var(--tr-space-5);
+  padding: var(--tr-space-5) var(--tr-space-4);
+  border-radius: var(--tr-radius-l);
+  background: var(--ion-card-background);
+  box-shadow: var(--tr-shadow-1);
+}
+.day-eyebrow {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--tr-text-muted);
+}
+.day-title {
+  margin: 2px 0 6px;
+  font-size: var(--tr-font-xl);
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.day-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 var(--tr-space-3);
+}
+.day-meta span {
+  padding: 4px 10px;
+  border-radius: var(--tr-radius-pill);
+  background: var(--tr-surface-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.share-icon {
+  margin-inline-end: 8px;
+}
+.usual-loads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-block-start: var(--tr-space-3);
+  padding: var(--tr-space-3);
+  border-radius: var(--tr-radius-m);
+  background: var(--tr-surface-2);
+}
+.usual-loads p {
+  flex-basis: 100%;
+  margin: 0 0 4px;
+  color: var(--tr-text-muted);
+  font-size: 0.9rem;
+}
+.usual-loads ion-button {
+  --border-radius: var(--tr-radius-pill);
+  margin: 0;
+  text-transform: none;
+}
+.day-start {
+  margin-block-start: var(--tr-space-3);
+  min-height: 56px;
+  font-size: 1.1rem;
+}
+.day-start svg {
+  margin-inline-end: 8px;
+}
+.menu-heading {
+  margin: var(--tr-space-5) 0 var(--tr-space-3);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.ways {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--tr-space-3);
+}
+.way {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 120px;
+  padding: var(--tr-space-4);
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius-l);
+  background: var(--ion-card-background);
+  box-shadow: var(--tr-shadow-1);
+  color: var(--tr-text);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--tr-duration-fast) ease;
+}
+.way:active {
+  transform: scale(0.97);
+}
+.way svg {
+  color: var(--ion-color-primary);
+}
+.way-title {
+  color: var(--tr-text);
+  font-weight: 800;
+  line-height: 1.2;
+}
+.way-help {
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: var(--tr-text-muted);
+}
 .my-sessions {
   margin-block: 16px;
 }
@@ -1143,6 +1404,53 @@ async function logWarmup(): Promise<void> {
   margin-block: 0 10px;
   font-size: 0.85rem;
   color: var(--ion-color-medium-shade);
+}
+.record-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-block-end: 12px;
+  padding: 12px 14px;
+  border-radius: var(--app-radius);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--ion-color-warning-rgb), 0.35),
+    rgba(var(--ion-color-warning-rgb), 0.12)
+  );
+  color: var(--ion-text-color);
+  animation: record-pop 600ms cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.record-banner .trophy {
+  font-size: 2rem;
+  animation: trophy-shine 1.2s ease-out;
+}
+@keyframes record-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+@keyframes trophy-shine {
+  0% {
+    transform: rotate(-20deg) scale(0.6);
+  }
+  60% {
+    transform: rotate(12deg) scale(1.25);
+  }
+  100% {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .record-banner,
+  .record-banner .trophy {
+    animation: none;
+  }
+}
+.warmup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 .rest-more {
   margin-block: 8px 10px;

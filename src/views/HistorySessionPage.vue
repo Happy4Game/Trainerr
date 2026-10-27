@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRirText } from '@/ui/session/useRirText';
 import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonBackButton,
@@ -41,6 +42,7 @@ const props = defineProps<{ id: string }>();
 const DIFFICULTIES: readonly Difficulty[] = ['easy', 'ok', 'hard', 'fail'];
 
 const { t, locale } = useI18n();
+const rirText = useRirText();
 const templateLabel = useTemplateName();
 const session = useSession();
 const { symbol, toDisplay, fromInput } = useUnits();
@@ -200,6 +202,11 @@ async function remove() {
               >
                 <Trash2 :size="20" aria-hidden="true" />
               </ion-button>
+              <p v-if="set.rir !== undefined || set.note" class="set-extra">
+                <span v-if="set.rir !== undefined">{{ rirText(set.rir) }}</span>
+                <span v-if="set.rir !== undefined && set.note"> · </span>
+                <em v-if="set.note">{{ set.note }}</em>
+              </p>
             </div>
             <ion-button
               fill="clear"
@@ -279,6 +286,13 @@ async function remove() {
 </template>
 
 <style scoped>
+.set-extra {
+  grid-column: 1 / -1;
+  margin: 0 0 4px;
+  font-size: 0.875rem;
+  color: var(--ion-color-medium);
+}
+
 .title {
   font-size: 1.4rem;
 }

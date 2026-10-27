@@ -2,11 +2,14 @@
 import { IonButton } from '@ionic/vue';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useSettings } from '@/ui/useSettings';
+import { playRestOver } from './restSound';
 
 const props = defineProps<{ endsAt: number }>();
 const emit = defineEmits<{ done: []; adjust: [seconds: number] }>();
 
 const { t } = useI18n();
+const { settings } = useSettings();
 const now = ref(Date.now());
 // Full length of the rest, for the ring; grows when the rest is extended.
 const total = ref(Math.max(1, props.endsAt - Date.now()));
@@ -23,7 +26,7 @@ const label = computed(() => {
   const minutes = Math.floor(remaining.value / 60);
   return `${minutes}:${String(remaining.value % 60).padStart(2, '0')}`;
 });
-const RADIUS = 26;
+const RADIUS = 54;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const dash = computed(() => CIRCUMFERENCE * (remainingMs.value / total.value));
 
@@ -32,7 +35,8 @@ onMounted(() => {
     now.value = Date.now();
     if (remaining.value === 0) {
       clearInterval(timer);
-      navigator.vibrate?.([300, 150, 300]);
+      navigator.vibrate?.([300, 150, 300, 150, 300]);
+      if (settings.value?.restSound !== false) playRestOver();
       emit('done');
     }
   }, 250);
@@ -42,28 +46,30 @@ onBeforeUnmount(() => clearInterval(timer));
 
 <template>
   <div class="rest" role="timer" :aria-label="t('session.rest.label', { time: label })">
-    <svg class="ring" viewBox="0 0 64 64" aria-hidden="true">
-      <circle class="track" cx="32" cy="32" :r="RADIUS" />
-      <circle
-        class="progress"
-        cx="32"
-        cy="32"
-        :r="RADIUS"
-        :stroke-dasharray="`${dash} ${CIRCUMFERENCE}`"
-      />
-    </svg>
-    <div class="text">
-      <span class="title">{{ t('session.rest.title') }}</span>
-      <span class="time" aria-hidden="true">{{ label }}</span>
+    <div class="dial">
+      <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="track" cx="60" cy="60" :r="RADIUS" />
+        <circle
+          class="progress"
+          cx="60"
+          cy="60"
+          :r="RADIUS"
+          :stroke-dasharray="`${dash} ${CIRCUMFERENCE}`"
+        />
+      </svg>
+      <div class="text">
+        <span class="title">{{ t('session.rest.title') }}</span>
+        <span class="time" aria-hidden="true">{{ label }}</span>
+      </div>
     </div>
     <div class="actions">
-      <ion-button fill="clear" size="small" @click="emit('adjust', -15)">
+      <ion-button fill="outline" @click="emit('adjust', -15)">
         −15 s<span class="visually-hidden">{{ t('session.rest.less') }}</span>
       </ion-button>
-      <ion-button fill="clear" size="small" @click="emit('adjust', 30)">
+      <ion-button fill="outline" @click="emit('adjust', 30)">
         +30 s<span class="visually-hidden">{{ t('session.rest.more') }}</span>
       </ion-button>
-      <ion-button fill="outline" size="small" @click="emit('done')">
+      <ion-button class="skip" @click="emit('done')">
         {{ t('session.rest.skip') }}
       </ion-button>
     </div>
@@ -71,28 +77,37 @@ onBeforeUnmount(() => clearInterval(timer));
 </template>
 
 <style scoped>
+/* Grand anneau qui se vide : lisible à bout de bras, entre deux séries. */
 .rest {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  margin-block-end: 12px;
-  border-radius: var(--app-radius);
-  background: var(--ion-color-primary);
-  color: var(--ion-color-primary-contrast);
+  gap: var(--tr-space-4);
+  padding: var(--tr-space-5) var(--tr-space-4) var(--tr-space-4);
+  margin-block-end: var(--tr-space-3);
+  border-radius: var(--tr-radius-l);
+  background: var(--tr-hero);
+  color: var(--tr-hero-text);
+  box-shadow: var(--tr-shadow-2);
+  animation: tr-pop var(--tr-duration-slow) var(--tr-ease-spring);
+}
+.dial {
+  position: relative;
+  width: 176px;
+  height: 176px;
 }
 .ring {
-  flex: none;
-  width: 56px;
-  height: 56px;
+  width: 100%;
+  height: 100%;
   transform: rotate(-90deg);
 }
 .ring circle {
   fill: none;
-  stroke-width: 6;
+  stroke-width: 9;
 }
 .track {
-  stroke: rgb(255 255 255 / 25%);
+  stroke: currentcolor;
+  opacity: 0.2;
 }
 .progress {
   stroke: currentcolor;
@@ -100,33 +115,42 @@ onBeforeUnmount(() => clearInterval(timer));
   transition: stroke-dasharray 0.25s linear;
 }
 .text {
+  position: absolute;
+  inset: 0;
   display: flex;
-  flex: 1;
   flex-direction: column;
-  line-height: 1.1;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 .title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  opacity: 0.9;
+  font-size: var(--tr-font-s);
+  font-weight: 700;
+  opacity: 0.85;
 }
 .time {
-  font-size: 1.9rem;
+  margin-top: 4px;
+  font-size: var(--tr-font-display);
   font-variant-numeric: tabular-nums;
-  font-weight: 800;
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.03em;
 }
 .actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 2px;
-  max-width: 50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  gap: var(--tr-space-2);
+  width: 100%;
 }
 .actions ion-button {
   margin: 0;
-  --color: var(--ion-color-primary-contrast);
-  --border-color: var(--ion-color-primary-contrast);
+  min-height: var(--tr-touch);
+  --color: var(--tr-hero-text);
+  --border-color: currentcolor;
   font-variant-numeric: tabular-nums;
+}
+.actions .skip {
+  --background: var(--tr-hero-text);
+  --color: var(--ion-color-primary);
 }
 .visually-hidden {
   position: absolute;

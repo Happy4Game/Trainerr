@@ -10,6 +10,7 @@ public class MainActivity extends BridgeActivity {
         // Small native plugins of the app, registered before the bridge starts.
         registerPlugin(SessionNotificationPlugin.class);
         registerPlugin(AppUpdaterPlugin.class);
+        registerPlugin(FileSharePlugin.class);
         super.onCreate(savedInstanceState);
     }
 }

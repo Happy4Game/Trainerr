@@ -1,10 +1,11 @@
-import { computed, watch } from 'vue';
+import { computed, onUnmounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useTemplateName } from '@/ui/useTemplateName';
 import { useSettings } from '@/ui/useSettings';
 import { useUnits } from '@/ui/useUnits';
 import {
   cancelRestEnd,
+  keepScreenOn,
   ensureSessionNotificationPermission,
   hideSessionNotification,
   scheduleRestEnd,
@@ -76,6 +77,18 @@ export function useSessionNotification(): void {
     },
     { immediate: true },
   );
+
+  // Screen on while a session is in progress (setting on by default).
+  const awake = computed(
+    () => session.active.value !== undefined && settings.value?.keepAwake !== false,
+  );
+  watch(awake, (on) => void keepScreenOn(on), { immediate: true });
+  // The browser drops the lock when the page is hidden: taken again on return.
+  const onVisible = () => {
+    if (document.visibilityState === 'visible' && awake.value) void keepScreenOn(true);
+  };
+  document.addEventListener('visibilitychange', onVisible);
+  onUnmounted(() => document.removeEventListener('visibilitychange', onVisible));
 
   // The end-of-rest alert follows the timer: −15 s, +30 s or skipped.
   watch(

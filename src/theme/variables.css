@@ -1,12 +1,50 @@
 /*
- * Thème de l'appli. Le thème sombre suit le réglage du téléphone (palette
- * dark.system d'Ionic, complétée ici). Principes : une couleur d'action
- * (indigo), un fond teinté avec des cartes blanches pour la hiérarchie,
- * des coins arrondis, des libellés en casse normale (plus lisibles que les
- * majuscules), des zones tactiles d'au moins 48 px.
+ * Design system de Trainerr : toutes les couleurs, tailles de texte,
+ * espacements, rayons, ombres et durées d'animation sont ici. Les écrans
+ * n'utilisent que ces variables (--tr-…) ou celles d'Ionic qu'elles
+ * remplissent (--ion-color-primary…). Choix et sources : docs/design.md.
+ *
+ * Thème sombre par défaut (classe .ion-palette-dark sur <html>, posée au
+ * démarrage), thème clair au choix dans les Réglages. Accent orange « flamme »,
+ * chiffres en gros, cartes à coins arrondis, cibles tactiles ≥ 48 px.
+ * Chaque paire texte / fond est vérifiée à 4,5:1 au moins (WCAG 2.1 AA).
  */
 :root {
+  /* ---- Typographie ---- */
   --ion-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --tr-font-display: 3.25rem; /* minuteur, charge de la série */
+  --tr-font-xxl: 2.25rem; /* chiffres clés des stats */
+  --tr-font-xl: 1.6rem;
+  --tr-font-l: 1.25rem; /* titres de carte */
+  --tr-font-m: 1rem;
+  --tr-font-s: 0.875rem;
+  --tr-font-xs: 0.78rem;
+  --tr-weight-bold: 700;
+  --tr-weight-black: 800;
+
+  /* ---- Espacements (grille de 4 px) ---- */
+  --tr-space-1: 4px;
+  --tr-space-2: 8px;
+  --tr-space-3: 12px;
+  --tr-space-4: 16px;
+  --tr-space-5: 24px;
+  --tr-space-6: 32px;
+
+  /* ---- Rayons ---- */
+  --tr-radius-s: 10px;
+  --tr-radius-m: 16px;
+  --tr-radius-l: 24px;
+  --tr-radius-pill: 999px;
+
+  /* ---- Cible tactile minimale (Material 3 : 48 dp) ---- */
+  --tr-touch: 48px;
+
+  /* ---- Mouvement : coupé par prefers-reduced-motion plus bas ---- */
+  --tr-duration-fast: 150ms;
+  --tr-duration: 250ms;
+  --tr-duration-slow: 450ms;
+  --tr-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --tr-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Barres système Android : Capacitor injecte leur taille, env() sert ailleurs. */
   --ion-safe-area-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
@@ -14,13 +52,44 @@
   --ion-safe-area-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
   --ion-safe-area-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
 
-  /* Indigo : texte blanc dessus à 8:1. */
-  --ion-color-primary: #4338ca;
-  --ion-color-primary-rgb: 67, 56, 202;
+  /* ---- Thème clair ---- */
+  --tr-bg: #f4f5f8;
+  --tr-surface: #ffffff;
+  --tr-surface-2: #eef0f5;
+  --tr-border: #dfe3ea;
+  --tr-text: #12151c;
+  --tr-text-muted: #545d6e;
+  --tr-accent-soft: #fff1e8;
+  --tr-hero: linear-gradient(135deg, #c2410c 0%, #9a3412 100%);
+  --tr-hero-text: #ffffff;
+  --tr-chart-1: #c2410c;
+  --tr-chart-2: #1d4ed8;
+  --tr-chart-grid: #e3e6ec;
+  --tr-shadow-1: 0 1px 2px rgb(16 24 40 / 6%), 0 2px 8px rgb(16 24 40 / 6%);
+  --tr-shadow-2: 0 4px 12px rgb(16 24 40 / 10%), 0 12px 32px rgb(16 24 40 / 8%);
+
+  /* Orange brûlé : texte blanc dessus à 5,2:1. */
+  --ion-color-primary: #c2410c;
+  --ion-color-primary-rgb: 194, 65, 12;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3b31b2;
-  --ion-color-primary-tint: #564ccf;
+  --ion-color-primary-shade: #ab390b;
+  --ion-color-primary-tint: #c85424;
+
+  /* Bleu, deuxième couleur (courbes, liens secondaires). */
+  --ion-color-secondary: #1d4ed8;
+  --ion-color-secondary-rgb: 29, 78, 216;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #1a45be;
+  --ion-color-secondary-tint: #3460dc;
+
+  --ion-color-tertiary: #6d28d9;
+  --ion-color-tertiary-rgb: 109, 40, 217;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #6023bf;
+  --ion-color-tertiary-tint: #7c3edd;
 
   --ion-color-success: #15803d;
   --ion-color-success-rgb: 21, 128, 61;
@@ -43,125 +112,344 @@
   --ion-color-danger-shade: #a31919;
   --ion-color-danger-tint: #c03333;
 
-  /* Fond teinté, cartes et listes blanches. */
-  --ion-background-color: #f3f4f8;
-  --ion-background-color-rgb: 243, 244, 248;
-  --ion-item-background: #ffffff;
-  --ion-card-background: #ffffff;
-  --ion-toolbar-background: #f3f4f8;
-  --ion-tab-bar-background: #ffffff;
-  --ion-color-light: #e8eaf2;
-  --ion-color-light-rgb: 232, 234, 242;
-  --ion-color-light-contrast: #1f2333;
-  --ion-color-light-contrast-rgb: 31, 35, 51;
-  --ion-color-light-shade: #cccfd9;
-  --ion-color-light-tint: #eaecf3;
+  --ion-color-medium: #545d6e;
+  --ion-color-medium-rgb: 84, 93, 110;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #4a5261;
+  --ion-color-medium-tint: #656d7d;
 
-  --app-radius: 16px;
-  --app-radius-small: 12px;
-  --app-shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 2px 8px rgb(16 24 40 / 6%);
+  --ion-color-light: #eef0f5;
+  --ion-color-light-rgb: 238, 240, 245;
+  --ion-color-light-contrast: #12151c;
+  --ion-color-light-contrast-rgb: 18, 21, 28;
+  --ion-color-light-shade: #d1d3d8;
+  --ion-color-light-tint: #f0f2f6;
+
+  --ion-background-color: var(--tr-bg);
+  --ion-background-color-rgb: 244, 245, 248;
+  --ion-text-color: var(--tr-text);
+  --ion-text-color-rgb: 18, 21, 28;
+  --ion-item-background: var(--tr-surface);
+  --ion-card-background: var(--tr-surface);
+  --ion-toolbar-background: var(--tr-bg);
+  --ion-tab-bar-background: var(--tr-surface);
+  --ion-tab-bar-color-selected: var(--ion-color-primary);
+  --ion-border-color: var(--tr-border);
+
+  /* Anciens noms, gardés pour les écrans pas encore repris. */
+  --app-radius: var(--tr-radius-m);
+  --app-radius-small: var(--tr-radius-s);
+  --app-shadow: var(--tr-shadow-1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Indigo clair : texte sombre dessus à 7:1, et lisible sur fond noir. */
-    --ion-color-primary: #a5b4fc;
-    --ion-color-primary-rgb: 165, 180, 252;
-    --ion-color-primary-contrast: #11133a;
-    --ion-color-primary-contrast-rgb: 17, 19, 58;
-    --ion-color-primary-shade: #919ede;
-    --ion-color-primary-tint: #aebcfc;
+/* ---- Thème sombre (par défaut) ---- */
+:root.ion-palette-dark {
+  --tr-bg: #0b0d12;
+  --tr-surface: #161a22;
+  --tr-surface-2: #212734;
+  --tr-border: #2a3040;
+  --tr-text: #f2f4f8;
+  --tr-text-muted: #a3abbd;
+  --tr-accent-soft: #2b1a10;
+  --tr-hero: linear-gradient(135deg, #ff8a3d 0%, #ff5f2e 100%);
+  --tr-hero-text: #1a0b00;
+  --tr-chart-1: #ff7a2f;
+  --tr-chart-2: #5eb8ff;
+  --tr-chart-grid: #262c3a;
+  --tr-shadow-1: 0 0 0 1px rgb(255 255 255 / 4%);
+  --tr-shadow-2: 0 0 0 1px rgb(255 255 255 / 6%), 0 12px 32px rgb(0 0 0 / 45%);
 
-    --ion-color-success: #4ade80;
-    --ion-color-success-rgb: 74, 222, 128;
-    --ion-color-success-contrast: #052e16;
-    --ion-color-success-contrast-rgb: 5, 46, 22;
-    --ion-color-success-shade: #41c371;
-    --ion-color-success-tint: #5ce18d;
+  /* Orange vif : texte presque noir dessus à 7,4:1, lisible sur le fond à 7,5:1. */
+  --ion-color-primary: #ff7a2f;
+  --ion-color-primary-rgb: 255, 122, 47;
+  --ion-color-primary-contrast: #1a0b00;
+  --ion-color-primary-contrast-rgb: 26, 11, 0;
+  --ion-color-primary-shade: #e06b29;
+  --ion-color-primary-tint: #ff8744;
 
-    --ion-color-danger: #f87171;
-    --ion-color-danger-rgb: 248, 113, 113;
-    --ion-color-danger-contrast: #2b0505;
-    --ion-color-danger-contrast-rgb: 43, 5, 5;
-    --ion-color-danger-shade: #da6363;
-    --ion-color-danger-tint: #f97f7f;
+  --ion-color-secondary: #5eb8ff;
+  --ion-color-secondary-rgb: 94, 184, 255;
+  --ion-color-secondary-contrast: #04121f;
+  --ion-color-secondary-contrast-rgb: 4, 18, 31;
+  --ion-color-secondary-shade: #53a2e0;
+  --ion-color-secondary-tint: #6ebfff;
 
-    --ion-background-color: #0f1117;
-    --ion-background-color-rgb: 15, 17, 23;
-    --ion-item-background: #1a1d26;
-    --ion-card-background: #1a1d26;
-    --ion-toolbar-background: #0f1117;
-    --ion-tab-bar-background: #1a1d26;
-    --ion-color-light: #262a36;
-    --ion-color-light-rgb: 38, 42, 54;
-    --ion-color-light-contrast: #e6e8ef;
-    --ion-color-light-contrast-rgb: 230, 232, 239;
-    --ion-color-light-shade: #21252f;
-    --ion-color-light-tint: #3c3f4a;
+  --ion-color-tertiary: #b69cff;
+  --ion-color-tertiary-rgb: 182, 156, 255;
+  --ion-color-tertiary-contrast: #160b33;
+  --ion-color-tertiary-contrast-rgb: 22, 11, 51;
+  --ion-color-tertiary-shade: #a089e0;
+  --ion-color-tertiary-tint: #bda6ff;
 
-    --app-shadow: none;
-  }
+  --ion-color-success: #3ddc84;
+  --ion-color-success-rgb: 61, 220, 132;
+  --ion-color-success-contrast: #03230f;
+  --ion-color-success-contrast-rgb: 3, 35, 15;
+  --ion-color-success-shade: #36c274;
+  --ion-color-success-tint: #50e090;
+
+  --ion-color-warning: #ffc233;
+  --ion-color-warning-rgb: 255, 194, 51;
+  --ion-color-warning-contrast: #241900;
+  --ion-color-warning-contrast-rgb: 36, 25, 0;
+  --ion-color-warning-shade: #e0ab2d;
+  --ion-color-warning-tint: #ffc847;
+
+  --ion-color-danger: #ff6b6b;
+  --ion-color-danger-rgb: 255, 107, 107;
+  --ion-color-danger-contrast: #2b0505;
+  --ion-color-danger-contrast-rgb: 43, 5, 5;
+  --ion-color-danger-shade: #e05e5e;
+  --ion-color-danger-tint: #ff7a7a;
+
+  --ion-color-medium: #a3abbd;
+  --ion-color-medium-rgb: 163, 171, 189;
+  --ion-color-medium-contrast: #0b0d12;
+  --ion-color-medium-contrast-rgb: 11, 13, 18;
+  --ion-color-medium-shade: #a3abbd;
+  --ion-color-medium-tint: #b4bbc9;
+
+  --ion-color-light: #212734;
+  --ion-color-light-rgb: 33, 39, 52;
+  --ion-color-light-contrast: #f2f4f8;
+  --ion-color-light-contrast-rgb: 242, 244, 248;
+  --ion-color-light-shade: #1d222e;
+  --ion-color-light-tint: #373d48;
+
+  --ion-color-dark: #f2f4f8;
+  --ion-color-dark-rgb: 242, 244, 248;
+  --ion-color-dark-contrast: #0b0d12;
+  --ion-color-dark-contrast-rgb: 11, 13, 18;
+  --ion-color-dark-shade: #d5d7da;
+  --ion-color-dark-tint: #f3f5f9;
+
+  --ion-background-color: var(--tr-bg);
+  --ion-background-color-rgb: 11, 13, 18;
+  --ion-text-color: var(--tr-text);
+  --ion-text-color-rgb: 242, 244, 248;
+  --ion-item-background: var(--tr-surface);
+  --ion-card-background: var(--tr-surface);
+  --ion-toolbar-background: var(--tr-bg);
+  --ion-tab-bar-background: #11141b;
+  --ion-border-color: var(--tr-border);
+  --ion-color-step-50: #161a22;
+  --ion-color-step-100: #212734;
+  --ion-color-step-150: #2a3040;
+  --ion-color-step-200: #343b4c;
+  color-scheme: dark;
 }
 
-/* Zones tactiles d'au moins 48 px (recommandation Android, au-dessus des 44 pt d'Apple). */
+/* ---- Composants Ionic ---- */
+
+body {
+  background: var(--tr-bg);
+  color: var(--tr-text);
+}
+
+/* Zones tactiles d'au moins 48 px (Material 3), barre d'onglets plus haute. */
+ion-tab-bar {
+  --border: 0;
+  border-top: 1px solid var(--tr-border);
+}
 ion-tab-button {
   min-height: 56px;
+  --color: var(--tr-text-muted);
+  font-weight: 600;
 }
 
-/* Boutons : casse normale, coins arrondis, graisse lisible. */
+/* Boutons : casse normale, coins arrondis, graisse lisible, jamais sous 48 px. */
 ion-button {
-  --border-radius: var(--app-radius-small);
+  --border-radius: var(--tr-radius-s);
   --box-shadow: none;
+  min-height: var(--tr-touch);
   text-transform: none;
   letter-spacing: 0;
-  font-weight: 600;
+  font-weight: 700;
+  transition: transform var(--tr-duration-fast) var(--tr-ease-out);
+}
+ion-button[size='small'] {
+  min-height: 40px;
+}
+ion-button:active {
+  transform: scale(0.97);
 }
 ion-button[size='large'] {
   font-size: 1.1rem;
   min-height: 56px;
+  --border-radius: var(--tr-radius-m);
+}
+ion-button[fill='outline'] {
+  --border-width: 1.5px;
+}
+ion-segment {
+  --background: var(--tr-surface-2);
+  border-radius: var(--tr-radius-pill);
+  padding: 3px;
+}
+/* Dans une barre, le sélecteur s'aligne sur les marges des cartes au lieu de toucher les bords. */
+ion-toolbar ion-segment {
+  width: auto;
+  margin-inline: var(--tr-space-4);
+}
+/* En mode Material, l'indicateur est un trait collé en bas : on l'étire sur toute
+   la hauteur du bouton pour obtenir une pastille. */
+ion-segment-button::part(indicator) {
+  inset-block: 0;
+  height: 100%;
+}
+ion-segment-button::part(indicator-background) {
+  height: 100%;
+  border-radius: var(--tr-radius-pill);
 }
 ion-segment-button {
+  --indicator-color: var(--tr-surface);
+  --indicator-box-shadow: var(--tr-shadow-1);
+  --border-radius: var(--tr-radius-pill);
+  --color: var(--tr-text-muted);
+  --color-checked: var(--tr-text);
+  --indicator-height: 100%;
+  min-height: 40px;
   text-transform: none;
   letter-spacing: 0;
-  font-weight: 600;
-}
-
-/* Cartes : blanches sur fond teinté, sans bordure dure. */
-ion-card {
-  border-radius: var(--app-radius);
-  box-shadow: var(--app-shadow);
-  margin-inline: 0;
-}
-ion-card-title {
-  font-size: 1.25rem;
   font-weight: 700;
 }
-.ion-padding > ion-card:first-child {
-  margin-top: 4px;
+:root.ion-palette-dark ion-segment-button {
+  --indicator-color: #343b4c;
 }
 
-/* Barres du haut : à plat sur le fond, titre affirmé. */
+/* Cartes : surface claire sur fond teinté (sombre : surface relevée + liseré). */
+ion-card {
+  border-radius: var(--tr-radius-l);
+  box-shadow: var(--tr-shadow-1);
+  margin-inline: 0;
+  margin-block: var(--tr-space-3);
+  color: var(--tr-text);
+}
+ion-card-header {
+  padding-bottom: var(--tr-space-2);
+}
+ion-card-title {
+  font-size: var(--tr-font-l);
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.01em;
+  color: var(--tr-text);
+}
+ion-card-subtitle {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--tr-text-muted);
+}
+ion-card-content {
+  color: var(--tr-text);
+}
+.ion-padding > ion-card:first-child {
+  margin-top: var(--tr-space-1);
+}
+
+/* Barres du haut : à plat sur le fond, grand titre affirmé. */
 ion-header ion-toolbar {
   --border-width: 0;
+  --min-height: 60px;
 }
 ion-header.header-md {
   box-shadow: none;
 }
 ion-title {
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.015em;
 }
 
 /* Listes en blocs arrondis plutôt qu'en bandes. */
 ion-list.list-md,
 ion-list.list-ios {
-  border-radius: var(--app-radius);
+  border-radius: var(--tr-radius-l);
   overflow: hidden;
+  background: var(--tr-surface);
 }
 ion-list-header {
   text-transform: none;
-  font-weight: 700;
+  font-size: var(--tr-font-s);
+  font-weight: var(--tr-weight-black);
+  letter-spacing: 0.02em;
+  color: var(--ion-color-primary);
+  padding-top: var(--tr-space-4);
+}
+ion-item {
+  --min-height: var(--tr-touch);
+  --border-color: var(--tr-border);
 }
 
 ion-chip {
-  font-weight: 500;
+  font-weight: 600;
+  min-height: 36px;
+}
+
+ion-toggle {
+  --track-background-checked: var(--ion-color-primary);
+}
+
+/* ---- Utilitaires partagés ---- */
+
+/* Gros chiffres : chasse fixe pour qu'un compte à rebours ne tremble pas. */
+.tr-number {
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.tr-muted {
+  color: var(--tr-text-muted);
+}
+.tr-eyebrow {
+  font-size: var(--tr-font-xs);
+  font-weight: var(--tr-weight-black);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tr-text-muted);
+}
+
+/* Apparition douce d'un élément (série validée, carte). */
+@keyframes tr-pop {
+  0% {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes tr-rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Animations réduites si le téléphone le demande (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+ion-back-button {
+  --color: var(--ion-color-primary);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 700;
+  min-height: var(--tr-touch);
 }

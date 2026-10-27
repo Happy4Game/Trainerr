@@ -12,15 +12,28 @@
     "restDay": "Pas de séance prévue aujourd'hui : repos, ou une séance en plus si tu en as envie.",
     "go": "Commencer",
     "resume": "Reprendre la séance",
+    "otherChoice": "Changer de séance ou de mode",
     "week": "Cette semaine",
     "weekCount": "{done} séances faites sur {target} cette semaine",
     "streak": "{count} semaine au rythme | {count} semaines d'affilée au rythme",
     "seePlanning": "Voir le planning",
-    "next": "Prochaine séance",
     "inProgressShort": "Séance en cours",
     "noPlan": "Prochaine séance",
     "weekSessions": "séance | séances",
-    "exercises": "{count} exercice | {count} exercices"
+    "exercises": "{count} exercice | {count} exercices",
+    "line": "{sets} × {load}",
+    "doneOf": "{done} exercice terminé sur {total} | {done} exercices terminés sur {total}",
+    "goingUp": "Tu montes la charge sur {count} exercice aujourd'hui. | Tu montes la charge sur {count} exercices aujourd'hui.",
+    "exerciseDone": "Exercice terminé",
+    "change": {
+      "up": "+{delta}",
+      "first": "1re fois"
+    },
+    "tiredOff": "Pas en forme ? Alléger la séance",
+    "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges",
+    "doneToday": "✓ Séance du jour faite, bravo ! La prochaine :",
+    "goExtra": "Faire une séance en plus",
+    "heroLabel": "Séance du jour"
   },
   "gym": {
     "defaultName": "Ma salle"
@@ -66,6 +79,7 @@
   },
   "catalog": {
     "search": "Chercher une machine ou un muscle",
+    "searchShort": "Machine, muscle…",
     "filters": {
       "all": "Tout",
       "favorites": "Mes machines",
@@ -248,6 +262,16 @@
     "moreReps": "Une rep de plus",
     "halfRep": "Ajouter une demi-rep",
     "incomplete": "Reps incomplètes",
+    "rir": {
+      "label": "Reps en réserve (facultatif)",
+      "value": "{count} rep en réserve | {count} reps en réserve",
+      "plenty": "4 reps ou plus en réserve",
+      "help": "Combien de reps tu aurais encore pu faire proprement. 4+ = largement."
+    },
+    "setNote": {
+      "label": "Note sur la série",
+      "placeholder": "Prise qui glisse, siège 4…"
+    },
     "slowTempo": "Tempo lent",
     "howWasIt": "Comment c'était ?",
     "busy": "Machine occupée",
@@ -294,7 +318,9 @@
       "heavier": "Charge réalisable plus lourde",
       "closest": "Charge exacte impossible : {below} ou {above}",
       "perSide": "Par côté : {plates} kg",
-      "bar": "barre de {kg} kg"
+      "bar": "barre de {kg} kg",
+      "perSideLine": "Par côté : {plates} {unit}",
+      "barOnly": "Barre seule"
     },
     "summary": {
       "title": "Séance terminée",
@@ -308,7 +334,11 @@
       "workloadLabel": "soulevés au total",
       "recordsLabel": "record | records",
       "newMachines": "Tu as utilisé {names}, pas encore dans tes machines. | Tu as utilisé {names}, pas encore dans tes machines.",
-      "adoptMachines": "Ajouter cette machine à mes machines | Ajouter ces {count} machines à mes machines"
+      "adoptMachines": "Ajouter cette machine à mes machines | Ajouter ces {count} machines à mes machines",
+      "volumeGain": "+{percent} % de volume par rapport à la dernière fois que tu as fait cette séance.",
+      "minutes": "Séance bouclée en {minutes} min.",
+      "share": "Partager ma séance",
+      "shareGain": "+{percent} % de volume depuis la dernière fois"
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",
@@ -331,7 +361,7 @@
       "previous": "+1 série sur : {name}"
     },
     "addExercise": "+ Ajouter un exercice",
-    "moreOptions": "Préciser la série (reps incomplètes, tempo lent, dictée)",
+    "moreOptions": "Préciser la série (RIR, note, reps incomplètes, tempo lent, dictée)",
     "coach": {
       "lastTime": "La dernière fois : {sets}",
       "noHistory": "Première fois sur cet exercice.",
@@ -352,7 +382,8 @@
         "lighter": "Remets un peu d'aide : {load} × {reps}",
         "first": "Commence avec {load} d'aide × {reps}",
         "comeback": "Reprise en douceur : aide {load} × {reps}"
-      }
+      },
+      "goal": "Objectif : toutes tes séries à {reps} reps avec {load}, et la prochaine fois tu passes à {next}."
     },
     "steps": {
       "do": "Fais ta série",
@@ -373,7 +404,8 @@
         "current": "en cours",
         "next": "à venir"
       },
-      "seeAll": "Tout voir"
+      "seeAll": "Tout voir",
+      "elapsed": "⏱ {minutes} min"
     },
     "nextMachine": {
       "title": "Machine suivante",
@@ -448,6 +480,36 @@
       "extra": "poids du corps + {load}",
       "label": "Lest",
       "short": "Aucun"
+    },
+    "warmupStep": "Échauffement {index}/{total} : {load} × {reps}",
+    "warmupSkip": "Passer l'échauffement",
+    "record": {
+      "toBeat": "Record à battre : {set} · 1RM estimé {oneRepMax}",
+      "beaten": "Nouveau record !",
+      "beatenDetail": "{name} : {set}"
+    },
+    "menu": {
+      "sets": "{count} série | {count} séries",
+      "minutes": "≈ {minutes} min",
+      "other": "Autres façons de s'entraîner",
+      "expressHelp": "Les exercices clés, en 20 à 30 minutes.",
+      "presetsHelp": "Push, Pull, Jambes… prêtes, à copier.",
+      "homeHelp": "Avec le matériel que tu as chez toi."
+    },
+    "tired": {
+      "toggle": "Pas en forme aujourd'hui",
+      "help": "Une série de moins par exercice et pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser."
+    },
+    "usualLoads": {
+      "intro": "Tu connais déjà ta charge sur cette machine ? Note-la : la séance partira de là au lieu d'une série test. | Tu connais déjà tes charges sur ces {count} machines ? Note-les : la séance partira de là au lieu de séries test.",
+      "add": "+ {name}"
+    },
+    "testSetFeel": "Série test : sois honnête. Si tu aurais pu faire 3 reps de plus, choisis Facile, la charge montera tout de suite.",
+    "testSetHint": {
+      "easy": "trop léger : la charge monte",
+      "ok": "bonne charge : on la garde",
+      "hard": "lourd : on la garde",
+      "fail": "trop lourd : la charge baisse"
     }
   },
   "availability": {
@@ -590,7 +652,8 @@
     "sessions": "{count} séance | {count} séances",
     "sets": "{count} série | {count} séries",
     "exercisesOf": "Exercices de {session}",
-    "lifted": "{load} soulevés"
+    "lifted": "{load} soulevés",
+    "record": "Record battu ce jour-là"
   },
   "comeback": {
     "load": "Charge ({unit})",
@@ -610,43 +673,109 @@
     "saved": "Charge enregistrée."
   },
   "stats": {
+    "brief": {
+      "title": "En bref",
+      "up": "{count} exercice progresse sur les 6 dernières semaines. | {count} exercices progressent sur les 6 dernières semaines.",
+      "stalled": "{names} : bloqué, regarde le conseil plus bas. | {names} : bloqués, regarde les conseils plus bas.",
+      "lagging": "Peu de séries pour {muscles} (moins de 10 par semaine).",
+      "pace": "{perWeek} séance par semaine en moyenne, pour {target} visées. | {perWeek} séances par semaine en moyenne, pour {target} visées."
+    },
+    "progress": {
+      "question": "Est-ce que je progresse ?",
+      "title": "Force par exercice",
+      "exercise": "Exercice affiché",
+      "oneRepMax": "1RM estimé aujourd'hui",
+      "change": "{change} en {weeks} semaine | {change} en {weeks} semaines",
+      "tooEarly": "Une seule séance : la tendance arrive à la prochaine.",
+      "legend": "1RM estimé ({unit})",
+      "legend2": "Charge de la meilleure série ({unit})",
+      "description": "{exercise} : {line} ({sessions} séances)",
+      "formula": "1RM estimé avec la formule d'Epley : charge × (1 + reps / 30). Les séries d'échauffement, en tempo lent ou incomplètes ne comptent pas.",
+      "verdict": {
+        "progressing": "Progresse",
+        "steady": "Stable",
+        "stalled": "Stagne",
+        "regressing": "Recule",
+        "tooEarly": "Nouveau"
+      },
+      "advice": {
+        "progressing": "Continue comme ça : même fourchette de reps, l'appli monte la charge quand c'est le moment.",
+        "steady": "Stable pour l'instant. Vise une rep de plus à la même charge à la prochaine séance.",
+        "stalled": "Stagnation depuis {sessions} séances → essaie une semaine de décharge (charges et séries réduites) ou change de fourchette de reps (par ex. 6-8 au lieu de 10-12).",
+        "regressing": "En baisse : vérifie sommeil, repas et récupération. Une semaine plus légère aide souvent à repartir.",
+        "tooEarly": "Fais encore {missing} séance sur cet exercice pour voir une tendance. | Fais encore {missing} séances sur cet exercice pour voir une tendance."
+      }
+    },
     "strength": {
-      "title": "Évolution de la force",
-      "exercise": "Exercice",
       "unit": "1RM estimé ({unit}), formule d'Epley",
-      "none": "Pas encore de série comparable (les séries d'échauffement et en tempo lent sont exclues).",
-      "description": "1RM estimé {exercise} : {change} % sur {sessions} séances",
       "stagnation": "Pas de progrès sur les 3 dernières séances : essaie une variante de l'exercice ou une semaine plus légère."
     },
     "volume": {
-      "title": "Séries par muscle cette semaine",
-      "help": "Zone conseillée : {min} à {max} séries par muscle et par semaine.",
-      "below": "{sets} séries, en dessous",
-      "inRange": "{sets} séries",
-      "above": "{sets} séries, au-dessus",
-      "pushDominant": "La poussée ({push} séries) domine nettement le tirage ({pull}) : ajoute du tirage, surtout si une épaule tire."
+      "question": "Mes muscles reçoivent-ils assez de travail ?",
+      "title": "Séries par muscle et par semaine",
+      "period": "Moyenne de la dernière semaine complète. | Moyenne des {count} dernières semaines complètes.",
+      "periodCurrent": "Semaine en cours (pas encore de semaine complète).",
+      "zone": "Zone conseillée : {min} à {max} séries par muscle et par semaine",
+      "below": "{sets} · peu",
+      "inRange": "{sets} · bien",
+      "above": "{sets} · beaucoup",
+      "lagging": "Sous 10 séries par semaine : {muscles}. Ajoute 2 à 4 séries pour eux sur la semaine, par exemple un exercice d'isolation en fin de séance. | Sous 10 séries par semaine : {muscles}, entre autres. Ajoute 2 à 4 séries pour eux sur la semaine, par exemple un exercice d'isolation en fin de séance.",
+      "allGood": "Tous les grands muscles sont à 10 séries par semaine ou plus.",
+      "source": "Source : Schoenfeld, Ogborn & Krieger 2017 (méta-analyse volume et hypertrophie)"
+    },
+    "balance": {
+      "question": "Mon entraînement est-il équilibré ?",
+      "title": "Pousser / tirer, haut / bas",
+      "push": "Pousser · {sets}",
+      "pull": "Tirer · {sets}",
+      "upper": "Haut du corps · {sets}",
+      "legs": "Jambes · {sets}",
+      "pushPullLabel": "{push} séries de poussée pour {pull} de tirage",
+      "upperLowerLabel": "{upper} séries pour le haut du corps, {legs} pour les jambes",
+      "pushDominant": "Tu pousses nettement plus que tu ne tires : ajoute du tirage (rowing, tirage vertical), les épaules te remercieront.",
+      "pullDominant": "Tu tires nettement plus que tu ne pousses : ajoute un développé si tu veux équilibrer.",
+      "upperDominant": "Les jambes font moins d'un quart de tes séries : une séance de bas du corps de plus par semaine rééquilibrerait.",
+      "lowerDominant": "Les jambes font plus des trois quarts de tes séries : pense au haut du corps.",
+      "ok": "Équilibré : poussée et tirage proches, jambes bien présentes.",
+      "period": "Séries de travail des 4 dernières semaines, chaque série comptée une fois selon le mouvement."
     },
     "regularity": {
+      "question": "Suis-je régulier ?",
       "title": "Régularité",
+      "perWeek": "{value} séances par semaine en moyenne",
+      "perWeekShort": "séances / semaine",
       "pace": "{count} semaine d'affilée au rythme | {count} semaines d'affilée au rythme",
-      "calendar": "{count} jours d'entraînement sur les 8 dernières semaines",
-      "best": "Ton record : {best}"
+      "paceShort": "semaine au rythme | semaines au rythme",
+      "since": "Dernière séance il y a {count} jour | Dernière séance il y a {count} jours",
+      "sinceToday": "Dernière séance aujourd'hui",
+      "sinceShort": "jour depuis la dernière | jours depuis la dernière",
+      "calendar": "{count} jours d'entraînement sur les 12 dernières semaines",
+      "target": "Rythme visé : {target} séances par semaine. Ton record : {best} semaines d'affilée."
+    },
+    "records": {
+      "question": "Qu'est-ce que j'ai battu récemment ?",
+      "title": "Records des 30 derniers jours",
+      "oneRepMax": "1RM estimé {load}",
+      "none": "Pas de nouveau record ce mois-ci. Ça viendra : la progression se fait par paliers.",
+      "all": "Voir mon record sur {count} exercice | Voir mes records sur {count} exercices"
+    },
+    "body": {
+      "question": "Mon poids bouge-t-il ?",
+      "title": "Poids de corps",
+      "latest": "dernière pesée",
+      "perWeek": "{change} / semaine",
+      "legend": "Poids ({unit}), 3 derniers mois",
+      "description": "Courbe du poids de corps, {count} pesées",
+      "help": "Tendance sur les 4 dernières semaines. Pèse-toi le matin, à jeun, pour comparer ce qui est comparable.",
+      "needMore": "Encore une pesée à une semaine d'écart pour voir la tendance.",
+      "none": "Pas encore de pesée : ajoute ton poids dans l'onglet Corps."
     },
     "workload": {
+      "question": "Est-ce que j'en fais plus qu'avant ?",
       "title": "Charge de travail",
       "unit": "{unit} soulevés par semaine (charge × reps)",
       "description": "Charge de travail sur {weeks} semaines",
       "single": "{load} cette semaine"
-    },
-    "records": {
-      "title": "Records",
-      "oneRepMax": "1RM estimé {load}"
-    },
-    "kpi": {
-      "sessions": "séance sur 30 jours | séances sur 30 jours",
-      "pace": "semaine au rythme | semaines au rythme",
-      "records": "record | records",
-      "workload": "soulevés par semaine (moyenne)"
     }
   },
   "body": {
@@ -673,6 +802,25 @@
     "back": "Dos"
   },
   "settings": {
+    "theme": {
+      "label": "Thème",
+      "options": {
+        "dark": "Sombre",
+        "light": "Clair",
+        "system": "Comme le téléphone"
+      }
+    },
+    "plates": {
+      "title": "Barre et disques",
+      "bar": "Poids de la barre",
+      "plate": "Disques de {load}",
+      "pairs": "{count} paire | {count} paires",
+      "fewer": "Une paire de {load} en moins",
+      "more": "Une paire de {load} en plus",
+      "collars": "Compter les colliers",
+      "collarsHelp": "Colliers à ressort, {load} la paire.",
+      "help": "Le calculateur de disques ne propose que les charges faisables avec ces disques (nombre de paires disponibles à la salle)."
+    },
     "title": "Réglages",
     "content": "Infos",
     "workout": "Séances",
@@ -715,7 +863,11 @@
       "help": "Sert aux tractions et dips assistés : charge réelle = poids du corps − aide. Chaque pesée s'ajoute aussi dans Historique → Corps."
     },
     "sessionNotification": "Notification pendant la séance",
-    "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android)."
+    "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android).",
+    "keepAwake": "Écran allumé pendant la séance",
+    "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances.",
+    "restSound": "Bip à la fin du repos",
+    "restSoundHelp": "Trois bips et une vibration quand le repos est fini. Le repos s'allonge après une série « Limite » (+30 s) ou « Échec » (+1 min), et raccourcit après « Facile » (−15 s)."
   },
   "tips": {
     "title": "Bien débuter",
@@ -1112,7 +1264,7 @@
   "customSession": {
     "mine": "Mes séances",
     "intro": "Compose tes propres séances avec les exercices de ton choix.",
-    "create": "+ Créer une séance",
+    "create": "Créer une séance",
     "newTitle": "Nouvelle séance",
     "editTitle": "Modifier la séance",
     "name": "Nom de la séance",
@@ -1127,13 +1279,24 @@
     "delete": "Supprimer cette séance",
     "deleteConfirm": "La séance sera supprimée. Les séances déjà faites restent dans l'historique.",
     "deleteYes": "Oui, supprimer",
-    "edit": "Modifier",
     "editNamed": "Modifier {name}",
     "start": "Commencer",
     "startNamed": "Commencer {name}",
     "deleted": "Séance perso",
     "orderIssue": "{isolation} est avant {compound} : fatiguer d'abord ce muscle ({muscle}) limiterait le gros exercice.",
-    "fixOrder": "Remettre dans l'ordre conseillé"
+    "fixOrder": "Remettre dans l'ordre conseillé",
+    "lineOf": "Séries, reps et repos de {name}",
+    "adjust": {
+      "sets": "Séries",
+      "reps": "Reps",
+      "rest": "Repos",
+      "setsLess": "Une série de moins pour {name}",
+      "setsMore": "Une série de plus pour {name}",
+      "repsLess": "Moins de reps pour {name}",
+      "repsMore": "Plus de reps pour {name}",
+      "restLess": "Repos plus court pour {name}",
+      "restMore": "Repos plus long pour {name}"
+    }
   },
   "emptyStates": {
     "history": "Aucune séance pour l'instant",
@@ -1229,12 +1392,13 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s}"
     },
-    "shortcut": "Ou une séance type : Push, Pull, Jambes…",
     "beginner": {
       "title": "Tu débutes ? Commence ici",
       "text": "5 machines guidées pour tout le corps, 3 séries de 10, dans le bon ordre. L'appli propose une charge légère pour démarrer : dis « Facile » si c'était trop léger, elle montera.",
       "details": "Voir le détail et les autres séances types"
-    }
+    },
+    "copy": "Copier et modifier : {name}",
+    "copyName": "{name} (ma version)"
   },
   "sessionNotification": {
     "title": "Séance en cours · {name}",

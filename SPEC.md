@@ -20,6 +20,7 @@ L'appli tient en cinq écrans principaux : Aujourd'hui, Séance en cours, Catalo
 | Favoris | Met une étoile sur les machines de sa salle | Ne propose que les favoris dans les séances |
 | Saisie d'une série | Tape charge, reps, difficulté | Enregistre, calcule le 1RM estimé |
 | Difficulté de la série | Choisit Facile / Correct / Limite / Échec | Sert au calcul de la charge suivante |
+| Précisions facultatives | Note les reps en réserve (RIR 0 à 4+) et une note sur la série | Les garde dans l'historique et l'export CSV, sans changer la charge proposée |
 | Proposition de charge | Accepte ou modifie | Propose la charge de la série ou de la séance suivante |
 | **Mode « machine prise »** | Tape « occupée » sur un exercice | Propose une alternative, garde l'exercice en attente (détail ci-dessous) |
 | Paliers de la machine | Renseigne les plaques dispo (ex. 52 → 59 kg), les poids d'appoint (1,25 / 2,5 kg) et la précision de saisie | Arrondit les propositions au palier réel, plaque + appoint compris ; une charge tapée est arrondie à 0,5 kg au plus fin |
@@ -388,7 +389,8 @@ L'exemple reprend ton ancienne référence au développé couché : 70 kg.
 
 - Poids de la barre : 20 kg par défaut, 15 ou 10 kg possibles, ou valeur libre
 - Disques disponibles et nombre de paires (ex. 25, 20, 15, 10, 5, 2,5, 1,25 kg)
-- Colliers de serrage comptés ou non
+- Colliers de serrage comptés ou non (colliers à ressort, 2,5 kg la paire)
+- Réglés une fois dans Réglages → Barre et disques ; le calculateur s'en sert à chaque séance
 
 **Affichage**
 

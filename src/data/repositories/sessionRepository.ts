@@ -25,6 +25,10 @@ export interface SessionPlan {
   readonly supersets?: readonly (readonly [string, string])[];
   /** Short 20–30 min version of the session of the day. */
   readonly express?: boolean;
+  /** "Not in shape today": one set less, no load increase. */
+  readonly tired?: boolean;
+  /** When the session started (ms since 1970), for its length in the summary. */
+  readonly startedAt?: number;
 }
 
 export interface StoredSet extends SetLog {
@@ -57,7 +61,13 @@ export async function startSession(
   const id = newId();
   await db.run(
     `INSERT INTO session (id, date, template, status, gym_id, plan) VALUES (?, ?, ?, 'inProgress', ?, ?)`,
-    [id, input.date, input.templateId, input.gymId, JSON.stringify(input.plan)],
+    [
+      id,
+      input.date,
+      input.templateId,
+      input.gymId,
+      JSON.stringify({ startedAt: Date.now(), ...input.plan }),
+    ],
   );
   return id;
 }
@@ -70,9 +80,9 @@ export async function addSet(db: SqlDatabase, sessionId: string, set: SetLog): P
   const id = newId();
   await db.run(
     `INSERT INTO set_log (id, session_id, exercise_id, position, load_kg, reps, difficulty,
-       warmup, slow_tempo, complete_reps)
+       warmup, slow_tempo, complete_reps, rir, note)
      VALUES (?, ?, ?, (SELECT COALESCE(MAX(position), 0) + 1 FROM set_log WHERE session_id = ?),
-       ?, ?, ?, ?, ?, ?)`,
+       ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       id,
       sessionId,
@@ -84,6 +94,8 @@ export async function addSet(db: SqlDatabase, sessionId: string, set: SetLog): P
       set.warmup ? 1 : 0,
       set.slowTempo ? 1 : 0,
       set.completeReps === false ? 0 : 1,
+      set.rir ?? null,
+      set.note?.trim() || null,
     ],
   );
   return { ...set, id };
@@ -97,11 +109,14 @@ export async function deleteSet(db: SqlDatabase, setId: string): Promise<void> {
   await db.run('DELETE FROM set_log WHERE id = ?', [setId]);
 }
 
-/** Correction of a set typed wrong, from the history. */
+/** Correction of a set typed wrong, from the history. RIR and note change only when given. */
 export async function updateSet(
   db: SqlDatabase,
   setId: string,
-  values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'>,
+  values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'> & {
+    readonly rir?: number | undefined;
+    readonly note?: string | undefined;
+  },
 ): Promise<void> {
   await db.run('UPDATE set_log SET load_kg = ?, reps = ?, difficulty = ? WHERE id = ?', [
     values.loadKg,
@@ -109,6 +124,10 @@ export async function updateSet(
     values.difficulty,
     setId,
   ]);
+  if ('rir' in values)
+    await db.run('UPDATE set_log SET rir = ? WHERE id = ?', [values.rir ?? null, setId]);
+  if ('note' in values)
+    await db.run('UPDATE set_log SET note = ? WHERE id = ?', [values.note?.trim() || null, setId]);
 }
 
 export async function setSessionDate(db: SqlDatabase, sessionId: string, date: IsoDate) {
@@ -154,6 +173,8 @@ interface SetRow {
   warmup: number;
   slow_tempo: number;
   complete_reps: number;
+  rir: number | null;
+  note: string | null;
 }
 
 function toSet(row: SetRow): StoredSet {
@@ -166,6 +187,8 @@ function toSet(row: SetRow): StoredSet {
     ...(row.warmup ? { warmup: true } : {}),
     ...(row.slow_tempo ? { slowTempo: true } : {}),
     ...(row.complete_reps ? {} : { completeReps: false }),
+    ...(row.rir === null || row.rir === undefined ? {} : { rir: row.rir }),
+    ...(row.note ? { note: row.note } : {}),
   };
 }
 

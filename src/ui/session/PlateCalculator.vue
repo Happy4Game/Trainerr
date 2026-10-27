@@ -3,6 +3,7 @@ import { IonButton } from '@ionic/vue';
 import { Minus, Plus } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useSettings } from '@/ui/useSettings';
 import { useUnits } from '@/ui/useUnits';
 import { adjacentLoads, DEFAULT_PLATE_CONFIG, platesFor, type BarLoading } from '@/domain/plates';
 
@@ -11,18 +12,19 @@ const emit = defineEmits<{ change: [loadKg: number] }>();
 
 const { t, n } = useI18n();
 const { load } = useUnits();
-const config = DEFAULT_PLATE_CONFIG;
+const { settings } = useSettings();
+const config = computed(() => settings.value?.barbell ?? DEFAULT_PLATE_CONFIG);
 const target = ref(props.loadKg);
 watch(
   () => props.loadKg,
   (value) => (target.value = value),
 );
 
-const result = computed(() => platesFor(target.value, config));
+const result = computed(() => platesFor(target.value, config.value));
 const shown = computed<BarLoading | undefined>(() =>
   result.value.exact ? result.value.loading : (result.value.below ?? result.value.above),
 );
-const neighbours = computed(() => adjacentLoads(target.value, config));
+const neighbours = computed(() => adjacentLoads(target.value, config.value));
 
 // Competition colours (to be checked before being frozen); the weight is always written too.
 const COLORS: Record<number, string> = {

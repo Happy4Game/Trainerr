@@ -2,6 +2,8 @@ import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
 import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
 import type { NextChoice, SportId, WeeklySlot } from '@/domain/planning';
+import type { PlateConfig } from '@/domain/plates';
+import type { SessionLine } from '@/domain/presets';
 import type { Equipment } from '@/domain/types';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
@@ -13,7 +15,12 @@ export interface CustomSession {
   readonly id: string;
   readonly name: string;
   readonly exerciseIds: readonly string[];
+  /** Its own sets, reps and rests (a copied ready-made session); the defaults otherwise. */
+  readonly lines?: Readonly<Record<string, SessionLine>>;
 }
+
+/** Dark by default; light, or the phone setting, on request. */
+export type ThemePreference = 'dark' | 'light' | 'system';
 
 /** Template id of a custom session in the history: "custom:<id>". */
 export const CUSTOM_PREFIX = 'custom:';
@@ -49,6 +56,12 @@ export interface Settings {
   readonly shareRecords: boolean;
   /** Android: look for a new version on GitHub at launch (once a day). On by default. */
   readonly autoUpdateCheck?: boolean;
+  /** Beeps at the end of the rest (app open). On by default. */
+  readonly restSound?: boolean;
+  /** Bar and plates of the gym, for the plate calculator (20 kg bar and usual plates by default). */
+  readonly barbell?: PlateConfig;
+  /** Screen kept on during a session. On by default. */
+  readonly keepAwake?: boolean;
   /** Android notification during a session (rest countdown, end-of-rest alert). On by default. */
   readonly sessionNotification?: boolean;
   /** The user agreed to send the summary of their week to the AI coach. */
@@ -56,6 +69,8 @@ export interface Settings {
   /** Sessions built by the user: a name and exercises in order. */
   readonly customSessions?: readonly CustomSession[];
   readonly language: LanguagePreference;
+  /** Dark by default. */
+  readonly theme?: ThemePreference;
   readonly weightUnit: WeightUnit;
   /** Set once the first-launch questionnaire is done or skipped. */
   readonly onboarded: boolean;

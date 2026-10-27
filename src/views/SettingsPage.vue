@@ -19,11 +19,13 @@ import {
 import { useI18n } from 'vue-i18n';
 import DataSection from '@/ui/DataSection.vue';
 import GymsSection from '@/ui/GymsSection.vue';
+import PlatesSection from '@/ui/PlatesSection.vue';
 import ProfileSection from '@/ui/ProfileSection.vue';
 import UpdatesSection from '@/ui/UpdatesSection.vue';
 import type { NotificationKind } from '@/domain/notifications';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
+import type { ThemePreference } from '@/data/repositories/settingsRepository';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { useSettings } from '@/ui/useSettings';
@@ -35,6 +37,7 @@ const session = useSession();
 
 const LANGUAGES: LanguagePreference[] = ['system', 'fr-FR', 'en-US'];
 const UNITS: WeightUnit[] = ['kg', 'lb'];
+const THEMES: ThemePreference[] = ['dark', 'light', 'system'];
 
 const KINDS: NotificationKind[] = [
   'sessionReminder',
@@ -86,50 +89,6 @@ async function redoQuestionnaire(): Promise<void> {
     </ion-header>
     <ion-content>
       <ion-list v-if="settings">
-        <ion-list-header>{{ t('settings.content') }}</ion-list-header>
-        <ion-item router-link="/tabs/settings/tips" detail>
-          <ion-label>{{ t('tips.title') }}</ion-label>
-        </ion-item>
-        <ion-item router-link="/tabs/settings/friends" detail>
-          <ion-label>{{ t('friends.title') }}</ion-label>
-        </ion-item>
-        <ion-item router-link="/tabs/settings/about" detail>
-          <ion-label>{{ t('about.title') }}</ion-label>
-        </ion-item>
-        <ion-item router-link="/tabs/settings/credits" detail>
-          <ion-label>{{ t('credits.title') }}</ion-label>
-        </ion-item>
-
-        <ion-list-header>{{ t('settings.language.title') }}</ion-list-header>
-        <ion-item>
-          <ion-select
-            :label="t('settings.language.label')"
-            :value="settings.language"
-            interface="action-sheet"
-            @ion-change="updateSettings({ language: $event.detail.value })"
-          >
-            <ion-select-option v-for="l in LANGUAGES" :key="l" :value="l">
-              {{ t(`settings.language.options.${l}`) }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            :label="t('settings.unit.label')"
-            :value="settings.weightUnit"
-            interface="action-sheet"
-            @ion-change="updateSettings({ weightUnit: $event.detail.value })"
-          >
-            <ion-select-option v-for="u in UNITS" :key="u" :value="u">
-              {{ t(`settings.unit.options.${u}`) }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ProfileSection />
-
-        <GymsSection />
-
         <ion-list-header>{{ t('settings.workout') }}</ion-list-header>
         <ion-item>
           <ion-toggle
@@ -150,9 +109,37 @@ async function redoQuestionnaire(): Promise<void> {
             </ion-label>
           </ion-toggle>
         </ion-item>
+        <ion-item>
+          <ion-toggle
+            :checked="settings.restSound !== false"
+            @ion-change="updateSettings({ restSound: $event.detail.checked })"
+          >
+            <ion-label class="ion-text-wrap">
+              {{ t('settings.restSound') }}
+              <p>{{ t('settings.restSoundHelp') }}</p>
+            </ion-label>
+          </ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-toggle
+            :checked="settings.keepAwake !== false"
+            @ion-change="updateSettings({ keepAwake: $event.detail.checked })"
+          >
+            <ion-label class="ion-text-wrap">
+              {{ t('settings.keepAwake') }}
+              <p>{{ t('settings.keepAwakeHelp') }}</p>
+            </ion-label>
+          </ion-toggle>
+        </ion-item>
         <ion-item button @click="redoQuestionnaire">
           <ion-label>{{ t('settings.redo') }}</ion-label>
         </ion-item>
+
+        <ProfileSection />
+
+        <GymsSection />
+
+        <PlatesSection />
 
         <ion-list-header>{{ t('settings.notifications') }}</ion-list-header>
         <ion-item>
@@ -184,8 +171,62 @@ async function redoQuestionnaire(): Promise<void> {
             </p>
           </ion-label>
         </ion-item>
+
+        <ion-list-header>{{ t('settings.language.title') }}</ion-list-header>
+        <ion-item>
+          <ion-select
+            :label="t('settings.language.label')"
+            :value="settings.language"
+            interface="action-sheet"
+            @ion-change="updateSettings({ language: $event.detail.value })"
+          >
+            <ion-select-option v-for="l in LANGUAGES" :key="l" :value="l">
+              {{ t(`settings.language.options.${l}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select
+            :label="t('settings.unit.label')"
+            :value="settings.weightUnit"
+            interface="action-sheet"
+            @ion-change="updateSettings({ weightUnit: $event.detail.value })"
+          >
+            <ion-select-option v-for="u in UNITS" :key="u" :value="u">
+              {{ t(`settings.unit.options.${u}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-select
+            :label="t('settings.theme.label')"
+            :value="settings.theme ?? 'dark'"
+            interface="action-sheet"
+            @ion-change="updateSettings({ theme: $event.detail.value })"
+          >
+            <ion-select-option v-for="th in THEMES" :key="th" :value="th">
+              {{ t(`settings.theme.options.${th}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
         <UpdatesSection />
         <DataSection />
+
+        <ion-list-header>{{ t('settings.content') }}</ion-list-header>
+        <ion-item router-link="/tabs/settings/tips" detail>
+          <ion-label>{{ t('tips.title') }}</ion-label>
+        </ion-item>
+        <ion-item router-link="/tabs/settings/friends" detail>
+          <ion-label>{{ t('friends.title') }}</ion-label>
+        </ion-item>
+        <ion-item router-link="/tabs/settings/about" detail>
+          <ion-label>{{ t('about.title') }}</ion-label>
+        </ion-item>
+        <ion-item router-link="/tabs/settings/credits" detail>
+          <ion-label>{{ t('credits.title') }}</ion-label>
+        </ion-item>
       </ion-list>
     </ion-content>
   </ion-page>

@@ -11,7 +11,7 @@ import {
   IonToolbar,
   useIonRouter,
 } from '@ionic/vue';
-import { ArrowDown, ArrowUp, Plus, X } from 'lucide-vue-next';
+import { ArrowDown, ArrowUp, Minus, Plus, X } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
@@ -19,6 +19,7 @@ import type { CustomSession } from '@/data/repositories/settingsRepository';
 import { newId } from '@/data/repositories/sessionRepository';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import { orderIssues, recommendedOrder } from '@/domain/exerciseOrder';
+import { adjustLine, DEFAULT_LINE, type SessionLine } from '@/domain/presets';
 import type { CatalogExercise } from '@/data/catalog/catalog';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings, useSettings } from '@/ui/useSettings';
@@ -26,7 +27,7 @@ import { updateSettings, useSettings } from '@/ui/useSettings';
 /** Creates ("new") or edits a session made by the user. */
 const props = defineProps<{ id: string }>();
 
-const { t, locale } = useI18n();
+const { t, n, locale } = useI18n();
 const { settings } = useSettings();
 const session = useSession();
 const router = useIonRouter();
@@ -36,6 +37,8 @@ const existing = computed(() =>
 );
 const name = ref('');
 const exerciseIds = ref<string[]>([]);
+/** Own sets, reps and rests: a copied ready-made session has them, a new session does not. */
+const lines = ref<Record<string, SessionLine> | undefined>();
 const picking = ref(false);
 const confirmingDelete = ref(false);
 watch(
@@ -44,6 +47,7 @@ watch(
     if (!custom) return;
     name.value = custom.name;
     exerciseIds.value = [...custom.exerciseIds];
+    lines.value = custom.lines ? { ...custom.lines } : undefined;
   },
   { immediate: true },
 );
@@ -78,6 +82,31 @@ function move(index: number, delta: number): void {
 function add(id: string): void {
   picking.value = false;
   if (!exerciseIds.value.includes(id)) exerciseIds.value = [...exerciseIds.value, id];
+  if (lines.value && !lines.value[id]) lines.value = { ...lines.value, [id]: DEFAULT_LINE };
+}
+
+function adjust(id: string, change: 'sets' | 'reps' | 'rest', delta: 1 | -1): void {
+  const line = lines.value?.[id];
+  if (line) lines.value = { ...lines.value, [id]: adjustLine(line, change, delta) };
+}
+function repsText(line: SessionLine): string {
+  const range =
+    line.reps.min === line.reps.max
+      ? n(line.reps.min)
+      : t('presets.repsRange', { min: n(line.reps.min), max: n(line.reps.max) });
+  return line.timed
+    ? t('presets.seconds', { reps: range })
+    : line.perSide
+      ? t('presets.perSide', { reps: range })
+      : range;
+}
+function restText(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  if (m === 0) return t('presets.rest.seconds', { s: sec });
+  return sec === 0
+    ? t('presets.rest.minutes', { m })
+    : t('presets.rest.minutesSeconds', { m, s: sec });
 }
 
 async function save(): Promise<void> {
@@ -87,6 +116,16 @@ async function save(): Promise<void> {
     id: existing.value?.id ?? newId(),
     name: name.value.trim(),
     exerciseIds: exerciseIds.value,
+    ...(lines.value
+      ? {
+          lines: Object.fromEntries(
+            exerciseIds.value.flatMap((id) => {
+              const line = lines.value?.[id];
+              return line ? [[id, line]] : [];
+            }),
+          ),
+        }
+      : {}),
   };
   await updateSettings({
     customSessions: existing.value
@@ -134,7 +173,18 @@ async function remove(): Promise<void> {
           <span class="thumb" aria-hidden="true">
             <img v-if="thumbnailOf(exerciseId)" :src="thumbnailOf(exerciseId)" alt="" />
           </span>
-          <span class="name">{{ nameOf(exerciseId) }}</span>
+          <span class="name">
+            {{ nameOf(exerciseId) }}
+            <span v-if="lines?.[exerciseId]" class="line-summary">
+              {{
+                t('presets.line', {
+                  sets: lines[exerciseId]!.sets,
+                  reps: repsText(lines[exerciseId]!),
+                  rest: restText(lines[exerciseId]!.restSeconds),
+                })
+              }}
+            </span>
+          </span>
           <span class="actions">
             <ion-button fill="clear" size="small" :disabled="index === 0" @click="move(index, -1)">
               <ArrowUp :size="18" aria-hidden="true" />
@@ -165,6 +215,32 @@ async function remove(): Promise<void> {
               }}</span>
             </ion-button>
           </span>
+          <div
+            v-if="lines?.[exerciseId]"
+            class="line-editor"
+            role="group"
+            :aria-label="t('customSession.lineOf', { name: nameOf(exerciseId) })"
+          >
+            <div v-for="change in ['sets', 'reps', 'rest'] as const" :key="change" class="adjust">
+              <span class="adjust-label">{{ t(`customSession.adjust.${change}`) }}</span>
+              <ion-button
+                fill="outline"
+                size="small"
+                :aria-label="t(`customSession.adjust.${change}Less`, { name: nameOf(exerciseId) })"
+                @click="adjust(exerciseId, change, -1)"
+              >
+                <Minus :size="16" aria-hidden="true" />
+              </ion-button>
+              <ion-button
+                fill="outline"
+                size="small"
+                :aria-label="t(`customSession.adjust.${change}More`, { name: nameOf(exerciseId) })"
+                @click="adjust(exerciseId, change, 1)"
+              >
+                <Plus :size="16" aria-hidden="true" />
+              </ion-button>
+            </div>
+          </div>
         </li>
       </ol>
       <div v-if="issues.length > 0" class="order-warning" role="note">
@@ -249,6 +325,7 @@ async function remove(): Promise<void> {
 }
 .row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   min-height: 64px;
@@ -283,6 +360,37 @@ async function remove(): Promise<void> {
 .actions {
   display: flex;
   flex: none;
+}
+.line-summary {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--tr-text-muted);
+}
+.line-editor {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding-inline-start: calc(1.4em + 10px);
+}
+.adjust {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.adjust-label {
+  margin-inline-end: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tr-text-muted);
+}
+.adjust ion-button {
+  margin: 0;
+  min-width: 44px;
+  min-height: 44px;
 }
 .actions ion-button {
   margin: 0;

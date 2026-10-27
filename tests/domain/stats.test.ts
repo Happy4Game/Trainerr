@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  beatsRecord,
   missingSetsThisWeek,
   personalRecords,
   sessionWorkload,
@@ -140,5 +141,25 @@ describe('month summary', () => {
       workloadKg: 0,
       trainingDays: 0,
     });
+  });
+});
+
+describe('record beaten live', () => {
+  const record = {
+    bestLoad: { loadKg: 100, reps: 8, date: '2026-10-20' },
+    bestOneRepMax: { value: 126.7, date: '2026-10-20' },
+  };
+
+  it('counts a heavier load, or the same load for more reps', () => {
+    expect(beatsRecord({ loadKg: 102.5, reps: 5 }, record)).toBe(true);
+    expect(beatsRecord({ loadKg: 100, reps: 9 }, record)).toBe(true);
+    expect(beatsRecord({ loadKg: 100, reps: 8 }, record)).toBe(false);
+    expect(beatsRecord({ loadKg: 95, reps: 12 }, record)).toBe(false);
+  });
+
+  it('never counts warm-up or incomplete sets, nor a first time', () => {
+    expect(beatsRecord({ loadKg: 120, reps: 5, warmup: true }, record)).toBe(false);
+    expect(beatsRecord({ loadKg: 120, reps: 5, completeReps: false }, record)).toBe(false);
+    expect(beatsRecord({ loadKg: 120, reps: 5 }, undefined)).toBe(false);
   });
 });

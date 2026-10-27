@@ -41,7 +41,9 @@ test('the language can be switched to English without restarting', async ({ page
   await page.getByRole('radio', { name: 'English' }).click();
   await expect(page.locator('ion-title:visible')).toHaveText('Settings');
   await page.getByRole('tab', { name: 'Catalog' }).click();
-  await expect(page.getByRole('status')).toHaveText(/\d+ exercises/);
+  await expect(page.getByRole('status').filter({ hasText: /exercises/ })).toHaveText(
+    /\d+ exercises/,
+  );
   await page.reload();
   await expect(page.getByRole('tab', { name: 'Catalog' })).toBeVisible({ timeout: 20_000 });
 });
@@ -49,7 +51,10 @@ test('the language can be switched to English without restarting', async ({ page
 test('loads can be shown in pounds', async ({ page }) => {
   await skipOnboarding(page);
   await page.goto('/tabs/settings');
-  await page.locator('ion-select').nth(1).click();
+  await page
+    .locator('ion-select')
+    .filter({ hasText: /Unité de poids/ })
+    .click();
   await page.getByRole('radio', { name: 'Livres (lb)' }).click();
   await page.getByRole('tab', { name: 'Catalogue' }).click();
   await page.getByRole('searchbox').fill('pec deck');

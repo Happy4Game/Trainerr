@@ -12,15 +12,28 @@
     "restDay": "No workout planned today: rest, or an extra workout if you feel like it.",
     "go": "Start",
     "resume": "Resume the workout",
+    "otherChoice": "Change workout or mode",
     "week": "This week",
     "weekCount": "{done} sessions done out of {target} this week",
     "streak": "{count} week on pace | {count} weeks in a row on pace",
     "seePlanning": "See the planning",
-    "next": "Next session",
     "inProgressShort": "Session in progress",
     "noPlan": "Next session",
     "weekSessions": "session | sessions",
-    "exercises": "{count} exercise | {count} exercises"
+    "exercises": "{count} exercise | {count} exercises",
+    "line": "{sets} × {load}",
+    "doneOf": "{done} of {total} exercise done | {done} of {total} exercises done",
+    "goingUp": "You go up in load on {count} exercise today. | You go up in load on {count} exercises today.",
+    "exerciseDone": "Exercise done",
+    "change": {
+      "up": "+{delta}",
+      "first": "First time"
+    },
+    "tiredOff": "Not in shape? Make it lighter",
+    "tiredOn": "✓ Lighter session: one set less, same loads",
+    "doneToday": "✓ Today's session done, well done! Next one:",
+    "goExtra": "Do an extra session",
+    "heroLabel": "Today's session"
   },
   "gym": {
     "defaultName": "My gym"
@@ -66,6 +79,7 @@
   },
   "catalog": {
     "search": "Search a machine or a muscle",
+    "searchShort": "Machine, muscle…",
     "filters": {
       "all": "All",
       "favorites": "My machines",
@@ -248,6 +262,16 @@
     "moreReps": "One rep more",
     "halfRep": "Add a half rep",
     "incomplete": "Incomplete reps",
+    "rir": {
+      "label": "Reps in reserve (optional)",
+      "value": "{count} rep in reserve | {count} reps in reserve",
+      "plenty": "4 or more reps in reserve",
+      "help": "How many more clean reps you could have done. 4+ = plenty."
+    },
+    "setNote": {
+      "label": "Note on this set",
+      "placeholder": "Grip slipping, seat 4…"
+    },
     "slowTempo": "Slow tempo",
     "howWasIt": "How was it?",
     "busy": "Machine taken",
@@ -294,7 +318,9 @@
       "heavier": "Heavier achievable load",
       "closest": "Exact load impossible: {below} or {above}",
       "perSide": "Per side: {plates} kg",
-      "bar": "{kg} kg bar"
+      "bar": "{kg} kg bar",
+      "perSideLine": "Each side: {plates} {unit}",
+      "barOnly": "Empty bar"
     },
     "summary": {
       "title": "Workout finished",
@@ -308,7 +334,11 @@
       "workloadLabel": "lifted in total",
       "recordsLabel": "record | records",
       "newMachines": "You used {names}, not in your machines yet. | You used {names}, not in your machines yet.",
-      "adoptMachines": "Add this machine to my machines | Add these {count} machines to my machines"
+      "adoptMachines": "Add this machine to my machines | Add these {count} machines to my machines",
+      "volumeGain": "+{percent}% volume compared with the last time you did this session.",
+      "minutes": "Session done in {minutes} min.",
+      "share": "Share my session",
+      "shareGain": "+{percent}% volume since last time"
     },
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",
@@ -331,7 +361,7 @@
       "previous": "+1 set on: {name}"
     },
     "addExercise": "+ Add an exercise",
-    "moreOptions": "Add details (incomplete reps, slow tempo, voice)",
+    "moreOptions": "Add details (RIR, note, incomplete reps, slow tempo, voice)",
     "coach": {
       "lastTime": "Last time: {sets}",
       "noHistory": "First time on this exercise.",
@@ -352,7 +382,8 @@
         "lighter": "Add a bit of help: {load} × {reps}",
         "first": "Start with {load} of help × {reps}",
         "comeback": "Easy restart: help {load} × {reps}"
-      }
+      },
+      "goal": "Goal: every set at {reps} reps with {load}, and next time you move to {next}."
     },
     "steps": {
       "do": "Do your set",
@@ -373,7 +404,8 @@
         "current": "in progress",
         "next": "to come"
       },
-      "seeAll": "See all"
+      "seeAll": "See all",
+      "elapsed": "⏱ {minutes} min"
     },
     "nextMachine": {
       "title": "Next machine",
@@ -448,6 +480,36 @@
       "extra": "body weight + {load}",
       "label": "Extra load",
       "short": "None"
+    },
+    "warmupStep": "Warm-up {index}/{total}: {load} × {reps}",
+    "warmupSkip": "Skip the warm-up",
+    "record": {
+      "toBeat": "Record to beat: {set} · estimated 1RM {oneRepMax}",
+      "beaten": "New record!",
+      "beatenDetail": "{name}: {set}"
+    },
+    "menu": {
+      "sets": "{count} set | {count} sets",
+      "minutes": "≈ {minutes} min",
+      "other": "Other ways to train",
+      "expressHelp": "The key exercises, in 20 to 30 minutes.",
+      "presetsHelp": "Push, Pull, Legs… ready, and copyable.",
+      "homeHelp": "With the equipment you have at home."
+    },
+    "tired": {
+      "toggle": "Not in shape today",
+      "help": "One set less per exercise and no load increase: you still train, without wearing yourself out."
+    },
+    "usualLoads": {
+      "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
+      "add": "+ {name}"
+    },
+    "testSetFeel": "Test set: be honest. If you could have done 3 more reps, pick Easy and the load goes up right away.",
+    "testSetHint": {
+      "easy": "too light: the load goes up",
+      "ok": "right load: we keep it",
+      "hard": "heavy: we keep it",
+      "fail": "too heavy: the load goes down"
     }
   },
   "availability": {
@@ -590,7 +652,8 @@
     "sessions": "{count} session | {count} sessions",
     "sets": "{count} set | {count} sets",
     "exercisesOf": "Exercises of {session}",
-    "lifted": "{load} lifted"
+    "lifted": "{load} lifted",
+    "record": "Record beaten that day"
   },
   "comeback": {
     "load": "Load ({unit})",
@@ -610,43 +673,109 @@
     "saved": "Load saved."
   },
   "stats": {
+    "brief": {
+      "title": "At a glance",
+      "up": "{count} exercise is progressing over the last 6 weeks. | {count} exercises are progressing over the last 6 weeks.",
+      "stalled": "{names}: stuck, see the advice below. | {names}: stuck, see the advice below.",
+      "lagging": "Few sets for {muscles} (under 10 a week).",
+      "pace": "{perWeek} session a week on average, {target} planned. | {perWeek} sessions a week on average, {target} planned."
+    },
+    "progress": {
+      "question": "Am I progressing?",
+      "title": "Strength per exercise",
+      "exercise": "Exercise shown",
+      "oneRepMax": "estimated 1RM today",
+      "change": "{change} in {weeks} week | {change} in {weeks} weeks",
+      "tooEarly": "One session so far: the trend comes with the next one.",
+      "legend": "Estimated 1RM ({unit})",
+      "legend2": "Best set load ({unit})",
+      "description": "{exercise}: {line} ({sessions} sessions)",
+      "formula": "Estimated 1RM with the Epley formula: load × (1 + reps / 30). Warm-up, slow-tempo and incomplete sets do not count.",
+      "verdict": {
+        "progressing": "Progressing",
+        "steady": "Steady",
+        "stalled": "Stalled",
+        "regressing": "Going down",
+        "tooEarly": "New"
+      },
+      "advice": {
+        "progressing": "Keep going: same rep range, the app raises the load when it is time.",
+        "steady": "Steady for now. Aim for one more rep at the same load next session.",
+        "stalled": "Stalled for {sessions} sessions → try a deload week (lighter loads, fewer sets) or change the rep range (e.g. 6-8 instead of 10-12).",
+        "regressing": "Going down: check sleep, meals and recovery. A lighter week often helps to bounce back.",
+        "tooEarly": "Do {missing} more session on this exercise to see a trend. | Do {missing} more sessions on this exercise to see a trend."
+      }
+    },
     "strength": {
-      "title": "Strength over time",
-      "exercise": "Exercise",
       "unit": "Estimated 1RM ({unit}), Epley formula",
-      "none": "No comparable set yet (warm-up and slow-tempo sets are left out).",
-      "description": "Estimated 1RM {exercise}: {change} % over {sessions} workouts",
-      "stagnation": "No progress over the last 3 workouts: try a variant of the exercise or a lighter week."
+      "stagnation": "No progress over the last 3 sessions: try a variation of the exercise or a lighter week."
     },
     "volume": {
-      "title": "Sets per muscle this week",
-      "help": "Suggested zone: {min} to {max} sets per muscle per week.",
-      "below": "{sets} sets, below",
-      "inRange": "{sets} sets",
-      "above": "{sets} sets, above",
-      "pushDominant": "Push ({push} sets) clearly outweighs pull ({pull}): add pulling work, especially if a shoulder hurts."
+      "question": "Do my muscles get enough work?",
+      "title": "Sets per muscle per week",
+      "period": "Average of the last complete week. | Average of the last {count} complete weeks.",
+      "periodCurrent": "Week in progress (no complete week yet).",
+      "zone": "Recommended: {min} to {max} sets per muscle per week",
+      "below": "{sets} · low",
+      "inRange": "{sets} · good",
+      "above": "{sets} · high",
+      "lagging": "Under 10 sets a week: {muscles}. Add 2 to 4 sets for them over the week, for example an isolation exercise at the end of a session. | Under 10 sets a week: {muscles}, among others. Add 2 to 4 sets for them over the week, for example an isolation exercise at the end of a session.",
+      "allGood": "Every big muscle gets 10 sets a week or more.",
+      "source": "Source: Schoenfeld, Ogborn & Krieger 2017 (meta-analysis on volume and hypertrophy)"
+    },
+    "balance": {
+      "question": "Is my training balanced?",
+      "title": "Push / pull, upper / lower",
+      "push": "Push · {sets}",
+      "pull": "Pull · {sets}",
+      "upper": "Upper body · {sets}",
+      "legs": "Legs · {sets}",
+      "pushPullLabel": "{push} push sets for {pull} pull sets",
+      "upperLowerLabel": "{upper} upper body sets, {legs} leg sets",
+      "pushDominant": "You push a lot more than you pull: add rows or pulldowns, your shoulders will thank you.",
+      "pullDominant": "You pull a lot more than you push: add a press to balance it.",
+      "upperDominant": "Legs are less than a quarter of your sets: one more lower body session a week would balance it.",
+      "lowerDominant": "Legs are more than three quarters of your sets: think of the upper body.",
+      "ok": "Balanced: push and pull are close, legs are well there.",
+      "period": "Work sets of the last 4 weeks, each set counted once from its movement."
     },
     "regularity": {
-      "title": "Consistency",
+      "question": "Am I regular?",
+      "title": "Regularity",
+      "perWeek": "{value} sessions a week on average",
+      "perWeekShort": "sessions / week",
       "pace": "{count} week in a row on pace | {count} weeks in a row on pace",
-      "calendar": "{count} training days over the last 8 weeks",
-      "best": "Your best: {best}"
+      "paceShort": "week on pace | weeks on pace",
+      "since": "Last session {count} day ago | Last session {count} days ago",
+      "sinceToday": "Last session today",
+      "sinceShort": "day since the last | days since the last",
+      "calendar": "{count} training days over the last 12 weeks",
+      "target": "Planned pace: {target} sessions a week. Your record: {best} weeks in a row."
+    },
+    "records": {
+      "question": "What did I beat lately?",
+      "title": "Records of the last 30 days",
+      "oneRepMax": "Estimated 1RM {load}",
+      "none": "No new record this month. It will come: progress comes in steps.",
+      "all": "See my record on {count} exercise | See my records on {count} exercises"
+    },
+    "body": {
+      "question": "Is my body weight moving?",
+      "title": "Body weight",
+      "latest": "last weighing",
+      "perWeek": "{change} / week",
+      "legend": "Weight ({unit}), last 3 months",
+      "description": "Body weight curve, {count} weighings",
+      "help": "Trend over the last 4 weeks. Weigh yourself in the morning, before eating, to compare like with like.",
+      "needMore": "One more weighing a week apart to see the trend.",
+      "none": "No weighing yet: add your weight in the Body tab."
     },
     "workload": {
+      "question": "Am I doing more than before?",
       "title": "Workload",
       "unit": "{unit} lifted per week (load × reps)",
       "description": "Workload over {weeks} weeks",
       "single": "{load} this week"
-    },
-    "records": {
-      "title": "Records",
-      "oneRepMax": "Estimated 1RM {load}"
-    },
-    "kpi": {
-      "sessions": "session in 30 days | sessions in 30 days",
-      "pace": "week on pace | weeks on pace",
-      "records": "record | records",
-      "workload": "lifted per week (average)"
     }
   },
   "body": {
@@ -673,6 +802,25 @@
     "back": "Back"
   },
   "settings": {
+    "theme": {
+      "label": "Theme",
+      "options": {
+        "dark": "Dark",
+        "light": "Light",
+        "system": "Same as the phone"
+      }
+    },
+    "plates": {
+      "title": "Bar and plates",
+      "bar": "Bar weight",
+      "plate": "{load} plates",
+      "pairs": "{count} pair | {count} pairs",
+      "fewer": "One pair of {load} less",
+      "more": "One pair of {load} more",
+      "collars": "Count the collars",
+      "collarsHelp": "Spring collars, {load} the pair.",
+      "help": "The plate calculator only suggests loads you can build with these plates (pairs available at the gym)."
+    },
     "title": "Settings",
     "content": "About the app",
     "workout": "Workouts",
@@ -715,7 +863,11 @@
       "help": "Used for assisted pull-ups and dips: real load = body weight − help. Each weighing is also added in History → Body."
     },
     "sessionNotification": "Notification during the session",
-    "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android)."
+    "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android).",
+    "keepAwake": "Screen on during the session",
+    "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions.",
+    "restSound": "Beep at the end of the rest",
+    "restSoundHelp": "Three beeps and a buzz when the rest is over. The rest gets longer after a \"Hard\" set (+30 s) or a \"Failed\" set (+1 min), and shorter after \"Easy\" (−15 s)."
   },
   "tips": {
     "title": "Getting started",
@@ -1112,7 +1264,7 @@
   "customSession": {
     "mine": "My sessions",
     "intro": "Build your own sessions with the exercises you choose.",
-    "create": "+ Create a session",
+    "create": "Create a session",
     "newTitle": "New session",
     "editTitle": "Edit the session",
     "name": "Session name",
@@ -1127,13 +1279,24 @@
     "delete": "Delete this session",
     "deleteConfirm": "The session will be deleted. Sessions already done stay in the history.",
     "deleteYes": "Yes, delete",
-    "edit": "Edit",
     "editNamed": "Edit {name}",
     "start": "Start",
     "startNamed": "Start {name}",
     "deleted": "Custom session",
     "orderIssue": "{isolation} comes before {compound}: tiring this muscle first ({muscle}) would limit the big lift.",
-    "fixOrder": "Put back in the advised order"
+    "fixOrder": "Put back in the advised order",
+    "lineOf": "Sets, reps and rest of {name}",
+    "adjust": {
+      "sets": "Sets",
+      "reps": "Reps",
+      "rest": "Rest",
+      "setsLess": "One set less for {name}",
+      "setsMore": "One more set for {name}",
+      "repsLess": "Fewer reps for {name}",
+      "repsMore": "More reps for {name}",
+      "restLess": "Shorter rest for {name}",
+      "restMore": "Longer rest for {name}"
+    }
   },
   "emptyStates": {
     "history": "No session yet",
@@ -1229,12 +1392,13 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s} s"
     },
-    "shortcut": "Or a ready-made session: Push, Pull, Legs…",
     "beginner": {
       "title": "New to this? Start here",
       "text": "5 guided machines for the whole body, 3 sets of 10, in the right order. The app suggests a light load to start: say \"Easy\" if it was too light, it will go up.",
       "details": "See the details and the other ready-made sessions"
-    }
+    },
+    "copy": "Copy and edit: {name}",
+    "copyName": "{name} (my version)"
   },
   "sessionNotification": {
     "title": "Session in progress · {name}",

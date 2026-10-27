@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import { getSettings, saveSettings, type Settings } from '@/data/repositories/settingsRepository';
 import { applyLanguage } from '@/i18n';
+import { applyTheme } from '@/ui/theme';
 
 const settings = ref<Settings>();
 let loading: Promise<Settings> | undefined;
@@ -12,6 +13,7 @@ export function loadSettings(): Promise<Settings> {
     const { db } = await openAppDatabase();
     settings.value = await getSettings(db);
     applyLanguage(settings.value.language);
+    applyTheme(settings.value.theme ?? 'dark');
     return settings.value;
   })();
   loading.catch(() => (loading = undefined));
@@ -30,6 +32,7 @@ export async function updateSettings(patch: SettingsPatch): Promise<Settings> {
   await saveSettings(db, next);
   settings.value = next;
   applyLanguage(next.language);
+  applyTheme(next.theme ?? 'dark');
   loading = Promise.resolve(next);
   return next;
 }

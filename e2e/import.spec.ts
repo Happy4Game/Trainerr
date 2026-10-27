@@ -31,6 +31,10 @@ test('imports a Strong export after checking the exercise matches', async ({ pag
       .getByRole('listitem')
       .filter({ hasText: 'Presse à cuisses' }),
   ).toContainText('90 kg × 12');
+
+  // Badges of the imported past are already there: no "first session" later on.
+  await page.goto('/tabs/today');
+  await expect(page.getByText('Première séance')).toBeVisible({ timeout: 20_000 });
 });
 
 test('imported sessions: the user picks the session the cycle goes on with', async ({ page }) => {

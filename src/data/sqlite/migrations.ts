@@ -157,6 +157,14 @@ export const migrations: readonly Migration[] = [
       ALTER TABLE gym_machine ADD COLUMN machine_setup TEXT NOT NULL DEFAULT '{}';
     `,
   },
+  {
+    version: 6,
+    description: 'Optional reps in reserve and note on each set',
+    sql: `
+      ALTER TABLE set_log ADD COLUMN rir INTEGER CHECK (rir BETWEEN 0 AND 4);
+      ALTER TABLE set_log ADD COLUMN note TEXT;
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;

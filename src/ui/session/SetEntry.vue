@@ -15,9 +15,13 @@ import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
 import { useSession } from './useSession';
+import { useRirText } from './useRirText';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
+import { unlockSound } from './restSound';
 import { useUnits } from '@/ui/useUnits';
+import { useSettings } from '@/ui/useSettings';
+import { DEFAULT_PLATE_CONFIG, platesFor } from '@/domain/plates';
 import { DEFAULT_BODY_WEIGHT_KG } from '@/domain/assisted';
 
 const props = defineProps<{ exerciseId: string }>();
@@ -25,9 +29,12 @@ const emit = defineEmits<{ busy: []; replace: []; plates: [loadKg: number] }>();
 
 const { t, n, locale } = useI18n();
 const session = useSession();
+const rirText = useRirText();
 
 const entry = computed(() => session.entryOf(props.exerciseId));
 const proposal = computed(() => session.proposalFor(props.exerciseId));
+/** A light test set: the feeling sets the load, so each answer says what it does. */
+const testSet = computed(() => proposal.value?.reason === 'testSet');
 const cardLink = computed(() => `/tabs/session/exercise/${encodeURIComponent(props.exerciseId)}`);
 const thumbnail = computed(() => {
   const image = illustrationFor(props.exerciseId)?.images[0];
@@ -41,6 +48,9 @@ const load = ref(0);
 const reps = ref(0);
 const incomplete = ref(false);
 const slowTempo = ref(false);
+/** Optional: reps left in the tank (0 to 4+), and a free note on the set. */
+const rir = ref<number>();
+const setNote = ref('');
 const heard = ref<Difficulty>();
 const listening = ref(false);
 
@@ -53,6 +63,8 @@ watch(
     reps.value = proposal.value.targetReps;
     incomplete.value = false;
     slowTempo.value = false;
+    rir.value = undefined;
+    setNote.value = '';
     heard.value = undefined;
   },
   { immediate: true },
@@ -70,7 +82,8 @@ const name = computed(() =>
       : entry.value.exercise.nameEn
     : '',
 );
-const { load: kg, fromInput, toDisplay } = useUnits();
+const { load: kg, fromInput, toDisplay, symbol } = useUnits();
+const { settings: appSettings } = useSettings();
 
 // A load between two steps (e.g. 52.5 kg with an add-on) can be typed: tap the value.
 const typing = ref(false);
@@ -97,6 +110,18 @@ const breakdown = computed(() => {
   const plates = e.loadSteps.length > 0 ? e.loadSteps : defaultStepsFor(e.exercise.equipment);
   const found = stackBreakdown(load.value, plates, addOns);
   return found && found.addOnsKg.length > 0 ? found : undefined;
+});
+/** On a barbell, the plates to put on each side, without opening the calculator. */
+const platesPerSide = computed(() => {
+  if (entry.value?.exercise.equipment !== 'barbell') return undefined;
+  const result = platesFor(load.value, appSettings.value?.barbell ?? DEFAULT_PLATE_CONFIG);
+  if (!result.exact) return undefined;
+  return result.loading.perSide.length === 0
+    ? t('session.plates.barOnly')
+    : t('session.plates.perSideLine', {
+        plates: result.loading.perSide.map((p) => n(toDisplay(p))).join(' + '),
+        unit: symbol.value,
+      });
 });
 /** Seat and notch noted on the machine card, recalled at each set. */
 const setupText = computed(() => {
@@ -158,8 +183,25 @@ const advice = computed<SetAdvice>(() => {
   );
 });
 const realLoad = computed(() => session.realLoadFor(props.exerciseId, load.value));
+/** Record to beat, on the real load (body weight − help on an assisted machine). */
+const record = computed(() => session.recordFor(props.exerciseId));
+
 /** Ready-made session lines: a plank is held for seconds, lunges count per leg. */
 const timed = computed(() => session.planned(props.exerciseId)?.timed === true);
+/**
+ * Double progression made visible: every set at the top of the range, and
+ * the load goes up next time (less help on an assisted machine).
+ */
+const goal = computed(() => {
+  const p = proposal.value;
+  const range = session.repRangeOf(props.exerciseId);
+  if (!p || !range || timed.value || p.reason === 'testSet') return undefined;
+  const next = assisted.value ? stepDown(steps.value, p.loadKg) : stepUp(steps.value, p.loadKg);
+  if (next === undefined) return undefined;
+  const label = (kgValue: number) =>
+    assisted.value ? t('session.assisted.load', { load: kg(kgValue) }) : loadText(kgValue);
+  return t('session.coach.goal', { reps: n(range.max), load: label(p.loadKg), next: label(next) });
+});
 const perSide = computed(() => session.planned(props.exerciseId)?.perSide === true);
 const ADVICE_ICON: Record<SetAdvice, string> = {
   moreLoad: '↑',
@@ -169,6 +211,8 @@ const ADVICE_ICON: Record<SetAdvice, string> = {
   first: '★',
   comeback: '↺',
 };
+
+const RIR_VALUES = [0, 1, 2, 3, 4] as const;
 
 const DIFFICULTIES: { value: Difficulty; color: string }[] = [
   { value: 'easy', color: 'success' },
@@ -180,6 +224,8 @@ const DIFFICULTIES: { value: Difficulty; color: string }[] = [
 async function validate(difficulty: Difficulty): Promise<void> {
   // A short buzz: the set is saved, no need to look at the screen.
   navigator.vibrate?.(35);
+  // This tap allows the beep at the end of the rest.
+  unlockSound();
   await session.logSet({
     exerciseId: props.exerciseId,
     loadKg: load.value,
@@ -187,7 +233,11 @@ async function validate(difficulty: Difficulty): Promise<void> {
     difficulty,
     ...(incomplete.value ? { completeReps: false } : {}),
     ...(slowTempo.value ? { slowTempo: true } : {}),
+    ...(rir.value === undefined ? {} : { rir: rir.value }),
+    ...(setNote.value.trim() ? { note: setNote.value.trim() } : {}),
   });
+  // A record: a happier buzz.
+  if (session.lastSetBeatRecord.value) navigator.vibrate?.([60, 40, 60, 40, 160]);
 }
 
 function listen(): void {
@@ -242,6 +292,15 @@ function listen(): void {
         {{ t('session.fewerSets.short') }}
       </ion-button>
     </div>
+    <p v-if="record" class="record" data-testid="record">
+      <span aria-hidden="true">🏆</span>
+      <span>{{
+        t('session.record.toBeat', {
+          set: `${kg(record.bestLoad.loadKg)} × ${n(record.bestLoad.reps)}`,
+          oneRepMax: kg(Math.round(record.bestOneRepMax.value)),
+        })
+      }}</span>
+    </p>
     <div v-if="partnerName" class="superset" role="note">
       <span>
         <strong>{{
@@ -290,6 +349,7 @@ function listen(): void {
         }}
       </p>
       <p class="why">{{ t(`session.reason.${proposal.reason}`) }}</p>
+      <p v-if="goal" class="goal" data-testid="goal">🎯 {{ goal }}</p>
     </div>
     <p v-if="proposal.reminders.includes('rangeOfMotion')" class="reminder" role="note">
       {{ t('session.reminder.rangeOfMotion') }}
@@ -361,6 +421,7 @@ function listen(): void {
         {{ t('session.assisted.noWeight') }}
       </router-link>
     </p>
+    <p v-if="platesPerSide" class="breakdown" data-testid="per-side">{{ platesPerSide }}</p>
     <p v-if="breakdown" class="breakdown" data-testid="breakdown">
       {{
         t('session.breakdown', {
@@ -390,6 +451,7 @@ function listen(): void {
       </ion-button>
       <ion-button
         v-if="!timed"
+        class="half"
         fill="clear"
         :aria-label="t('session.halfRep')"
         @click="changeReps(0.5)"
@@ -399,7 +461,8 @@ function listen(): void {
     </div>
 
     <h3 class="step"><span class="badge">2</span> {{ t('session.howWasIt') }}</h3>
-    <p v-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
+    <p v-if="testSet" class="help test-help">{{ t('session.testSetFeel') }}</p>
+    <p v-else-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
     <div class="difficulties">
       <ion-button
         v-for="d in DIFFICULTIES"
@@ -411,7 +474,9 @@ function listen(): void {
       >
         <span class="difficulty">
           <span class="difficulty-name">{{ t(`difficulty.${d.value}`) }}</span>
-          <span class="difficulty-hint">{{ t(`session.difficultyHint.${d.value}`) }}</span>
+          <span class="difficulty-hint">{{
+            t(`session.${testSet ? 'testSetHint' : 'difficultyHint'}.${d.value}`)
+          }}</span>
         </span>
       </ion-button>
     </div>
@@ -438,6 +503,31 @@ function listen(): void {
           <ion-label>{{ t('session.slowTempo') }}</ion-label>
         </ion-chip>
       </div>
+      <fieldset class="rir">
+        <legend>{{ t('session.rir.label') }}</legend>
+        <ion-chip
+          v-for="value in RIR_VALUES"
+          :key="value"
+          :outline="rir !== value"
+          v-bind="rir === value ? { color: 'primary' } : {}"
+          role="radio"
+          :aria-checked="rir === value"
+          :aria-label="rirText(value)"
+          @click="rir = rir === value ? undefined : value"
+        >
+          <ion-label>{{ value === 4 ? '4+' : value }}</ion-label>
+        </ion-chip>
+      </fieldset>
+      <p class="help">{{ t('session.rir.help') }}</p>
+      <ion-input
+        v-model="setNote"
+        class="set-note"
+        fill="outline"
+        :label="t('session.setNote.label')"
+        label-placement="stacked"
+        :placeholder="t('session.setNote.placeholder')"
+        :maxlength="120"
+      />
       <ion-button
         v-if="voiceSupported()"
         fill="outline"
@@ -470,6 +560,28 @@ function listen(): void {
 </template>
 
 <style scoped>
+.rir {
+  border: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.rir legend {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.rir ion-chip {
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+}
+.set-note {
+  margin: 8px 0;
+}
+
 .extra-set {
   margin-inline: 4px;
   --padding-start: 8px;
@@ -503,6 +615,9 @@ function listen(): void {
 h2 {
   margin-block: 0 4px;
   font-size: 1.4rem;
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 .set-number {
   display: flex;
@@ -510,6 +625,19 @@ h2 {
   gap: 8px;
   margin-block: 8px;
   font-size: 1.1rem;
+}
+.record {
+  /* Le trophée reste sur la ligne du texte, même quand le texte passe à la ligne. */
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-block: 0 8px;
+  padding: 6px 14px;
+  border-radius: var(--tr-radius-m);
+  background: rgba(var(--ion-color-warning-rgb), 0.16);
+  color: var(--ion-text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 .coach {
   margin-block: 8px 12px;
@@ -571,6 +699,15 @@ h2 {
   font-size: 0.85rem;
   color: var(--ion-color-medium);
 }
+.goal {
+  margin-block: 6px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.test-help {
+  color: var(--tr-text);
+  font-weight: 600;
+}
 .difficulty {
   display: flex;
   flex-direction: column;
@@ -617,20 +754,35 @@ h2 {
   color: var(--ion-color-warning-contrast);
 }
 .stepper {
-  display: flex;
+  /* Même grille pour la charge et les reps : les − et + restent alignés, et le
+     « +½ » des reps tient dans sa colonne. Le libellé passe au-dessus : la valeur
+     garde toute la largeur pour de gros chiffres, même sur un écran de 360 px. */
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 56px 44px;
   align-items: center;
-  gap: 8px;
-  margin-block: 6px;
+  gap: 2px 6px;
+  margin-block: 8px;
 }
 .stepper-label {
-  width: 4.5em;
-  color: var(--ion-color-medium);
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tr-text-muted);
 }
 .stepper ion-button {
-  min-width: 56px;
+  min-width: 0;
   min-height: 52px;
+  margin: 0;
+}
+.stepper ion-button.half {
+  --padding-start: 0;
+  --padding-end: 0;
+  min-height: 48px;
 }
 .value-button {
+  width: 100%;
   min-height: 52px;
   padding: 0 4px;
   border: 0;
@@ -641,8 +793,8 @@ h2 {
 }
 .value-input {
   max-width: 7ch;
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   text-align: center;
 }
 .breakdown,
@@ -656,10 +808,12 @@ h2 {
   color: var(--ion-text-color);
 }
 .value {
-  min-width: 5.5ch;
-  font-size: 1.6rem;
-  font-weight: 700;
+  min-width: 0;
+  font-size: 1.9rem;
+  font-weight: var(--tr-weight-black);
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
   text-align: center;
 }
 .flags {

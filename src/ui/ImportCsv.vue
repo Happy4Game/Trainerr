@@ -4,6 +4,8 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { openAppDatabase } from '@/data/appDatabase';
 import { importSessions } from '@/data/repositories/sessionRepository';
+import { addBadges } from '@/data/repositories/badgeRepository';
+import { earnedBadges } from '@/domain/achievements';
 import {
   detectFormat,
   parseCsv,
@@ -109,6 +111,20 @@ async function confirm(): Promise<void> {
   }));
   const count = await importSessions(db, settings.value?.currentGymId ?? 'default', sessions);
   await session.reload();
+  // Badges already earned in the imported past: given now, quietly, so the
+  // next summary does not hail a "first session" after fifty of them.
+  const today = new Date().toISOString().slice(0, 10);
+  await addBadges(
+    db,
+    earnedBadges({
+      sessions: session.history.value,
+      sessionsPerWeek: settings.value?.sessionsPerWeek ?? 3,
+      today,
+      recordsBeaten: 0,
+      backToLevelReached: false,
+    }),
+    today,
+  );
   parsed.value = [];
   message.value = t('importCsv.done', count);
   imported.value = count > 0;

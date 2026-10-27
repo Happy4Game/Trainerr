@@ -145,6 +145,34 @@ export function personalRecords(sessions: readonly SessionLog[]): Map<string, Pe
   return records;
 }
 
+/**
+ * For each session, the exercises where it beat the best load of all the
+ * sessions before it. A first time on an exercise is not a record.
+ */
+export function recordsBySession(sessions: readonly SessionLog[]): Map<string, Set<string>> {
+  type Top = { loadKg: number; reps: number };
+  const beats = (a: Top, b: Top | undefined) =>
+    !b || a.loadKg > b.loadKg || (a.loadKg === b.loadKg && a.reps > b.reps);
+  const best = new Map<string, Top>();
+  const result = new Map<string, Set<string>>();
+  for (const session of sortByDate(sessions)) {
+    const today = new Map<string, Top>();
+    for (const set of session.sets) {
+      if (set.warmup || set.completeReps === false) continue;
+      if (beats(set, today.get(set.exerciseId))) today.set(set.exerciseId, set);
+    }
+    const beaten = new Set<string>();
+    for (const [exerciseId, top] of today) {
+      const previous = best.get(exerciseId);
+      if (!beats(top, previous)) continue;
+      if (previous) beaten.add(exerciseId);
+      best.set(exerciseId, top);
+    }
+    if (beaten.size > 0) result.set(session.id, beaten);
+  }
+  return result;
+}
+
 function sortByDate(sessions: readonly SessionLog[]): SessionLog[] {
   return [...sessions].sort((a, b) => a.date.localeCompare(b.date));
 }
@@ -162,4 +190,18 @@ export function monthSummary(
     workloadKg: work.reduce((total, set) => total + set.loadKg * set.reps, 0),
     trainingDays: new Set(inMonth.map((s) => s.date)).size,
   };
+}
+
+/**
+ * A set that beats the record of its exercise, live during the session: a
+ * heavier load, or the same load for more reps. Warm-up and incomplete sets
+ * never count. No record yet: nothing to beat.
+ */
+export function beatsRecord(
+  set: { loadKg: number; reps: number; warmup?: boolean; completeReps?: boolean },
+  record: PersonalRecord | undefined,
+): boolean {
+  if (!record || set.warmup || set.completeReps === false) return false;
+  const best = record.bestLoad;
+  return set.loadKg > best.loadKg || (set.loadKg === best.loadKg && set.reps > best.reps);
 }
