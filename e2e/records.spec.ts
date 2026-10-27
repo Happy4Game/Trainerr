@@ -10,7 +10,7 @@ test('the record to beat is shown, and beating it is celebrated', async ({ page 
   await skipOnboarding(page);
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('tab', { name: 'Séance' }).click();
-  await page.getByRole('link', { name: '+ Créer une séance' }).click();
+  await page.getByRole('link', { name: 'Créer une séance' }).click();
   await page.getByRole('textbox', { name: 'Nom de la séance' }).fill('Pecs');
   await page.getByRole('button', { name: 'Ajouter un exercice' }).click();
   await page.getByRole('search').last().getByRole('searchbox').fill('pec deck');

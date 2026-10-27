@@ -314,7 +314,8 @@ function proposalFor(exerciseId: string): Proposal | undefined {
 function plannedSets(exerciseId: string): number {
   return (
     active.value?.plan.exercises.find((e) => e.exerciseId === exerciseId)?.sets ??
-    setsPerExercise(settings.value?.goal ?? 'hypertrophy')
+    // Before the session: what start() will plan, one set less in a light week.
+    setsForWeek(setsPerExercise(settings.value?.goal ?? 'hypertrophy'), cycle.value.light)
   );
 }
 

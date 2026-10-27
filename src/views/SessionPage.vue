@@ -17,6 +17,7 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { computed, ref, watch } from 'vue';
+import { House, LayoutList, Pencil, Play, Plus, Zap } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import type { Alternative } from '@/domain/busyMachine';
@@ -35,7 +36,6 @@ import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionPlanList from '@/ui/session/SessionPlanList.vue';
 import SessionOverview from '@/ui/session/SessionOverview.vue';
 import SetEditModal from '@/ui/session/SetEditModal.vue';
-import { Pencil } from 'lucide-vue-next';
 import { useUnits } from '@/ui/useUnits';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
@@ -167,6 +167,11 @@ const loadOf = useLoadLabel();
 /** "3 sets · 20 kg" under an exercise of the plan. */
 const planDetail = (id: string) =>
   `${t('session.nextMachine.plan', session.plannedSets(id))} · ${loadOf(id, session.proposalFor(id)?.loadKg ?? 0)}`;
+/** Work sets of the session of the day, and a rough length: a set plus its rest ≈ 2.5 min. */
+const planSets = computed(() =>
+  preview.value.reduce((total, e) => total + session.plannedSets(e.id), 0),
+);
+const planMinutes = computed(() => Math.max(10, Math.round((planSets.value * 2.5) / 5) * 5));
 /** Card of a machine; a banner there leads back to the session. */
 const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
@@ -283,20 +288,41 @@ async function logWarmup(): Promise<void> {
             </ion-button>
           </ion-card-content>
         </ion-card>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>
-              {{ t('session.next', { template: templateLabel(template.id) }) }}
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="muted">
-              {{
-                session.cycle.value.light
-                  ? t('cycle.light', session.cycle.value)
-                  : t('cycle.week', session.cycle.value)
-              }}
-            </p>
+        <!-- The session of the day first: what, how long, and one big button. -->
+        <section
+          class="day-card"
+          :aria-label="t('session.next', { template: templateLabel(template.id) })"
+        >
+          <p class="day-eyebrow">
+            {{
+              session.cycle.value.light
+                ? t('cycle.light', session.cycle.value)
+                : t('cycle.week', session.cycle.value)
+            }}
+          </p>
+          <h2 class="day-title">{{ templateLabel(template.id) }}</h2>
+          <p v-if="preview.length > 0" class="day-meta">
+            <span>{{ t('customSession.exercises', preview.length) }}</span>
+            <span>{{ t('session.menu.sets', planSets) }}</span>
+            <span>{{ t('session.menu.minutes', { minutes: planMinutes }) }}</span>
+          </p>
+          <template v-if="preview.length > 0">
+            <SessionPlanList
+              :exercises="preview"
+              :supersets="useSupersets"
+              :name="exerciseName"
+              :detail="planDetail"
+              :to="cardLink"
+            />
+            <ion-button
+              class="day-start"
+              expand="block"
+              size="large"
+              @click="session.start({ supersets: useSupersets })"
+            >
+              <Play :size="22" aria-hidden="true" />
+              {{ t('session.start') }}
+            </ion-button>
             <ion-item lines="none" class="superset-choice">
               <ion-toggle
                 :checked="useSupersets"
@@ -306,98 +332,88 @@ async function logWarmup(): Promise<void> {
                 <span class="toggle-help">{{ t('session.supersetToggleHelp') }}</span>
               </ion-toggle>
             </ion-item>
-            <template v-if="preview.length > 0">
-              <SessionPlanList
-                :exercises="preview"
-                :supersets="useSupersets"
-                :name="exerciseName"
-                :detail="planDetail"
-                :to="cardLink"
-              />
-              <ion-button
-                expand="block"
-                size="large"
-                @click="session.start({ supersets: useSupersets })"
-              >
-                {{ t('session.start') }}
-              </ion-button>
-              <ion-button
-                v-if="session.expressPreview.value.length > 0"
-                expand="block"
-                fill="outline"
-                @click="session.start({ express: true, supersets: useSupersets })"
-              >
-                {{ t('session.express') }}
-              </ion-button>
-              <ion-button expand="block" fill="clear" router-link="/tabs/session/presets">
-                {{ t('presets.shortcut') }}
-              </ion-button>
-            </template>
-            <template v-else-if="!readyMade">
-              <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>
-              <ion-button expand="block" fill="outline" router-link="/tabs/catalog">
-                {{ t('session.goToCatalog') }}
-              </ion-button>
-            </template>
-            <!-- Not enough favorites: a ready-made session with popular machines. -->
-            <section v-if="readyMade" class="ready-made" :aria-label="t('session.readyMade.title')">
-              <h3>{{ t('session.readyMade.title') }}</h3>
-              <p class="muted">
-                {{
-                  preview.length === 0
-                    ? t('session.readyMade.introNone')
-                    : t('session.readyMade.intro', preview.length)
-                }}
-              </p>
-              <SessionPlanList
-                :exercises="readyMade.exercises"
-                :supersets="useSupersets"
-                :name="exerciseName"
-                :detail="planDetail"
-                :to="cardLink"
-                :badge="suggestedBadge"
-              />
-              <ion-button
-                expand="block"
-                size="large"
-                @click="session.start({ readyMade: true, supersets: useSupersets })"
-              >
-                {{ t('session.readyMade.start') }}
-              </ion-button>
-              <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
-                {{ t('session.readyMade.adopt', readyMade.suggestedIds.length) }}
-              </ion-button>
-              <ion-button expand="block" fill="clear" router-link="/tabs/session/presets">
-                {{ t('presets.shortcut') }}
-              </ion-button>
-              <ion-button expand="block" fill="clear" router-link="/tabs/catalog">
-                {{ t('session.goToCatalog') }}
-              </ion-button>
-            </section>
-            <!-- At home, any exercise doable with the declared equipment: no favorite needed. -->
-            <ion-button
-              v-if="session.homePreview.value.length > 0"
-              expand="block"
-              fill="clear"
-              @click="session.start({ home: true, supersets: useSupersets })"
-            >
-              {{ t('session.home') }}
+          </template>
+          <template v-else-if="!readyMade">
+            <p>{{ t('session.noFavorites', { template: templateLabel(template.id) }) }}</p>
+            <ion-button expand="block" fill="outline" router-link="/tabs/catalog">
+              {{ t('session.goToCatalog') }}
             </ion-button>
-            <MobilityCard :muscles="template.muscles" />
-          </ion-card-content>
-        </ion-card>
-
-        <section class="my-sessions" :aria-label="t('presets.title')">
-          <h2>{{ t('presets.title') }}</h2>
-          <p class="muted">{{ t('presets.intro') }}</p>
-          <ion-button expand="block" fill="outline" router-link="/tabs/session/presets">
-            {{ t('presets.open') }}
-          </ion-button>
+          </template>
+          <!-- Not enough favorites: a ready-made session with popular machines. -->
+          <section v-if="readyMade" class="ready-made" :aria-label="t('session.readyMade.title')">
+            <h3>{{ t('session.readyMade.title') }}</h3>
+            <p class="muted">
+              {{
+                preview.length === 0
+                  ? t('session.readyMade.introNone')
+                  : t('session.readyMade.intro', preview.length)
+              }}
+            </p>
+            <SessionPlanList
+              :exercises="readyMade.exercises"
+              :supersets="useSupersets"
+              :name="exerciseName"
+              :detail="planDetail"
+              :to="cardLink"
+              :badge="suggestedBadge"
+            />
+            <ion-button
+              expand="block"
+              size="large"
+              @click="session.start({ readyMade: true, supersets: useSupersets })"
+            >
+              {{ t('session.readyMade.start') }}
+            </ion-button>
+            <ion-button expand="block" fill="outline" @click="session.adoptReadyMade()">
+              {{ t('session.readyMade.adopt', readyMade.suggestedIds.length) }}
+            </ion-button>
+            <ion-button expand="block" fill="clear" router-link="/tabs/catalog">
+              {{ t('session.goToCatalog') }}
+            </ion-button>
+          </section>
         </section>
 
-        <section class="my-sessions" :aria-label="t('customSession.mine')">
-          <h2>{{ t('customSession.mine') }}</h2>
-          <p v-if="customSessions.length === 0" class="muted">{{ t('customSession.intro') }}</p>
+        <!-- Other ways to train today: big tiles, one tap each. -->
+        <h2 class="menu-heading">{{ t('session.menu.other') }}</h2>
+        <div class="tiles">
+          <button
+            v-if="session.expressPreview.value.length > 0"
+            type="button"
+            class="tile"
+            @click="session.start({ express: true, supersets: useSupersets })"
+          >
+            <Zap :size="26" aria-hidden="true" />
+            <span class="tile-title">{{ t('session.express') }}</span>
+            <span class="tile-help">{{ t('session.menu.expressHelp') }}</span>
+          </button>
+          <router-link class="tile" to="/tabs/session/presets">
+            <LayoutList :size="26" aria-hidden="true" />
+            <span class="tile-title">{{ t('presets.open') }}</span>
+            <span class="tile-help">{{ t('session.menu.presetsHelp') }}</span>
+          </router-link>
+          <button
+            v-if="session.homePreview.value.length > 0"
+            type="button"
+            class="tile"
+            @click="session.start({ home: true, supersets: useSupersets })"
+          >
+            <House :size="26" aria-hidden="true" />
+            <span class="tile-title">{{ t('session.home') }}</span>
+            <span class="tile-help">{{ t('session.menu.homeHelp') }}</span>
+          </button>
+          <router-link class="tile" to="/tabs/session/custom/new">
+            <Plus :size="26" aria-hidden="true" />
+            <span class="tile-title">{{ t('customSession.create') }}</span>
+            <span class="tile-help">{{ t('customSession.intro') }}</span>
+          </router-link>
+        </div>
+
+        <section
+          v-if="customSessions.length > 0"
+          class="my-sessions"
+          :aria-label="t('customSession.mine')"
+        >
+          <h2 class="menu-heading">{{ t('customSession.mine') }}</h2>
           <div v-for="c in customSessions" :key="c.id" class="custom">
             <div class="custom-text">
               <strong>{{ c.name }}</strong>
@@ -409,20 +425,20 @@ async function logWarmup(): Promise<void> {
               :router-link="`/tabs/session/custom/${c.id}`"
               :aria-label="t('customSession.editNamed', { name: c.name })"
             >
-              {{ t('customSession.edit') }}
+              <Pencil :size="18" aria-hidden="true" />
             </ion-button>
             <ion-button
               size="small"
               :aria-label="t('customSession.startNamed', { name: c.name })"
               @click="session.start({ custom: c.id, supersets: useSupersets })"
             >
+              <Play :size="18" aria-hidden="true" />
               {{ t('customSession.start') }}
             </ion-button>
           </div>
-          <ion-button expand="block" fill="outline" router-link="/tabs/session/custom/new">
-            {{ t('customSession.create') }}
-          </ion-button>
         </section>
+
+        <MobilityCard :muscles="template.muscles" />
       </template>
 
       <!-- Pendant la séance -->
@@ -1147,6 +1163,89 @@ async function logWarmup(): Promise<void> {
   padding: 10px 12px;
   border-radius: var(--app-radius-small);
   background: var(--ion-card-background);
+}
+.day-card {
+  margin-block: 0 var(--tr-space-5);
+  padding: var(--tr-space-5) var(--tr-space-4);
+  border-radius: var(--tr-radius-l);
+  background: var(--ion-card-background);
+  box-shadow: var(--tr-shadow-1);
+}
+.day-eyebrow {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--tr-text-muted);
+}
+.day-title {
+  margin: 2px 0 6px;
+  font-size: var(--tr-font-xl);
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.day-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 var(--tr-space-3);
+}
+.day-meta span {
+  padding: 4px 10px;
+  border-radius: var(--tr-radius-pill);
+  background: var(--tr-surface-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.day-start {
+  margin-block-start: var(--tr-space-3);
+  min-height: 56px;
+  font-size: 1.1rem;
+}
+.day-start svg {
+  margin-inline-end: 8px;
+}
+.menu-heading {
+  margin: var(--tr-space-5) 0 var(--tr-space-3);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--tr-space-3);
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 120px;
+  padding: var(--tr-space-4);
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius-l);
+  background: var(--ion-card-background);
+  box-shadow: var(--tr-shadow-1);
+  color: var(--tr-text);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--tr-duration-fast) ease;
+}
+.tile:active {
+  transform: scale(0.97);
+}
+.tile svg {
+  color: var(--ion-color-primary);
+}
+.tile-title {
+  font-weight: 800;
+  line-height: 1.2;
+}
+.tile-help {
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: var(--tr-text-muted);
 }
 .my-sessions {
   margin-block: 16px;

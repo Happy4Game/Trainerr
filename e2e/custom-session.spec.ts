@@ -13,7 +13,7 @@ test('a custom session is created, reordered, started and kept in the history', 
   await skipOnboarding(page);
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('tab', { name: 'Séance' }).click();
-  await page.getByRole('link', { name: '+ Créer une séance' }).click();
+  await page.getByRole('link', { name: 'Créer une séance' }).click();
 
   const save = page.getByRole('button', { name: 'Enregistrer la séance' });
   await expect(save).toBeDisabled();

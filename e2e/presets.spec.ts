@@ -38,7 +38,7 @@ test('a custom session with an isolation before its compound is flagged and fixe
   await skipOnboarding(page);
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('tab', { name: 'Séance' }).click();
-  await page.getByRole('link', { name: '+ Créer une séance' }).click();
+  await page.getByRole('link', { name: 'Créer une séance' }).click();
   await page.getByRole('textbox', { name: 'Nom de la séance' }).fill('Bras');
   for (const [search, name] of [
     ['pushdown', /Extension triceps à la poulie/],

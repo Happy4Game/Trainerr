@@ -182,6 +182,17 @@ async function capture(browser, scheme) {
   await page.waitForTimeout(1500);
   await shot(page, p('01-accueil'));
 
+  // Le menu de l'onglet Séance, avant de commencer : tous les choix possibles.
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.waitForTimeout(1200);
+  await shot(page, p('01b-menu-seance-1'));
+  await scrollContent(page, 700);
+  await shot(page, p('01b-menu-seance-2'));
+  await scrollContent(page, 1400);
+  await shot(page, p('01b-menu-seance-3'));
+  await page.getByRole('tab', { name: "Aujourd'hui" }).click();
+  await page.waitForTimeout(800);
+
   // « Commencer » lance directement la séance du jour.
   await page.locator('ion-button:visible', { hasText: 'Commencer' }).first().click();
   await page.locator('section.entry').first().waitFor({ timeout: 20_000 });

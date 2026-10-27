@@ -20,7 +20,7 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await star(page, 'pec deck', 'Écarté à la machine');
 
   await tab(page, 'Séance');
-  await expect(page.getByText('Séance du jour : Haut du corps A')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Haut du corps A', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
 
   // First exercise: compound first. First time on it: a light test set, no warm-up below it.
@@ -73,7 +73,7 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await page.getByRole('button', { name: 'Fermer' }).click();
 
   // The rotation goes on.
-  await expect(page.getByText('Séance du jour : Bas du corps A')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Bas du corps A', exact: true })).toBeVisible();
   await page.getByRole('tab', { name: "Aujourd'hui" }).click();
   await expect(page.getByText('Première séance')).toBeVisible();
 

@@ -466,6 +466,14 @@
       "toBeat": "Record à battre : {set} · 1RM estimé {oneRepMax}",
       "beaten": "Nouveau record !",
       "beatenDetail": "{name} : {set}"
+    },
+    "menu": {
+      "sets": "{count} série | {count} séries",
+      "minutes": "≈ {minutes} min",
+      "other": "Autres façons de s'entraîner",
+      "expressHelp": "Les exercices clés, en 20 à 30 minutes.",
+      "presetsHelp": "Push, Pull, Jambes… prêtes, à copier.",
+      "homeHelp": "Avec le matériel que tu as chez toi."
     }
   },
   "availability": {
@@ -1219,7 +1227,7 @@
   "customSession": {
     "mine": "Mes séances",
     "intro": "Compose tes propres séances avec les exercices de ton choix.",
-    "create": "+ Créer une séance",
+    "create": "Créer une séance",
     "newTitle": "Nouvelle séance",
     "editTitle": "Modifier la séance",
     "name": "Nom de la séance",
@@ -1234,7 +1242,6 @@
     "delete": "Supprimer cette séance",
     "deleteConfirm": "La séance sera supprimée. Les séances déjà faites restent dans l'historique.",
     "deleteYes": "Oui, supprimer",
-    "edit": "Modifier",
     "editNamed": "Modifier {name}",
     "start": "Commencer",
     "startNamed": "Commencer {name}",
@@ -1348,7 +1355,6 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s}"
     },
-    "shortcut": "Ou une séance type : Push, Pull, Jambes…",
     "beginner": {
       "title": "Tu débutes ? Commence ici",
       "text": "5 machines guidées pour tout le corps, 3 séries de 10, dans le bon ordre. L'appli propose une charge légère pour démarrer : dis « Facile » si c'était trop léger, elle montera.",

@@ -466,6 +466,14 @@
       "toBeat": "Record to beat: {set} · estimated 1RM {oneRepMax}",
       "beaten": "New record!",
       "beatenDetail": "{name}: {set}"
+    },
+    "menu": {
+      "sets": "{count} set | {count} sets",
+      "minutes": "≈ {minutes} min",
+      "other": "Other ways to train",
+      "expressHelp": "The key exercises, in 20 to 30 minutes.",
+      "presetsHelp": "Push, Pull, Legs… ready, and copyable.",
+      "homeHelp": "With the equipment you have at home."
     }
   },
   "availability": {
@@ -1219,7 +1227,7 @@
   "customSession": {
     "mine": "My sessions",
     "intro": "Build your own sessions with the exercises you choose.",
-    "create": "+ Create a session",
+    "create": "Create a session",
     "newTitle": "New session",
     "editTitle": "Edit the session",
     "name": "Session name",
@@ -1234,7 +1242,6 @@
     "delete": "Delete this session",
     "deleteConfirm": "The session will be deleted. Sessions already done stay in the history.",
     "deleteYes": "Yes, delete",
-    "edit": "Edit",
     "editNamed": "Edit {name}",
     "start": "Start",
     "startNamed": "Start {name}",
@@ -1348,7 +1355,6 @@
       "minutes": "{m} min",
       "minutesSeconds": "{m} min {s} s"
     },
-    "shortcut": "Or a ready-made session: Push, Pull, Legs…",
     "beginner": {
       "title": "New to this? Start here",
       "text": "5 guided machines for the whole body, 3 sets of 10, in the right order. The app suggests a light load to start: say \"Easy\" if it was too light, it will go up.",
