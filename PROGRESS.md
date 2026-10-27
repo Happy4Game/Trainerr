@@ -11,7 +11,7 @@ Suit l'ordre de construction de [SPEC.md](SPEC.md) (section « Choix techniques 
 | 5     | Parcours utilisateur                                       | ✅ Fait                         |
 | 6     | Suivi                                                      | ✅ Fait (sauf photo du corps)   |
 | 7     | Pages de contenu                                           | ✅ Fait (contact à choisir)     |
-| 8     | Connecté                                                   | ⏸️ En attente de décisions      |
+| 8     | Connecté                                                   | 🔄 En partie (Health Connect)   |
 | 9     | Finition                                                   | 🔄 En partie (sauvegarde faite) |
 
 ## Étape 1 — Socle
@@ -228,6 +228,12 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Après une série enregistrée, la vue remonte en haut (minuteur de repos) et un toast « ✓ Série enregistrée : … » s'affiche 2 s. Avant, « Correct » est bas dans l'écran et rien ne bougeait à cet endroit.
 - « Changer de machine » s'ouvre en feuille (`ion-modal` à 90 %) par-dessus l'écran au lieu d'une carte en haut de la page.
 
+## Repos et accessibilité (27 oct. 2026)
+
+- Repos habituel : 2 à 3 min sur les polyarticulaires lourds (3 min appliquées), 1 min 30 à 2 min sur les polyarticulaires guidés. Avec des pratiquants entraînés, 3 min de repos ont donné plus de force et de muscle que 1 min ([Schoenfeld et al. 2016](https://doi.org/10.1519/JSC.0000000000001272)).
+- Champs de recherche : Ionic 9 nomme le champ interne « search text » et le bouton d'effacement « reset », quel que soit le libellé de la page. La directive `v-search-label` (`src/ui/searchLabel.ts`) leur donne nos libellés traduits.
+- Ce fichier est remis à jour : le dépôt est sur GitHub et les secrets de signature sont créés depuis le 26 oct.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.
@@ -235,13 +241,9 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 
 ## Problèmes connus
 
-- Dans la fenêtre du sélecteur d'exercice, Ionic n'applique pas le libellé d'accessibilité au champ de recherche (lu « search text », le texte indicatif reste lu) : à reprendre avec la passe accessibilité.
-
 - `npm audit` signale 3 failles « modérées » dans `uuid`, utilisé par l'outil iOS de `@capacitor/cli` (développement seulement, pas dans l'appli). Le correctif proposé rétrograde Capacitor : à revoir quand Capacitor publiera une mise à jour.
 - sql.js est figé en 1.12.0 pour rester compatible avec jeep-sqlite (voir [ADR 0002](docs/adr/0002-sqlite-local.md)).
 - Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
-- Le remote GitHub est configuré (`origin` → github.com/Happy4Game/Trainerr) mais rien n'est encore poussé : il manque l'authentification GitHub sur l'ordinateur.
-- Notification de séance et mises à jour : compilées (APK debug et release signé vérifiés), pas encore essayées sur un vrai téléphone.
+- Notification de séance, mises à jour et import Health Connect : compilés par la CI (APK signé publié à chaque merge sur `main`), pas encore essayés sur un vrai téléphone.
 - Pistes du retour utilisateur non traitées : proposer de noter ses charges habituelles après « Je m'entraîne déjà », question explicite après la série test, questionnaire plus court.
-- Clé de signature créée hors du dépôt (`~/trainerr-release.jks`, mot de passe dans `~/.trainerr-release-secrets`) ; reste à installer `gh`, se connecter, pousser et créer les 4 secrets.

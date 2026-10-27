@@ -23,6 +23,11 @@ test('finds a machine by name, alias or muscle, without accents', async ({ page 
   await expect(page.getByRole('heading', { name: 'Développé épaules machine' })).toBeVisible();
   await search(page, 'poulie haute');
   await expect(page.getByRole('heading', { name: 'Extension triceps à la poulie' })).toBeVisible();
+  // Read in French by screen readers, not Ionic's "search text" / "reset".
+  await expect(
+    page.getByRole('searchbox', { name: 'Chercher une machine ou un muscle' }),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Effacer la recherche' })).toBeVisible();
 });
 
 test('filters by muscle group', async ({ page }) => {

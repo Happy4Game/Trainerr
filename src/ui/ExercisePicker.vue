@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vSearchLabel } from '@/ui/searchLabel';
 import {
   IonButton,
   IonButtons,
@@ -87,6 +88,7 @@ function pick(id: string): void {
       <ion-toolbar>
         <ion-searchbar
           v-model="query"
+          v-search-label="{ field: t('catalog.search'), clear: t('catalog.clearSearch') }"
           :debounce="150"
           :placeholder="t('catalog.searchShort')"
           :aria-label="t('catalog.search')"
