@@ -4,7 +4,6 @@
     "session": "Séance",
     "catalog": "Catalogue",
     "history": "Progrès",
-    "body": "Corps",
     "planning": "Planning",
     "inProgress": "séance en cours"
   },
@@ -678,7 +677,8 @@
     "empty": "Pas encore de séance terminée.",
     "views": {
       "sessions": "Séances",
-      "stats": "Stats"
+      "stats": "Stats",
+      "body": "Corps"
     },
     "edit": "Modifier {session}",
     "sessions": "{count} séance | {count} séances",
@@ -800,7 +800,7 @@
       "description": "Courbe du poids de corps, {count} pesées",
       "help": "Tendance sur les 4 dernières semaines. Pèse-toi le matin, à jeun, pour comparer ce qui est comparable.",
       "needMore": "Encore une pesée à une semaine d'écart pour voir la tendance.",
-      "none": "Pas encore de pesée : ajoute ton poids dans l'onglet Corps."
+      "none": "Pas encore de pesée : ajoute ton poids dans Progrès, segment « Corps »."
     },
     "workload": {
       "question": "Est-ce que j'en fais plus qu'avant ?",
@@ -1136,7 +1136,8 @@
       "cameraFix": "Prendre une photo ouvre l'appareil photo",
       "bodyTab": "Un onglet Corps et la caméra dans l'appli",
       "planningTab": "Le Planning revient en onglet",
-      "flexibleSession": "Séance plus souple"
+      "flexibleSession": "Séance plus souple",
+      "catalogTab": "Catalogue et Planning en onglets"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1195,7 +1196,8 @@
       "addFocus": "« Ajouter un exercice » montre d'abord ceux pour les muscles de la séance (les jambes un jour jambes), les autres en dessous.",
       "restKept": "Le repos continue même si tu fermes l'appli de force.",
       "ownRepRange": "Réglages : ta propre fourchette de reps pour tous les exercices (8 à 12 par défaut), avec les études qui l'expliquent.",
-      "newestFirst": "Les séries de la séance s'affichent de la plus récente à la plus ancienne : la dernière, celle qu'on corrige le plus souvent, est en haut."
+      "newestFirst": "Les séries de la séance s'affichent de la plus récente à la plus ancienne : la dernière, celle qu'on corrige le plus souvent, est en haut.",
+      "catalogTab": "Le Catalogue retrouve son onglet, à côté du Planning. Poids, mensurations et photos passent dans Progrès, segment « Corps », avec tes séances et tes stats."
     }
   },
   "data": {

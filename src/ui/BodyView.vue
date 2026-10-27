@@ -242,7 +242,7 @@ async function remove(id: string): Promise<void> {
         class="gallery-link"
         expand="block"
         fill="outline"
-        router-link="/tabs/body/photos"
+        router-link="/tabs/history/photos"
       >
         {{
           photos.length > 0 ? t('body.gallery.link', photos.length) : t('body.gallery.linkEmpty')

@@ -129,7 +129,7 @@ async function remove(): Promise<void> {
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/tabs/body" :text="t('common.back')" />
+          <ion-back-button default-href="/tabs/history?view=body" :text="t('common.back')" />
         </ion-buttons>
         <ion-title>{{ t('body.gallery.title') }}</ion-title>
       </ion-toolbar>

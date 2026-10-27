@@ -5,18 +5,21 @@ export async function skipOnboarding(page: Page): Promise<void> {
   await page.goto('/');
   await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
   await page.getByRole('button', { name: 'Passer' }).click();
-  await expect(page).toHaveURL(/\/tabs\/session\/catalog$/);
+  await expect(page).toHaveURL(/\/tabs\/catalog$/);
 }
 
-/** The catalog lives in the Session tab, behind the book icon of its header. */
+/** In the tab bar only: the segments of Progress are tabs too. */
+export async function openTab(page: Page, label: string): Promise<void> {
+  await page.locator('ion-tab-bar').getByRole('tab', { name: label, exact: true }).click();
+}
+
 export async function openCatalog(page: Page): Promise<void> {
-  // In the tab bar only: the Progress tab has a "Séances" segment, a tab too.
-  await page
-    .locator('ion-tab-bar')
-    .getByRole('tab', { name: /^Séance(\s|$)/ })
-    .click();
-  // Ionic reopens the tab where it was left: maybe the catalog already.
-  if (!/\/tabs\/session\/catalog$/.test(page.url()))
-    await page.getByRole('link', { name: 'Catalogue', exact: true }).click();
-  await expect(page).toHaveURL(/\/tabs\/session\/catalog$/);
+  await openTab(page, 'Catalogue');
+  await expect(page).toHaveURL(/\/tabs\/catalog$/);
+}
+
+/** Weight, measurements and photos: the Body view of Progress. */
+export async function openBody(page: Page): Promise<void> {
+  await openTab(page, 'Progrès');
+  await page.locator('ion-segment-button', { hasText: 'Corps' }).click();
 }

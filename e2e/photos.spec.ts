@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { skipOnboarding } from './helpers';
+import { openBody, skipOnboarding } from './helpers';
 
 // A tiny real PNG: the app shrinks and re-encodes each photo, so it must load.
 const PNG = Buffer.from(
@@ -12,7 +12,7 @@ test('body photos: imported, dated, sorted by pose and compared, on the phone on
   page,
 }) => {
   await skipOnboarding(page);
-  await page.getByRole('tab', { name: 'Corps' }).click();
+  await openBody(page);
   await page.getByRole('link', { name: 'Ouvrir ma galerie' }).click();
   await expect(page.getByRole('note')).toContainText("rien n'est envoyé sur internet");
 

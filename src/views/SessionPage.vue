@@ -2,7 +2,6 @@
 import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -18,7 +17,7 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
-import { ArrowLeftRight, BookOpen, Pencil } from 'lucide-vue-next';
+import { ArrowLeftRight, Pencil } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import type { Alternative } from '@/domain/busyMachine';
@@ -291,11 +290,6 @@ async function logWarmup(): Promise<void> {
           {{ t('tabs.session') }}
           <template v-if="active"> · {{ templateLabel(active.templateId) }}</template>
         </ion-title>
-        <ion-buttons slot="end">
-          <ion-button router-link="/tabs/session/catalog" :aria-label="t('tabs.catalog')">
-            <BookOpen :size="24" aria-hidden="true" />
-          </ion-button>
-        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
