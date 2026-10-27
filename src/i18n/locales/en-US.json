@@ -1240,7 +1240,19 @@
     "startNamed": "Start {name}",
     "deleted": "Custom session",
     "orderIssue": "{isolation} comes before {compound}: tiring this muscle first ({muscle}) would limit the big lift.",
-    "fixOrder": "Put back in the advised order"
+    "fixOrder": "Put back in the advised order",
+    "lineOf": "Sets, reps and rest of {name}",
+    "adjust": {
+      "sets": "Sets",
+      "reps": "Reps",
+      "rest": "Rest",
+      "setsLess": "One set less for {name}",
+      "setsMore": "One more set for {name}",
+      "repsLess": "Fewer reps for {name}",
+      "repsMore": "More reps for {name}",
+      "restLess": "Shorter rest for {name}",
+      "restMore": "Longer rest for {name}"
+    }
   },
   "emptyStates": {
     "history": "No session yet",
@@ -1341,7 +1353,9 @@
       "title": "New to this? Start here",
       "text": "5 guided machines for the whole body, 3 sets of 10, in the right order. The app suggests a light load to start: say \"Easy\" if it was too light, it will go up.",
       "details": "See the details and the other ready-made sessions"
-    }
+    },
+    "copy": "Copy and edit: {name}",
+    "copyName": "{name} (my version)"
   },
   "sessionNotification": {
     "title": "Session in progress · {name}",

@@ -3,6 +3,7 @@ import type { ProtectedZone } from '@/domain/muscles';
 import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
 import type { NextChoice, SportId, WeeklySlot } from '@/domain/planning';
 import type { PlateConfig } from '@/domain/plates';
+import type { SessionLine } from '@/domain/presets';
 import type { Equipment } from '@/domain/types';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
@@ -14,6 +15,8 @@ export interface CustomSession {
   readonly id: string;
   readonly name: string;
   readonly exerciseIds: readonly string[];
+  /** Its own sets, reps and rests (a copied ready-made session); the defaults otherwise. */
+  readonly lines?: Readonly<Record<string, SessionLine>>;
 }
 
 /** Dark by default; light, or the phone setting, on request. */

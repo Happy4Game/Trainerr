@@ -510,7 +510,20 @@ async function start(
     if (pair) ids.push(pair[1]);
   }
   const plan: SessionPlan = {
-    exercises: ids.map((exerciseId) => ({ exerciseId, sets })),
+    exercises: ids.map((exerciseId) => {
+      // A copied ready-made session keeps its own sets, reps and rests.
+      const line = custom?.lines?.[exerciseId];
+      return line
+        ? {
+            exerciseId,
+            sets: setsForWeek(line.sets, cycle.value.light),
+            repRange: line.reps,
+            restSeconds: line.restSeconds,
+            ...(line.timed ? { timed: true } : {}),
+            ...(line.perSide ? { perSide: true } : {}),
+          }
+        : { exerciseId, sets };
+    }),
     queue: startQueue(ids),
     ...(pairs.length > 0 ? { supersets: pairs } : {}),
     ...(options.express ? { express: true } : {}),

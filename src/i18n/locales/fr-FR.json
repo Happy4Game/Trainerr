@@ -1240,7 +1240,19 @@
     "startNamed": "Commencer {name}",
     "deleted": "Séance perso",
     "orderIssue": "{isolation} est avant {compound} : fatiguer d'abord ce muscle ({muscle}) limiterait le gros exercice.",
-    "fixOrder": "Remettre dans l'ordre conseillé"
+    "fixOrder": "Remettre dans l'ordre conseillé",
+    "lineOf": "Séries, reps et repos de {name}",
+    "adjust": {
+      "sets": "Séries",
+      "reps": "Reps",
+      "rest": "Repos",
+      "setsLess": "Une série de moins pour {name}",
+      "setsMore": "Une série de plus pour {name}",
+      "repsLess": "Moins de reps pour {name}",
+      "repsMore": "Plus de reps pour {name}",
+      "restLess": "Repos plus court pour {name}",
+      "restMore": "Repos plus long pour {name}"
+    }
   },
   "emptyStates": {
     "history": "Aucune séance pour l'instant",
@@ -1341,7 +1353,9 @@
       "title": "Tu débutes ? Commence ici",
       "text": "5 machines guidées pour tout le corps, 3 séries de 10, dans le bon ordre. L'appli propose une charge légère pour démarrer : dis « Facile » si c'était trop léger, elle montera.",
       "details": "Voir le détail et les autres séances types"
-    }
+    },
+    "copy": "Copier et modifier : {name}",
+    "copyName": "{name} (ma version)"
   },
   "sessionNotification": {
     "title": "Séance en cours · {name}",

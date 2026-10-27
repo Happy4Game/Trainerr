@@ -106,3 +106,28 @@ test('a beginner is offered the beginner full body first, with realistic loads',
   // A light test set, not the lightest plate of the machine.
   await expect(legPress.getByTestId('load')).toHaveText('45 kg');
 });
+
+test('a ready-made session is copied, changed and started with its own sets and reps', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('link', { name: 'Voir les séances types' }).click();
+  const pull = page.getByRole('region', { name: 'Pull', exact: true });
+  await pull.getByRole('button', { name: 'Copier et modifier : Pull' }).click();
+
+  // The copy opens for changes, with the sets, reps and rests of the ready-made session.
+  await expect(page.getByRole('textbox', { name: 'Nom de la séance' })).toHaveValue(
+    'Pull (ma version)',
+  );
+  const first = page.locator('ol.list li').first();
+  await expect(first).toContainText('4 × 6-8 · repos 2 min 30');
+  await page.getByRole('button', { name: /^Une série de moins pour Tractions/ }).click();
+  await page.getByRole('button', { name: /^Plus de reps pour Tractions/ }).click();
+  await expect(first).toContainText('3 × 7-9 · repos 2 min 30');
+  await page.getByRole('button', { name: 'Enregistrer la séance' }).click();
+
+  await page.getByRole('button', { name: 'Commencer Pull (ma version)' }).click();
+  await expect(page.getByText('Série 1 sur 3')).toBeVisible();
+});

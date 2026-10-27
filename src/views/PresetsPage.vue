@@ -18,13 +18,21 @@ import {
 import { useI18n } from 'vue-i18n';
 import { PRESET_MODELS } from '@/data/content/presetSessions';
 import { ORDER_SOURCE_IDS, sourceById } from '@/data/content/sources';
-import { resolvePreset, type PresetExercise, type PresetSession } from '@/domain/presets';
+import {
+  copyPreset,
+  resolvePreset,
+  type PresetExercise,
+  type PresetSession,
+} from '@/domain/presets';
+import { newId } from '@/data/repositories/sessionRepository';
+import { updateSettings, useSettings } from '@/ui/useSettings';
 import ExerciseRow from '@/ui/ExerciseRow.vue';
 import { useSession } from '@/ui/session/useSession';
 
 const { t, n, locale } = useI18n();
 const router = useIonRouter();
 const session = useSession();
+const { settings } = useSettings();
 
 const sources = ORDER_SOURCE_IDS.map(sourceById).filter((s) => s !== undefined);
 
@@ -58,6 +66,22 @@ function detail(line: PresetExercise): string {
       ? t('presets.perSide', { reps: range })
       : range;
   return t('presets.line', { sets: line.sets, reps, rest: rest(line.restSeconds) });
+}
+
+/** The ready-made session becomes one of "my sessions", opened for changes. */
+async function copy(preset: PresetSession): Promise<void> {
+  const id = newId();
+  await updateSettings({
+    customSessions: [
+      ...(settings.value?.customSessions ?? []),
+      {
+        id,
+        name: t('presets.copyName', { name: t(`presets.sessions.${preset.id}`) }),
+        ...copyPreset(lines(preset)),
+      },
+    ],
+  });
+  router.push(`/tabs/session/custom/${id}`);
 }
 
 async function start(preset: PresetSession): Promise<void> {
@@ -131,6 +155,9 @@ async function start(preset: PresetSession): Promise<void> {
                 @click="start(preset)"
               >
                 {{ t('presets.start', { name: t(`presets.sessions.${preset.id}`) }) }}
+              </ion-button>
+              <ion-button expand="block" fill="outline" @click="copy(preset)">
+                {{ t('presets.copy', { name: t(`presets.sessions.${preset.id}`) }) }}
               </ion-button>
             </section>
           </ion-card-content>
