@@ -815,7 +815,19 @@
     "front": "Front",
     "back": "Back",
     "date": "Weighing date",
-    "importHint": "Your weighings are elsewhere (smart scale, spreadsheet)? Export them as CSV (one date and one weight per line), then import them in Settings › My data."
+    "importHint": "Your weighings are in a spreadsheet or another app? Export them as CSV (one date and one weight per line), then import them in Settings › My data.",
+    "health": {
+      "import": "Import from Health Connect",
+      "reading": "Reading Health Connect…",
+      "help": "Gets the weighings of your smart scale, Samsung Health or Google Fit through Health Connect (Android). Trainerr only reads your weight, and weighings stay on your phone.",
+      "done": "{count} weighing imported from Health Connect. | {count} weighings imported from Health Connect.",
+      "nothing": "No new weighing in Health Connect.",
+      "unavailable": "Health Connect is not installed on this phone (Android 9 or later).",
+      "updateRequired": "Health Connect needs an update.",
+      "install": "Open Health Connect on the Play Store",
+      "denied": "Access denied: Trainerr cannot read your weight. You can allow it in the Health Connect settings.",
+      "error": "Could not read: {message}"
+    }
   },
   "settings": {
     "theme": {
@@ -1015,7 +1027,8 @@
       "newLook": "New look and statistics",
       "firstRelease": "First public version",
       "bodyWeight": "Weight tracking",
-      "easySwitch": "Switch machine in one tap"
+      "easySwitch": "Switch machine in one tap",
+      "healthConnect": "Weighings from Health Connect"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1045,7 +1058,8 @@
       "weightDate": "You can log a weighing on a past date.",
       "weightImport": "Import your weighings as CSV (smart scale, spreadsheet) in Settings › My data.",
       "switchButton": "A \"Switch\" button next to the machine name, at every set: the list of close machines opens at the top of the screen.",
-      "switchNext": "The \"Next machine\" screen also offers to switch before you go."
+      "switchNext": "The \"Next machine\" screen also offers to switch before you go.",
+      "healthConnectImport": "History › Body › \"Import from Health Connect\" gets the weighings of your smart scale, Samsung Health or Google Fit (Android)."
     }
   },
   "data": {

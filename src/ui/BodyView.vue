@@ -16,9 +16,15 @@ import {
   listMeasurements,
   type BodyMeasurement,
 } from '@/data/repositories/bodyRepository';
+import { weighingsToAdd } from '@/domain/healthWeights';
 import { bodyWeightTrend } from '@/domain/insights';
 import { parseLoad } from '@/domain/loadSteps';
 import TrendChart from '@/ui/charts/TrendChart.vue';
+import {
+  HEALTH_CONNECT_STORE,
+  healthConnectSupported,
+  readHealthWeighings,
+} from '@/ui/healthConnect';
 import { proteinTargetGrams } from '@/domain/tracking';
 import { readPhoto } from '@/ui/photo';
 import { todayIso } from '@/ui/useWeekPlan';
@@ -80,6 +86,49 @@ async function save(): Promise<void> {
   // Assisted pull-ups and dips use the latest weight.
   if (weightKg !== undefined) await session.reloadWeighings();
 }
+
+const healthConnect = healthConnectSupported();
+const importing = ref(false);
+const healthMessage = ref('');
+const needsHealthConnect = ref(false);
+
+/** Weighings written by a scale or a health app, copied once into Trainerr. */
+async function importFromHealthConnect(): Promise<void> {
+  importing.value = true;
+  healthMessage.value = '';
+  needsHealthConnect.value = false;
+  try {
+    const result = await readHealthWeighings(addYears(todayIso(), -2));
+    if (result.kind !== 'done') {
+      healthMessage.value = t(`body.health.${result.kind}`);
+      needsHealthConnect.value = result.kind !== 'denied';
+      return;
+    }
+    const known = new Set(
+      measurements.value.filter((m) => m.weightKg !== undefined).map((m) => m.date),
+    );
+    const toAdd = weighingsToAdd(result.weighings, known);
+    const { db } = await openAppDatabase();
+    for (const w of toAdd) {
+      measurements.value.push(
+        await addMeasurement(db, { date: w.date, weightKg: w.weightKg, measurements: {} }),
+      );
+    }
+    measurements.value = [...measurements.value].sort((a, b) => a.date.localeCompare(b.date));
+    if (toAdd.length > 0) await session.reloadWeighings();
+    healthMessage.value =
+      toAdd.length > 0 ? t('body.health.done', toAdd.length) : t('body.health.nothing');
+  } catch (error) {
+    healthMessage.value = t('body.health.error', {
+      message: error instanceof Error ? error.message : String(error),
+    });
+  } finally {
+    importing.value = false;
+  }
+}
+
+const addYears = (date: string, years: number) =>
+  `${Number(date.slice(0, 4)) + years}${date.slice(4, 10)}`.replace(/-02-29$/, '-02-28');
 
 const photos = computed(() => measurements.value.filter((m) => m.photo));
 const comparison = computed(() =>
@@ -175,6 +224,27 @@ async function remove(id: string): Promise<void> {
         label-placement="stacked"
       />
       <ion-button expand="block" @click="save">{{ t('body.save') }}</ion-button>
+      <template v-if="healthConnect">
+        <ion-button
+          expand="block"
+          fill="outline"
+          :disabled="importing"
+          @click="importFromHealthConnect"
+        >
+          {{ importing ? t('body.health.reading') : t('body.health.import') }}
+        </ion-button>
+        <p v-if="healthMessage" class="small" role="status">
+          {{ healthMessage }}
+          <a
+            v-if="needsHealthConnect"
+            :href="HEALTH_CONNECT_STORE"
+            target="_blank"
+            rel="noopener"
+            >{{ t('body.health.install') }}</a
+          >
+        </p>
+        <p class="small">{{ t('body.health.help') }}</p>
+      </template>
       <p class="small">{{ t('body.importHint') }}</p>
       <p class="small">{{ t('body.privacy') }}</p>
     </ion-card-content>

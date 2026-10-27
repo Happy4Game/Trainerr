@@ -217,6 +217,12 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - L'écran « Machine suivante » a aussi « Changer de machine », à côté de « Machine occupée ».
 - Les cartes « Changer » et « Machine occupée » s'affichent en haut de l'écran : la vue y remonte quand on les ouvre.
 
+## Pesées depuis Health Connect (27 oct. 2026)
+
+- Plugin natif Kotlin `HealthWeightPlugin` (connect-client 1.1.0, la dernière version stable) : disponibilité, permission `READ_WEIGHT` (et `READ_HEALTH_DATA_HISTORY` pour plus de 30 jours), lecture paginée des `WeightRecord`. Détails et sources : [docs/health-connect.md](docs/health-connect.md).
+- Côté web : `weighingsToAdd` garde une pesée par jour (la dernière), ignore les jours déjà pesés. Bouton dans Historique → Corps, Android seulement.
+- **À tester sur un vrai téléphone** : la CI compile l'APK, mais personne n'a encore lancé l'import sur un appareil.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

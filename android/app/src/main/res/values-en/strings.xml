@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="health_rationale">Trainerr only reads your weight in Health Connect, when you tap \"Import from Health Connect\" in History › Body. Weighings are copied into Trainerr and stay on your phone: nothing is sent anywhere, and Trainerr writes nothing to Health Connect. You can remove access at any time in the Health Connect settings.</string>
+</resources>

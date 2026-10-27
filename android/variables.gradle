@@ -13,4 +13,8 @@ ext {
     androidxJunitVersion = '1.3.0'
     androidxEspressoCoreVersion = '3.7.0'
     cordovaAndroidVersion = '14.0.1'
+    // Same Kotlin as the Capacitor plugins (local notifications), for the Health Connect plugin.
+    kotlin_version = '2.0.21'
+    healthConnectVersion = '1.1.0'
+    coroutinesVersion = '1.9.0'
 }

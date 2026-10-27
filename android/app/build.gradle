@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+// Kotlin only for the Health Connect plugin: its client is coroutine based.
+apply plugin: 'kotlin-android'
 
 android {
     namespace = "fr.trainerr.app"
@@ -51,10 +53,16 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
+    implementation "androidx.health.connect:connect-client:$healthConnectVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 apply from: 'capacitor.build.gradle'
