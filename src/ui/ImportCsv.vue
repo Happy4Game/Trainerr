@@ -10,11 +10,14 @@ import {
   detectFormat,
   parseCsv,
   parseLoadsCsv,
+  parseWeightsCsv,
   parseWorkoutCsv,
   suggestMatches,
   type ImportedLoad,
   type ImportedSession,
+  type ImportedWeighing,
 } from '@/domain/importCsv';
+import { addMeasurement } from '@/data/repositories/bodyRepository';
 import NextSessionChooser from '@/ui/NextSessionChooser.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useCatalog } from '@/ui/useCatalog';
@@ -34,11 +37,19 @@ const strongUnit = ref<'kg' | 'lb'>('kg');
 const parsed = ref<ImportedSession[]>([]);
 /** A file of loads already lifted, one per machine, instead of sessions. */
 const loads = ref<ImportedLoad[]>([]);
+/** A file of body weighings, from a scale app or typed by hand. */
+const weighings = ref<ImportedWeighing[]>([]);
 /** Sessions just imported: the user says where the cycle goes on. */
 const imported = ref(false);
 /** Exercise name in the file → catalog id, or '' to skip it. */
 const matches = ref<Record<string, string>>({});
 const message = ref('');
+const shortDate = (date: string | undefined) =>
+  date
+    ? new Intl.DateTimeFormat(locale.value, { dateStyle: 'medium', timeZone: 'UTC' }).format(
+        new Date(`${date}T00:00:00Z`),
+      )
+    : '';
 
 const catalogNames = computed(() =>
   entries.value.map((e) => ({
@@ -64,15 +75,22 @@ function parse(): void {
   imported.value = false;
   try {
     const header = parseCsv(text.value)[0] ?? [];
-    if (detectFormat(header) === 'loads') {
+    const detected = detectFormat(header);
+    parsed.value = [];
+    loads.value = [];
+    weighings.value = [];
+    if (detected === 'loads') {
       format.value = 'loads';
-      parsed.value = [];
       loads.value = parseLoadsCsv(text.value);
+    } else if (detected === 'weights') {
+      format.value = 'weights';
+      weighings.value = parseWeightsCsv(text.value);
+      message.value = weighings.value.length === 0 ? t('importCsv.weightsNone') : '';
+      return;
     } else {
       const result = parseWorkoutCsv(text.value, { strongUnit: strongUnit.value });
       format.value = result.format;
       parsed.value = result.sessions;
-      loads.value = [];
     }
     matches.value = Object.fromEntries(
       names.value.map((n) => [n, suggestions.value[n]?.[0] ?? '']),
@@ -82,6 +100,7 @@ function parse(): void {
     message.value = error instanceof Error ? error.message : String(error);
     parsed.value = [];
     loads.value = [];
+    weighings.value = [];
   }
 }
 
@@ -130,6 +149,27 @@ async function confirm(): Promise<void> {
   imported.value = count > 0;
 }
 
+/** Days already weighed in the app keep their weighing: no duplicates. */
+async function confirmWeighings(): Promise<void> {
+  const { db } = await openAppDatabase();
+  const known = new Set(
+    session.weighings.value.filter((w) => w.weightKg !== undefined).map((w) => w.date),
+  );
+  let count = 0;
+  for (const weighing of weighings.value) {
+    if (known.has(weighing.date)) continue;
+    await addMeasurement(db, {
+      date: weighing.date,
+      weightKg: weighing.weightKg,
+      measurements: {},
+    });
+    count++;
+  }
+  await session.reloadWeighings();
+  weighings.value = [];
+  message.value = count === 0 ? t('importCsv.weightsAlready') : t('importCsv.weightsDone', count);
+}
+
 async function confirmLoads(): Promise<void> {
   let count = 0;
   for (const load of loads.value) {
@@ -162,6 +202,21 @@ async function confirmLoads(): Promise<void> {
       :title="t('importCsv.continueTitle')"
       :help="t('importCsv.continueHelp')"
     />
+
+    <template v-if="weighings.length > 0">
+      <p>
+        {{
+          t('importCsv.weightsFound', {
+            count: weighings.length,
+            from: shortDate(weighings[0]?.date),
+            to: shortDate(weighings.at(-1)?.date),
+          })
+        }}
+      </p>
+      <ion-button expand="block" @click="confirmWeighings">
+        {{ t('importCsv.weightsConfirm', weighings.length) }}
+      </ion-button>
+    </template>
 
     <template v-if="loads.length > 0">
       <p>{{ t('importCsv.loadsFound', loads.length) }}</p>

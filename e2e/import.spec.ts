@@ -84,3 +84,35 @@ Presse à cuisses,107,10,2026-10-24
     page.getByRole('button', { name: /Ma charge sur Presse à cuisses : 107\s*kg × 10/ }),
   ).toBeVisible({ timeout: 20_000 });
 });
+
+test('imports weighings from a scale export, then shows the curve in Body', async ({ page }) => {
+  const day = (ago: number) => new Date(Date.now() - ago * 86_400_000).toISOString().slice(0, 10);
+  const SCALE = [
+    '"Date","Weight (kg)","Fat mass (kg)"',
+    `"${day(20)} 07:10:00","79.2","15.3"`,
+    `"${day(13)} 07:05:00","78.8","15.1"`,
+    `"${day(6)} 07:12:00","78.3","15.0"`,
+  ].join('\n');
+  await skipOnboarding(page);
+  await page.goto('/tabs/settings');
+  await page
+    .locator('input[type=file][accept=".csv,text/csv"]')
+    .setInputFiles({ name: 'weight.csv', mimeType: 'text/csv', buffer: Buffer.from(SCALE) });
+  await expect(page.getByText(/Pesées trouvées : 3/)).toBeVisible();
+  await page.getByRole('button', { name: 'Importer 3 pesées' }).click();
+  await expect(page.getByText(/3 pesées importées/)).toBeVisible();
+
+  // The same file again adds nothing: those days are already weighed.
+  await page
+    .locator('input[type=file][accept=".csv,text/csv"]')
+    .setInputFiles({ name: 'weight.csv', mimeType: 'text/csv', buffer: Buffer.from(SCALE) });
+  await page.getByRole('button', { name: 'Importer 3 pesées' }).click();
+  await expect(page.getByText('Aucune nouvelle pesée')).toBeVisible();
+
+  await page.goto('/tabs/history');
+  await page.locator('ion-segment-button', { hasText: 'Corps' }).click();
+  await expect(page.getByText('78,3 kg').first()).toBeVisible();
+  await expect(page.getByText('dernière pesée')).toBeVisible();
+  await expect(page.getByText(/−0,7 kg \/ semaine|−0,5 kg \/ semaine/)).toBeVisible();
+  await expect(page.getByRole('img', { name: 'Courbe du poids de corps, 3 pesées' })).toBeVisible();
+});

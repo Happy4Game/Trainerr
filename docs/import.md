@@ -24,6 +24,23 @@ Tirage vertical,45,8,2026-10-20
 
 Une ligne par machine ; si une machine revient plusieurs fois, la dernière ligne compte.
 
+## Mes pesées
+
+Ton poids du corps noté ailleurs : balance connectée, tableur, autre appli. Les pesées s'ajoutent dans **Historique → Corps** et dans la courbe des **Stats**.
+
+```csv
+date,weight_kg
+2026-10-20,78.9
+2026-10-24,78.4
+```
+
+| Colonne     | Contenu                                                                                                        |
+| ----------- | -------------------------------------------------------------------------------------------------------------- |
+| `date`      | Jour de la pesée : `2026-10-24` (une heure après est ignorée) ou `24/10/2026`                                  |
+| `weight_kg` | Poids. La colonne peut aussi s'appeler `poids`, `weight` ou `Weight (kg)` ; en livres si son nom contient `lb` |
+
+Les autres colonnes sont ignorées : l'export d'une balance (masse grasse, IMC…) s'importe tel quel tant qu'il a une date et un poids. Une pesée par jour (la dernière du fichier compte), et un jour déjà pesé dans l'appli garde sa pesée.
+
 ## Séances passées
 
 Une ligne par série. C'est aussi le format de l'export CSV de l'appli.

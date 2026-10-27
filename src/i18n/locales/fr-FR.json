@@ -812,7 +812,9 @@
       "alt": "Photo du {date}"
     },
     "front": "Face",
-    "back": "Dos"
+    "back": "Dos",
+    "date": "Date de la pesée",
+    "importHint": "Tu as tes pesées ailleurs (balance connectée, tableur) ? Exporte-les en CSV (une date et un poids par ligne) puis importe-les dans Réglages › Mes données."
   },
   "settings": {
     "theme": {
@@ -1010,7 +1012,8 @@
       "clearerSession": "Séance plus lisible",
       "wholeWeek": "Tous les muscles de la semaine",
       "newLook": "Nouveau look et statistiques",
-      "firstRelease": "Première version publiée"
+      "firstRelease": "Première version publiée",
+      "bodyWeight": "Suivi du poids"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1035,7 +1038,10 @@
       "machineSetup": "Le réglage du siège et la charge précise de chaque machine sont mémorisés.",
       "assisted": "Tractions et dips assistés comptés correctement.",
       "restScreen": "Écran de repos simplifié, avec une notification à la fin du repos.",
-      "autoUpdate": "L'appli se met à jour toute seule depuis les Réglages."
+      "autoUpdate": "L'appli se met à jour toute seule depuis les Réglages.",
+      "weightCurve": "La courbe de ton poids et sa tendance par semaine sont maintenant dans Historique › Corps, là où tu te pèses.",
+      "weightDate": "Tu peux noter une pesée à une date passée.",
+      "weightImport": "Import de tes pesées en CSV (balance connectée, tableur) dans Réglages › Mes données."
     }
   },
   "data": {
@@ -1180,7 +1186,7 @@
   },
   "importCsv": {
     "title": "Importer depuis une autre appli",
-    "choose": "Choisir un fichier CSV (séances ou charges)",
+    "choose": "Choisir un fichier CSV (séances, charges ou pesées)",
     "found": "{sessions} séance(s) trouvée(s) dans l'export {app}.",
     "apps": {
       "strong": "Strong",
@@ -1196,7 +1202,12 @@
     "continueHelp": "Tes séances importées ne suivent pas forcément le programme de l'appli : choisis la prochaine séance, la suite s'enchaîne.",
     "loadsFound": "{count} charge trouvée, une par machine. | {count} charges trouvées, une par machine.",
     "loadsConfirm": "Importer {count} charge | Importer {count} charges",
-    "loadsDone": "{count} charge importée : elle sert de point de départ sur la machine. | {count} charges importées : elles servent de point de départ sur chaque machine."
+    "loadsDone": "{count} charge importée : elle sert de point de départ sur la machine. | {count} charges importées : elles servent de point de départ sur chaque machine.",
+    "weightsFound": "Pesées trouvées : {count}, du {from} au {to}.",
+    "weightsConfirm": "Importer {count} pesée | Importer {count} pesées",
+    "weightsDone": "{count} pesée importée : elle apparaît dans Historique › Corps et dans les Stats. | {count} pesées importées : elles apparaissent dans Historique › Corps et dans les Stats.",
+    "weightsNone": "Aucune pesée lisible dans ce fichier (une date et un poids entre 20 et 400 kg par ligne).",
+    "weightsAlready": "Aucune nouvelle pesée : ces jours-là sont déjà notés."
   },
   "coach": {
     "section": "Partager avec un coach",

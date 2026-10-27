@@ -59,14 +59,67 @@ export function parseCsv(text: string): string[][] {
   return rows;
 }
 
-/** A session export, or the loads already lifted on each machine (no session). */
-export function detectFormat(header: readonly string[]): CsvFormat | 'loads' | undefined {
+/**
+ * A session export, the loads already lifted on each machine (no session), or
+ * body weighings (a date and a weight, from a scale app or typed by hand).
+ */
+export function detectFormat(
+  header: readonly string[],
+): CsvFormat | 'loads' | 'weights' | undefined {
   const h = header.map((c) => c.trim().toLowerCase());
   if (h.includes('exercise_title') && h.includes('weight_kg')) return 'hevy';
   if (h.includes('exercise name') && h.includes('set order')) return 'strong';
   if (h.includes('load_kg') && h.includes('template')) return 'trainerr';
   if (h.includes('load_kg') && h.includes('exercise')) return 'loads';
+  if (dateColumn(h) !== -1 && weightColumn(h) !== -1) return 'weights';
   return undefined;
+}
+
+const dateColumn = (header: readonly string[]) =>
+  header.findIndex((c) => /^"?(date|jour|day|time|timestamp)\b/.test(c));
+/** "weight_kg", "Weight (kg)", "Poids", "Body weight (lb)"… but not "Fat mass weight". */
+const weightColumn = (header: readonly string[]) =>
+  header.findIndex((c) => /^"?(body[ _-]?)?(weight|poids)(_|\b)/.test(c));
+
+export interface ImportedWeighing {
+  readonly date: IsoDate;
+  readonly weightKg: number;
+}
+
+/**
+ * Body weighings, one per line: `date,weight_kg`. The weight column may be
+ * named weight, poids or body weight, in lb when its name says so. Dates in
+ * ISO (2026-10-24, time ignored) or French order (24/10/2026). Implausible
+ * values are skipped; the last weighing of a day wins.
+ */
+export function parseWeightsCsv(text: string): ImportedWeighing[] {
+  const [header, ...rows] = parseCsv(text);
+  const h = (header ?? []).map((c) => c.trim().toLowerCase());
+  if (detectFormat(h) !== 'weights')
+    throw new Error('Format de fichier non reconnu (date, weight_kg).');
+  const date = dateColumn(h);
+  const weight = weightColumn(h);
+  const factor = /\b(lb|lbs|pounds?)\b/.test(h[weight] ?? '') ? LB_TO_KG : 1;
+  const byDay = new Map<IsoDate, number>();
+  for (const row of rows) {
+    const day = toIsoDate(row[date] ?? '') ?? frenchDate(row[date] ?? '');
+    const kg = Math.round(number(row[weight]) * factor * 10) / 10;
+    if (!day || kg < 20 || kg > 400) continue;
+    byDay.set(day, kg);
+  }
+  return [...byDay.entries()]
+    .map(([day, weightKg]) => ({ date: day, weightKg }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/** 24/10/2026 or 24.10.2026: day first, as written in France. */
+function frenchDate(text: string): IsoDate | undefined {
+  const match = /(\d{1,2})[/.](\d{1,2})[/.](\d{4})/.exec(text);
+  if (!match) return undefined;
+  const [, day, month, year] = match as unknown as [string, string, string, string];
+  if (Number(month) < 1 || Number(month) > 12 || Number(day) < 1 || Number(day) > 31)
+    return undefined;
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 }
 
 export interface ImportedLoad {
@@ -120,6 +173,7 @@ export function parseWorkoutCsv(
   const [header, ...rows] = parseCsv(text);
   const format = header ? detectFormat(header) : undefined;
   if (format === 'loads') throw new Error('Ce fichier contient des charges, pas des séances.');
+  if (format === 'weights') throw new Error('Ce fichier contient des pesées, pas des séances.');
   if (!header || !format)
     throw new Error('Format de fichier non reconnu (Strong, Hevy ou Trainerr).');
   const column = (name: string) => header.findIndex((c) => c.trim().toLowerCase() === name);
