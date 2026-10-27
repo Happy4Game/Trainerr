@@ -89,65 +89,6 @@ async function redoQuestionnaire(): Promise<void> {
     </ion-header>
     <ion-content>
       <ion-list v-if="settings">
-        <ion-list-header>{{ t('settings.content') }}</ion-list-header>
-        <ion-item router-link="/tabs/settings/tips" detail>
-          <ion-label>{{ t('tips.title') }}</ion-label>
-        </ion-item>
-        <ion-item router-link="/tabs/settings/friends" detail>
-          <ion-label>{{ t('friends.title') }}</ion-label>
-        </ion-item>
-        <ion-item router-link="/tabs/settings/about" detail>
-          <ion-label>{{ t('about.title') }}</ion-label>
-        </ion-item>
-        <ion-item router-link="/tabs/settings/credits" detail>
-          <ion-label>{{ t('credits.title') }}</ion-label>
-        </ion-item>
-
-        <ion-list-header>{{ t('settings.language.title') }}</ion-list-header>
-        <ion-item>
-          <ion-select
-            :label="t('settings.language.label')"
-            :value="settings.language"
-            interface="action-sheet"
-            @ion-change="updateSettings({ language: $event.detail.value })"
-          >
-            <ion-select-option v-for="l in LANGUAGES" :key="l" :value="l">
-              {{ t(`settings.language.options.${l}`) }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            :label="t('settings.unit.label')"
-            :value="settings.weightUnit"
-            interface="action-sheet"
-            @ion-change="updateSettings({ weightUnit: $event.detail.value })"
-          >
-            <ion-select-option v-for="u in UNITS" :key="u" :value="u">
-              {{ t(`settings.unit.options.${u}`) }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-item>
-          <ion-select
-            :label="t('settings.theme.label')"
-            :value="settings.theme ?? 'dark'"
-            interface="action-sheet"
-            @ion-change="updateSettings({ theme: $event.detail.value })"
-          >
-            <ion-select-option v-for="th in THEMES" :key="th" :value="th">
-              {{ t(`settings.theme.options.${th}`) }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ProfileSection />
-
-        <GymsSection />
-
-        <PlatesSection />
-
         <ion-list-header>{{ t('settings.workout') }}</ion-list-header>
         <ion-item>
           <ion-toggle
@@ -194,6 +135,12 @@ async function redoQuestionnaire(): Promise<void> {
           <ion-label>{{ t('settings.redo') }}</ion-label>
         </ion-item>
 
+        <ProfileSection />
+
+        <GymsSection />
+
+        <PlatesSection />
+
         <ion-list-header>{{ t('settings.notifications') }}</ion-list-header>
         <ion-item>
           <ion-toggle
@@ -224,8 +171,62 @@ async function redoQuestionnaire(): Promise<void> {
             </p>
           </ion-label>
         </ion-item>
+
+        <ion-list-header>{{ t('settings.language.title') }}</ion-list-header>
+        <ion-item>
+          <ion-select
+            :label="t('settings.language.label')"
+            :value="settings.language"
+            interface="action-sheet"
+            @ion-change="updateSettings({ language: $event.detail.value })"
+          >
+            <ion-select-option v-for="l in LANGUAGES" :key="l" :value="l">
+              {{ t(`settings.language.options.${l}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select
+            :label="t('settings.unit.label')"
+            :value="settings.weightUnit"
+            interface="action-sheet"
+            @ion-change="updateSettings({ weightUnit: $event.detail.value })"
+          >
+            <ion-select-option v-for="u in UNITS" :key="u" :value="u">
+              {{ t(`settings.unit.options.${u}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-select
+            :label="t('settings.theme.label')"
+            :value="settings.theme ?? 'dark'"
+            interface="action-sheet"
+            @ion-change="updateSettings({ theme: $event.detail.value })"
+          >
+            <ion-select-option v-for="th in THEMES" :key="th" :value="th">
+              {{ t(`settings.theme.options.${th}`) }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
         <UpdatesSection />
         <DataSection />
+
+        <ion-list-header>{{ t('settings.content') }}</ion-list-header>
+        <ion-item router-link="/tabs/settings/tips" detail>
+          <ion-label>{{ t('tips.title') }}</ion-label>
+        </ion-item>
+        <ion-item router-link="/tabs/settings/friends" detail>
+          <ion-label>{{ t('friends.title') }}</ion-label>
+        </ion-item>
+        <ion-item router-link="/tabs/settings/about" detail>
+          <ion-label>{{ t('about.title') }}</ion-label>
+        </ion-item>
+        <ion-item router-link="/tabs/settings/credits" detail>
+          <ion-label>{{ t('credits.title') }}</ion-label>
+        </ion-item>
       </ion-list>
     </ion-content>
   </ion-page>
