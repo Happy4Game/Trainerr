@@ -31,7 +31,9 @@
       "first": "First time"
     },
     "tiredOff": "Not in shape? Make it lighter",
-    "tiredOn": "✓ Lighter session: one set less, same loads"
+    "tiredOn": "✓ Lighter session: one set less, same loads",
+    "doneToday": "✓ Today's session done, well done! Next one:",
+    "goExtra": "Do an extra session"
   },
   "gym": {
     "defaultName": "My gym"

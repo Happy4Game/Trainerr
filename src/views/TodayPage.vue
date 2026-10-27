@@ -103,6 +103,8 @@ onMounted(loadBadges);
 watch(history, loadBadges);
 
 const today = computed(() => days.value.find((d) => d.date === todayIso()));
+/** Already trained today: say well done, and the next one is an extra. */
+const doneToday = computed(() => history.value.some((s) => s.date === todayIso()));
 
 /** « Commencer » lance directement la séance proposée : pas d'écran intermédiaire. */
 const starting = ref(false);
@@ -149,14 +151,18 @@ const streak = computed(() =>
             {{
               active
                 ? t('today.inProgressShort')
-                : today?.session
-                  ? t('today.plannedAt', { start: today.session.start })
-                  : t('today.noPlan')
+                : doneToday
+                  ? t('today.doneToday')
+                  : today?.session
+                    ? t('today.plannedAt', { start: today.session.start })
+                    : t('today.noPlan')
             }}
           </p>
           <h2 v-if="active">{{ templateLabel(active.templateId) }}</h2>
           <h2 v-else-if="template">{{ templateLabel(template.id) }}</h2>
-          <p v-if="!active && !today?.session" class="hint">{{ t('today.restDay') }}</p>
+          <p v-if="!active && !today?.session && !doneToday" class="hint">
+            {{ t('today.restDay') }}
+          </p>
           <p v-if="planCount > 0" class="meta">
             <span>{{ t('today.exercises', planCount) }}</span>
             <span>{{ t('session.menu.sets', totalSets) }}</span>
@@ -184,7 +190,7 @@ const streak = computed(() =>
             </li>
           </ol>
           <ion-button expand="block" size="large" :disabled="starting" @click="go">
-            {{ active ? t('today.resume') : t('today.go') }}
+            {{ active ? t('today.resume') : doneToday ? t('today.goExtra') : t('today.go') }}
           </ion-button>
           <ion-button
             v-if="!active && planCount > 0"

@@ -31,7 +31,9 @@
       "first": "1re fois"
     },
     "tiredOff": "Pas en forme ? Alléger la séance",
-    "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges"
+    "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges",
+    "doneToday": "✓ Séance du jour faite, bravo ! La prochaine :",
+    "goExtra": "Faire une séance en plus"
   },
   "gym": {
     "defaultName": "Ma salle"

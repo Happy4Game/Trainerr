@@ -25,6 +25,14 @@ test('today shows the whole next session, and a lighter one when not in shape', 
 
   await hero.getByRole('button', { name: 'Commencer' }).click();
   await expect(page.getByText('Série 1 sur 2')).toBeVisible();
+
+  // Once done, today says so, and another session is an extra.
+  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: 'Terminer la séance' }).click();
+  await page.getByRole('button', { name: 'Fermer' }).click();
+  await page.getByRole('tab', { name: "Aujourd'hui" }).click();
+  await expect(hero.getByText('Séance du jour faite, bravo')).toBeVisible();
+  await expect(hero.getByRole('button', { name: 'Faire une séance en plus' })).toBeVisible();
 });
 
 test('someone who already trains notes a usual load instead of a test set', async ({ page }) => {
