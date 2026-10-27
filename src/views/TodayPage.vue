@@ -20,9 +20,9 @@ import { openAppDatabase } from '@/data/appDatabase';
 import { listBadges, type EarnedBadge } from '@/data/repositories/badgeRepository';
 import { useI18n } from 'vue-i18n';
 import { weeksOnPace } from '@/domain/stats';
-import { estimateMinutes, loadChange, type LoadChange } from '@/domain/sessionPreview';
+import { estimateMinutes, type LoadChange } from '@/domain/sessionPreview';
+import { usePlanInsights } from '@/ui/session/usePlanInsights';
 import { useLoadLabel } from '@/ui/session/useLoadLabel';
-import { useUnits } from '@/ui/useUnits';
 import AdviceCard from '@/ui/AdviceCard.vue';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useSession } from '@/ui/session/useSession';
@@ -43,7 +43,6 @@ const planIds = computed(() =>
 );
 const planCount = computed(() => planIds.value.length);
 const loadOf = useLoadLabel();
-const { load: kg } = useUnits();
 
 interface PreviewRow {
   readonly id: string;
@@ -73,11 +72,7 @@ const rows = computed<PreviewRow[]>(() =>
       ...(active.value && doneSets > 0
         ? {}
         : {
-            change: loadChange({
-              proposedKg: proposed,
-              lastLoadsKg: session.lastTimeSets(id).map((s) => s.loadKg),
-              assisted: exercise?.assisted === true,
-            }),
+            change: insights.changeFor(id),
           }),
       done: !!active.value && doneSets >= sets,
     };
@@ -89,12 +84,8 @@ const totalSets = computed(() =>
 const minutes = computed(() => estimateMinutes(totalSets.value));
 const doneCount = computed(() => rows.value.filter((r) => r.done).length);
 const goingUp = computed(() => rows.value.filter((r) => r.change?.kind === 'up').length);
-/** Muscles behind on their week that this session works: "it catches up calves". */
-const catchUp = computed(() => {
-  if (active.value) return [];
-  const worked = new Set(preview.value.flatMap((e) => e.primaryMuscles));
-  return session.neglected.value.filter((m) => worked.has(m));
-});
+const insights = usePlanInsights(preview);
+const catchUpText = computed(() => (active.value ? undefined : insights.catchUpText.value));
 
 /** Very close machines for an exercise of the preview, opened one row at a time. */
 const choosing = ref<string>();
@@ -107,10 +98,7 @@ async function swap(fromId: string, toId: string): Promise<void> {
   await session.swapPlanned(fromId, toId);
 }
 
-const changeLabel = (change: LoadChange) =>
-  change.kind === 'up'
-    ? t('today.change.up', { delta: kg(change.deltaKg) })
-    : t('today.change.first');
+const { changeLabel } = insights;
 
 const badges = ref<EarnedBadge[]>([]);
 async function loadBadges(): Promise<void> {
@@ -190,9 +178,7 @@ const streak = computed(() =>
             {{ t('today.doneOf', { done: doneCount, total: planCount }) }}
           </p>
           <p v-else-if="goingUp > 0" class="hint">{{ t('today.goingUp', goingUp) }}</p>
-          <p v-if="catchUp.length > 0" class="hint">
-            {{ t('today.catchUp', { muscles: catchUp.map((m) => t(`muscles.${m}`)).join(', ') }) }}
-          </p>
+          <p v-if="catchUpText" class="hint">{{ catchUpText }}</p>
           <ol v-if="rows.length > 0" class="preview">
             <li v-for="row in rows" :key="row.id" :class="{ done: row.done }">
               <img v-if="row.thumbnail" :src="row.thumbnail" alt="" />

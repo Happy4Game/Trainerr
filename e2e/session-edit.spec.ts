@@ -66,6 +66,8 @@ test('switching machine is at hand: next to the name after a set, and on the nex
   await star(page, 'pec deck', 'Écarté à la machine');
 
   await page.getByRole('tab', { name: 'Séance' }).click();
+  // Same insights as on Today: here, every machine is new.
+  await expect(page.getByText('1re fois').filter({ visible: true })).toHaveCount(2);
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
   const machine = page.getByRole('region', { name: 'Développé épaules machine' });
   await expect(machine).toBeVisible();
