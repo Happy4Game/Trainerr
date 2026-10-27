@@ -995,8 +995,48 @@
     "p3": "I was not a fan of AI to begin with. But here it is for a good cause, and I find it works well.",
     "p4": "Any help is welcome: a mistake spotted, an idea, a tip, feel free to tell me.",
     "report": "Report a mistake or suggest an idea",
-    "reportSoon": "The contact option is coming soon.",
     "credits": "See the credits and sources"
+  },
+  "feedback": {
+    "title": "Send feedback",
+    "help": "A bug, an idea? This opens your mail app with a message ready to fill in. Nothing is sent without you.",
+    "subject": "Trainerr: my feedback",
+    "intro": "Hi Thibaut,\n\n(Write here what is wrong or your idea. The details below the line help reproduce a bug, you can delete them.)"
+  },
+  "changelog": {
+    "title": "What's new",
+    "help": "What changed in each update",
+    "titles": {
+      "clearerSession": "A clearer session",
+      "wholeWeek": "Every muscle over the week",
+      "newLook": "New look and statistics",
+      "firstRelease": "First public version"
+    },
+    "items": {
+      "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
+      "changelog": "This page, to see what changes in each update.",
+      "scrollTop": "Moving to the next machine brings the screen back to the top.",
+      "steppers": "Choosing the load and reps is bigger and clearer, with round buttons.",
+      "neglected": "Today's session catches up on muscles you trained little over the last 7 days.",
+      "closeMachines": "Very similar machines are offered when yours is taken, before or during the session.",
+      "addToPlan": "You can add exercises to the session plan.",
+      "noLoadCap": "No more maximum load stuck on a machine not set up yet.",
+      "muscleSearch": "Search by muscle shows every exercise and is forgotten when you close it.",
+      "updateCheck": "Updates are also found when you come back to the app.",
+      "pastSession": "You can add a session done without the app in History.",
+      "design": "New design, dark and light.",
+      "stats": "Statistics on your progress, volume and muscles.",
+      "exports": "Export your sessions and a full backup as a file.",
+      "notInShape": "\"Not in shape\" lightens today's session.",
+      "trophies": "Trophies to celebrate milestones.",
+      "shareRecap": "The end of session recap can be shared.",
+      "presets": "5 ready-made sessions, in the right order.",
+      "swapMachine": "Change machine or adjust the session in progress.",
+      "machineSetup": "Seat setting and exact load are remembered for each machine.",
+      "assisted": "Assisted pull-ups and dips counted correctly.",
+      "restScreen": "Simpler rest screen, with a notification when rest is over.",
+      "autoUpdate": "The app updates itself from Settings."
+    }
   },
   "data": {
     "title": "My data",

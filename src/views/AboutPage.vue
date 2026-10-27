@@ -10,8 +10,10 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { useI18n } from 'vue-i18n';
+import { useFeedbackLink } from '@/ui/feedback';
 
 const { t } = useI18n();
+const feedback = useFeedbackLink();
 const paragraphs = ['p1', 'p2', 'p3', 'p4'] as const;
 </script>
 
@@ -29,9 +31,10 @@ const paragraphs = ['p1', 'p2', 'p3', 'p4'] as const;
       <blockquote>
         <p v-for="p in paragraphs" :key="p">{{ t(`about.${p}`) }}</p>
       </blockquote>
-      <!-- Le moyen de contact (formulaire, e-mail ou page du projet) reste à choisir par Thibaut. -->
-      <ion-button expand="block" fill="outline" disabled>{{ t('about.report') }}</ion-button>
-      <p class="small">{{ t('about.reportSoon') }}</p>
+      <ion-button expand="block" fill="outline" :href="feedback">{{
+        t('about.report')
+      }}</ion-button>
+      <p class="small">{{ t('feedback.help') }}</p>
       <ion-button expand="block" fill="clear" router-link="/tabs/settings/credits">
         {{ t('about.credits') }}
       </ion-button>

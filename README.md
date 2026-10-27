@@ -56,7 +56,8 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 - **Hors ligne d'abord** : base SQLite sur le téléphone, aucune donnée envoyée sans action de ta part (RGPD).
 - **Français et anglais**, kilos ou livres, thème clair et sombre, grandes zones tactiles.
 - Export (via le menu Partager d'Android), import (Strong, Hevy, tes séances ou tes charges en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
-- **Mises à jour intégrées** sur Android : l'appli trouve toute seule la nouvelle version (au démarrage et quand tu y reviens) et l'installe avec ton accord ([docs/mises-a-jour.md](docs/mises-a-jour.md)).
+- **Mises à jour intégrées** sur Android : l'appli trouve toute seule la nouvelle version (au démarrage et quand tu y reviens) et l'installe avec ton accord ([docs/mises-a-jour.md](docs/mises-a-jour.md)). La page **Nouveautés** des Réglages dit ce qui change à chaque version.
+- **Envoyer un retour** depuis les Réglages : ça ouvre ton appli mail avec un message prérempli (version de l'appli, téléphone, langue). Rien n'est envoyé sans toi.
 
 ## 🚀 Installer et lancer
 
@@ -158,7 +159,7 @@ Les captures d'écran ci-dessus contiennent des dessins Everkinetic (CC BY-SA 4.
 
 ## 🤝 Contribuer
 
-Les contributions sont les bienvenues : lis [CONTRIBUTING.md](CONTRIBUTING.md) pour l'installation, les règles de code, les tests attendus et le déroulé d'une pull request.
+Les contributions sont les bienvenues : lis [CONTRIBUTING.md](CONTRIBUTING.md) pour l'installation, les règles de code, les tests attendus et le déroulé d'une pull request. Une pull request qui change ce que voit l'utilisateur ajoute une ligne à la page Nouveautés ([src/data/content/changelog.ts](src/data/content/changelog.ts), textes dans `changelog.items` des traductions).
 
 ## ⚖️ Licence
 

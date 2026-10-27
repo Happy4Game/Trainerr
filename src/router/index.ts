@@ -38,6 +38,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'settings/credits', component: () => import('@/views/CreditsPage.vue') },
       { path: 'settings/friends', component: () => import('@/views/FriendsPage.vue') },
       { path: 'settings/about', component: () => import('@/views/AboutPage.vue') },
+      { path: 'settings/changelog', component: () => import('@/views/ChangelogPage.vue') },
       { path: 'planning', component: () => import('@/views/PlanningPage.vue') },
     ],
   },
