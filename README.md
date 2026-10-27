@@ -8,6 +8,7 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 [Fonctionnalités](#-fonctionnalités) ·
 [Installer](#-installer-et-lancer) ·
+[iOS](#-construire-pour-ios) ·
 [Contribuer](CONTRIBUTING.md) ·
 [Sources et crédits](#-sources-et-crédits) ·
 [Licence](#-licence)
@@ -108,6 +109,15 @@ Autres commandes : `npm run android:apk` (APK dans `android/app/build/outputs/ap
 
 > C'est un APK **de test**, signé avec une clé de debug. Pour le Play Store, il faut une clé de signature personnelle : la marche à suivre est dans [docs/android.md](docs/android.md#version-de-production-play-store).
 
+## 🍎 Construire pour iOS
+
+L'appli se compile aussi pour iPhone, **sans compte Apple Developer payant** (elle n'est pas sur l'App Store). Le workflow **iOS** tourne sur un Mac de GitHub Actions, gratuit pour un dépôt public, à chaque push et pull request. Dans l'onglet **Actions**, il dépose deux artefacts :
+
+- `trainerr-ios-simulator` : l'appli pour le simulateur d'iPhone d'Xcode ;
+- `trainerr-ios-unsigned-ipa` : un `.ipa` **non signé**, à signer avant de l'installer sur un iPhone.
+
+Pour l'installer sur ton iPhone avec un compte Apple gratuit (via Xcode sur un Mac, à refaire tous les 7 jours) et voir ce qui diffère d'Android : [docs/ios.md](docs/ios.md). Commandes : `npm run ios:sync` (met à jour le projet iOS), `npx cap open ios` (ouvre Xcode).
+
 ## 🧪 Tests et qualité
 
 | Commande                | Ce qu'elle vérifie                                                 |
@@ -126,7 +136,7 @@ Un hook Git (Husky) lance le lint, les types, les traductions et les tests avant
 
 ## 🧱 Comment c'est construit
 
-[Ionic](https://ionicframework.com) + [Vue 3](https://vuejs.org) + [Capacitor](https://capacitorjs.com), TypeScript strict, SQLite sur le téléphone.
+[Ionic](https://ionicframework.com) + [Vue 3](https://vuejs.org) + [Capacitor](https://capacitorjs.com), TypeScript strict, SQLite sur le téléphone. Les projets natifs sont dans `android/` et `ios/`.
 
 | Dossier                 | Contenu                                                                                                 |
 | ----------------------- | ------------------------------------------------------------------------------------------------------- |
