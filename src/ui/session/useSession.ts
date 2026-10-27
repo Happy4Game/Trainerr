@@ -6,6 +6,7 @@ import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
 import {
   abandonSession,
+  addPastSession as addPastSessionRow,
   addSet,
   deleteSet,
   moveSets,
@@ -924,6 +925,24 @@ async function editHistory(change: (db: SqlDatabase) => Promise<unknown>): Promi
   history.value = await listDoneSessions(db);
 }
 
+/**
+ * A session done without the app. It starts from the last session of the
+ * same type (same exercises, loads and reps), so only the differences are typed.
+ */
+async function addPastSession(input: { date: string; templateId: string }): Promise<string> {
+  const { db } = await openAppDatabase();
+  const previous = history.value.filter((s) => s.templateId === input.templateId).at(-1);
+  const id = await addPastSessionRow(db, {
+    ...input,
+    gymId: settings.value?.currentGymId ?? 'default',
+    sets: (previous?.sets ?? [])
+      .filter((s) => !s.warmup)
+      .map(({ exerciseId, loadKg, reps }) => ({ exerciseId, loadKg, reps, difficulty: 'ok' })),
+  });
+  history.value = await listDoneSessions(db);
+  return id;
+}
+
 /** Supersets are an option: a pair can be split at any time, sets then follow as usual. */
 async function splitSuperset(exerciseId: string): Promise<void> {
   if (!active.value) return;
@@ -1158,6 +1177,7 @@ export function useSession() {
     splitSuperset,
     addExerciseNow,
     editHistory,
+    addPastSession,
     extraSet,
     replacements,
     sameMovement,

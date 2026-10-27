@@ -18,6 +18,7 @@ import {
   IonTextarea,
   IonTitle,
   IonToolbar,
+  onIonViewDidLeave,
   useIonRouter,
 } from '@ionic/vue';
 import { Plus, Trash2 } from 'lucide-vue-next';
@@ -113,6 +114,13 @@ async function addExercise(exerciseId: string) {
   await addOneMore(exerciseId, last);
 }
 
+/** A session left without any set (added from the history, then nothing typed) is not kept. */
+onIonViewDidLeave(async () => {
+  if (past.value && past.value.sets.length === 0) {
+    await session.editHistory((db) => deleteSession(db, props.id));
+  }
+});
+
 async function remove() {
   await session.editHistory((db) => deleteSession(db, props.id));
   router.navigate('/tabs/history', 'back', 'pop');
@@ -145,6 +153,9 @@ async function remove() {
           "
         />
 
+        <p v-if="groups.length === 0" class="empty-hint" role="note">
+          {{ t('historyEdit.emptyHint') }}
+        </p>
         <ion-card v-for="group in groups" :key="group.exerciseId">
           <ion-card-header>
             <ion-card-title>{{ nameOf(group.exerciseId) }}</ion-card-title>
@@ -286,6 +297,10 @@ async function remove() {
 </template>
 
 <style scoped>
+.empty-hint {
+  margin-block: var(--tr-space-4);
+  color: var(--tr-text-muted);
+}
 .set-extra {
   grid-column: 1 / -1;
   margin: 0 0 4px;

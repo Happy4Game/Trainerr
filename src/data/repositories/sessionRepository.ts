@@ -240,6 +240,26 @@ export async function listDoneSessions(
   }));
 }
 
+/**
+ * A session done without the app, added afterwards: already finished, with
+ * the sets it starts from (the user corrects them next).
+ */
+export async function addPastSession(
+  db: SqlDatabase,
+  input: { date: IsoDate; templateId: string; gymId: string; sets: readonly SetLog[] },
+): Promise<string> {
+  const id = newId();
+  const statements = [
+    `INSERT INTO session (id, date, template, status, gym_id, plan) VALUES (${q(id)}, ${q(input.date)}, ${q(input.templateId)}, 'done', ${q(input.gymId)}, '{}');`,
+    ...input.sets.map(
+      (set, index) =>
+        `INSERT INTO set_log (id, session_id, exercise_id, position, load_kg, reps, difficulty, warmup) VALUES (${q(newId())}, ${q(id)}, ${q(set.exerciseId)}, ${index + 1}, ${q(set.loadKg)}, ${q(set.reps)}, ${q(set.difficulty)}, ${set.warmup ? 1 : 0});`,
+    ),
+  ];
+  await db.executeScript(statements.join('\n'));
+  return id;
+}
+
 /** Sessions coming from another app, imported in one transaction (all or nothing). */
 export async function importSessions(
   db: SqlDatabase,
