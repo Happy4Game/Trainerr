@@ -222,6 +222,14 @@ async function capture(browser, scheme) {
   await page.waitForTimeout(800);
   await shot(page, p('07-reglages'));
 
+  await page.goto(`${baseURL}/tabs/planning`);
+  await page.waitForTimeout(800);
+  await shot(page, p('08-planning'));
+
+  await page.goto(`${baseURL}/tabs/catalog`);
+  await page.waitForTimeout(1200);
+  await shot(page, p('09-catalogue'));
+
   await context.close();
 }
 

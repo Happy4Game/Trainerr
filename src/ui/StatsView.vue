@@ -72,14 +72,17 @@ const shortDate = (date: string) =>
 const signed = (kg: number) => (kg > 0 ? `+${load(kg)}` : kg < 0 ? `−${load(-kg)}` : load(0));
 
 // ---- Am I progressing? ----
-const trends = computed(() => allTrends(sessions.value, today));
+// The most worked exercises first: the chip selected by default is visible.
+const trends = computed(() =>
+  [...allTrends(sessions.value, today)].sort((a, b) => b.sessions - a.sessions),
+);
 const selected = ref<string>();
 watch(
   trends,
   (list) => {
     if (!selected.value || !list.some((tr) => tr.exerciseId === selected.value)) {
       // The most worked exercise of the last sessions: usually the one that matters.
-      selected.value = [...list].sort((a, b) => b.sessions - a.sessions)[0]?.exerciseId;
+      selected.value = list[0]?.exerciseId;
     }
   },
   { immediate: true },

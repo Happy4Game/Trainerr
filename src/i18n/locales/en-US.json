@@ -77,6 +77,7 @@
   },
   "catalog": {
     "search": "Search a machine or a muscle",
+    "searchShort": "Machine, muscle…",
     "filters": {
       "all": "All",
       "favorites": "My machines",
