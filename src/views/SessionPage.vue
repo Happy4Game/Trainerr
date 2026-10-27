@@ -42,6 +42,7 @@ import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
 import SetEntry from '@/ui/session/SetEntry.vue';
 import ReplaceCard from '@/ui/session/ReplaceCard.vue';
 import { useSessionNotification } from '@/ui/session/useSessionNotification';
+import { usePlanInsights } from '@/ui/session/usePlanInsights';
 import { useLoadLabel } from '@/ui/session/useLoadLabel';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionPlanList from '@/ui/session/SessionPlanList.vue';
@@ -224,6 +225,8 @@ const suggestedBadge = (id: string) =>
     ? t('session.readyMade.suggested')
     : undefined;
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
+/** Same insights as on Today: loads going up, muscles caught up. */
+const insights = usePlanInsights(preview);
 const { load: kg } = useUnits();
 
 /** Minutes since the start, refreshed every 30 s: "where am I in my hour?". */
@@ -401,6 +404,12 @@ async function logWarmup(): Promise<void> {
             <span>{{ t('session.menu.sets', planSets) }}</span>
             <span>{{ t('session.menu.minutes', { minutes: planMinutes }) }}</span>
           </p>
+          <p v-if="preview.length > 0 && insights.goingUp.value > 0" class="day-hint">
+            {{ t('today.goingUp', insights.goingUp.value) }}
+          </p>
+          <p v-if="preview.length > 0 && insights.catchUpText.value" class="day-hint">
+            {{ insights.catchUpText.value }}
+          </p>
           <template v-if="preview.length > 0">
             <SessionPlanList
               :exercises="preview"
@@ -408,6 +417,7 @@ async function logWarmup(): Promise<void> {
               :name="exerciseName"
               :detail="planDetail"
               :to="cardLink"
+              :badge="insights.changeText"
             />
             <div v-if="unknownLoads.length > 0" class="usual-loads" role="note">
               <p>{{ t('session.usualLoads.intro', unknownLoads.length) }}</p>
@@ -1374,6 +1384,10 @@ async function logWarmup(): Promise<void> {
   background: var(--tr-surface-2);
   font-size: 0.85rem;
   font-weight: 700;
+}
+.day-hint {
+  margin: 0 0 var(--tr-space-3);
+  color: var(--tr-text-muted);
 }
 .share-icon {
   margin-inline-end: 8px;
