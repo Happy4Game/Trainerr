@@ -45,8 +45,13 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   // And the session goes on, on that machine.
   await expect(page.getByText('Série 2 sur 2')).toBeVisible();
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
-  await expect(page.getByText('Série 2 sur 2')).toHaveCount(0);
+  // The screen scrolls back up after the move: on a loaded runner the tap can
+  // land during that scroll and be lost. Tap again only if the set is still due.
+  await expect(async () => {
+    if ((await page.getByText('Série 2 sur 2').count()) > 0)
+      await page.getByRole('button', { name: 'Correct', exact: true }).click({ timeout: 1000 });
+    await expect(page.getByText('Série 2 sur 2')).toHaveCount(0, { timeout: 3000 });
+  }).toPass({ timeout: 15_000 });
 
   // Reorder what comes next from the overview.
   await page.getByRole('button', { name: 'Voir le programme de la séance' }).click();
@@ -56,15 +61,15 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   // Wait for the new order before the next tap: on a slow machine the list is
   // redrawn after the move, and a tap on the old row would be lost.
   await expect(page.locator('ion-modal li').last()).toContainText('Écarté à la machine');
-  // The list can still be redrawing after the move on a slow CI runner and swallow the
-  // tap: tap again while the row is there, until it is gone.
-  const remove = page.getByRole('button', { name: 'Retirer de la séance : Écarté à la machine' });
-  await expect(async () => {
-    if ((await remove.count()) > 0) await remove.click({ timeout: 1000 });
-    await expect(page.getByText('Écarté à la machine', { exact: true })).toHaveCount(0, {
-      timeout: 1000,
-    });
-  }).toPass({ timeout: 10_000 });
+  // The sheet redraws its list after the move, and on a slow runner a tap can
+  // land on the button that slid under the finger. Remove from a list opened
+  // afresh, which no longer moves.
+  await page.getByRole('button', { name: 'Fermer' }).click();
+  await expect(page.locator('ion-modal li')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Voir le programme de la séance' }).click();
+  await expect(page.locator('ion-modal li').last()).toContainText('Écarté à la machine');
+  await page.getByRole('button', { name: 'Retirer de la séance : Écarté à la machine' }).click();
+  await expect(page.getByText('Écarté à la machine', { exact: true })).toHaveCount(0);
 });
 
 test('switching machine is at hand: next to the name after a set, and on the next machine screen', async ({
