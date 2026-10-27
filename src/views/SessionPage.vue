@@ -18,7 +18,7 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { computed, ref, watch } from 'vue';
-import { House, LayoutList, Pencil, Play, Plus, Zap } from 'lucide-vue-next';
+import { House, LayoutList, Pencil, Play, Plus, Share2, Zap } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import type { Alternative } from '@/domain/busyMachine';
@@ -45,6 +45,8 @@ import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
 import { useSession } from '@/ui/session/useSession';
 import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/useWeekPlan';
+import { drawRecap } from '@/ui/recapImage';
+import { shareOrDownload } from '@/ui/shareFile';
 
 const { t, n, locale } = useI18n();
 const templateLabel = useTemplateName();
@@ -191,6 +193,34 @@ const suggestedBadge = (id: string) =>
     : undefined;
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
+
+/** The summary as an image, to show the session to friends. */
+const sharing = ref(false);
+async function shareSummary(): Promise<void> {
+  const done = summary.value;
+  if (!done || sharing.value) return;
+  sharing.value = true;
+  try {
+    const blob = await drawRecap({
+      title: templateLabel(done.templateId),
+      lines: [
+        `${n(done.sets)} ${t('session.summary.setsLabel', done.sets)}`,
+        `${kg(Math.round(done.workloadKg))} ${t('session.summary.workloadLabel')}`,
+        ...(done.minutes !== undefined
+          ? [t('session.summary.minutes', { minutes: n(done.minutes) })]
+          : []),
+        ...(done.volumeGain !== undefined
+          ? [t('session.summary.shareGain', { percent: n(done.volumeGain) })]
+          : []),
+        ...done.records.map((r) => `🏆 ${nameOf(r.exerciseId)} : ${kg(r.loadKg)} × ${n(r.reps)}`),
+      ],
+      footer: t('recap.footer'),
+    });
+    await shareOrDownload(`trainerr-${todayIso()}.png`, blob, t('session.summary.share'));
+  } finally {
+    sharing.value = false;
+  }
+}
 
 /** Ends the session, then updates the challenges in the background: offline is fine. */
 async function finishSession(): Promise<void> {
@@ -940,6 +970,10 @@ async function logWarmup(): Promise<void> {
             {{ t('session.summary.adoptMachines', summary.newMachines.length) }}
           </ion-button>
         </div>
+        <ion-button expand="block" fill="outline" :disabled="sharing" @click="shareSummary">
+          <Share2 :size="20" aria-hidden="true" class="share-icon" />
+          {{ t('session.summary.share') }}
+        </ion-button>
         <ion-button expand="block" size="large" @click="session.closeSummary()">{{
           t('session.summary.close')
         }}</ion-button>
@@ -1240,6 +1274,9 @@ async function logWarmup(): Promise<void> {
   background: var(--tr-surface-2);
   font-size: 0.85rem;
   font-weight: 700;
+}
+.share-icon {
+  margin-inline-end: 8px;
 }
 .usual-loads {
   display: flex;

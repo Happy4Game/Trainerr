@@ -72,6 +72,9 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await expect(page.getByText('Séance terminée')).toBeVisible();
   await expect(page.getByRole('group', { name: '4 séries' })).toBeVisible();
   await expect(page.getByText('Badge obtenu : Première séance')).toBeVisible();
+  const card = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Partager ma séance' }).click();
+  expect((await card).suggestedFilename()).toMatch(/^trainerr-\d{4}-\d{2}-\d{2}\.png$/);
   await page.getByRole('button', { name: 'Fermer' }).click();
 
   // The rotation goes on.

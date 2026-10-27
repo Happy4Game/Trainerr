@@ -119,6 +119,8 @@ const restEndsAt = ref<number>();
 /** Record just beaten, for the celebration on the screen (cleared at the next set). */
 const recordBeaten = ref<{ exerciseId: string; loadKg: number; reps: number }>();
 const summary = ref<{
+  /** Session type, for the title of the shared card. */
+  templateId: string;
   sets: number;
   workloadKg: number;
   carryOver: readonly string[];
@@ -997,6 +999,7 @@ async function finish(): Promise<void> {
     const minutes = sessionMinutes(active.value.plan.startedAt, Date.now());
     const volumeGain = previous && volumeGainPercent(workload(previous.sets), workloadKg);
     summary.value = {
+      templateId: finished.templateId,
       sets: work.length,
       workloadKg,
       ...(minutes !== undefined ? { minutes } : {}),

@@ -1,5 +1,5 @@
 /**
- * Shareable end-of-month card (1080 × 1350, the portrait size of most social
+ * Shareable card (end of month, or one session) (1080 × 1350, the portrait size of most social
  * apps), drawn on a canvas. Loads can be hidden; nothing else personal is on it.
  */
 export interface RecapCard {
@@ -15,8 +15,9 @@ export async function drawRecap(card: RecapCard): Promise<Blob> {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas indisponible');
   const gradient = ctx.createLinearGradient(0, 0, 1080, 1350);
-  gradient.addColorStop(0, '#0b3d91');
-  gradient.addColorStop(1, '#3880ff');
+  // Same orange as the hero cards of the app (--tr-hero, light theme).
+  gradient.addColorStop(0, '#c2410c');
+  gradient.addColorStop(1, '#9a3412');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 1080, 1350);
   ctx.fillStyle = '#ffffff';

@@ -334,7 +334,9 @@
       "newMachines": "Tu as utilisé {names}, pas encore dans tes machines. | Tu as utilisé {names}, pas encore dans tes machines.",
       "adoptMachines": "Ajouter cette machine à mes machines | Ajouter ces {count} machines à mes machines",
       "volumeGain": "+{percent} % de volume par rapport à la dernière fois que tu as fait cette séance.",
-      "minutes": "Séance bouclée en {minutes} min."
+      "minutes": "Séance bouclée en {minutes} min.",
+      "share": "Partager ma séance",
+      "shareGain": "+{percent} % de volume depuis la dernière fois"
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",

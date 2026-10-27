@@ -334,7 +334,9 @@
       "newMachines": "You used {names}, not in your machines yet. | You used {names}, not in your machines yet.",
       "adoptMachines": "Add this machine to my machines | Add these {count} machines to my machines",
       "volumeGain": "+{percent}% volume compared with the last time you did this session.",
-      "minutes": "Session done in {minutes} min."
+      "minutes": "Session done in {minutes} min.",
+      "share": "Share my session",
+      "shareGain": "+{percent}% volume since last time"
     },
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",
