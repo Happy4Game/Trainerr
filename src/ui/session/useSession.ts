@@ -1,3 +1,4 @@
+import { sessionMinutes, volumeGainPercent, workload } from '@/domain/sessionPreview';
 import { computed, ref } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import type { SqlDatabase } from '@/data/sqlite/database';
@@ -127,6 +128,10 @@ const summary = ref<{
   weeksOnPace: number;
   /** Machines used today that are not in "my machines" yet (ready-made session…). */
   newMachines: readonly string[];
+  /** Length of the session, when known. */
+  minutes?: number;
+  /** Volume gained since the last session of the same type, in percent. */
+  volumeGain?: number;
 }>();
 
 const { entries, state: catalogState, toggleFavorite } = useCatalog();
@@ -964,11 +969,15 @@ async function finish(): Promise<void> {
       }),
       finished.date,
     );
+    const workloadKg = workload(real.sets);
+    const previous = realHistory.value.filter((s) => s.templateId === finished.templateId).at(-1);
+    const minutes = sessionMinutes(active.value.plan.startedAt, Date.now());
+    const volumeGain = previous && volumeGainPercent(workload(previous.sets), workloadKg);
     summary.value = {
       sets: work.length,
-      workloadKg: real.sets
-        .filter((s) => !s.warmup)
-        .reduce((total, s) => total + s.loadKg * s.reps, 0),
+      workloadKg,
+      ...(minutes !== undefined ? { minutes } : {}),
+      ...(volumeGain !== undefined ? { volumeGain } : {}),
       carryOver,
       records,
       backToLevel,

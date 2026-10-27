@@ -327,7 +327,9 @@
       "workloadLabel": "soulevés au total",
       "recordsLabel": "record | records",
       "newMachines": "Tu as utilisé {names}, pas encore dans tes machines. | Tu as utilisé {names}, pas encore dans tes machines.",
-      "adoptMachines": "Ajouter cette machine à mes machines | Ajouter ces {count} machines à mes machines"
+      "adoptMachines": "Ajouter cette machine à mes machines | Ajouter ces {count} machines à mes machines",
+      "volumeGain": "+{percent} % de volume par rapport à la dernière fois que tu as fait cette séance.",
+      "minutes": "Séance bouclée en {minutes} min."
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",

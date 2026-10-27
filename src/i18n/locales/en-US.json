@@ -327,7 +327,9 @@
       "workloadLabel": "lifted in total",
       "recordsLabel": "record | records",
       "newMachines": "You used {names}, not in your machines yet. | You used {names}, not in your machines yet.",
-      "adoptMachines": "Add this machine to my machines | Add these {count} machines to my machines"
+      "adoptMachines": "Add this machine to my machines | Add these {count} machines to my machines",
+      "volumeGain": "+{percent}% volume compared with the last time you did this session.",
+      "minutes": "Session done in {minutes} min."
     },
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",

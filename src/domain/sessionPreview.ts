@@ -29,3 +29,24 @@ export function loadChange(input: {
   if (deltaKg === 0) return { kind: 'same' };
   return { kind: gain > 0 ? 'up' : 'down', deltaKg };
 }
+
+/** Weight × reps of the work sets: the volume of a session. */
+export function workload(
+  sets: readonly { loadKg: number; reps: number; warmup?: boolean }[],
+): number {
+  return sets.filter((s) => !s.warmup).reduce((total, s) => total + s.loadKg * s.reps, 0);
+}
+
+/** Whole percent of volume gained since last time; undefined when not more. */
+export function volumeGainPercent(previousKg: number, nowKg: number): number | undefined {
+  if (previousKg <= 0) return undefined;
+  const percent = Math.round(((nowKg - previousKg) / previousKg) * 100);
+  return percent >= 1 ? percent : undefined;
+}
+
+/** Whole minutes between start and end; undefined for a session left open for hours. */
+export function sessionMinutes(startedAt: number | undefined, endedAt: number): number | undefined {
+  if (startedAt === undefined) return undefined;
+  const minutes = Math.round((endedAt - startedAt) / 60_000);
+  return minutes >= 1 && minutes <= 240 ? minutes : undefined;
+}

@@ -861,6 +861,12 @@ async function logWarmup(): Promise<void> {
             <span>{{ t('session.summary.recordsLabel', summary.records.length) }}</span>
           </div>
         </div>
+        <p v-if="summary.volumeGain !== undefined" class="highlight">
+          📈 {{ t('session.summary.volumeGain', { percent: n(summary.volumeGain) }) }}
+        </p>
+        <p v-if="summary.minutes !== undefined" class="note-line">
+          ⏱️ {{ t('session.summary.minutes', { minutes: n(summary.minutes) }) }}
+        </p>
         <p v-for="record in summary.records" :key="record.exerciseId" class="highlight">
           🏆
           {{

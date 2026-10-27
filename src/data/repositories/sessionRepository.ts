@@ -25,6 +25,8 @@ export interface SessionPlan {
   readonly supersets?: readonly (readonly [string, string])[];
   /** Short 20–30 min version of the session of the day. */
   readonly express?: boolean;
+  /** When the session started (ms since 1970), for its length in the summary. */
+  readonly startedAt?: number;
 }
 
 export interface StoredSet extends SetLog {
@@ -57,7 +59,13 @@ export async function startSession(
   const id = newId();
   await db.run(
     `INSERT INTO session (id, date, template, status, gym_id, plan) VALUES (?, ?, ?, 'inProgress', ?, ?)`,
-    [id, input.date, input.templateId, input.gymId, JSON.stringify(input.plan)],
+    [
+      id,
+      input.date,
+      input.templateId,
+      input.gymId,
+      JSON.stringify({ startedAt: Date.now(), ...input.plan }),
+    ],
   );
   return id;
 }
