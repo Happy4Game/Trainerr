@@ -494,6 +494,13 @@
     "usualLoads": {
       "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
       "add": "+ {name}"
+    },
+    "testSetFeel": "Test set: be honest. If you could have done 3 more reps, pick Easy and the load goes up right away.",
+    "testSetHint": {
+      "easy": "too light: the load goes up",
+      "ok": "right load: we keep it",
+      "hard": "heavy: we keep it",
+      "fail": "too heavy: the load goes down"
     }
   },
   "availability": {

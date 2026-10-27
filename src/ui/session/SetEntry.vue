@@ -31,6 +31,8 @@ const rirText = useRirText();
 
 const entry = computed(() => session.entryOf(props.exerciseId));
 const proposal = computed(() => session.proposalFor(props.exerciseId));
+/** A light test set: the feeling sets the load, so each answer says what it does. */
+const testSet = computed(() => proposal.value?.reason === 'testSet');
 const cardLink = computed(() => `/tabs/session/exercise/${encodeURIComponent(props.exerciseId)}`);
 const thumbnail = computed(() => {
   const image = illustrationFor(props.exerciseId)?.images[0];
@@ -428,7 +430,8 @@ function listen(): void {
     </div>
 
     <h3 class="step"><span class="badge">2</span> {{ t('session.howWasIt') }}</h3>
-    <p v-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
+    <p v-if="testSet" class="help test-help">{{ t('session.testSetFeel') }}</p>
+    <p v-else-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
     <div class="difficulties">
       <ion-button
         v-for="d in DIFFICULTIES"
@@ -440,7 +443,9 @@ function listen(): void {
       >
         <span class="difficulty">
           <span class="difficulty-name">{{ t(`difficulty.${d.value}`) }}</span>
-          <span class="difficulty-hint">{{ t(`session.difficultyHint.${d.value}`) }}</span>
+          <span class="difficulty-hint">{{
+            t(`session.${testSet ? 'testSetHint' : 'difficultyHint'}.${d.value}`)
+          }}</span>
         </span>
       </ion-button>
     </div>
@@ -659,6 +664,10 @@ h2 {
   margin-block: 2px 6px;
   font-size: 0.85rem;
   color: var(--ion-color-medium);
+}
+.test-help {
+  color: var(--tr-text);
+  font-weight: 600;
 }
 .difficulty {
   display: flex;

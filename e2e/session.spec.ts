@@ -26,6 +26,8 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   // First exercise: compound first. First time on it: a light test set, no warm-up below it.
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   await expect(page.getByText(/série test légère/)).toBeVisible();
+  // Each feeling says what it does to the load: the test set finds the right one.
+  await expect(page.getByText('trop léger : la charge monte')).toBeVisible();
   await expect(page.getByText(/Échauffement conseillé/)).toHaveCount(0);
   await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 

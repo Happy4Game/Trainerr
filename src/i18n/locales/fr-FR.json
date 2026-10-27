@@ -494,6 +494,13 @@
     "usualLoads": {
       "intro": "Tu connais déjà ta charge sur cette machine ? Note-la : la séance partira de là au lieu d'une série test. | Tu connais déjà tes charges sur ces {count} machines ? Note-les : la séance partira de là au lieu de séries test.",
       "add": "+ {name}"
+    },
+    "testSetFeel": "Série test : sois honnête. Si tu aurais pu faire 3 reps de plus, choisis Facile, la charge montera tout de suite.",
+    "testSetHint": {
+      "easy": "trop léger : la charge monte",
+      "ok": "bonne charge : on la garde",
+      "hard": "lourd : on la garde",
+      "fail": "trop lourd : la charge baisse"
     }
   },
   "availability": {
