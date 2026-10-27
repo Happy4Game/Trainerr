@@ -418,6 +418,7 @@ async function logWarmup(): Promise<void> {
               :detail="planDetail"
               :to="cardLink"
               :badge="insights.changeText"
+              swappable
             />
             <div v-if="unknownLoads.length > 0" class="usual-loads" role="note">
               <p>{{ t('session.usualLoads.intro', unknownLoads.length) }}</p>

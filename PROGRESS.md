@@ -234,6 +234,10 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Champs de recherche : Ionic 9 nomme le champ interne « search text » et le bouton d'effacement « reset », quel que soit le libellé de la page. La directive `v-search-label` (`src/ui/searchLabel.ts`) leur donne nos libellés traduits.
 - Ce fichier est remis à jour : le dépôt est sur GitHub et les secrets de signature sont créés depuis le 26 oct.
 
+## Remplacer depuis Séance (27 oct. 2026)
+
+- La liste de la séance proposée, sur la page Séance, a le même bouton ⇄ que Aujourd'hui (`SwappableRow.vue`) : machines très proches, choix gardé, « Annuler ».
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

@@ -85,3 +85,24 @@ test('a machine of the session is swapped for a very close one, before and durin
   await chip.click();
   await expect(page.getByRole('region', { name: instead })).toBeVisible();
 });
+
+test('the Session page offers the same swap as Today', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  for (const name of ['Développé épaules machine', 'Écarté à la machine']) {
+    await page.getByRole('searchbox').fill(name);
+    await page.getByRole('button', { name: `Ajouter ${name} à mes machines` }).click();
+  }
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  const day = page.getByRole('region', { name: /^Séance du jour : / });
+
+  await day.getByRole('button', { name: 'Remplacer Développé épaules machine' }).click();
+  const choices = day.getByRole('group', { name: 'À la place de Développé épaules machine :' });
+  const first = choices.getByRole('button').first();
+  const other = (await first.textContent())?.trim() ?? '';
+  await first.click();
+  await expect(day.getByText('à la place de Développé épaules machine')).toBeVisible();
+  await expect(day.getByText(other, { exact: true }).first()).toBeVisible();
+  await day.getByRole('button', { name: 'Reprendre Développé épaules machine' }).click();
+  await expect(day.getByText('Développé épaules machine', { exact: true }).first()).toBeVisible();
+});

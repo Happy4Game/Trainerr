@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { SessionBlock } from '@/domain/supersets';
 import type { Exercise } from '@/domain/types';
-import ExerciseRow from '@/ui/ExerciseRow.vue';
+import SwappableRow from './SwappableRow.vue';
 import { useSession } from '@/ui/session/useSession';
 
 /**
@@ -18,6 +18,8 @@ const props = defineProps<{
   detail: (id: string) => string;
   to: (id: string) => string;
   badge?: (id: string) => string | undefined;
+  /** Offers very close machines instead, as on Today. */
+  swappable?: boolean;
 }>();
 
 const { t } = useI18n();
@@ -38,16 +40,17 @@ const noPair = computed(() => props.supersets && blocks.value.every((b) => b.kin
       :key="block.kind === 'single' ? block.exercise.id : block.first.id"
     >
       <li v-if="block.kind === 'single'">
-        <ExerciseRow
+        <SwappableRow
           :exercise-id="block.exercise.id"
           :name="name(block.exercise)"
           :detail="detail(block.exercise.id)"
           :to="to(block.exercise.id)"
+          :swappable="swappable"
         >
           <template v-if="badge?.(block.exercise.id)" #badge>
             <span class="tag">{{ badge(block.exercise.id) }}</span>
           </template>
-        </ExerciseRow>
+        </SwappableRow>
       </li>
       <li v-else class="pair">
         <div
@@ -61,18 +64,19 @@ const noPair = computed(() => props.supersets && blocks.value.every((b) => b.kin
             {{ t('session.supersetTitle') }}
             <span class="pair-help">{{ t('session.supersetRest') }}</span>
           </p>
-          <ExerciseRow
+          <SwappableRow
             v-for="e in [block.first, block.second]"
             :key="e.id"
             :exercise-id="e.id"
             :name="name(e)"
             :detail="detail(e.id)"
             :to="to(e.id)"
+            :swappable="swappable"
           >
             <template v-if="badge?.(e.id)" #badge>
               <span class="tag">{{ badge(e.id) }}</span>
             </template>
-          </ExerciseRow>
+          </SwappableRow>
         </div>
       </li>
     </template>

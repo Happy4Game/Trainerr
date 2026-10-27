@@ -1034,7 +1034,8 @@
       "clearFeedback": "Chaque geste se voit",
       "carryOverOrder": "Ordre des machines respecté",
       "sessionInsights": "La page Séance en dit plus",
-      "longerRest": "Plus de repos sur les gros mouvements"
+      "longerRest": "Plus de repos sur les gros mouvements",
+      "sessionSwap": "Remplacer une machine depuis Séance"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1071,7 +1072,8 @@
       "carryOverOrder": "Une machine restée occupée à la dernière séance revient en début de séance, mais toujours après les gros mouvements : une isolation ne passe plus avant un polyarticulaire.",
       "sessionInsights": "Comme sur Aujourd'hui, la séance proposée indique les charges qui montent (+2,5 kg, 1re fois) et les muscles qu'elle rattrape sur ta semaine.",
       "longerRest": "Le repos passe à 3 min sur les gros mouvements (squat, développé couché…) et à 2 min sur les machines guidées : les études montrent plus de force et de muscle avec un repos plus long.",
-      "searchLabel": "Le champ de recherche et son bouton d'effacement sont lus en français par les lecteurs d'écran."
+      "searchLabel": "Le champ de recherche et son bouton d'effacement sont lus en français par les lecteurs d'écran.",
+      "sessionSwap": "Le bouton ⇄ d'Aujourd'hui est aussi sur la page Séance : une machine très proche à la place, gardée pour les séances suivantes, et « Annuler » pour revenir."
     }
   },
   "data": {
