@@ -223,6 +223,11 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Côté web : `weighingsToAdd` garde une pesée par jour (la dernière), ignore les jours déjà pesés. Bouton dans Historique → Corps, Android seulement.
 - **À tester sur un vrai téléphone** : la CI compile l'APK, mais personne n'a encore lancé l'import sur un appareil.
 
+## Chaque geste se voit (27 oct. 2026)
+
+- Après une série enregistrée, la vue remonte en haut (minuteur de repos) et un toast « ✓ Série enregistrée : … » s'affiche 2 s. Avant, « Correct » est bas dans l'écran et rien ne bougeait à cet endroit.
+- « Changer de machine » s'ouvre en feuille (`ion-modal` à 90 %) par-dessus l'écran au lieu d'une carte en haut de la page.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

@@ -15,6 +15,7 @@ import {
   IonTextarea,
   IonToggle,
   IonTitle,
+  IonToast,
   IonToolbar,
 } from '@ionic/vue';
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
@@ -126,6 +127,23 @@ watch(screen, async (now, before) => {
   await nextTick();
   void content.value?.$el.scrollToTop(300);
 });
+// A set just saved: back to the top, where the rest timer starts, with a
+// short confirmation, so the tap visibly did something.
+const savedMessage = ref<string>();
+watch(
+  () => active.value?.sets.length ?? 0,
+  async (now, before) => {
+    if (now <= before) return;
+    const last = active.value?.sets.at(-1);
+    if (last && !last.warmup) {
+      savedMessage.value = t('session.saved', {
+        set: `${nameOf(last.exerciseId)} — ${loadOf(last.exerciseId, last.loadKg)} × ${n(last.reps)}`,
+      });
+    }
+    await nextTick();
+    void content.value?.$el.scrollToTop(300);
+  },
+);
 const pickingExercise = ref(false);
 async function addExercise(id: string): Promise<void> {
   pickingExercise.value = false;
@@ -273,9 +291,9 @@ async function onBusy(): Promise<void> {
   void showTop();
   await session.markMachineBusy(id);
 }
+/** Opens over the screen, where the user is looking. */
 function openReplace(id: string): void {
   replacing.value = id;
-  void showTop();
 }
 async function choose(alternative: Alternative): Promise<void> {
   await session.chooseAlternative(alternative);
@@ -731,7 +749,24 @@ async function logWarmup(): Promise<void> {
           </ion-card-content>
         </ion-card>
 
-        <ReplaceCard v-if="replacing" :exercise-id="replacing" @close="replacing = undefined" />
+        <ion-modal
+          :is-open="replacing !== undefined"
+          :initial-breakpoint="0.9"
+          :breakpoints="[0, 0.9, 1]"
+          @did-dismiss="replacing = undefined"
+        >
+          <ion-content class="ion-padding">
+            <ReplaceCard v-if="replacing" :exercise-id="replacing" @close="replacing = undefined" />
+          </ion-content>
+        </ion-modal>
+        <ion-toast
+          :is-open="savedMessage !== undefined"
+          :message="savedMessage"
+          :duration="2000"
+          position="top"
+          color="success"
+          @did-dismiss="savedMessage = undefined"
+        />
 
         <DiscomfortCard
           v-if="reportingDiscomfort"
