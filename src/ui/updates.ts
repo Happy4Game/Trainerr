@@ -87,8 +87,8 @@ export async function checkForUpdate(): Promise<void> {
   }
 }
 
-/** At launch, once a day at most, if the user kept the setting on. */
-export async function checkAtStartup(): Promise<void> {
+/** At launch and back to the app, every 30 minutes at most, if the user kept the setting on. */
+export async function checkWhenDue(): Promise<void> {
   if (!updatesSupported()) return;
   const settings = await loadSettings();
   if (settings.autoUpdateCheck === false || !checkDue(lastCheck(), Date.now())) return;

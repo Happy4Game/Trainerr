@@ -12,6 +12,7 @@ import {
   withAddOns,
   stepDown,
   stepUp,
+  stepUpOrBeyond,
   uniformSteps,
 } from '@/domain/loadSteps';
 import { dumbbellSteps, stackSteps } from '../fixtures/exercises';
@@ -86,6 +87,13 @@ describe('load steps', () => {
     expect(defaultStepsFor('cable').at(-1)).toBe(500);
     expect(defaultStepsFor('dumbbell').at(-1)).toBe(100);
     expect(defaultStepsFor('barbell').at(-1)).toBe(500);
+  });
+
+  it('"+" goes past the heaviest step by the last gap', () => {
+    expect(stepUpOrBeyond([0, 5, 10], 5)).toBe(10);
+    expect(stepUpOrBeyond([0, 5, 10], 10)).toBe(15);
+    expect(stepUpOrBeyond([0, 5, 10], 12.5)).toBe(17.5);
+    expect(stepUpOrBeyond([20], 20)).toBe(25);
   });
 
   it('always returns an existing step (property)', () => {

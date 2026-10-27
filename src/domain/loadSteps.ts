@@ -27,6 +27,18 @@ export function stepUp(steps: LoadSteps, loadKg: number): number | undefined {
   return steps.find((step) => step > loadKg + EPSILON);
 }
 
+/**
+ * "+" on a load: the next step, or past the heaviest one by the last gap
+ * (a machine heavier than its known steps, weights added on top).
+ */
+export function stepUpOrBeyond(steps: LoadSteps, loadKg: number): number {
+  const next = stepUp(steps, loadKg);
+  if (next !== undefined) return next;
+  const [before, last] = steps.slice(-2);
+  const gap = before !== undefined && last !== undefined ? last - before : 5;
+  return roundKg(loadKg + gap);
+}
+
 /** Heaviest step strictly lighter than the load. */
 export function stepDown(steps: LoadSteps, loadKg: number): number | undefined {
   return steps.findLast((step) => step < loadKg - EPSILON);
@@ -70,7 +82,6 @@ export function parseLoad(text: string): number | undefined {
   return value > 0 ? value : undefined;
 }
 
-/** Steps used until the user enters the real ones for a machine. */
 /**
  * Steps used until the user enters the real plates of the machine. Wide on
  * purpose: an unknown machine must never cap a strong lifter (a back extension

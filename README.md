@@ -30,9 +30,12 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 ### À la salle
 
 - **Une séance prête chaque jour** selon ton objectif, ton rythme et tes machines favorites. Pas assez de favoris ? L'appli propose une **pré-séance** avec des machines courantes.
-- **Le bon poids à chaque série** : « La dernière fois : 20 kg × 10 » puis un conseil clair (monte la charge, vise une rep de plus, garde, allège) et sa raison. Les paliers réels de chaque machine sont respectés.
+- **Aperçu avant de partir** : exercices, séries, charges, durée estimée et où tu montes en charge. **« Pas en forme »** allège la séance du jour au lieu de la sauter.
+- **Séances types à copier et modifier** (Push, Pull, Jambes…) pour en faire les tiennes.
+- **Le bon poids à chaque série** : « La dernière fois : 20 kg × 10 » puis un conseil clair (monte la charge, vise une rep de plus, garde, allège) et sa raison. Les paliers réels de chaque machine sont respectés, sans plafond pour les plus forts. Tu t'entraînes déjà ? Note tes **charges habituelles** au lieu de faire des séries test.
+- **Pendant l'effort** : objectif de progression, disques à mettre de chaque côté de la barre, temps écoulé, minuteur de repos visible écran verrouillé. Les tractions assistées se comptent à l'envers (moins d'aide = progrès).
 - **Saisie en deux gestes** : charge et reps déjà remplies, un appui sur le ressenti (Facile, Correct, Limite, Échec) enregistre et lance le repos.
-- **Rien n'est figé** : corriger une série validée trop vite, revenir à l'exercice précédent, ajouter une série ou un exercice, changer l'ordre, séparer un superset.
+- **Rien n'est figé** : corriger une série validée trop vite, revenir à l'exercice précédent, ajouter une série, ajouter un exercice depuis le **programme de la séance**, changer l'ordre, séparer un superset.
 - **Machine occupée** : alternatives avec aperçu (dessin, muscles, charge), la machine est reproposée plus tard.
 - **Changement de machine visible** : « ✓ Terminé · Machine suivante » avec le dessin du mouvement.
 - **Supersets en option**, séance express, séance à la maison, **séances personnalisées**.
@@ -41,14 +44,17 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 - **Catalogue de 480 exercices** avec dessins du mouvement, muscles travaillés, consignes en français, **recherche par zone du corps** et ta charge sur chaque machine.
 - **Statistiques** : régularité, évolution de la force (1RM estimé), séries par muscle, records.
-- **Historique modifiable**, suivi du corps, badges, récap du mois à partager.
+- **Récap de fin de séance** : volume gagné depuis la dernière fois, durée, records, et une image à partager.
+- **Historique modifiable**, avec trophées sur les records. Téléphone oublié ? **Ajoute après coup une séance faite sans l'appli** : elle compte dans les stats et le cycle.
+- Suivi du corps, badges, récap du mois à partager.
 - **Défis entre amis** et **conseils d'un coach IA**, optionnels, via un petit serveur ([server/](server/README.md)).
 
 ### Pour tous
 
 - **Hors ligne d'abord** : base SQLite sur le téléphone, aucune donnée envoyée sans action de ta part (RGPD).
 - **Français et anglais**, kilos ou livres, thème clair et sombre, grandes zones tactiles.
-- Export, import (Strong, Hevy, tes séances ou tes charges en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
+- Export (via le menu Partager d'Android), import (Strong, Hevy, tes séances ou tes charges en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
+- **Mises à jour intégrées** sur Android : l'appli trouve toute seule la nouvelle version (au démarrage et quand tu y reviens) et l'installe avec ton accord ([docs/mises-a-jour.md](docs/mises-a-jour.md)).
 
 ## 🚀 Installer et lancer
 
@@ -64,11 +70,13 @@ Vite affiche deux adresses :
 - **Local** (`http://localhost:5173`) pour l'ordinateur ;
 - **Network** (par exemple `http://192.168.1.20:5173`) pour le **téléphone**, connecté au même Wi-Fi. Ouvre-la dans Chrome ou Safari.
 
-## 📱 Générer l'APK Android
+## 📱 Installer sur Android
 
-**Sans rien installer** : chaque push sur `main` déclenche le workflow GitHub **Android APK** ; l'APK se télécharge dans l'onglet **Actions**, artefact `trainerr-debug-apk`.
+**La version publiée** : chaque merge sur `main` publie un APK signé dans les [Releases GitHub](https://github.com/Happy4Game/Trainerr/releases/latest) (workflow **Publier l'APK**). Installe-le une fois ; ensuite l'appli te propose elle-même les nouvelles versions.
 
-**Sur ton ordinateur** :
+**Un APK de test sans rien installer** : le workflow **Android APK** construit aussi un APK de debug à chaque push, dans l'onglet **Actions**, artefact `trainerr-debug-apk`.
+
+### Générer l'APK sur ton ordinateur
 
 1. Installe le **JDK 21** ([Temurin](https://adoptium.net)) et le **SDK Android 36** (via [Android Studio](https://developer.android.com/studio), ou les outils en ligne de commande : voir [docs/android.md](docs/android.md)).
 2. Indique où ils sont :

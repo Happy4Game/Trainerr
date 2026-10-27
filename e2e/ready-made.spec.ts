@@ -109,3 +109,32 @@ test('the session plan shows every machine and lets one be done now', async ({ p
   await page.locator('ion-modal ion-button', { hasText: 'Maintenant' }).nth(1).click();
   await expect(page.getByRole('region', { name: third })).toBeVisible();
 });
+
+test('another exercise is added from the session plan, after the others', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  await page.getByRole('button', { name: 'Voir le programme de la séance' }).click();
+  const items = page.locator('ion-modal ol.overview > li');
+  await expect(items).toHaveCount(5);
+  const first = (await items.first().locator('.name').textContent())?.trim() ?? '';
+
+  await page
+    .locator('ion-modal.show-modal')
+    .getByRole('button', { name: 'Ajouter un exercice' })
+    .click();
+  await page.getByRole('search').last().getByRole('searchbox').fill('presse');
+  await page
+    .locator('ion-modal.show-modal')
+    .getByRole('heading', { name: 'Presse à cuisses', exact: true })
+    .click();
+
+  // Last in the plan, with its sets; the current exercise goes on.
+  await expect(items).toHaveCount(6);
+  await expect(items.last()).toContainText('Presse à cuisses');
+  await expect(items.last()).toContainText(/0 \/ \d+ séries/);
+  await expect(items.first()).toContainText(first);
+  await page.getByRole('button', { name: 'Fermer' }).click();
+  await expect(page.getByRole('region', { name: first })).toBeVisible();
+});

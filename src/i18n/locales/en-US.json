@@ -1425,8 +1425,8 @@
     "allow": "Allow",
     "retry": "Try again",
     "error": "Cannot check right now ({message}).",
-    "auto": "Look for updates at launch",
-    "autoHelp": "At most once a day, the app asks GitHub for the latest published version. Nothing else is sent."
+    "auto": "Look for updates automatically",
+    "autoHelp": "At launch and when you come back to the app, every 30 minutes at most, it asks GitHub for the latest published version. Nothing else is sent."
   },
   "pastSession": {
     "open": "Add a session done without the app",

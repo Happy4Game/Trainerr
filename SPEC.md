@@ -532,7 +532,7 @@ La règle centrale : la logique métier (progression, planning, stats) est du Ty
 **Données et vie privée**
 
 - Tout reste sur le téléphone par défaut ; aucune donnée envoyée sans action de l'utilisateur
-- **Exception : la vérification des mises à jour** (appli Android). Au démarrage, au plus une fois par jour, l'appli interroge l'API GitHub Releases du projet (`https://api.github.com/repos/Happy4Game/Trainerr/releases/latest`) pour savoir si une nouvelle version existe. Aucune donnée de l'utilisateur n'est envoyée : seule la requête part, et GitHub voit l'adresse IP comme pour toute page web. Activée par défaut, désactivable dans Réglages → Mises à jour ; l'installation demande toujours l'accord de l'utilisateur.
+- **Exception : la vérification des mises à jour** (appli Android). Au démarrage et au retour dans l'appli, au plus une fois toutes les 30 minutes (l'API GitHub accepte 60 requêtes par heure sans compte), l'appli interroge l'API GitHub Releases du projet (`https://api.github.com/repos/Happy4Game/Trainerr/releases/latest`) pour savoir si une nouvelle version existe. Aucune donnée de l'utilisateur n'est envoyée : seule la requête part, et GitHub voit l'adresse IP comme pour toute page web. Activée par défaut, désactivable dans Réglages → Mises à jour ; l'installation demande toujours l'accord de l'utilisateur.
 - Les gênes et douleurs saisies relèvent des données de santé, une catégorie sensible au RGPD : stockage local, export et suppression complète en un bouton
 - Migrations de base versionnées, jamais de modification manuelle du schéma
 

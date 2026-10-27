@@ -9,13 +9,15 @@ import {
   IonToolbar,
 } from '@ionic/vue';
 import { ArrowDown, ArrowUp, Check, Minus, Plus, X } from 'lucide-vue-next';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
+import ExercisePicker from '@/ui/ExercisePicker.vue';
 import { useLoadLabel } from './useLoadLabel';
 import { useSession } from './useSession';
 
 /** The whole session at a glance: done, current and next machines, with a quick reorder. */
-defineProps<{
+const props = defineProps<{
   open: boolean;
   exercises: readonly { id: string; name: string; status: 'done' | 'current' | 'next' }[];
 }>();
@@ -46,6 +48,14 @@ async function doNow(id: string): Promise<void> {
   await session.addExerciseNow(id);
   emit('close');
 }
+
+/** Another exercise, at the end of the session: it shows up in the list, ready to move. */
+const picking = ref(false);
+async function addLater(id: string): Promise<void> {
+  picking.value = false;
+  await session.addExerciseLater(id);
+}
+const inSession = () => props.exercises.filter((e) => e.status !== 'done').map((e) => e.id);
 </script>
 
 <template>
@@ -64,6 +74,10 @@ async function doNow(id: string): Promise<void> {
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <!-- At the top: the sheet stops at 85 % of the screen, the end of the list is below it. -->
+      <ion-button expand="block" fill="outline" class="add" @click="picking = true">
+        {{ t('session.addExercise') }}
+      </ion-button>
       <ol class="overview">
         <li
           v-for="(e, index) in exercises"
@@ -166,11 +180,21 @@ async function doNow(id: string): Promise<void> {
           </span>
         </li>
       </ol>
+      <ExercisePicker
+        :open="picking"
+        :title="t('session.addExercise')"
+        :exclude="inSession()"
+        @pick="addLater"
+        @close="picking = false"
+      />
     </ion-content>
   </ion-modal>
 </template>
 
 <style scoped>
+.add {
+  margin-block-end: 12px;
+}
 .overview {
   margin: 0;
   padding: 0;

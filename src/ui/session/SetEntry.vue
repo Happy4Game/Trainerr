@@ -10,6 +10,7 @@ import {
   stackBreakdown,
   stepDown,
   stepUp,
+  stepUpOrBeyond,
 } from '@/domain/loadSteps';
 import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
@@ -137,7 +138,7 @@ function lighter(): void {
   load.value = stepDown(steps.value, load.value) ?? load.value;
 }
 function heavier(): void {
-  load.value = stepUp(steps.value, load.value) ?? load.value;
+  load.value = stepUpOrBeyond(steps.value, load.value);
 }
 function changeReps(delta: number): void {
   reps.value = Math.max(0, reps.value + delta);

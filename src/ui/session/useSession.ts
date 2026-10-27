@@ -29,6 +29,7 @@ import { CUSTOM_PREFIX, getSettings, type Settings } from '@/data/repositories/s
 import { loadSettings } from '@/ui/useSettings';
 import {
   addExercise,
+  appendExercise,
   alternativesFor,
   completeExercise,
   endSession,
@@ -773,8 +774,11 @@ async function extraSet(exerciseId: string): Promise<void> {
   });
 }
 
-/** Exercise added by hand: done now, with the usual number of sets. */
-async function addExerciseNow(exerciseId: string): Promise<void> {
+/** Exercise added by hand, with the usual number of sets. */
+async function addExerciseTo(
+  place: typeof addExercise | typeof appendExercise,
+  exerciseId: string,
+): Promise<void> {
   if (!active.value || !settings.value) return;
   const plan = active.value.plan;
   const exercises = plan.exercises.some((e) => e.exerciseId === exerciseId)
@@ -786,8 +790,12 @@ async function addExerciseNow(exerciseId: string): Promise<void> {
           sets: setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light),
         },
       ];
-  await updatePlan({ ...plan, exercises, queue: addExercise(plan.queue, exerciseId) });
+  await updatePlan({ ...plan, exercises, queue: place(plan.queue, exerciseId) });
 }
+/** Done now (reopened if already done). */
+const addExerciseNow = (exerciseId: string) => addExerciseTo(addExercise, exerciseId);
+/** From the session's program: the current exercise is not interrupted. */
+const addExerciseLater = (exerciseId: string) => addExerciseTo(appendExercise, exerciseId);
 
 /** Same movement on another machine: my machines and the common ones, not already in the session. */
 function replacements(exerciseId: string): CatalogExercise[] {
@@ -1176,6 +1184,7 @@ export function useSession() {
     goBack,
     splitSuperset,
     addExerciseNow,
+    addExerciseLater,
     editHistory,
     addPastSession,
     extraSet,

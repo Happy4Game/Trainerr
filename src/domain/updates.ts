@@ -8,8 +8,11 @@ export const RELEASES_API = 'https://api.github.com/repos/Happy4Game/Trainerr/re
 /** Only APKs from the project's own releases are ever downloaded. */
 export const DOWNLOAD_PREFIX = 'https://github.com/Happy4Game/Trainerr/releases/download/';
 
-/** At most one automatic check a day: GitHub limits requests without an account. */
-export const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
+/**
+ * At most one automatic check every 30 minutes, at launch or back to the app:
+ * GitHub allows 60 requests an hour without an account.
+ */
+export const CHECK_INTERVAL_MS = 30 * 60 * 1000;
 
 export interface AvailableUpdate {
   readonly versionCode: number;
@@ -54,7 +57,7 @@ export function isNewer(update: AvailableUpdate | undefined, installedCode: numb
   return update !== undefined && update.versionCode > installedCode;
 }
 
-/** An automatic check is due once a day; a check by hand is always allowed. */
+/** An automatic check is due every CHECK_INTERVAL_MS; a check by hand is always allowed. */
 export function checkDue(lastCheck: number | undefined, now: number): boolean {
   return lastCheck === undefined || now - lastCheck >= CHECK_INTERVAL_MS;
 }

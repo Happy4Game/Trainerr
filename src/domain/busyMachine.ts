@@ -96,6 +96,21 @@ export function addExercise(queue: ExerciseQueue, exerciseId: string): ExerciseQ
   return startNow({ ...queue, done: queue.done.filter((id) => id !== exerciseId) }, exerciseId);
 }
 
+/** Exercise added from the session's program: at the end, the current one is not interrupted. */
+export function appendExercise(queue: ExerciseQueue, exerciseId: string): ExerciseQueue {
+  if (
+    queue.pending.includes(exerciseId) ||
+    queue.waiting.some((w) => w.exerciseId === exerciseId)
+  ) {
+    return queue;
+  }
+  return {
+    ...queue,
+    pending: [...queue.pending, exerciseId],
+    done: queue.done.filter((id) => id !== exerciseId),
+  };
+}
+
 /** Last exercise done or skipped, that the user can go back to. */
 export function previousExercise(queue: ExerciseQueue): string | undefined {
   return queue.done.at(-1);
