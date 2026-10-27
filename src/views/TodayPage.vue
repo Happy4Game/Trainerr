@@ -13,19 +13,22 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { Settings } from 'lucide-vue-next';
+import { Check, Settings, TrendingUp } from 'lucide-vue-next';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { openAppDatabase } from '@/data/appDatabase';
 import { listBadges, type EarnedBadge } from '@/data/repositories/badgeRepository';
 import { useI18n } from 'vue-i18n';
 import { weeksOnPace } from '@/domain/stats';
+import { estimateMinutes, loadChange, type LoadChange } from '@/domain/sessionPreview';
+import { useLoadLabel } from '@/ui/session/useLoadLabel';
+import { useUnits } from '@/ui/useUnits';
 import AdviceCard from '@/ui/AdviceCard.vue';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const router = useRouter();
 const templateLabel = useTemplateName();
 const session = useSession();
@@ -39,13 +42,57 @@ const planIds = computed(() =>
     : preview.value.map((e) => e.id),
 );
 const planCount = computed(() => planIds.value.length);
-const thumbnails = computed(() =>
-  planIds.value
-    .map((id) => illustrationFor(id)?.images[0])
-    .filter((image) => image !== undefined)
-    .slice(0, 6)
-    .map((image) => `${import.meta.env.BASE_URL}exercise-images/${image.file}`),
+const loadOf = useLoadLabel();
+const { load: kg } = useUnits();
+
+interface PreviewRow {
+  readonly id: string;
+  readonly name: string;
+  readonly thumbnail?: string;
+  /** "2 × 67,5 kg" */
+  readonly detail: string;
+  readonly change?: LoadChange;
+  readonly done: boolean;
+}
+/**
+ * Each exercise with its sets and load. Only a step up is shown: a lighter
+ * week or a pause is planned, there is nothing to worry about.
+ */
+const rows = computed<PreviewRow[]>(() =>
+  planIds.value.map((id) => {
+    const exercise = session.entryOf(id)?.exercise;
+    const image = illustrationFor(id)?.images[0];
+    const sets = session.plannedSets(id);
+    const proposed = session.proposalFor(id)?.loadKg ?? 0;
+    const doneSets = session.workSetsInSession(id).length;
+    return {
+      id,
+      name: exercise ? (locale.value.startsWith('fr') ? exercise.name : exercise.nameEn) : id,
+      ...(image ? { thumbnail: `${import.meta.env.BASE_URL}exercise-images/${image.file}` } : {}),
+      detail: t('today.line', { sets, load: loadOf(id, proposed) }),
+      ...(active.value && doneSets > 0
+        ? {}
+        : {
+            change: loadChange({
+              proposedKg: proposed,
+              lastLoadsKg: session.lastTimeSets(id).map((s) => s.loadKg),
+              assisted: exercise?.assisted === true,
+            }),
+          }),
+      done: !!active.value && doneSets >= sets,
+    };
+  }),
 );
+const totalSets = computed(() =>
+  planIds.value.reduce((total, id) => total + session.plannedSets(id), 0),
+);
+const minutes = computed(() => estimateMinutes(totalSets.value));
+const doneCount = computed(() => rows.value.filter((r) => r.done).length);
+const goingUp = computed(() => rows.value.filter((r) => r.change?.kind === 'up').length);
+const changeLabel = (change: LoadChange) =>
+  change.kind === 'up'
+    ? t('today.change.up', { delta: kg(change.deltaKg) })
+    : t('today.change.first');
 
 const badges = ref<EarnedBadge[]>([]);
 async function loadBadges(): Promise<void> {
@@ -110,10 +157,32 @@ const streak = computed(() =>
           <h2 v-if="active">{{ templateLabel(active.templateId) }}</h2>
           <h2 v-else-if="template">{{ templateLabel(template.id) }}</h2>
           <p v-if="!active && !today?.session" class="hint">{{ t('today.restDay') }}</p>
-          <div v-if="thumbnails.length > 0" class="thumbs" aria-hidden="true">
-            <img v-for="src in thumbnails" :key="src" :src="src" alt="" />
-          </div>
-          <p v-if="planCount > 0" class="hint">{{ t('today.exercises', planCount) }}</p>
+          <p v-if="planCount > 0" class="meta">
+            <span>{{ t('today.exercises', planCount) }}</span>
+            <span>{{ t('session.menu.sets', totalSets) }}</span>
+            <span>{{ t('session.menu.minutes', { minutes }) }}</span>
+          </p>
+          <p v-if="active && planCount > 0" class="hint">
+            {{ t('today.doneOf', { done: doneCount, total: planCount }) }}
+          </p>
+          <p v-else-if="goingUp > 0" class="hint">{{ t('today.goingUp', goingUp) }}</p>
+          <ol v-if="rows.length > 0" class="preview">
+            <li v-for="row in rows" :key="row.id" :class="{ done: row.done }">
+              <img v-if="row.thumbnail" :src="row.thumbnail" alt="" />
+              <span class="preview-text">
+                <span class="preview-name">{{ row.name }}</span>
+                <span class="preview-detail">{{ row.detail }}</span>
+              </span>
+              <Check v-if="row.done" :size="20" :aria-label="t('today.exerciseDone')" />
+              <span v-else-if="row.change?.kind === 'up'" class="change">
+                <TrendingUp :size="14" aria-hidden="true" />
+                {{ changeLabel(row.change) }}
+              </span>
+              <span v-else-if="row.change?.kind === 'first'" class="change first">
+                {{ changeLabel(row.change) }}
+              </span>
+            </li>
+          </ol>
           <ion-button expand="block" size="large" :disabled="starting" @click="go">
             {{ active ? t('today.resume') : t('today.go') }}
           </ion-button>
@@ -213,17 +282,78 @@ const streak = computed(() =>
   margin: 4px 0 10px;
   opacity: 0.85;
 }
-.thumbs {
+.meta {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  margin-block: 10px 4px;
+  margin: var(--tr-space-2) 0;
 }
-.thumbs img {
-  width: 44px;
-  height: 44px;
+.meta span {
+  padding: 2px 10px;
+  border-radius: var(--tr-radius-pill);
+  background: rgb(255 255 255 / 18%);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.preview {
+  position: relative; /* above the halo */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin: var(--tr-space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.preview li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 12px;
+  background: rgb(0 0 0 / 14%);
+}
+.preview li.done {
+  opacity: 0.6;
+}
+.preview img {
+  flex: none;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #fff; /* dessins au trait noir : fond blanc dans les deux thèmes */
+}
+.preview-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.preview-name {
+  font-weight: 700;
+  line-height: 1.2;
+}
+.preview-detail {
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}
+.change {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  border-radius: var(--tr-radius-pill);
+  background: var(--tr-hero-text);
+  color: var(--ion-color-primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.change.first {
+  background: rgb(255 255 255 / 18%);
+  color: var(--tr-hero-text);
 }
 .hero ion-button:not(.other) {
   --background: var(--tr-hero-text);

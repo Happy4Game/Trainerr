@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { estimateMinutes } from '@/domain/sessionPreview';
 import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonButton,
@@ -167,11 +168,11 @@ const loadOf = useLoadLabel();
 /** "3 sets · 20 kg" under an exercise of the plan. */
 const planDetail = (id: string) =>
   `${t('session.nextMachine.plan', session.plannedSets(id))} · ${loadOf(id, session.proposalFor(id)?.loadKg ?? 0)}`;
-/** Work sets of the session of the day, and a rough length: a set plus its rest ≈ 2.5 min. */
+/** Work sets of the session of the day, and a rough length. */
 const planSets = computed(() =>
   preview.value.reduce((total, e) => total + session.plannedSets(e.id), 0),
 );
-const planMinutes = computed(() => Math.max(10, Math.round((planSets.value * 2.5) / 5) * 5));
+const planMinutes = computed(() => estimateMinutes(planSets.value));
 /** Card of a machine; a banner there leads back to the session. */
 const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)

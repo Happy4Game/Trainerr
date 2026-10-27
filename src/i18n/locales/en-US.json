@@ -21,7 +21,15 @@
     "inProgressShort": "Session in progress",
     "noPlan": "Next session",
     "weekSessions": "session | sessions",
-    "exercises": "{count} exercise | {count} exercises"
+    "exercises": "{count} exercise | {count} exercises",
+    "line": "{sets} × {load}",
+    "doneOf": "{done} of {total} exercise done | {done} of {total} exercises done",
+    "goingUp": "You go up in load on {count} exercise today. | You go up in load on {count} exercises today.",
+    "exerciseDone": "Exercise done",
+    "change": {
+      "up": "+{delta}",
+      "first": "First time"
+    }
   },
   "gym": {
     "defaultName": "My gym"

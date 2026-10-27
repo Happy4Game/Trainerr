@@ -21,7 +21,15 @@
     "inProgressShort": "Séance en cours",
     "noPlan": "Prochaine séance",
     "weekSessions": "séance | séances",
-    "exercises": "{count} exercice | {count} exercices"
+    "exercises": "{count} exercice | {count} exercices",
+    "line": "{sets} × {load}",
+    "doneOf": "{done} exercice terminé sur {total} | {done} exercices terminés sur {total}",
+    "goingUp": "Tu montes la charge sur {count} exercice aujourd'hui. | Tu montes la charge sur {count} exercices aujourd'hui.",
+    "exerciseDone": "Exercice terminé",
+    "change": {
+      "up": "+{delta}",
+      "first": "1re fois"
+    }
   },
   "gym": {
     "defaultName": "Ma salle"
