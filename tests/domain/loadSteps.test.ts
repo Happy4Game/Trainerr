@@ -79,6 +79,15 @@ describe('load steps', () => {
     expect(defaultStepsFor('bodyweight').slice(0, 3)).toEqual([0, 5, 10]);
   });
 
+  it('never caps a strong lifter before the machine is set up', () => {
+    expect(stepUp(defaultStepsFor('bodyweight'), 50)).toBe(55);
+    expect(defaultStepsFor('bodyweight').at(-1)).toBe(150);
+    expect(defaultStepsFor('machine').at(-1)).toBe(500);
+    expect(defaultStepsFor('cable').at(-1)).toBe(500);
+    expect(defaultStepsFor('dumbbell').at(-1)).toBe(100);
+    expect(defaultStepsFor('barbell').at(-1)).toBe(500);
+  });
+
   it('always returns an existing step (property)', () => {
     const steps = fc.uniqueArray(fc.integer({ min: 1, max: 300 }), { minLength: 1 });
     fc.assert(

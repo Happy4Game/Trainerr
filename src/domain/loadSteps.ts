@@ -71,19 +71,25 @@ export function parseLoad(text: string): number | undefined {
 }
 
 /** Steps used until the user enters the real ones for a machine. */
+/**
+ * Steps used until the user enters the real plates of the machine. Wide on
+ * purpose: an unknown machine must never cap a strong lifter (a back extension
+ * with a 60 kg plate, a 300 kg leg press). Once the plates are entered, the
+ * real stack sets the limit.
+ */
 export function defaultStepsFor(equipment: Equipment): number[] {
   switch (equipment) {
     case 'dumbbell':
-      return uniformSteps(2, 60, 2);
+      return uniformSteps(2, 100, 2);
     case 'barbell':
       // 20 kg bar, then a pair of 1.25 kg plates at a time.
-      return uniformSteps(20, 250, 2.5);
+      return uniformSteps(20, 500, 2.5);
     case 'bodyweight':
-      // Extra weight on top of the body weight.
-      return uniformSteps(0, 50, 5);
+      // Extra weight on top of the body weight (plate held, dip belt).
+      return uniformSteps(0, 150, 5);
     case 'machine':
     case 'cable':
-      return uniformSteps(5, 200, 5);
+      return uniformSteps(5, 500, 5);
   }
 }
 
