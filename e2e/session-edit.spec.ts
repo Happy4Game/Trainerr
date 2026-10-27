@@ -56,3 +56,38 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   await page.getByRole('button', { name: 'Retirer de la séance : Écarté à la machine' }).click();
   await expect(page.getByText('Écarté à la machine', { exact: true })).toHaveCount(0);
 });
+
+test('switching machine is at hand: next to the name after a set, and on the next machine screen', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await star(page, 'shoulder press', 'Développé épaules machine');
+  await star(page, 'pec deck', 'Écarté à la machine');
+
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Commencer la séance' }).click();
+  const machine = page.getByRole('region', { name: 'Développé épaules machine' });
+  await expect(machine).toBeVisible();
+  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: 'Passer', exact: true }).click();
+  await expect(page.getByText('Série 2 sur 3')).toBeVisible();
+
+  // After a set, the button sits next to the name, and its card shows at once.
+  const switchButton = machine.getByRole('button', { name: 'Changer de machine' });
+  await expect(switchButton).toBeInViewport();
+  await switchButton.click();
+  const card = page.locator('ion-card.replace');
+  await expect(card).toBeInViewport();
+  await expect(card).toContainText('1 série déjà faite');
+  await card.getByRole('button', { name: 'Prendre Développé épaules haltères' }).click();
+
+  // The dumbbells come next: that screen offers the switch too.
+  const next = page.getByRole('region', { name: 'Machine suivante' });
+  await expect(next).toContainText('Développé épaules haltères');
+  await next.getByRole('button', { name: 'Changer de machine' }).click();
+  await expect(page.locator('ion-card.replace')).toBeInViewport();
+  await expect(page.locator('ion-card.replace')).toContainText(
+    'Remplacer Développé épaules haltères',
+  );
+});

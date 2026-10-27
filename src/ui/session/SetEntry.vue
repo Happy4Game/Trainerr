@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonButton, IonChip, IonInput, IonLabel } from '@ionic/vue';
-import { Mic, Minus, Pencil, Plus } from 'lucide-vue-next';
+import { ArrowLeftRight, Mic, Minus, Pencil, Plus } from 'lucide-vue-next';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
@@ -267,13 +267,25 @@ function listen(): void {
 
 <template>
   <section v-if="entry && proposal" class="entry" :aria-label="name">
-    <router-link :to="cardLink" class="header" :aria-label="t('session.seeCard', { name })">
-      <img v-if="thumbnail" :src="thumbnail" alt="" class="thumb" />
-      <span class="title">
-        <h2>{{ name }}</h2>
-        <span class="hint">{{ t('session.seeMovement') }} ›</span>
-      </span>
-    </router-link>
+    <div class="head-row">
+      <router-link :to="cardLink" class="header" :aria-label="t('session.seeCard', { name })">
+        <img v-if="thumbnail" :src="thumbnail" alt="" class="thumb" />
+        <span class="title">
+          <h2>{{ name }}</h2>
+          <span class="hint">{{ t('session.seeMovement') }} ›</span>
+        </span>
+      </router-link>
+      <!-- Always at hand, next to the name: the machine is taken, broken, or not right. -->
+      <button
+        type="button"
+        class="switch"
+        :aria-label="t('session.replaceCard.open')"
+        @click="emit('replace')"
+      >
+        <ArrowLeftRight :size="22" aria-hidden="true" />
+        <span>{{ t('session.replaceCard.short') }}</span>
+      </button>
+    </div>
 
     <div
       v-if="closeOnes.length > 0"
@@ -579,9 +591,6 @@ function listen(): void {
       <ion-button fill="outline" color="medium" @click="emit('busy')">
         {{ t('session.busy') }}
       </ion-button>
-      <ion-button fill="outline" color="medium" @click="emit('replace')">
-        {{ t('session.replaceCard.open') }}
-      </ion-button>
       <ion-button
         v-if="entry.exercise.equipment === 'barbell'"
         fill="outline"
@@ -634,6 +643,36 @@ function listen(): void {
   flex-basis: 100%;
   color: var(--tr-text-muted);
   font-size: 0.85rem;
+}
+.head-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.head-row .header {
+  flex: 1;
+  min-width: 0;
+}
+.switch {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 64px;
+  min-height: 64px;
+  padding: 6px 8px;
+  border: 1px solid var(--ion-color-primary);
+  border-radius: var(--tr-radius-l, 16px);
+  background: color-mix(in srgb, var(--ion-color-primary) 12%, transparent);
+  color: var(--ion-color-primary);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+.switch:active {
+  background: color-mix(in srgb, var(--ion-color-primary) 24%, transparent);
 }
 .header {
   display: flex;

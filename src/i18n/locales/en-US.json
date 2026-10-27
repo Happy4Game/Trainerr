@@ -481,7 +481,8 @@
       "keepDone": "{count} set already done stays on {name}. The new machine takes the sets left. | {count} sets already done stay on {name}. The new machine takes the sets left.",
       "mine": "My machine",
       "none": "No other machine for this movement among your machines or the common ones.",
-      "other": "Another exercise…"
+      "other": "Another exercise…",
+      "short": "Switch"
     },
     "restMore": "Fix, go back… ›",
     "bodyweight": {
@@ -1013,7 +1014,8 @@
       "wholeWeek": "Every muscle over the week",
       "newLook": "New look and statistics",
       "firstRelease": "First public version",
-      "bodyWeight": "Weight tracking"
+      "bodyWeight": "Weight tracking",
+      "easySwitch": "Switch machine in one tap"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1041,7 +1043,9 @@
       "autoUpdate": "The app updates itself from Settings.",
       "weightCurve": "Your weight curve and weekly trend are now in History › Body, where you weigh in.",
       "weightDate": "You can log a weighing on a past date.",
-      "weightImport": "Import your weighings as CSV (smart scale, spreadsheet) in Settings › My data."
+      "weightImport": "Import your weighings as CSV (smart scale, spreadsheet) in Settings › My data.",
+      "switchButton": "A \"Switch\" button next to the machine name, at every set: the list of close machines opens at the top of the screen.",
+      "switchNext": "The \"Next machine\" screen also offers to switch before you go."
     }
   },
   "data": {

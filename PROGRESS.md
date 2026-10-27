@@ -211,6 +211,12 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - **Basic-Fit, JOY (L'Appart Fitness)** : ni API publique ni export documenté dans leurs fiches Google Play et App Store. Basic-Fit se connecte à Apple Santé, JOY lit le poids d'Apple Santé : aucune des deux ne fournit le poids à d'autres applis. Piste suivante : lire les pesées de Health Connect (balances connectées, Samsung Health, Google Fit).
 - **Captures du README** renommées (noms en clair) pour que GitHub et les navigateurs n'affichent plus les anciennes en cache ; la capture de la série montre le haut de l'écran.
 
+## Changer de machine plus facilement (27 oct. 2026)
+
+- Bouton **⇄ Changer** à droite du nom de l'exercice, visible à chaque série (avant, « Changer de machine » était tout en bas, sous le ressenti et les détails).
+- L'écran « Machine suivante » a aussi « Changer de machine », à côté de « Machine occupée ».
+- Les cartes « Changer » et « Machine occupée » s'affichent en haut de l'écran : la vue y remonte quand on les ouvre.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.
