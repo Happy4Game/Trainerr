@@ -54,6 +54,16 @@ const showBody = ref(false);
 const zoneMuscles = ref<MuscleId[]>([]);
 const zoneLabel = computed(() => zoneMuscles.value.map((m) => t(`muscles.${m}`)).join(', '));
 watch(zoneMuscles, () => (shown.value = PAGE_SIZE));
+/** Movement filters (push, pull…) would hide most of a zone: touching a zone shows every part. */
+const GROUP_FILTERS: readonly Filter[] = ['push', 'pull', 'legs', 'core'];
+function pickZone(muscles: MuscleId[]): void {
+  zoneMuscles.value = muscles;
+  if (muscles.length > 0 && GROUP_FILTERS.includes(filter.value)) filter.value = 'all';
+}
+// Back to the normal search: the zone touched before is forgotten.
+watch(showBody, (open) => {
+  if (!open) zoneMuscles.value = [];
+});
 const loadOf = (entry: CatalogEntry) => session.myLoadFor(entry.exercise.id);
 const loadText = (entry: CatalogEntry) => {
   const l = loadOf(entry);
@@ -134,7 +144,10 @@ function subtitle(entry: CatalogEntry): string {
 }
 
 function onFilter(value: unknown): void {
-  if (FILTERS.includes(value as Filter)) filter.value = value as Filter;
+  if (!FILTERS.includes(value as Filter)) return;
+  filter.value = value as Filter;
+  // A movement filter replaces the zone search rather than narrowing it.
+  if (GROUP_FILTERS.includes(filter.value)) showBody.value = false;
 }
 </script>
 
@@ -181,7 +194,7 @@ function onFilter(value: unknown): void {
       <template v-else>
         <section v-if="showBody" class="body-search" :aria-label="t('catalog.body.title')">
           <p class="body-help">{{ t('catalog.body.help') }}</p>
-          <BodyPicker :selected="zoneMuscles" @pick="zoneMuscles = $event" />
+          <BodyPicker :selected="zoneMuscles" @pick="pickZone" />
         </section>
         <div v-if="zoneMuscles.length > 0" class="zone-chip">
           <span>{{ t('catalog.body.zone', { muscles: zoneLabel }) }}</span>
