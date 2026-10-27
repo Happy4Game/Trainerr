@@ -1,6 +1,7 @@
 /**
  * Photos taken with the phone (machine plate, monthly body photo). The file
- * input opens the camera on phones, in the browser and in the app alike; the
+ * input with `capture` opens the camera on phones, in the browser and in the
+ * app alike (on Android, thanks to the IMAGE_CAPTURE query of the manifest); the
  * picture is shrunk to keep the local database small. Photos never leave the
  * phone.
  */

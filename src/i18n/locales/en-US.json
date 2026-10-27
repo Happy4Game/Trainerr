@@ -1092,7 +1092,8 @@
       "smootherStart": "Easier start",
       "photoGallery": "Body photo gallery",
       "cardio": "Cardio in sessions",
-      "programChoice": "Pick your program from the start"
+      "programChoice": "Pick your program from the start",
+      "cameraFix": "Take a photo opens the camera"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1140,7 +1141,8 @@
       "cardioSessions": "Session › “Add cardio to my sessions”: pick the machine, the duration, and before or after the weights, with the advice of the studies for today's session.",
       "cardioLog": "During the session, log your cardio results: time, distance, speed, incline, level, cadence, heart rate and calories, depending on the machine.",
       "cardioCatalog": "Catalog › Cardio: each machine with the muscles worked and your results, and your week against the WHO bar (150 min).",
-      "programChoice": "Questionnaire › “What type of sessions?”: full body, upper/lower, PPL… or let the app choose from your number of sessions. Each program is explained, with the frequency per muscle."
+      "programChoice": "Questionnaire › “What type of sessions?”: full body, upper/lower, PPL… or let the app choose from your number of sessions. Each program is explained, with the frequency per muscle.",
+      "cameraFix": "“Take a photo” now opens the camera on Android instead of the gallery. For a photo already taken, use “Import”."
     }
   },
   "data": {
