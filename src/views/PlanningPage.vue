@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { useTemplateName } from '@/ui/useTemplateName';
 import {
-  IonBackButton,
   IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -104,9 +102,6 @@ const changeSuggested = computed(() =>
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button default-href="/tabs/today" :text="t('common.back')" />
-        </ion-buttons>
         <ion-title>{{ t('tabs.planning') }}</ion-title>
       </ion-toolbar>
     </ion-header>
