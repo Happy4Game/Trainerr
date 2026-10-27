@@ -8,9 +8,14 @@ export const DEFAULT_REP_RANGES: Readonly<Record<ExerciseKind, RepRange>> = {
   isolation: { min: 12, max: 15 },
 };
 
+/**
+ * Usual rest (the max is used). Heavy compounds get 2–3 min: with trained men,
+ * 3 min gave more strength and muscle than 1 min (Schoenfeld 2016,
+ * doi:10.1519/JSC.0000000000001272). Isolation needs less.
+ */
 export const REST_SECONDS: Readonly<Record<ExerciseKind, { min: number; max: number }>> = {
-  heavyCompound: { min: 90, max: 120 },
-  machineCompound: { min: 90, max: 90 },
+  heavyCompound: { min: 120, max: 180 },
+  machineCompound: { min: 90, max: 120 },
   isolation: { min: 60, max: 90 },
 };
 

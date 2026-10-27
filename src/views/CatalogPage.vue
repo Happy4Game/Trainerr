@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vSearchLabel } from '@/ui/searchLabel';
 import EmptyState from '@/ui/EmptyState.vue';
 import {
   IonButton,
@@ -159,6 +160,7 @@ function onFilter(value: unknown): void {
       <ion-toolbar>
         <ion-searchbar
           v-model="query"
+          v-search-label="{ field: t('catalog.search'), clear: t('catalog.clearSearch') }"
           :debounce="150"
           :placeholder="t('catalog.searchShort')"
           :aria-label="t('catalog.search')"

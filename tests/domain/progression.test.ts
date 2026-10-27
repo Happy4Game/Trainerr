@@ -29,7 +29,8 @@ describe('rep ranges and rest', () => {
     expect(heavy).toEqual({ min: 8, max: 10 });
     expect(machine).toEqual({ min: 10, max: 12 });
     expect(isolation).toEqual({ min: 12, max: 15 });
-    expect(REST_SECONDS.heavyCompound).toEqual({ min: 90, max: 120 });
+    expect(REST_SECONDS.heavyCompound).toEqual({ min: 120, max: 180 });
+    expect(REST_SECONDS.machineCompound).toEqual({ min: 90, max: 120 });
     expect(REST_SECONDS.isolation).toEqual({ min: 60, max: 90 });
   });
 

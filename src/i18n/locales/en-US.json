@@ -115,7 +115,8 @@
       "help": "Touch a zone to see the exercises that work it.",
       "zone": "Zone: {muscles}",
       "clear": "Clear the zone"
-    }
+    },
+    "clearSearch": "Clear the search"
   },
   "exercise": {
     "notFound": "Exercise not found.",
@@ -1032,7 +1033,8 @@
       "healthConnect": "Weighings from Health Connect",
       "clearFeedback": "Every tap shows",
       "carryOverOrder": "Machine order kept",
-      "sessionInsights": "The Session page tells more"
+      "sessionInsights": "The Session page tells more",
+      "longerRest": "More rest on the big lifts"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1067,7 +1069,9 @@
       "setSaved": "After a set, the screen goes back up to the rest timer and a banner confirms \"Set saved\".",
       "switchSheet": "\"Switch machine\" opens over the screen, no need to scroll up to find it.",
       "carryOverOrder": "A machine that stayed taken last session comes back early, but always after the big lifts: an isolation exercise no longer comes before a compound.",
-      "sessionInsights": "As on Today, the proposed session shows the loads going up (+2.5 kg, first time) and the muscles it catches up on your week."
+      "sessionInsights": "As on Today, the proposed session shows the loads going up (+2.5 kg, first time) and the muscles it catches up on your week.",
+      "longerRest": "Rest goes up to 3 min on the big lifts (squat, bench press…) and 2 min on guided machines: studies show more strength and muscle with longer rest.",
+      "searchLabel": "The search field and its clear button are read in your language by screen readers."
     }
   },
   "data": {
