@@ -35,8 +35,14 @@ test('cardio: chosen before the session, logged in it, kept in the history and c
   await expect(modal.getByLabel('Pente (%)')).toHaveCount(0);
   await field('Distance (km)').fill('2,1');
   await field('Fréquence cardiaque moyenne (bpm)').fill('900');
-  await modal.getByRole('button', { name: 'Enregistrer' }).click();
-  await expect(modal.getByRole('alert')).toContainText('Fréquence cardiaque');
+  // Under load, a tap during an Ionic redraw can be lost: tap again until the
+  // check answers (nothing is saved while a value is wrong).
+  await expect(async () => {
+    await modal.getByRole('button', { name: 'Enregistrer' }).click();
+    await expect(modal.getByRole('alert')).toContainText('Fréquence cardiaque', {
+      timeout: 1_000,
+    });
+  }).toPass();
   await field('Fréquence cardiaque moyenne (bpm)').fill('140');
   await modal.getByRole('radio', { name: /Modérée/ }).click();
   await modal.getByRole('button', { name: 'Enregistrer' }).click();

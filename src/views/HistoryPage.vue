@@ -11,17 +11,45 @@ import {
   IonSegmentButton,
   IonTitle,
   IonToolbar,
+  onIonViewWillEnter,
 } from '@ionic/vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 import { recordsBySession, sessionWorkload } from '@/domain/stats';
 import AddPastSession from '@/ui/AddPastSession.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useUnits } from '@/ui/useUnits';
 import StatsView from '@/ui/StatsView.vue';
+import BodyView from '@/ui/BodyView.vue';
+import { useBodyMeasurements } from '@/ui/body/useBodyMeasurements';
 
-const VIEWS = ['sessions', 'stats'] as const;
-const view = ref<(typeof VIEWS)[number]>('sessions');
+/**
+ * Progress: the sessions, their stats, and the body (weight, measurements,
+ * photos). The body joined here so that the catalog keeps its own tab: five
+ * tabs at most.
+ */
+const VIEWS = ['sessions', 'stats', 'body'] as const;
+type View = (typeof VIEWS)[number];
+const view = ref<View>('sessions');
+
+const route = useRoute();
+const body = useBodyMeasurements();
+/** "?view=body": the former Body tab, and the way back from the photos. */
+function viewFromRoute(): void {
+  const asked = route.query.view;
+  if (typeof asked === 'string' && (VIEWS as readonly string[]).includes(asked))
+    view.value = asked as View;
+}
+// Ionic keeps the page alive between tabs: read the body again in case of a
+// CSV import or a restored backup in the meantime.
+onIonViewWillEnter(() => {
+  viewFromRoute();
+  if (view.value === 'body') void body.reload();
+});
+watch(view, (v) => {
+  if (v === 'body') void body.reload();
+});
 
 const { t, n, locale } = useI18n();
 const templateLabel = useTemplateName();
@@ -84,10 +112,7 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
         <ion-title>{{ t('tabs.history') }}</ion-title>
       </ion-toolbar>
       <ion-toolbar>
-        <ion-segment
-          :value="view"
-          @ion-change="view = ($event.detail.value as (typeof VIEWS)[number]) ?? 'sessions'"
-        >
+        <ion-segment :value="view" @ion-change="view = ($event.detail.value as View) ?? 'sessions'">
           <ion-segment-button v-for="v in VIEWS" :key="v" :value="v">
             <ion-label>{{ t(`history.views.${v}`) }}</ion-label>
           </ion-segment-button>
@@ -96,6 +121,7 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
     </ion-header>
     <ion-content class="ion-padding">
       <StatsView v-if="view === 'stats'" />
+      <BodyView v-if="view === 'body'" />
       <AddPastSession v-if="view === 'sessions'" />
       <EmptyState
         v-if="view === 'sessions' && sessions.length === 0"

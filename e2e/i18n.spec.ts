@@ -15,7 +15,7 @@ test('pseudo-language: every interface text comes from the translation files', a
   for (const path of [
     '/tabs/today',
     '/tabs/session',
-    '/tabs/session/catalog',
+    '/tabs/catalog',
     '/tabs/history',
     '/tabs/planning',
     '/tabs/settings',
@@ -40,8 +40,7 @@ test('the language can be switched to English without restarting', async ({ page
     .click();
   await page.getByRole('radio', { name: 'English' }).click();
   await expect(page.locator('ion-title:visible')).toHaveText('Settings');
-  await page.getByRole('tab', { name: /^Workout/ }).click();
-  await page.getByRole('link', { name: 'Catalog', exact: true }).click();
+  await page.getByRole('tab', { name: 'Catalog', exact: true }).click();
   await expect(page.getByRole('status').filter({ hasText: /exercises/ })).toHaveText(
     /\d+ exercises/,
   );

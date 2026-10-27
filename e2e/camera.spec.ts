@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { skipOnboarding } from './helpers';
+import { openBody, skipOnboarding } from './helpers';
 
 // Chromium's fake camera (playwright.config.ts) stands in for the phone's.
 test('body photo taken inside the app: pose above, camera switch, count kept up to date', async ({
   page,
 }) => {
   await skipOnboarding(page);
-  await page.getByRole('tab', { name: 'Corps' }).click();
+  await openBody(page);
   await expect(page.getByRole('link', { name: 'Ouvrir ma galerie' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Prendre une photo' }).click();

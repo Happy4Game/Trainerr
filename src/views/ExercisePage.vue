@@ -115,7 +115,7 @@ const muscleList = (muscles: readonly MuscleId[]) =>
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button
-            :default-href="fromSession ? '/tabs/session' : '/tabs/session/catalog'"
+            :default-href="fromSession ? '/tabs/session' : '/tabs/catalog'"
             :text="fromSession ? t('exercise.session') : t('common.back')"
           />
         </ion-buttons>

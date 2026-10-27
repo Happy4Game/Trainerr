@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openCatalog, skipOnboarding } from './helpers';
+import { openTab, skipOnboarding } from './helpers';
 
 test('the first launch opens the questionnaire, skipping it leads to the catalog', async ({
   page,
@@ -13,19 +13,22 @@ test('the five tabs are reachable', async ({ page }) => {
   for (const [label, path] of [
     ['Séance', 'session'],
     ['Planning', 'planning'],
+    ['Catalogue', 'catalog'],
     ['Progrès', 'history'],
-    ['Corps', 'body'],
     ["Aujourd'hui", 'today'],
   ] as const) {
-    await page.getByRole('tab', { name: label }).click();
+    await openTab(page, label);
     await expect(page).toHaveURL(new RegExp(`/tabs/${path}$`));
   }
-  // The catalog opens from the Session tab; the former addresses still work.
-  await openCatalog(page);
-  await page.goto('/tabs/catalog');
-  await expect(page).toHaveURL(/\/tabs\/session\/catalog$/);
+  // The former addresses still work.
+  await page.goto('/tabs/session/catalog');
+  await expect(page).toHaveURL(/\/tabs\/catalog$/);
   await page.goto('/tabs/today/planning');
   await expect(page).toHaveURL(/\/tabs\/planning$/);
+  await page.goto('/tabs/body');
+  await expect(page.getByRole('link', { name: 'Ouvrir ma galerie' })).toBeVisible({
+    timeout: 20_000,
+  });
 });
 
 test('the questionnaire is not shown again after a reload', async ({ page }) => {

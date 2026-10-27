@@ -78,7 +78,7 @@ Presse à cuisses,107,10,2026-10-24
   await page.getByRole('button', { name: 'Importer 2 charges' }).click();
   await expect(page.getByText(/2 charges importées/)).toBeVisible();
 
-  await page.goto('/tabs/session/catalog');
+  await page.goto('/tabs/catalog');
   await page.getByRole('searchbox').fill('presse à cuisses');
   await expect(
     page.getByRole('button', { name: /Ma charge sur Presse à cuisses : 107\s*kg × 10/ }),

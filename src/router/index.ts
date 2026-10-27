@@ -25,24 +25,26 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/ExercisePage.vue'),
         props: (route) => ({ id: route.params.id, fromSession: true }),
       },
-      // The catalog opens from the Session tab: picking machines is part of it.
-      { path: 'session/catalog', component: () => import('@/views/CatalogPage.vue') },
+      { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
       {
-        path: 'session/catalog/cardio/:id',
+        path: 'catalog/cardio/:id',
         component: () => import('@/views/CardioPage.vue'),
         props: true,
       },
       {
-        path: 'session/catalog/:id',
+        path: 'catalog/:id',
         component: () => import('@/views/ExercisePage.vue'),
         props: true,
       },
-      // Former addresses, before the catalog moved into the Session tab.
-      { path: 'catalog', redirect: '/tabs/session/catalog' },
-      { path: 'catalog/:rest(.*)', redirect: (to) => `/tabs/session/catalog/${to.params.rest}` },
+      // Former addresses, when the catalog was inside the Session tab.
+      { path: 'session/catalog', redirect: '/tabs/catalog' },
+      {
+        path: 'session/catalog/:rest(.*)',
+        redirect: (to) => `/tabs/catalog/${to.params.rest}`,
+      },
+      // Progress: sessions, stats and body (weight, measurements, photos).
       { path: 'history', component: () => import('@/views/HistoryPage.vue') },
-      // Moved to the Body tab (body photos) and under Today (planning).
-      { path: 'history/photos', redirect: '/tabs/body/photos' },
+      { path: 'history/photos', component: () => import('@/views/PhotosPage.vue') },
       {
         path: 'history/:id',
         component: () => import('@/views/HistorySessionPage.vue'),
@@ -54,8 +56,9 @@ const routes: RouteRecordRaw[] = [
       { path: 'settings/friends', component: () => import('@/views/FriendsPage.vue') },
       { path: 'settings/about', component: () => import('@/views/AboutPage.vue') },
       { path: 'settings/changelog', component: () => import('@/views/ChangelogPage.vue') },
-      { path: 'body', component: () => import('@/views/BodyPage.vue') },
-      { path: 'body/photos', component: () => import('@/views/PhotosPage.vue') },
+      // Former Body tab, now the Body view of Progress.
+      { path: 'body', redirect: { path: '/tabs/history', query: { view: 'body' } } },
+      { path: 'body/photos', redirect: '/tabs/history/photos' },
       { path: 'planning', component: () => import('@/views/PlanningPage.vue') },
       { path: 'today/planning', redirect: '/tabs/planning' },
     ],
