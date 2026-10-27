@@ -1,3 +1,4 @@
+import type { CardioPlan } from '@/domain/cardio';
 import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
 import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
@@ -68,6 +69,8 @@ export interface Settings {
   readonly aiConsent: boolean;
   /** Machines replaced from the session preview: "instead of this one, propose that one". */
   readonly swaps?: Readonly<Record<string, string>>;
+  /** Sessions with cardio: the machine, minutes and moment kept for the next ones. Without when unset. */
+  readonly cardio?: CardioPlan;
   /** Sessions built by the user: a name and exercises in order. */
   readonly customSessions?: readonly CustomSession[];
   readonly language: LanguagePreference;

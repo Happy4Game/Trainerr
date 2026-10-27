@@ -26,6 +26,11 @@ const routes: RouteRecordRaw[] = [
         props: (route) => ({ id: route.params.id, fromSession: true }),
       },
       { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
+      {
+        path: 'catalog/cardio/:id',
+        component: () => import('@/views/CardioPage.vue'),
+        props: true,
+      },
       { path: 'catalog/:id', component: () => import('@/views/ExercisePage.vue'), props: true },
       { path: 'history', component: () => import('@/views/HistoryPage.vue') },
       { path: 'history/photos', component: () => import('@/views/PhotosPage.vue') },

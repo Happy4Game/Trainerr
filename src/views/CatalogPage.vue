@@ -33,13 +33,15 @@ import {
   matchesSearch,
   type CatalogSection,
 } from '@/domain/catalogSearch';
+import { CARDIO_MACHINES } from '@/domain/cardio';
+import CardioIcon from '@/ui/cardio/CardioIcon.vue';
 import LoadNoteModal from '@/ui/LoadNoteModal.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useCatalog } from '@/ui/useCatalog';
 import { useUnits } from '@/ui/useUnits';
 
 const PAGE_SIZE = 50;
-const FILTERS = ['all', 'favorites', 'push', 'pull', 'legs', 'core'] as const;
+const FILTERS = ['all', 'favorites', 'push', 'pull', 'legs', 'core', 'cardio'] as const;
 type Filter = (typeof FILTERS)[number];
 
 const { t, locale } = useI18n();
@@ -126,6 +128,12 @@ const matching = computed<Row[]>(() => {
     .sort(compare);
 });
 const visible = computed(() => matching.value.slice(0, shown.value));
+/** Cardio tab: the cardio machines, apart from the weight machines. */
+const cardioMachines = computed(() =>
+  CARDIO_MACHINES.map((m) => ({ ...m, name: t(`cardio.machines.${m.id}`) })).filter((m) =>
+    matchesSearch([m.name], query.value),
+  ),
+);
 /** Section title before the first row of each part (not in "my machines" filter). */
 const sectionStart = (index: number): CatalogSection | undefined => {
   if (filter.value === 'favorites') return undefined;
@@ -148,6 +156,11 @@ function onFilter(value: unknown): void {
   filter.value = value as Filter;
   // A body part tab replaces the search by muscle rather than narrowing it.
   if (filter.value !== 'all' && filter.value !== 'favorites') showBody.value = false;
+  // A search left from the weight machines would hide every cardio machine.
+  if (filter.value === 'cardio') {
+    zoneMuscles.value = [];
+    query.value = '';
+  }
 }
 </script>
 
@@ -192,6 +205,23 @@ function onFilter(value: unknown): void {
       <p v-else-if="state.kind === 'error'" class="ion-padding" role="alert">
         {{ t('catalog.error', { message: state.message }) }}
       </p>
+      <template v-else-if="filter === 'cardio'">
+        <p class="ion-padding-horizontal count">{{ t('cardio.catalogIntro') }}</p>
+        <ion-list>
+          <ion-item
+            v-for="m in cardioMachines"
+            :key="m.id"
+            :router-link="`/tabs/catalog/cardio/${m.id}`"
+            detail
+          >
+            <span slot="start" class="cardio-icon"><CardioIcon :icon="m.icon" /></span>
+            <ion-label class="ion-text-wrap">
+              <h2>{{ m.name }}</h2>
+              <p>{{ m.primaryMuscles.map((id) => t(`muscles.${id}`)).join(', ') }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </template>
       <template v-else>
         <section v-if="showBody" class="body-search" :aria-label="t('catalog.body.title')">
           <p class="body-help">{{ t('catalog.body.help') }}</p>
@@ -288,6 +318,16 @@ function onFilter(value: unknown): void {
 </template>
 
 <style scoped>
+.cardio-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--tr-surface-2);
+  color: var(--ion-color-primary);
+}
 .body-search {
   margin: 8px 16px;
   padding: 12px;

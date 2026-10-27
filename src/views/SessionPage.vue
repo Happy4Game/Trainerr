@@ -41,6 +41,7 @@ import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
 import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
 import { useSession } from '@/ui/session/useSession';
+import SessionCardio from '@/ui/cardio/SessionCardio.vue';
 import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/useWeekPlan';
 
@@ -536,6 +537,7 @@ async function logWarmup(): Promise<void> {
         </button>
         <SessionOverview :open="overviewOpen" :exercises="progress" @close="overviewOpen = false" />
 
+        <SessionCardio place="top" />
         <section
           v-if="nextMachine"
           class="next-machine"
@@ -647,6 +649,7 @@ async function logWarmup(): Promise<void> {
           </ion-card-content>
         </ion-card>
 
+        <SessionCardio place="bottom" />
         <ion-button expand="block" fill="outline" @click="pickingExercise = true">
           {{ t('session.addExercise') }}
         </ion-button>

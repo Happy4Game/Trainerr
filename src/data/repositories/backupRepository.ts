@@ -8,6 +8,7 @@ const USER_TABLES = [
   'gym_machine',
   'session',
   'set_log',
+  'cardio_log',
   'reference_load',
   'availability',
   'badge',

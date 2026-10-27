@@ -94,7 +94,8 @@
       "push": "Poussée",
       "pull": "Tirage",
       "legs": "Jambes",
-      "core": "Gainage"
+      "core": "Gainage",
+      "cardio": "Cardio"
     },
     "loading": "Chargement du catalogue…",
     "error": "Impossible de charger le catalogue : {message}",
@@ -1002,6 +1003,18 @@
       "etiquette": {
         "title": "Le savoir-vivre à la salle",
         "body": "Essuie la machine, range les poids, et partage la machine entre tes séries si quelqu'un attend."
+      },
+      "cardioOrder": {
+        "title": "Cardio : avant ou après la muscu ?",
+        "body": "Pour le muscle, l'endurance ou la perte de gras, l'ordre ne change rien. Pour la force des jambes, commence par la muscu. Le cardio ne freine ni la prise de muscle ni la force maximale. Seule l'explosivité (sprint, saut) baisse un peu quand les deux sont dans la même séance : 3 h d'écart suffisent pour l'éviter."
+      },
+      "cardioAmount": {
+        "title": "Combien de cardio par semaine",
+        "body": "L'OMS conseille aux adultes 150 à 300 min d'activité modérée par semaine, ou 75 à 150 min d'activité intense, en plus de la muscu de tous les grands muscles au moins 2 jours par semaine."
+      },
+      "cardioIntensity": {
+        "title": "Modéré ou intense : le test de la parole",
+        "body": "Modéré : tu peux parler, mais pas chanter. Intense : tu ne dis que quelques mots avant de reprendre ton souffle. Pas besoin de cardiofréquencemètre pour le savoir."
       }
     }
   },
@@ -1064,7 +1077,8 @@
       "longerRest": "Plus de repos sur les gros mouvements",
       "sessionSwap": "Remplacer une machine depuis Séance",
       "smootherStart": "Démarrage plus simple",
-      "photoGallery": "Galerie de photos du corps"
+      "photoGallery": "Galerie de photos du corps",
+      "cardio": "Cardio dans les séances"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1108,7 +1122,10 @@
       "usualLoadsToday": "Tu t'entraînes déjà ? Note tes charges habituelles dès la page Aujourd'hui, avant ta première séance.",
       "photoGallery": "Historique › Corps › Ma galerie : tes photos mois par mois, avec le nombre de séances faites à chaque photo.",
       "photoImport": "Prends une photo devant le miroir ou importe celles de ta galerie, en une fois. La date se corrige si besoin.",
-      "photoCompare": "Classe-les par pose (face, profil, dos) et compare la première et la dernière côte à côte. Elles restent sur ton téléphone."
+      "photoCompare": "Classe-les par pose (face, profil, dos) et compare la première et la dernière côte à côte. Elles restent sur ton téléphone.",
+      "cardioSessions": "Séance › « Ajouter du cardio à mes séances » : choisis la machine, la durée, et avant ou après la muscu, avec le conseil des études pour ta séance du jour.",
+      "cardioLog": "Pendant la séance, saisis tes perfs de cardio : durée, distance, vitesse, pente, niveau, cadence, fréquence cardiaque et calories, selon la machine.",
+      "cardioCatalog": "Catalogue › Cardio : chaque machine avec les muscles travaillés et tes perfs, et ta semaine comparée au repère de l'OMS (150 min)."
     }
   },
   "data": {
@@ -1567,5 +1584,116 @@
     "prefilled": "Elle reprend les exercices, charges et reps de ta dernière séance de ce type : tu n'as qu'à corriger ce qui change.",
     "empty": "Tu ajouteras ensuite les exercices et les séries que tu as faits.",
     "create": "Créer et remplir"
+  },
+  "cardio": {
+    "title": "Cardio",
+    "machines": {
+      "treadmill": "Tapis de course",
+      "outdoorRun": "Course dehors",
+      "bike": "Vélo",
+      "recumbentBike": "Vélo semi-allongé",
+      "spinBike": "Vélo de biking",
+      "elliptical": "Vélo elliptique",
+      "rower": "Rameur",
+      "stairClimber": "Escalier / stepper",
+      "jumpRope": "Corde à sauter"
+    },
+    "descriptions": {
+      "treadmill": "Marche ou course sur place. La pente fait travailler davantage les fessiers et les mollets, sans courir plus vite.",
+      "outdoorRun": "Course à pied dehors. Note la distance et le temps lus sur ta montre ou ton téléphone.",
+      "bike": "Vélo d'appartement classique : peu de choc pour les genoux et le dos.",
+      "recumbentBike": "Vélo avec dossier, assis plus bas : le dos est soutenu, pratique pour reprendre en douceur.",
+      "spinBike": "Vélo des cours de biking, avec une roue lourde : on règle la résistance à la molette.",
+      "elliptical": "Mouvement de course sans impact au sol, les bras poussent et tirent les poignées.",
+      "rower": "Chaque coup de rame part des jambes, puis le dos et les bras finissent le mouvement.",
+      "stairClimber": "Montée de marches sans fin : très exigeant pour les fessiers et les cuisses.",
+      "jumpRope": "Petits sauts sur la pointe des pieds : mollets et coordination."
+    },
+    "fields": {
+      "minutes": "Durée (min)",
+      "distance": "Distance (km)",
+      "speed": "Vitesse (km/h)",
+      "incline": "Pente (%)",
+      "level": "Niveau ou résistance",
+      "cadence": "Cadence (tours ou coups par min)",
+      "heartRate": "Fréquence cardiaque moyenne (bpm)",
+      "calories": "Calories affichées (kcal)"
+    },
+    "units": {
+      "minutes": "{n} min",
+      "km": "{n} km",
+      "kmh": "{n} km/h",
+      "pace": "{pace} /km",
+      "pace500": "{pace} /500 m",
+      "incline": "pente {n} %",
+      "level": "niveau {n}",
+      "cadence": "{n} /min",
+      "bpm": "{n} bpm",
+      "kcal": "{n} kcal"
+    },
+    "effort": {
+      "title": "Intensité ressentie",
+      "light": "Facile",
+      "lightHelp": "Tu pourrais chanter.",
+      "moderate": "Modérée",
+      "moderateHelp": "Tu peux parler, mais pas chanter.",
+      "vigorous": "Intense",
+      "vigorousHelp": "Tu ne dis que quelques mots avant de reprendre ton souffle."
+    },
+    "positions": {
+      "before": "Avant la muscu",
+      "after": "Après la muscu"
+    },
+    "choose": {
+      "title": "Cardio de la séance",
+      "toggle": "Ajouter du cardio à mes séances",
+      "help": "Le choix reste pour les séances suivantes. Tu peux l'enlever à tout moment.",
+      "minutes": "Durée du cardio",
+      "when": "Quand faire le cardio",
+      "advised": "conseillé"
+    },
+    "advice": {
+      "lowerStrength": "Ton objectif est la force : fais le cardio après la muscu. Commencer par la muscu donne plus de force aux jambes (Eddens 2018).",
+      "legsDay": "Séance jambes : garde le cardio pour après, pour avoir les jambes fraîches sur les charges. Commencer par la muscu donne plus de force aux jambes (Eddens 2018).",
+      "noDifference": "Avant ou après, choisis ce que tu préfères : l'ordre ne change ni le muscle gagné, ni l'endurance (Eddens 2018), et le cardio ne freine pas la prise de muscle (Schumann 2022).",
+      "more": "Pourquoi ? Voir les conseils"
+    },
+    "session": {
+      "beforeTitle": "Cardio d'abord",
+      "afterTitle": "Cardio pour finir",
+      "target": "{machine} · {minutes} min prévues",
+      "log": "Saisir mes perfs",
+      "skip": "Pas de cardio aujourd'hui",
+      "skipped": "Cardio retiré de cette séance.",
+      "unskip": "Le remettre",
+      "add": "Ajouter du cardio",
+      "edit": "Modifier le cardio : {machine}"
+    },
+    "entry": {
+      "title": "Cardio",
+      "machine": "Machine",
+      "lastTime": "La dernière fois : {detail}",
+      "save": "Enregistrer",
+      "delete": "Supprimer ce cardio",
+      "deleteConfirm": "Confirmer la suppression",
+      "invalid": "Vérifie : {fields}"
+    },
+    "summary": "{minutes} min de cardio",
+    "week": {
+      "short": "{minutes} / {target} min cette semaine (OMS)",
+      "long": "Cette semaine : {minutes} min sur les {target} min conseillées par l'OMS.",
+      "help": "Repère de l'OMS : 150 à 300 min d'activité modérée par semaine, ou 75 à 150 min d'activité intense. Une minute intense compte double, une minute facile ne compte pas."
+    },
+    "catalogIntro": "Les machines de cardio. Il n'existe pas de dessins libres de droits de ces machines : une icône et la carte des muscles travaillés les représentent.",
+    "page": {
+      "unknown": "Cette machine n'existe pas.",
+      "worked": "Muscles qui travaillent",
+      "week": "Ma semaine",
+      "logToday": "Noter du cardio fait aujourd'hui",
+      "history": "Mes perfs",
+      "noHistory": "Pas encore de perf sur cette machine.",
+      "longest": "Plus longue distance : {km} km",
+      "editNamed": "Modifier le cardio du {date}"
+    }
   }
 }

@@ -20,6 +20,8 @@ import {
   type ActiveSession,
   type SessionPlan,
 } from '@/data/repositories/sessionRepository';
+import { cardioMinutesOf } from '@/data/repositories/cardioRepository';
+import { useCardio } from './useCardio';
 import {
   listReferences,
   setReference,
@@ -146,6 +148,8 @@ export interface SessionSummary {
   minutes?: number;
   /** Volume gained since the last session of the same type, in percent. */
   volumeGain?: number;
+  /** Minutes of cardio done with the session. */
+  cardioMinutes?: number;
 }
 const summary = ref<SessionSummary>();
 
@@ -508,6 +512,12 @@ function supersetBlocks<E extends Exercise>(exercises: readonly E[]): SessionBlo
   return proposeSupersets(exercises, zone ? { protectedZone: zone } : {});
 }
 
+/** The cardio chosen on the start screen (kept in the shared settings). */
+async function cardioOfSettings(): Promise<Pick<SessionPlan, 'cardio'>> {
+  const { cardio } = await loadSettings();
+  return cardio ? { cardio } : {};
+}
+
 /** Ready-made session: its exercises in order, with their sets, reps and rests. */
 async function startPreset(presetId: string): Promise<void> {
   const preset = presetSession(presetId);
@@ -529,6 +539,7 @@ async function startPreset(presetId: string): Promise<void> {
     })),
     queue: startQueue(ids),
     ...(tiredToday.value ? { tired: true } : {}),
+    ...(await cardioOfSettings()),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -599,6 +610,7 @@ async function start(
     ...(pairs.length > 0 ? { supersets: pairs } : {}),
     ...(options.express ? { express: true } : {}),
     ...(tiredToday.value ? { tired: true } : {}),
+    ...(await cardioOfSettings()),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -997,6 +1009,8 @@ async function editHistory(change: (db: SqlDatabase) => Promise<unknown>): Promi
   const { db } = await openAppDatabase();
   await change(db);
   history.value = await listDoneSessions(db);
+  // Sessions deleted or moved to another day take their cardio with them.
+  await useCardio().reload();
 }
 
 /**
@@ -1036,7 +1050,8 @@ async function finish(): Promise<void> {
   if (!active.value) return;
   const { db } = await openAppDatabase();
   const work = active.value.sets.filter((s) => !s.warmup);
-  if (active.value.sets.length === 0) {
+  const cardioMinutes = await cardioMinutesOf(db, active.value.id);
+  if (active.value.sets.length === 0 && cardioMinutes === 0) {
     await abandonSession(db, active.value.id);
   } else {
     const { carryOver } = endSession(active.value.plan.queue);
@@ -1097,6 +1112,7 @@ async function finish(): Promise<void> {
       workloadKg,
       ...(minutes !== undefined ? { minutes } : {}),
       ...(volumeGain !== undefined ? { volumeGain } : {}),
+      ...(cardioMinutes > 0 ? { cardioMinutes } : {}),
       carryOver,
       records,
       backToLevel,
@@ -1271,6 +1287,13 @@ export function useSession() {
       active.value ? previousInQueue(active.value.plan.queue) : undefined,
     ),
     saveNote,
+    /** The planned cardio skipped today, or put back. */
+    skipCardio: async (skipped: boolean) => {
+      const cardio = active.value?.plan.cardio;
+      if (!active.value || !cardio) return;
+      const { skipped: _old, ...rest } = cardio;
+      await updatePlan({ ...active.value.plan, cardio: skipped ? { ...rest, skipped } : rest });
+    },
     removeExercises,
     finish,
     adoptMachines,

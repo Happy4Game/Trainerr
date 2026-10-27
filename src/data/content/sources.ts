@@ -8,6 +8,32 @@ export interface Source {
 
 export const SOURCES: readonly Source[] = [
   {
+    id: 'eddens2018',
+    label:
+      'Eddens, van Someren & Howatson, 2018 — ordre muscu et cardio dans la même séance (Sports Medicine)',
+    url: 'https://doi.org/10.1007/s40279-017-0784-1',
+    theme: 'programme',
+  },
+  {
+    id: 'schumann2022',
+    label:
+      'Schumann et al., 2022 — cardio et muscu menés ensemble : force, muscle et explosivité (Sports Medicine)',
+    url: 'https://doi.org/10.1007/s40279-021-01587-7',
+    theme: 'programme',
+  },
+  {
+    id: 'who2020',
+    label: 'OMS, 2020 — lignes directrices sur l’activité physique et la sédentarité',
+    url: 'https://www.ncbi.nlm.nih.gov/books/NBK566048/',
+    theme: 'health',
+  },
+  {
+    id: 'cdcIntensity',
+    label: 'CDC — mesurer l’intensité d’une activité (le test de la parole)',
+    url: 'https://www.cdc.gov/physical-activity-basics/measuring/',
+    theme: 'health',
+  },
+  {
     id: 'schoenfeld2016',
     label: 'Schoenfeld, Ogborn & Krieger, 2016 — fréquence et hypertrophie (Sports Medicine)',
     url: 'https://pubmed.ncbi.nlm.nih.gov/27102172/',

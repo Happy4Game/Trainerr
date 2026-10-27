@@ -173,6 +173,31 @@ export const migrations: readonly Migration[] = [
         CHECK (photo_pose IN ('front', 'side', 'back'));
     `,
   },
+  {
+    version: 8,
+    description: 'Cardio done with a session: machine, time and what the machine shows',
+    sql: `
+      CREATE TABLE cardio_log (
+        id TEXT PRIMARY KEY,
+        session_id TEXT REFERENCES session (id) ON DELETE CASCADE,
+        date TEXT NOT NULL,
+        cardio_id TEXT NOT NULL,
+        position TEXT CHECK (position IN ('before', 'after')),
+        minutes REAL NOT NULL CHECK (minutes > 0),
+        distance_km REAL,
+        speed_kmh REAL,
+        incline_pct REAL,
+        level REAL,
+        cadence REAL,
+        avg_hr INTEGER,
+        calories INTEGER,
+        effort TEXT CHECK (effort IN ('light', 'moderate', 'vigorous')),
+        note TEXT
+      );
+      CREATE INDEX cardio_log_date ON cardio_log (date);
+      CREATE INDEX cardio_log_session ON cardio_log (session_id);
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;

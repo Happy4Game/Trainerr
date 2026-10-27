@@ -36,6 +36,10 @@ import {
 } from '@/data/repositories/sessionRepository';
 import type { Difficulty } from '@/domain/types';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
+import type { CardioEntry, DatedCardio } from '@/domain/cardio';
+import CardioEntryModal from '@/ui/cardio/CardioEntryModal.vue';
+import { useCardioText } from '@/ui/cardio/useCardioText';
+import { useCardio } from '@/ui/session/useCardio';
 import { useSession } from '@/ui/session/useSession';
 import { useUnits } from '@/ui/useUnits';
 
@@ -50,6 +54,21 @@ const { symbol, toDisplay, fromInput } = useUnits();
 const router = useIonRouter();
 
 const past = computed(() => session.history.value.find((s) => s.id === props.id));
+
+const cardio = useCardio();
+const cardioText = useCardioText();
+const cardioLogs = computed(() => cardio.ofSession(props.id));
+const cardioOpen = ref(false);
+const cardioEditing = ref<DatedCardio>();
+async function saveCardio(entry: CardioEntry): Promise<void> {
+  if (cardioEditing.value) await cardio.update(cardioEditing.value.id, entry);
+  else if (past.value) await cardio.add(entry, past.value);
+  cardioOpen.value = false;
+}
+async function removeCardio(): Promise<void> {
+  if (cardioEditing.value) await cardio.remove(cardioEditing.value.id);
+  cardioOpen.value = false;
+}
 const nameOf = (id: string) => {
   const e = session.entryOf(id)?.exercise;
   return e ? (locale.value.startsWith('fr') ? e.name : e.nameEn) : id;
@@ -116,7 +135,7 @@ async function addExercise(exerciseId: string) {
 
 /** A session left without any set (added from the history, then nothing typed) is not kept. */
 onIonViewDidLeave(async () => {
-  if (past.value && past.value.sets.length === 0) {
+  if (past.value && past.value.sets.length === 0 && cardioLogs.value.length === 0) {
     await session.editHistory((db) => deleteSession(db, props.id));
   }
 });
@@ -237,9 +256,47 @@ async function remove() {
           </ion-card-content>
         </ion-card>
 
+        <ion-card v-if="cardioLogs.length > 0">
+          <ion-card-header>
+            <ion-card-title>{{ t('cardio.title') }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ul class="cardio-list">
+              <li v-for="entry in cardioLogs" :key="entry.id">
+                <button
+                  type="button"
+                  class="cardio-entry"
+                  :aria-label="
+                    t('cardio.session.edit', { machine: cardioText.name(entry.cardioId) })
+                  "
+                  @click="((cardioEditing = entry), (cardioOpen = true))"
+                >
+                  <strong>{{ cardioText.name(entry.cardioId) }}</strong>
+                  <span>{{ cardioText.detail(entry) }}</span>
+                </button>
+              </li>
+            </ul>
+          </ion-card-content>
+        </ion-card>
+
         <ion-button expand="block" fill="outline" @click="picking = true">
           <Plus :size="20" aria-hidden="true" /> {{ t('historyEdit.addExercise') }}
         </ion-button>
+        <ion-button
+          expand="block"
+          fill="outline"
+          @click="((cardioEditing = undefined), (cardioOpen = true))"
+        >
+          <Plus :size="20" aria-hidden="true" /> {{ t('cardio.session.add') }}
+        </ion-button>
+        <CardioEntryModal
+          :open="cardioOpen"
+          :initial="cardioEditing"
+          :removable="cardioEditing !== undefined"
+          @save="saveCardio"
+          @remove="removeCardio"
+          @close="cardioOpen = false"
+        />
         <ExercisePicker
           :open="movingFrom !== undefined"
           :title="t('setEdit.wrongMachine.pick')"
@@ -297,6 +354,23 @@ async function remove() {
 </template>
 
 <style scoped>
+.cardio-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cardio-entry {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
 .empty-hint {
   margin-block: var(--tr-space-4);
   color: var(--tr-text-muted);
