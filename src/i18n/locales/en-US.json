@@ -1030,7 +1030,8 @@
       "bodyWeight": "Weight tracking",
       "easySwitch": "Switch machine in one tap",
       "healthConnect": "Weighings from Health Connect",
-      "clearFeedback": "Every tap shows"
+      "clearFeedback": "Every tap shows",
+      "carryOverOrder": "Machine order kept"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1063,7 +1064,8 @@
       "switchNext": "The \"Next machine\" screen also offers to switch before you go.",
       "healthConnectImport": "History › Body › \"Import from Health Connect\" gets the weighings of your smart scale, Samsung Health or Google Fit (Android).",
       "setSaved": "After a set, the screen goes back up to the rest timer and a banner confirms \"Set saved\".",
-      "switchSheet": "\"Switch machine\" opens over the screen, no need to scroll up to find it."
+      "switchSheet": "\"Switch machine\" opens over the screen, no need to scroll up to find it.",
+      "carryOverOrder": "A machine that stayed taken last session comes back early, but always after the big lifts: an isolation exercise no longer comes before a compound."
     }
   },
   "data": {
