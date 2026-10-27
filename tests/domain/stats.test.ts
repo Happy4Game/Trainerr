@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   beatsRecord,
   missingSetsThisWeek,
+  neglectedMuscles,
   personalRecords,
   sessionWorkload,
   strengthCurve,
@@ -64,6 +65,25 @@ describe('sets per muscle', () => {
     expect(volumeStatus(10)).toBe('inRange');
     expect(volumeStatus(20)).toBe('inRange');
     expect(volumeStatus(21)).toBe('above');
+  });
+
+  it('lists the muscles behind on the last 7 days, fewest sets first', () => {
+    const work = (exerciseId: string, count: number) =>
+      Array.from({ length: count }, () => ({
+        exerciseId,
+        loadKg: 50,
+        reps: 10,
+        difficulty: 'ok' as const,
+      }));
+    const sessions: SessionLog[] = [
+      // Eight days ago: out of the window.
+      { id: 'old', date: '2026-10-19', templateId: 'legsA', sets: work('leg-curl', 12) },
+      { id: 'a', date: '2026-10-22', templateId: 'pushA', sets: work('db-bench', 10) },
+      { id: 'b', date: '2026-10-25', templateId: 'legsA', sets: work('leg-press', 4) },
+    ];
+    expect(
+      neglectedMuscles(sessions, exercises, '2026-10-27', ['chest', 'quads', 'hamstrings']),
+    ).toEqual(['hamstrings', 'quads']);
   });
 
   it('lists the sets still missing this week', () => {

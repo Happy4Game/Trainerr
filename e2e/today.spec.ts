@@ -52,3 +52,36 @@ test('someone who already trains notes a usual load instead of a test set', asyn
   await expect(usual).toHaveCount(0);
   await expect(page.getByText(/séries? · 45\s*kg/).first()).toBeVisible();
 });
+
+test('a machine of the session is swapped for a very close one, before and during', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  for (const name of ['Développé épaules machine', 'Écarté à la machine']) {
+    await page.getByRole('searchbox').fill(name);
+    await page.getByRole('button', { name: `Ajouter ${name} à mes machines` }).click();
+  }
+  await page.getByRole('tab', { name: "Aujourd'hui" }).click();
+  const hero = page.getByRole('region', { name: 'Séance du jour' });
+
+  // Before: the swap is kept for the next sessions, and can be undone.
+  await hero.getByRole('button', { name: 'Remplacer Développé épaules machine' }).click();
+  const choices = hero.getByRole('group', { name: 'À la place de Développé épaules machine :' });
+  const first = choices.getByRole('button').first();
+  const other = (await first.textContent())?.trim() ?? '';
+  await first.click();
+  await expect(hero.getByText('à la place de Développé épaules machine')).toBeVisible();
+  await expect(hero.getByText(other, { exact: true })).toBeVisible();
+  await hero.getByRole('button', { name: 'Reprendre Développé épaules machine' }).click();
+  await expect(hero.getByText('Développé épaules machine', { exact: true })).toBeVisible();
+
+  // During: before the first set, the close machines are one tap away.
+  await hero.getByRole('button', { name: 'Commencer' }).click();
+  const close = page.getByRole('group', { name: 'Pas cette machine ? Très proches :' });
+  await expect(close).toBeVisible();
+  const chip = close.locator('ion-chip').first();
+  const instead = (await chip.textContent())?.trim() ?? '';
+  await chip.click();
+  await expect(page.getByRole('region', { name: instead })).toBeVisible();
+});

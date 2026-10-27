@@ -36,6 +36,8 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 - **Pendant l'effort** : objectif de progression, disques à mettre de chaque côté de la barre, temps écoulé, minuteur de repos visible écran verrouillé. Les tractions assistées se comptent à l'envers (moins d'aide = progrès).
 - **Saisie en deux gestes** : charge et reps déjà remplies, un appui sur le ressenti (Facile, Correct, Limite, Échec) enregistre et lance le repos.
 - **Rien n'est figé** : corriger une série validée trop vite, revenir à l'exercice précédent, ajouter une série, ajouter un exercice depuis le **programme de la séance**, changer l'ordre, séparer un superset.
+- **Tous les muscles sur la semaine** : chaque séance choisit en priorité les exercices des muscles qui ont eu moins de 10 séries sur les 7 derniers jours, et l'aperçu dit lesquels elle rattrape.
+- **Machines très proches** : depuis l'aperçu, remplace une machine par une autre du même mouvement (le choix est gardé pour les séances suivantes) ; pendant la séance, les plus proches sont proposées sous l'exercice avant la première série.
 - **Machine occupée** : alternatives avec aperçu (dessin, muscles, charge), la machine est reproposée plus tard.
 - **Changement de machine visible** : « ✓ Terminé · Machine suivante » avec le dessin du mouvement.
 - **Supersets en option**, séance express, séance à la maison, **séances personnalisées**.

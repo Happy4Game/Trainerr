@@ -80,6 +80,20 @@ describe('building a session from the favorites', () => {
     expect(ids(session)).toEqual(['leg-press', 'leg-curl', 'hip-abduction']);
   });
 
+  it('catches up the muscles behind on their week', () => {
+    const usual = buildSession({ template: legsA, favorites: allExercises, count: 3 });
+    expect(ids(usual)).not.toContain('back-extension');
+    const session = buildSession({
+      template: legsA,
+      favorites: allExercises,
+      count: 3,
+      neglected: ['lowerBack'],
+    });
+    expect(ids(session)).toContain('back-extension');
+    // The main compound stays: a muscle new to the session still counts more.
+    expect(ids(session)[0]).toBe('leg-press');
+  });
+
   it('returns fewer exercises when there are not enough favorites', () => {
     const session = buildSession({ template: pushA, favorites: [ex.pecFly], count: 5 });
     expect(ids(session)).toEqual(['pec-fly']);

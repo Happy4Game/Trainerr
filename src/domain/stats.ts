@@ -75,6 +75,30 @@ export function missingSetsThisWeek(
   return missing;
 }
 
+/**
+ * Muscles of the list short of 10 work sets over the last 7 days (today
+ * included), fewest sets first: the next sessions catch them up, so that over
+ * the weeks every muscle is trained (ACSM 2009, Schoenfeld 2017).
+ */
+export function neglectedMuscles(
+  sessions: readonly SessionLog[],
+  exercises: ReadonlyMap<string, Exercise>,
+  today: IsoDate,
+  muscles: readonly MuscleId[],
+): MuscleId[] {
+  const since = addDays(today, -6);
+  const counts = weeklySetsPerMuscle(
+    sessions.filter((s) => s.date <= today),
+    exercises,
+    since,
+  );
+  return muscles
+    .map((muscle, index) => ({ muscle, index, sets: counts[muscle] ?? 0 }))
+    .filter(({ sets }) => sets < WEEKLY_SETS_TARGET.min)
+    .sort((a, b) => a.sets - b.sets || a.index - b.index)
+    .map(({ muscle }) => muscle);
+}
+
 /** Days with at least one session, for the regularity heatmap. */
 export function trainingDays(sessions: readonly SessionLog[]): IsoDate[] {
   return [...new Set(sessions.map((s) => s.date))].sort();

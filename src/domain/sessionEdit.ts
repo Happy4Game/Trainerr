@@ -38,6 +38,24 @@ export function replacementsFor<E extends Exercise>(
     .map(({ e }) => e);
 }
 
+/**
+ * The machines chosen instead of others, in their place in the session. A
+ * replacement already in the session leaves the original as it is.
+ */
+export function applySwaps<E extends Exercise>(
+  exercises: readonly E[],
+  swaps: Readonly<Record<string, string>>,
+  lookup: (id: string) => E | undefined,
+): E[] {
+  const ids = new Set(exercises.map((e) => e.id));
+  return exercises.map((e) => {
+    const toId = swaps[e.id];
+    const to = toId && !ids.has(toId) ? lookup(toId) : undefined;
+    if (to) ids.add(to.id);
+    return to ?? e;
+  });
+}
+
 /** The new machine takes the place of the old one, wherever it was in the queue. */
 export function replaceInQueue(queue: ExerciseQueue, fromId: string, toId: string): ExerciseQueue {
   const swap = (id: string) => (id === fromId ? toId : id);

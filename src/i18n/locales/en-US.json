@@ -33,7 +33,15 @@
     "tiredOn": "✓ Lighter session: one set less, same loads",
     "doneToday": "✓ Today's session done, well done! Next one:",
     "goExtra": "Do an extra session",
-    "heroLabel": "Today's session"
+    "heroLabel": "Today's session",
+    "catchUp": "It catches up what your week barely worked: {muscles}.",
+    "swap": {
+      "openNamed": "Replace {name}",
+      "title": "Instead of {name}:",
+      "insteadOf": "instead of {name}",
+      "undo": "Undo",
+      "undoNamed": "Back to {name}"
+    }
   },
   "gym": {
     "defaultName": "My gym"
@@ -511,6 +519,10 @@
       "ok": "right load: we keep it",
       "hard": "heavy: we keep it",
       "fail": "too heavy: the load goes down"
+    },
+    "closeOnes": {
+      "title": "Not this machine? Very close ones:",
+      "take": "Do {name} instead"
     }
   },
   "availability": {

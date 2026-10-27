@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { startQueue } from '@/domain/busyMachine';
 import {
   afterMovingSets,
+  applySwaps,
   movePending,
   removeFromQueue,
   replaceInQueue,
@@ -110,5 +111,25 @@ describe('changing a session in progress', () => {
         toComplete: false,
       }),
     ).toEqual({ pending: ['bench', 'shoulderPress'], waiting: [], done: ['chestPress'] });
+  });
+});
+
+describe('machines replaced from the preview', () => {
+  const all = new Map([chestPress, bench, dbBench, pecFly].map((e) => [e.id, e]));
+  const lookup = (id: string) => all.get(id);
+
+  it('puts the chosen machine in the place of the original', () => {
+    const session = applySwaps([chestPress, pecFly], { chestPress: 'dbBench' }, lookup);
+    expect(session.map((e) => e.id)).toEqual(['dbBench', 'pecFly']);
+  });
+
+  it('keeps the original when the replacement is already in the session', () => {
+    const session = applySwaps([chestPress, dbBench], { chestPress: 'dbBench' }, lookup);
+    expect(session.map((e) => e.id)).toEqual(['chestPress', 'dbBench']);
+  });
+
+  it('ignores a replacement missing from the catalog', () => {
+    const session = applySwaps([chestPress], { chestPress: 'gone' }, lookup);
+    expect(session.map((e) => e.id)).toEqual(['chestPress']);
   });
 });
