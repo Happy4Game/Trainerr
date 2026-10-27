@@ -401,7 +401,8 @@
         "current": "in progress",
         "next": "to come"
       },
-      "seeAll": "See all"
+      "seeAll": "See all",
+      "elapsed": "⏱ {minutes} min"
     },
     "nextMachine": {
       "title": "Next machine",

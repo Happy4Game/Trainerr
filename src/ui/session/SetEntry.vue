@@ -600,6 +600,9 @@ function listen(): void {
 h2 {
   margin-block: 0 4px;
   font-size: 1.4rem;
+  font-weight: var(--tr-weight-black);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 .set-number {
   display: flex;

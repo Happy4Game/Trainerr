@@ -17,7 +17,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import { House, LayoutList, Pencil, Play, Plus, Share2, Zap } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
@@ -193,6 +193,17 @@ const suggestedBadge = (id: string) =>
     : undefined;
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
+
+/** Minutes since the start, refreshed every 30 s: "where am I in my hour?". */
+const now = ref(Date.now());
+const clock = setInterval(() => (now.value = Date.now()), 30_000);
+onUnmounted(() => clearInterval(clock));
+const elapsed = computed(() => {
+  const startedAt = active.value?.plan.startedAt;
+  return startedAt === undefined
+    ? undefined
+    : Math.max(0, Math.floor((now.value - startedAt) / 60_000));
+});
 
 /** The summary as an image, to show the session to friends. */
 const sharing = ref(false);
@@ -722,6 +733,9 @@ async function logWarmup(): Promise<void> {
                   })
                 : t('session.progress.done', progress.filter((e) => e.status === 'done').length)
             }}
+            <span v-if="elapsed !== undefined" class="elapsed">
+              {{ t('session.progress.elapsed', { minutes: n(elapsed) }) }}
+            </span>
           </span>
           <span class="segments" aria-hidden="true">
             <span v-for="e in progress" :key="e.id" class="segment" :class="e.status" />
@@ -1027,8 +1041,16 @@ async function logWarmup(): Promise<void> {
   text-align: start;
 }
 .progress-title {
+  display: flex;
+  flex-direction: column;
   font-weight: 700;
   white-space: nowrap;
+}
+.elapsed {
+  color: var(--tr-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 .segments {
   display: flex;
