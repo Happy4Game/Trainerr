@@ -29,7 +29,9 @@
     "change": {
       "up": "+{delta}",
       "first": "First time"
-    }
+    },
+    "tiredOff": "Not in shape? Make it lighter",
+    "tiredOn": "✓ Lighter session: one set less, same loads"
   },
   "gym": {
     "defaultName": "My gym"
@@ -484,6 +486,10 @@
       "expressHelp": "The key exercises, in 20 to 30 minutes.",
       "presetsHelp": "Push, Pull, Legs… ready, and copyable.",
       "homeHelp": "With the equipment you have at home."
+    },
+    "tired": {
+      "toggle": "Not in shape today",
+      "help": "One set less per exercise and no load increase: you still train, without wearing yourself out."
     }
   },
   "availability": {

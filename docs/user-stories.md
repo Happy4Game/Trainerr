@@ -26,7 +26,7 @@ Les personnages viennent des séances test de [retour-utilisateur.md](retour-uti
 | 2.4 | pratiquant pressé      | une séance express de 20 à 30 min                                           | ne pas sauter la séance                  | ✅                                 |
 | 2.5 | pratiquant             | lancer la séance en un seul tap                                             | ne pas perdre de temps                   | ✅ « Commencer » lance directement |
 | 2.6 | pratiquant             | choisir une séance type (Push, Pull, Jambes…) et la copier pour la modifier | avoir mes propres séries et reps         | 🆕 « Copier et modifier »          |
-| 2.7 | pratiquant fatigué     | dire que je suis fatigué                                                    | avoir une séance allégée plutôt que rien | 🔜                                 |
+| 2.7 | pratiquant fatigué     | dire que je suis fatigué                                                    | avoir une séance allégée plutôt que rien | 🆕 « Pas en forme aujourd'hui »    |
 | 2.8 | pratiquant à la maison | une séance avec mon matériel                                                | m'entraîner sans salle                   | ✅                                 |
 | 2.9 | pratiquant             | un échauffement articulaire court                                           | préparer épaules et hanches              | ✅ 3 min                           |
 

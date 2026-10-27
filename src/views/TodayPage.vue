@@ -188,6 +188,16 @@ const streak = computed(() =>
           </ion-button>
           <ion-button
             v-if="!active && planCount > 0"
+            class="other tired"
+            expand="block"
+            fill="clear"
+            :aria-pressed="session.tiredToday.value"
+            @click="session.tiredToday.value = !session.tiredToday.value"
+          >
+            {{ session.tiredToday.value ? t('today.tiredOn') : t('today.tiredOff') }}
+          </ion-button>
+          <ion-button
+            v-if="!active && planCount > 0"
             class="other"
             expand="block"
             fill="clear"

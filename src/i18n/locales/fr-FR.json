@@ -29,7 +29,9 @@
     "change": {
       "up": "+{delta}",
       "first": "1re fois"
-    }
+    },
+    "tiredOff": "Pas en forme ? Alléger la séance",
+    "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges"
   },
   "gym": {
     "defaultName": "Ma salle"
@@ -484,6 +486,10 @@
       "expressHelp": "Les exercices clés, en 20 à 30 minutes.",
       "presetsHelp": "Push, Pull, Jambes… prêtes, à copier.",
       "homeHelp": "Avec le matériel que tu as chez toi."
+    },
+    "tired": {
+      "toggle": "Pas en forme aujourd'hui",
+      "help": "Une série de moins par exercice et pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser."
     }
   },
   "availability": {

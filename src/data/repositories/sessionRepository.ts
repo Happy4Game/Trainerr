@@ -25,6 +25,8 @@ export interface SessionPlan {
   readonly supersets?: readonly (readonly [string, string])[];
   /** Short 20–30 min version of the session of the day. */
   readonly express?: boolean;
+  /** "Not in shape today": one set less, no load increase. */
+  readonly tired?: boolean;
   /** When the session started (ms since 1970), for its length in the summary. */
   readonly startedAt?: number;
 }

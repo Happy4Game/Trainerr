@@ -309,18 +309,37 @@ function proposalFor(exerciseId: string): Proposal | undefined {
       ? firstAssistedRealKg(scale, bodyWeight.value ?? DEFAULT_BODY_WEIGHT_KG)
       : start.loadKg;
   return {
-    loadKg: toMachine(startKg),
+    loadKg: tired() ? noHigherThanLastTime(exerciseId, toMachine(startKg)) : toMachine(startKg),
     targetReps: start.targetReps,
     reason: start.kind,
     reminders: [],
   };
 }
 
+const tired = () => active.value?.plan.tired ?? tiredToday.value;
+
+/** Not in shape: last time's load at most (on a help machine, at least last time's help). */
+function noHigherThanLastTime(exerciseId: string, loadKg: number): number {
+  const last = lastTimeSets(exerciseId).map((s) => s.loadKg);
+  if (last.length === 0) return loadKg;
+  return entryOf(exerciseId)?.exercise.assisted
+    ? Math.max(loadKg, Math.min(...last))
+    : Math.min(loadKg, Math.max(...last));
+}
+
+/**
+ * "Not in shape today", chosen before starting: one set less per exercise and
+ * no load increase. Training anyway, without digging a hole.
+ */
+const tiredToday = ref(false);
+/** Lighter today: a light week of the cycle, or the user said so. */
+const lighter = () => cycle.value.light || tiredToday.value;
+
 function plannedSets(exerciseId: string): number {
   return (
     active.value?.plan.exercises.find((e) => e.exerciseId === exerciseId)?.sets ??
     // Before the session: what start() will plan, one set less in a light week.
-    setsForWeek(setsPerExercise(settings.value?.goal ?? 'hypertrophy'), cycle.value.light)
+    setsForWeek(setsPerExercise(settings.value?.goal ?? 'hypertrophy'), lighter())
   );
 }
 
@@ -458,13 +477,14 @@ async function startPreset(presetId: string): Promise<void> {
   const plan: SessionPlan = {
     exercises: lines.map((line) => ({
       exerciseId: line.chosenId,
-      sets: setsForWeek(line.sets, cycle.value.light),
+      sets: setsForWeek(line.sets, lighter()),
       repRange: line.reps,
       restSeconds: line.restSeconds,
       ...(line.timed ? { timed: true } : {}),
       ...(line.perSide ? { perSide: true } : {}),
     })),
     queue: startQueue(ids),
+    ...(tiredToday.value ? { tired: true } : {}),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -475,6 +495,7 @@ async function startPreset(presetId: string): Promise<void> {
   });
   active.value = await getActiveSession(db);
   restEndsAt.value = undefined;
+  tiredToday.value = false;
   phase.value = 'active';
 }
 
@@ -504,7 +525,7 @@ async function start(
           ? (readyMade.value?.exercises ?? [])
           : preview.value;
   if (!template.value || exercises.length === 0 || !settings.value) return;
-  const sets = setsForWeek(setsPerExercise(settings.value.goal), cycle.value.light);
+  const sets = setsForWeek(setsPerExercise(settings.value.goal), lighter());
   const pairs =
     (options.supersets ?? settings.value.supersets) ? supersetPairs(supersetBlocks(exercises)) : [];
   // Partners side by side in the order.
@@ -522,7 +543,7 @@ async function start(
       return line
         ? {
             exerciseId,
-            sets: setsForWeek(line.sets, cycle.value.light),
+            sets: setsForWeek(line.sets, lighter()),
             repRange: line.reps,
             restSeconds: line.restSeconds,
             ...(line.timed ? { timed: true } : {}),
@@ -533,6 +554,7 @@ async function start(
     queue: startQueue(ids),
     ...(pairs.length > 0 ? { supersets: pairs } : {}),
     ...(options.express ? { express: true } : {}),
+    ...(tiredToday.value ? { tired: true } : {}),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -543,6 +565,7 @@ async function start(
   });
   active.value = await getActiveSession(db);
   restEndsAt.value = undefined;
+  tiredToday.value = false;
   phase.value = 'active';
 }
 
@@ -1103,6 +1126,7 @@ export function useSession() {
     entryOf,
     stepsOf,
     proposalFor,
+    tiredToday,
     lastTimeSets,
     previousFor,
     plannedSets,

@@ -326,6 +326,15 @@ async function logWarmup(): Promise<void> {
             </ion-button>
             <ion-item lines="none" class="superset-choice">
               <ion-toggle
+                :checked="session.tiredToday.value"
+                @ion-change="session.tiredToday.value = $event.detail.checked"
+              >
+                <span class="toggle-title">{{ t('session.tired.toggle') }}</span>
+                <span class="toggle-help">{{ t('session.tired.help') }}</span>
+              </ion-toggle>
+            </ion-item>
+            <ion-item lines="none" class="superset-choice">
+              <ion-toggle
                 :checked="useSupersets"
                 @ion-change="supersetChoice = $event.detail.checked"
               >
