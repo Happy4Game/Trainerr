@@ -12,6 +12,7 @@
     "restDay": "Pas de séance prévue aujourd'hui : repos, ou une séance en plus si tu en as envie.",
     "go": "Commencer",
     "resume": "Reprendre la séance",
+    "otherChoice": "Changer de séance ou de mode",
     "week": "Cette semaine",
     "weekCount": "{done} séances faites sur {target} cette semaine",
     "streak": "{count} semaine au rythme | {count} semaines d'affilée au rythme",

@@ -182,11 +182,8 @@ async function capture(browser, scheme) {
   await page.waitForTimeout(1500);
   await shot(page, p('01-accueil'));
 
+  // « Commencer » lance directement la séance du jour.
   await page.locator('ion-button:visible', { hasText: 'Commencer' }).first().click();
-  await page
-    .locator('ion-button:visible', { hasText: /Commencer la séance|Faire cette pré-séance/ })
-    .first()
-    .click();
   await page.locator('section.entry').first().waitFor({ timeout: 20_000 });
   const skip = page.getByRole('button', { name: "Passer l'échauffement" });
   if (await skip.isVisible()) await skip.click();

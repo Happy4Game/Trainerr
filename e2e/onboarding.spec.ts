@@ -60,19 +60,22 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
 test('the chosen answer is always the only one highlighted', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
-  const ACTION = 'rgb(67, 56, 202)';
-  // Names of the buttons painted in the action colour.
+  // Names of the buttons painted in the action colour (the theme's primary colour,
+  // read from the page so that a new palette does not break the test).
   const highlighted = (group: string) =>
-    page.locator(`${group} ion-button`).evaluateAll(
-      (buttons, action) =>
-        buttons
-          .filter((b) => {
-            const native = b.shadowRoot?.querySelector('.button-native');
-            return native && getComputedStyle(native).backgroundColor === action;
-          })
-          .map((b) => b.textContent?.trim()),
-      ACTION,
-    );
+    page.locator(`${group} ion-button`).evaluateAll((buttons) => {
+      const probe = document.createElement('span');
+      probe.style.backgroundColor = 'var(--ion-color-primary)';
+      document.body.append(probe);
+      const action = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return buttons
+        .filter((b) => {
+          const native = b.shadowRoot?.querySelector('.button-native');
+          return native && getComputedStyle(native).backgroundColor === action;
+        })
+        .map((b) => b.textContent?.trim());
+    });
 
   // The answer chosen by default is shown as chosen.
   await expect.poll(() => highlighted('.choices')).toEqual(['Prendre du muscle']);

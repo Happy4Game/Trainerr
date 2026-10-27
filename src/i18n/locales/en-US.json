@@ -12,6 +12,7 @@
     "restDay": "No workout planned today: rest, or an extra workout if you feel like it.",
     "go": "Start",
     "resume": "Resume the workout",
+    "otherChoice": "Change workout or mode",
     "week": "This week",
     "weekCount": "{done} sessions done out of {target} this week",
     "streak": "{count} week on pace | {count} weeks in a row on pace",

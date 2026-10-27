@@ -15,6 +15,7 @@ import {
 } from '@ionic/vue';
 import { Settings } from 'lucide-vue-next';
 import { computed, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { openAppDatabase } from '@/data/appDatabase';
 import { listBadges, type EarnedBadge } from '@/data/repositories/badgeRepository';
 import { useI18n } from 'vue-i18n';
@@ -25,6 +26,7 @@ import { useSession } from '@/ui/session/useSession';
 import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
 
 const { t } = useI18n();
+const router = useRouter();
 const templateLabel = useTemplateName();
 const session = useSession();
 const { settings, days } = useWeekPlan();
@@ -54,6 +56,19 @@ onMounted(loadBadges);
 watch(history, loadBadges);
 
 const today = computed(() => days.value.find((d) => d.date === todayIso()));
+
+/** « Commencer » lance directement la séance proposée : pas d'écran intermédiaire. */
+const starting = ref(false);
+async function go(): Promise<void> {
+  if (starting.value) return;
+  starting.value = true;
+  try {
+    if (!active.value && preview.value.length > 0) await session.start();
+    await router.push('/tabs/session');
+  } finally {
+    starting.value = false;
+  }
+}
 const doneThisWeek = computed(
   () =>
     new Set(
@@ -99,8 +114,17 @@ const streak = computed(() =>
             <img v-for="src in thumbnails" :key="src" :src="src" alt="" />
           </div>
           <p v-if="planCount > 0" class="hint">{{ t('today.exercises', planCount) }}</p>
-          <ion-button expand="block" size="large" router-link="/tabs/session">
+          <ion-button expand="block" size="large" :disabled="starting" @click="go">
             {{ active ? t('today.resume') : t('today.go') }}
+          </ion-button>
+          <ion-button
+            v-if="!active && planCount > 0"
+            class="other"
+            expand="block"
+            fill="clear"
+            router-link="/tabs/session"
+          >
+            {{ t('today.otherChoice') }}
           </ion-button>
         </section>
 
@@ -201,13 +225,18 @@ const streak = computed(() =>
   border-radius: 10px;
   background: #fff; /* dessins au trait noir : fond blanc dans les deux thèmes */
 }
-.hero ion-button {
+.hero ion-button:not(.other) {
   --background: var(--tr-hero-text);
   --color: var(--ion-color-primary);
   --border-radius: var(--tr-radius-m);
   margin-block-start: var(--tr-space-4);
   min-height: 56px;
   font-size: 1.1rem;
+}
+.hero ion-button.other {
+  --color: var(--tr-hero-text);
+  margin-block-start: var(--tr-space-2);
+  min-height: 48px;
 }
 .week-count {
   margin: 0 0 var(--tr-space-3);

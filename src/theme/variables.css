@@ -287,6 +287,21 @@ ion-segment {
   border-radius: var(--tr-radius-pill);
   padding: 3px;
 }
+/* Dans une barre, le sélecteur s'aligne sur les marges des cartes au lieu de toucher les bords. */
+ion-toolbar ion-segment {
+  width: auto;
+  margin-inline: var(--tr-space-4);
+}
+/* En mode Material, l'indicateur est un trait collé en bas : on l'étire sur toute
+   la hauteur du bouton pour obtenir une pastille. */
+ion-segment-button::part(indicator) {
+  inset-block: 0;
+  height: 100%;
+}
+ion-segment-button::part(indicator-background) {
+  height: 100%;
+  border-radius: var(--tr-radius-pill);
+}
 ion-segment-button {
   --indicator-color: var(--tr-surface);
   --indicator-box-shadow: var(--tr-shadow-1);

@@ -263,12 +263,12 @@ function listen(): void {
     </div>
     <p v-if="record" class="record" data-testid="record">
       <span aria-hidden="true">🏆</span>
-      {{
+      <span>{{
         t('session.record.toBeat', {
           set: `${kg(record.bestLoad.loadKg)} × ${n(record.bestLoad.reps)}`,
           oneRepMax: kg(Math.round(record.bestOneRepMax.value)),
         })
-      }}
+      }}</span>
     </p>
     <div v-if="partnerName" class="superset" role="note">
       <span>
@@ -418,6 +418,7 @@ function listen(): void {
       </ion-button>
       <ion-button
         v-if="!timed"
+        class="half"
         fill="clear"
         :aria-label="t('session.halfRep')"
         @click="changeReps(0.5)"
@@ -587,13 +588,13 @@ h2 {
   font-size: 1.1rem;
 }
 .record {
+  /* Le trophée reste sur la ligne du texte, même quand le texte passe à la ligne. */
   display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
+  align-items: baseline;
+  gap: 8px;
   margin-block: 0 8px;
-  padding: 4px 12px;
-  border-radius: 999px;
+  padding: 6px 14px;
+  border-radius: var(--tr-radius-m);
   background: rgba(var(--ion-color-warning-rgb), 0.16);
   color: var(--ion-text-color);
   font-size: 0.9rem;
@@ -705,20 +706,35 @@ h2 {
   color: var(--ion-color-warning-contrast);
 }
 .stepper {
-  display: flex;
+  /* Même grille pour la charge et les reps : les − et + restent alignés, et le
+     « +½ » des reps tient dans sa colonne. Le libellé passe au-dessus : la valeur
+     garde toute la largeur pour de gros chiffres, même sur un écran de 360 px. */
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 56px 44px;
   align-items: center;
-  gap: 8px;
-  margin-block: 6px;
+  gap: 2px 6px;
+  margin-block: 8px;
 }
 .stepper-label {
-  width: 4.5em;
-  color: var(--ion-color-medium);
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tr-text-muted);
 }
 .stepper ion-button {
-  min-width: 56px;
+  min-width: 0;
   min-height: 52px;
+  margin: 0;
+}
+.stepper ion-button.half {
+  --padding-start: 0;
+  --padding-end: 0;
+  min-height: 48px;
 }
 .value-button {
+  width: 100%;
   min-height: 52px;
   padding: 0 4px;
   border: 0;
@@ -744,7 +760,7 @@ h2 {
   color: var(--ion-text-color);
 }
 .value {
-  min-width: 5.5ch;
+  min-width: 0;
   font-size: 1.9rem;
   font-weight: var(--tr-weight-black);
   white-space: nowrap;
