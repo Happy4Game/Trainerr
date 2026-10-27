@@ -618,6 +618,15 @@
       "underOneMonth": "Less than 1 month",
       "oneToThreeMonths": "1 to 3 months",
       "overThreeMonths": "More than 3 months"
+    },
+    "program": {
+      "question": "What type of sessions?",
+      "why": "At equal volume, full body or split sessions build as much muscle and strength (Ramos-Campo 2024). What matters is working each muscle about twice a week (Schoenfeld 2016). Pick what you like.",
+      "auto": "Let the app choose: {model}",
+      "autoHelp": "The program that fits your number of sessions best. You can change it in Planning.",
+      "sessionsRange": "Made for {min} to {max} sessions",
+      "sessionsOne": "Made for {n} sessions",
+      "frequency": "each muscle ≈ {n} times a week"
     }
   },
   "planning": {
@@ -1015,6 +1024,10 @@
       "cardioIntensity": {
         "title": "Moderate or vigorous: the talk test",
         "body": "Moderate: you can talk, but not sing. Vigorous: only a few words before pausing for breath. No heart rate monitor needed to tell."
+      },
+      "splitOrFullBody": {
+        "title": "Full body or split?",
+        "body": "At equal volume, both build as much muscle and strength. Frequency matters little as long as the weekly volume is the same: pick the program you like and will stick to, working each muscle about twice a week."
       }
     }
   },
@@ -1078,7 +1091,8 @@
       "sessionSwap": "Swap a machine from Session",
       "smootherStart": "Easier start",
       "photoGallery": "Body photo gallery",
-      "cardio": "Cardio in sessions"
+      "cardio": "Cardio in sessions",
+      "programChoice": "Pick your program from the start"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1125,7 +1139,8 @@
       "photoCompare": "Sort them by pose (front, side, back) and compare the first and last side by side. They stay on your phone.",
       "cardioSessions": "Session › “Add cardio to my sessions”: pick the machine, the duration, and before or after the weights, with the advice of the studies for today's session.",
       "cardioLog": "During the session, log your cardio results: time, distance, speed, incline, level, cadence, heart rate and calories, depending on the machine.",
-      "cardioCatalog": "Catalog › Cardio: each machine with the muscles worked and your results, and your week against the WHO bar (150 min)."
+      "cardioCatalog": "Catalog › Cardio: each machine with the muscles worked and your results, and your week against the WHO bar (150 min).",
+      "programChoice": "Questionnaire › “What type of sessions?”: full body, upper/lower, PPL… or let the app choose from your number of sessions. Each program is explained, with the frequency per muscle."
     }
   },
   "data": {
@@ -1695,5 +1710,14 @@
       "longest": "Longest distance: {km} km",
       "editNamed": "Edit the cardio of {date}"
     }
+  },
+  "modelInfo": {
+    "fullBody": "The whole body every session: each muscle works every time. Best with few sessions.",
+    "upperLower": "One session for the upper body, one for the lower body, in turn.",
+    "ppl": "Push (chest, shoulders, triceps), pull (back, biceps), then legs, in an A and a B version.",
+    "pplul": "Push, pull, legs, then upper and lower body.",
+    "phul": "Upper and lower body, once heavy for strength, once lighter for volume.",
+    "arnold": "Chest and back, shoulders and arms, then legs, each twice.",
+    "broSplit": "One muscle group a day: each muscle works only once a week."
   }
 }

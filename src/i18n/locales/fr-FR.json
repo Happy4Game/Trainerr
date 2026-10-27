@@ -618,6 +618,15 @@
       "underOneMonth": "Moins d'1 mois",
       "oneToThreeMonths": "1 à 3 mois",
       "overThreeMonths": "Plus de 3 mois"
+    },
+    "program": {
+      "question": "Quel type de séances ?",
+      "why": "À volume égal, full body ou séances séparées donnent autant de muscle et de force (Ramos-Campo 2024). Ce qui compte, c'est de travailler chaque muscle environ 2 fois par semaine (Schoenfeld 2016). Choisis ce qui te plaît.",
+      "auto": "Laisse l'appli choisir : {model}",
+      "autoHelp": "Le programme le plus adapté à ton nombre de séances. Tu pourras le changer dans Planning.",
+      "sessionsRange": "Prévu pour {min} à {max} séances",
+      "sessionsOne": "Prévu pour {n} séances",
+      "frequency": "chaque muscle ≈ {n} fois par semaine"
     }
   },
   "planning": {
@@ -1015,6 +1024,10 @@
       "cardioIntensity": {
         "title": "Modéré ou intense : le test de la parole",
         "body": "Modéré : tu peux parler, mais pas chanter. Intense : tu ne dis que quelques mots avant de reprendre ton souffle. Pas besoin de cardiofréquencemètre pour le savoir."
+      },
+      "splitOrFullBody": {
+        "title": "Full body ou séances séparées ?",
+        "body": "À volume égal, les deux donnent autant de muscle et de force. La fréquence compte peu tant que le volume de la semaine est le même : choisis le programme qui te plaît et que tu tiendras, en travaillant chaque muscle environ 2 fois par semaine."
       }
     }
   },
@@ -1078,7 +1091,8 @@
       "sessionSwap": "Remplacer une machine depuis Séance",
       "smootherStart": "Démarrage plus simple",
       "photoGallery": "Galerie de photos du corps",
-      "cardio": "Cardio dans les séances"
+      "cardio": "Cardio dans les séances",
+      "programChoice": "Choisis ton programme dès le départ"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1125,7 +1139,8 @@
       "photoCompare": "Classe-les par pose (face, profil, dos) et compare la première et la dernière côte à côte. Elles restent sur ton téléphone.",
       "cardioSessions": "Séance › « Ajouter du cardio à mes séances » : choisis la machine, la durée, et avant ou après la muscu, avec le conseil des études pour ta séance du jour.",
       "cardioLog": "Pendant la séance, saisis tes perfs de cardio : durée, distance, vitesse, pente, niveau, cadence, fréquence cardiaque et calories, selon la machine.",
-      "cardioCatalog": "Catalogue › Cardio : chaque machine avec les muscles travaillés et tes perfs, et ta semaine comparée au repère de l'OMS (150 min)."
+      "cardioCatalog": "Catalogue › Cardio : chaque machine avec les muscles travaillés et tes perfs, et ta semaine comparée au repère de l'OMS (150 min).",
+      "programChoice": "Questionnaire › « Quel type de séances ? » : full body, haut/bas, PPL… ou laisse l'appli choisir selon ton nombre de séances. Chaque programme est expliqué, avec la fréquence par muscle."
     }
   },
   "data": {
@@ -1695,5 +1710,14 @@
       "longest": "Plus longue distance : {km} km",
       "editNamed": "Modifier le cardio du {date}"
     }
+  },
+  "modelInfo": {
+    "fullBody": "Tout le corps à chaque séance : chaque muscle travaille à chaque fois. Idéal avec peu de séances.",
+    "upperLower": "Une séance pour le haut du corps, une pour le bas, en alternance.",
+    "ppl": "Poussée (pecs, épaules, triceps), tirage (dos, biceps), puis jambes, en version A et B.",
+    "pplul": "Poussée, tirage, jambes, puis haut et bas du corps.",
+    "phul": "Haut et bas du corps, une fois lourd pour la force, une fois plus léger pour le volume.",
+    "arnold": "Pecs et dos, épaules et bras, puis jambes, chacun deux fois.",
+    "broSplit": "Un groupe de muscles par jour : chaque muscle ne travaille qu'une fois par semaine."
   }
 }

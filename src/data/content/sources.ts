@@ -8,6 +8,20 @@ export interface Source {
 
 export const SOURCES: readonly Source[] = [
   {
+    id: 'ramosCampo2024',
+    label:
+      'Ramos-Campo et al., 2024 — séances séparées ou full body : force et muscle (Journal of Strength and Conditioning Research)',
+    url: 'https://doi.org/10.1519/JSC.0000000000004774',
+    theme: 'programme',
+  },
+  {
+    id: 'schoenfeld2019',
+    label:
+      'Schoenfeld, Grgic & Krieger, 2019 — fréquence par muscle à volume égal (Journal of Sports Sciences)',
+    url: 'https://doi.org/10.1080/02640414.2018.1555906',
+    theme: 'programme',
+  },
+  {
     id: 'eddens2018',
     label:
       'Eddens, van Someren & Howatson, 2018 — ordre muscu et cardio dans la même séance (Sports Medicine)',

@@ -268,6 +268,7 @@ const changeSuggested = computed(() =>
                 </ion-select-option>
               </ion-select>
             </ion-item>
+            <p class="model-info">{{ t(`modelInfo.${settings.model}`) }}</p>
             <ion-item>
               <ion-select
                 :label="t('planning.sessionsPerWeek')"
@@ -299,6 +300,11 @@ const changeSuggested = computed(() =>
 </template>
 
 <style scoped>
+.model-info {
+  margin: 8px 16px;
+  color: var(--ion-color-medium-shade);
+  font-size: 0.9rem;
+}
 .hero {
   margin-block-end: 20px;
   padding: 20px;

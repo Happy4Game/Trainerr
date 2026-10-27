@@ -131,3 +131,35 @@ test('the planning changes the next session and shows what happens if it is miss
   await expect(ifMissed.getByRole('listitem').first()).toContainText('Haut du corps B');
   await expect(ifMissed.getByRole('listitem').first()).toContainText('au lieu de');
 });
+
+test('the type of sessions is chosen in the questionnaire, or left to the app', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
+  await page.getByRole('button', { name: 'Suivant' }).click();
+  await page.getByRole('button', { name: '3', exact: true }).click();
+
+  // By default the app chooses, from the number of sessions.
+  const programs = page.getByRole('group', { name: 'Quel type de séances ?' });
+  await expect(
+    programs.getByRole('button', { name: /^Laisse l'appli choisir : Full body/ }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByText(/Ramos-Campo 2024/)).toBeVisible();
+
+  // One muscle a day: each muscle only once a week, and the app says so.
+  await programs.getByRole('button', { name: /^Un muscle par jour/ }).click();
+  await expect(page.getByRole('note')).toContainText('Schoenfeld, 2016');
+
+  const ppl = programs.getByRole('button', { name: /^Push \/ Pull \/ Legs/ });
+  await ppl.click();
+  await expect(ppl).toContainText('Prévu pour 3 à 6 séances · chaque muscle ≈ 1 fois par semaine');
+  // The first session follows the program chosen.
+  await expect(page.getByRole('button', { name: 'Push A', exact: true })).toBeVisible();
+
+  for (let i = 0; i < 6; i++) await page.getByRole('button', { name: 'Suivant' }).click();
+  await page.getByRole('button', { name: 'Plus tard' }).click();
+  await expect(
+    page.getByRole('region', { name: 'Séance du jour' }).getByRole('heading', { name: 'Push A' }),
+  ).toBeVisible({ timeout: 20_000 });
+});

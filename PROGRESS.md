@@ -257,6 +257,11 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Pendant la séance (`SessionCardio.vue`) : carte « Cardio d'abord » en haut ou « Cardio pour finir » en bas, saisie dans `CardioEntryModal.vue`, possibilité de passer. Une séance avec seulement du cardio est gardée.
 - Table `cardio_log` (migration 8), dans la sauvegarde ; suit la date et la suppression de sa séance. Catalogue › Cardio et page par machine (`CardioPage.vue`) avec les perfs et la semaine comparée au repère OMS (150 min modérées, une minute intense compte double).
 
+## Choix du programme au questionnaire (27 oct. 2026)
+
+- Questionnaire, écran des séances : « Quel type de séances ? » avec « Laisse l'appli choisir » (règle `recommendModel`) ou un des 7 programmes, chacun expliqué (`modelInfo.*`), avec les séances prévues et la fréquence par muscle calculée (`frequencyPerMuscle`). Avertissement si un muscle n'est travaillé qu'une fois par semaine.
+- Sources : Ramos-Campo et al. 2024 (split ou full body, même résultat à volume égal), Schoenfeld 2019 et 2016 (fréquence). Fiche Conseils « Full body ou séances séparées ? ». Description du programme aussi sous le choix dans Planning.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

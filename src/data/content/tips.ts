@@ -28,6 +28,12 @@ export const TIPS: readonly Tip[] = [
   { id: 'frequency', theme: 'programme', sourceIds: ['schoenfeld2016', 'sbs'], status: 'sourced' },
   { id: 'machines', theme: 'programme', sourceIds: ['haugen2023'], status: 'sourced' },
   {
+    id: 'splitOrFullBody',
+    theme: 'programme',
+    sourceIds: ['ramosCampo2024', 'schoenfeld2019', 'schoenfeld2016'],
+    status: 'sourced',
+  },
+  {
     id: 'cardioOrder',
     theme: 'programme',
     sourceIds: ['eddens2018', 'schumann2022'],
