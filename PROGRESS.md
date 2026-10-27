@@ -159,6 +159,21 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 
 **À faire par Thibaut** : créer la clé de signature et les 4 secrets GitHub (docs/mises-a-jour.md), pousser le dépôt, puis tester sur le téléphone la notification de séance et une mise à jour.
 
+## Appli agréable à chaque étape (PR #2, 27 oct. 2026)
+
+User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
+
+- **Aujourd'hui** : aperçu complet de la séance (séries × charge par exercice, durée estimée, badge « +2,5 kg » quand la charge monte), exercices cochés pendant la séance, « Commencer » lance directement.
+- **Menu de séance** : carte de la séance du jour, tuiles Express / séances types / maison / créer, « Mes séances ».
+- **Séances types** : « Copier et modifier » (séries, reps, repos par exercice).
+- **Pas en forme aujourd'hui** : une série de moins, pas de hausse de charge (autorégulation, Greig et al. 2020, Sports Medicine).
+- **Charges habituelles** : pour qui s'entraîne déjà, « Noter ma charge » sur les machines jamais faites, au lieu d'une série test.
+- **Pendant la séance** : temps écoulé, disques par côté sous la charge de la barre, objectif de double progression, ressentis explicites sur la série test.
+- **Récap** : volume gagné depuis la dernière séance du même type, durée, « Partager ma séance » en image.
+- **Historique** : trophée sur les exercices où un record a été battu. **Stats** : l'exercice le plus travaillé sélectionné et visible.
+- **Exports Android** : menu Partager natif (plugin `FileShare` + FileProvider).
+- **Réglages** : l'entraînement en premier, les infos à la fin.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.
@@ -171,7 +186,6 @@ Illustrations des mouvements : 209 fiches, dessins Everkinetic (CC BY-SA 4.0), w
 - `npm audit` signale 3 failles « modérées » dans `uuid`, utilisé par l'outil iOS de `@capacitor/cli` (développement seulement, pas dans l'appli). Le correctif proposé rétrograde Capacitor : à revoir quand Capacitor publiera une mise à jour.
 - sql.js est figé en 1.12.0 pour rester compatible avec jeep-sqlite (voir [ADR 0002](docs/adr/0002-sqlite-local.md)).
 - Photo de la plaque de la machine et photo mensuelle du corps : pas encore faites, elles demandent le plugin appareil photo.
-- Les exports se téléchargent dans le navigateur ; sur téléphone il faudra les plugins Filesystem / Share.
 - Dans le navigateur seulement, une écriture interrompue par un rechargement immédiat peut être perdue (voir ADR 0005).
 - Le remote GitHub est configuré (`origin` → github.com/Happy4Game/Trainerr) mais rien n'est encore poussé : il manque l'authentification GitHub sur l'ordinateur.
 - Notification de séance et mises à jour : compilées (APK debug et release signé vérifiés), pas encore essayées sur un vrai téléphone.
