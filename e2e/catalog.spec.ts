@@ -196,3 +196,12 @@ test('touching a muscle leaves the body part tab, and the normal search forgets 
   await expect(page.getByText('Zone : Biceps')).toHaveCount(0);
   await expect(page.getByRole('status')).toHaveText('482 exercices');
 });
+
+test('a body part tab closes the search by muscle', async ({ page }) => {
+  await openCatalog(page);
+  await page.getByRole('button', { name: 'Chercher par zone du corps' }).click();
+  await page.getByRole('button', { name: 'Biceps', exact: true }).locator('path').first().click();
+  await page.locator('ion-segment-button', { hasText: 'Jambes' }).click();
+  await expect(page.getByText('Zone : Biceps')).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Recherche par zone du corps' })).toHaveCount(0);
+});

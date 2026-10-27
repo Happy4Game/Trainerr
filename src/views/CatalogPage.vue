@@ -143,7 +143,10 @@ function subtitle(entry: CatalogEntry): string {
 }
 
 function onFilter(value: unknown): void {
-  if (FILTERS.includes(value as Filter)) filter.value = value as Filter;
+  if (!FILTERS.includes(value as Filter)) return;
+  filter.value = value as Filter;
+  // A body part tab replaces the search by muscle rather than narrowing it.
+  if (filter.value !== 'all' && filter.value !== 'favorites') showBody.value = false;
 }
 </script>
 
