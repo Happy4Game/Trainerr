@@ -17,7 +17,6 @@
     "weekCount": "{done} sessions done out of {target} this week",
     "streak": "{count} week on pace | {count} weeks in a row on pace",
     "seePlanning": "See the planning",
-    "next": "Next session",
     "inProgressShort": "Session in progress",
     "noPlan": "Next session",
     "weekSessions": "session | sessions",
@@ -33,7 +32,8 @@
     "tiredOff": "Not in shape? Make it lighter",
     "tiredOn": "✓ Lighter session: one set less, same loads",
     "doneToday": "✓ Today's session done, well done! Next one:",
-    "goExtra": "Do an extra session"
+    "goExtra": "Do an extra session",
+    "heroLabel": "Today's session"
   },
   "gym": {
     "defaultName": "My gym"

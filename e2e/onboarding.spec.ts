@@ -40,7 +40,7 @@ test('the questionnaire sets the program and the week', async ({ page }) => {
 
   await expect(page).toHaveURL(/\/tabs\/today$/);
   await expect(
-    page.getByRole('region', { name: 'Prochaine séance' }).getByRole('heading', { name: 'Push A' }),
+    page.getByRole('region', { name: 'Séance du jour' }).getByRole('heading', { name: 'Push A' }),
   ).toBeVisible();
 
   await page.getByRole('tab', { name: 'Planning' }).click();
@@ -108,7 +108,7 @@ test('already mid-cycle: the first session is chosen in the questionnaire', asyn
 
   await expect(
     page
-      .getByRole('region', { name: 'Prochaine séance' })
+      .getByRole('region', { name: 'Séance du jour' })
       .getByRole('heading', { name: 'Bas du corps A' }),
   ).toBeVisible({ timeout: 20_000 });
 });

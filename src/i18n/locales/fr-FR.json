@@ -17,7 +17,6 @@
     "weekCount": "{done} séances faites sur {target} cette semaine",
     "streak": "{count} semaine au rythme | {count} semaines d'affilée au rythme",
     "seePlanning": "Voir le planning",
-    "next": "Prochaine séance",
     "inProgressShort": "Séance en cours",
     "noPlan": "Prochaine séance",
     "weekSessions": "séance | séances",
@@ -33,7 +32,8 @@
     "tiredOff": "Pas en forme ? Alléger la séance",
     "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges",
     "doneToday": "✓ Séance du jour faite, bravo ! La prochaine :",
-    "goExtra": "Faire une séance en plus"
+    "goExtra": "Faire une séance en plus",
+    "heroLabel": "Séance du jour"
   },
   "gym": {
     "defaultName": "Ma salle"

@@ -12,7 +12,7 @@ test('today shows the whole next session, and a lighter one when not in shape', 
   }
 
   await page.getByRole('tab', { name: "Aujourd'hui" }).click();
-  const hero = page.getByRole('region', { name: 'Prochaine séance' });
+  const hero = page.getByRole('region', { name: 'Séance du jour' });
   await expect(hero.getByText('Développé épaules machine')).toBeVisible();
   await expect(hero.getByText('6 séries')).toBeVisible();
 

@@ -146,7 +146,7 @@ const streak = computed(() =>
     <ion-content class="ion-padding">
       <p v-if="phase === 'loading'" role="status">{{ t('catalog.loading') }}</p>
       <template v-else>
-        <section class="hero" :aria-label="t('today.next')">
+        <section class="hero" :aria-label="t('today.heroLabel')">
           <p class="eyebrow">
             {{
               active
