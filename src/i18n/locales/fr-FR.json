@@ -221,7 +221,8 @@
     "shoulders": "Épaules",
     "arms": "Bras",
     "legsDay": "Jambes",
-    "imported": "Séance importée"
+    "imported": "Séance importée",
+    "manual": "Séance libre"
   },
   "difficulty": {
     "easy": "Facile",
@@ -1235,7 +1236,8 @@
     "deleteConfirm": "La séance et toutes ses séries seront effacées de l'historique.",
     "deleteYes": "Oui, supprimer la séance",
     "moveMachine": "Changer de machine",
-    "moveMachineNamed": "Ces séries étaient sur une autre machine que {name}"
+    "moveMachineNamed": "Ces séries étaient sur une autre machine que {name}",
+    "emptyHint": "Ajoute les exercices que tu as faits. Une séance laissée vide n'est pas gardée."
   },
   "myLoad": {
     "title": "Ma charge",
@@ -1425,5 +1427,14 @@
     "error": "Impossible de vérifier pour l'instant ({message}).",
     "auto": "Chercher les mises à jour au démarrage",
     "autoHelp": "Une fois par jour au plus, l'appli demande à GitHub la dernière version publiée. Rien d'autre n'est envoyé."
+  },
+  "pastSession": {
+    "open": "Ajouter une séance faite sans l'appli",
+    "title": "Séance faite sans l'appli",
+    "help": "Téléphone oublié, autre salle… Ajoute-la : elle compte dans ton historique, tes stats et ton cycle.",
+    "type": "Type de séance",
+    "prefilled": "Elle reprend les exercices, charges et reps de ta dernière séance de ce type : tu n'as qu'à corriger ce qui change.",
+    "empty": "Tu ajouteras ensuite les exercices et les séries que tu as faits.",
+    "create": "Créer et remplir"
   }
 }

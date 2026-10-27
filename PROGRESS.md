@@ -174,6 +174,13 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - **Exports Android** : menu Partager natif (plugin `FileShare` + FileProvider).
 - **Réglages** : l'entraînement en premier, les infos à la fin.
 
+## Séance faite sans l'appli (27 oct. 2026)
+
+- **Historique** : « Ajouter une séance faite sans l'appli » (téléphone oublié, autre salle). On choisit la date (pas dans le futur) et le type de séance ; la séance est créée terminée, puis on la remplit dans l'éditeur de l'historique.
+- Si une séance du même type existe déjà, elle est préremplie avec ses exercices, charges et reps : il ne reste qu'à corriger ce qui a changé.
+- Elle compte partout comme une autre : historique trié par date, stats, records, et le cycle passe à la séance suivante.
+- Une séance ajoutée puis laissée vide n'est pas gardée.
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

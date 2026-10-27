@@ -50,12 +50,13 @@ Les personnages viennent des séances test de [retour-utilisateur.md](retour-uti
 
 ## 4. Après la séance
 
-| #   | En tant que… | je veux…                                                  | pour…                       | État           |
-| --- | ------------ | --------------------------------------------------------- | --------------------------- | -------------- |
-| 4.1 | pratiquant   | un récap (séries, volume, records, badges)                | savoir ce que j'ai accompli | ✅             |
-| 4.2 | pratiquant   | comparer avec la dernière fois que j'ai fait cette séance | voir que je progresse       | 🔜             |
-| 4.3 | pratiquant   | partager une image de ma séance                           | la montrer à mes potes      | ✅ image récap |
-| 4.4 | pratiquant   | savoir combien de temps a duré ma séance                  | suivre mon rythme           | 🔜             |
+| #   | En tant que… | je veux…                                                  | pour…                        | État                        |
+| --- | ------------ | --------------------------------------------------------- | ---------------------------- | --------------------------- |
+| 4.1 | pratiquant   | un récap (séries, volume, records, badges)                | savoir ce que j'ai accompli  | ✅                          |
+| 4.2 | pratiquant   | comparer avec la dernière fois que j'ai fait cette séance | voir que je progresse        | 🔜                          |
+| 4.3 | pratiquant   | partager une image de ma séance                           | la montrer à mes potes       | ✅ image récap              |
+| 4.4 | pratiquant   | savoir combien de temps a duré ma séance                  | suivre mon rythme            | 🔜                          |
+| 4.5 | pratiquant   | ajouter une séance faite sans l'appli (téléphone oublié)  | garder un historique complet | 🆕 bouton dans l'Historique |
 
 ## 5. Suivi sur plusieurs semaines
 

@@ -221,7 +221,8 @@
     "shoulders": "Shoulders",
     "arms": "Arms",
     "legsDay": "Legs",
-    "imported": "Imported workout"
+    "imported": "Imported workout",
+    "manual": "Free session"
   },
   "difficulty": {
     "easy": "Easy",
@@ -1235,7 +1236,8 @@
     "deleteConfirm": "The session and all its sets will be erased from the history.",
     "deleteYes": "Yes, delete the session",
     "moveMachine": "Change machine",
-    "moveMachineNamed": "These sets were on another machine than {name}"
+    "moveMachineNamed": "These sets were on another machine than {name}",
+    "emptyHint": "Add the exercises you did. A session left empty is not kept."
   },
   "myLoad": {
     "title": "My load",
@@ -1425,5 +1427,14 @@
     "error": "Cannot check right now ({message}).",
     "auto": "Look for updates at launch",
     "autoHelp": "At most once a day, the app asks GitHub for the latest published version. Nothing else is sent."
+  },
+  "pastSession": {
+    "open": "Add a session done without the app",
+    "title": "Session done without the app",
+    "help": "Phone forgotten, another gym… Add it: it counts in your history, stats and cycle.",
+    "type": "Session type",
+    "prefilled": "It starts from the exercises, loads and reps of your last session of this type: just fix what changed.",
+    "empty": "You will then add the exercises and sets you did.",
+    "create": "Create and fill in"
   }
 }

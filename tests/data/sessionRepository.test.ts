@@ -266,6 +266,35 @@ describe('import from another app', () => {
   });
 });
 
+describe('a session done without the app', () => {
+  it('is added already finished, with its sets, and is not the active session', async () => {
+    const { addPastSession } = await import('@/data/repositories/sessionRepository');
+    const id = await addPastSession(db, {
+      date: '2026-10-20',
+      templateId: 'upperA',
+      gymId: DEFAULT_GYM_ID,
+      sets: [{ exerciseId: 'Dumbbell_Bench_Press', loadKg: 18, reps: 10, difficulty: 'ok' }],
+    });
+    const done = await listDoneSessions(db);
+    expect(done).toEqual([
+      expect.objectContaining({ id, date: '2026-10-20', templateId: 'upperA' }),
+    ]);
+    expect(done[0]?.sets).toEqual([expect.objectContaining({ loadKg: 18, reps: 10 })]);
+    expect(await getActiveSession(db)).toBeUndefined();
+  });
+
+  it('can start empty, to be filled in afterwards', async () => {
+    const { addPastSession } = await import('@/data/repositories/sessionRepository');
+    await addPastSession(db, {
+      date: '2026-10-20',
+      templateId: 'manual',
+      gymId: DEFAULT_GYM_ID,
+      sets: [],
+    });
+    expect((await listDoneSessions(db))[0]?.sets).toEqual([]);
+  });
+});
+
 describe('editing the history', () => {
   async function doneSession(date: string) {
     const id = await startSession(db, { date, templateId: 'pushA', gymId: DEFAULT_GYM_ID, plan });

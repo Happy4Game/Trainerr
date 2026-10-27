@@ -15,6 +15,7 @@ import {
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { recordsBySession, sessionWorkload } from '@/domain/stats';
+import AddPastSession from '@/ui/AddPastSession.vue';
 import BodyView from '@/ui/BodyView.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useUnits } from '@/ui/useUnits';
@@ -97,15 +98,16 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
     <ion-content class="ion-padding">
       <StatsView v-if="view === 'stats'" />
       <BodyView v-else-if="view === 'body'" />
+      <AddPastSession v-if="view === 'sessions'" />
       <EmptyState
-        v-else-if="sessions.length === 0"
+        v-if="view === 'sessions' && sessions.length === 0"
         :icon="CalendarCheck"
         :title="t('emptyStates.history')"
         :text="t('history.empty')"
         :action="t('emptyStates.start')"
         to="/tabs/session"
       />
-      <template v-else>
+      <template v-else-if="view === 'sessions'">
         <section v-for="month in months" :key="month.key" class="month">
           <h2>
             <span class="month-name">{{ month.title }}</span>
