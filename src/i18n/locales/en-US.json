@@ -1205,6 +1205,7 @@
       "catalogTab": "The Catalog gets its own tab back, next to Planning. Weight, measurements and photos move to Progress, under \"Body\", with your workouts and stats.",
       "moreDrawings": "26 more exercises have an Everkinetic drawing, including assisted pull-ups and dips, seated calf raise and machine crunch. When the drawing shows the same movement with other equipment, its name is written below.",
       "tapDrawing": "Tapping a machine's drawing opens its card: workout exercise list, next machine, busy machine, Today…",
+      "historyDrawings": "In Progress, each session of the history shows the drawing of its machines; tap it to open their card.",
       "restTaken": "The rest really taken between two sets is recorded. Tick \"Show the rest taken\" in Settings to see it in small print next to each set, during the workout and in the history.",
       "cardioDrawings": "Cardio machines have a drawing. No free one existed: these were made by an AI, and say so."
     }

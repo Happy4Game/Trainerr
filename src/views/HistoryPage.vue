@@ -16,6 +16,7 @@ import {
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
+import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { recordsBySession, sessionWorkload } from '@/domain/stats';
 import AddPastSession from '@/ui/AddPastSession.vue';
 import { useSession } from '@/ui/session/useSession';
@@ -55,6 +56,12 @@ const { t, n, locale } = useI18n();
 const templateLabel = useTemplateName();
 const session = useSession();
 const { load } = useUnits();
+
+const thumbnailOf = (id: string) => {
+  const image = illustrationFor(id)?.images[0];
+  return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
+};
+const cardLink = (id: string) => `/tabs/history/exercise/${encodeURIComponent(id)}`;
 
 const sessions = computed(() => [...session.history.value].reverse());
 /** Records on the real load: less help on an assisted machine is a record too. */
@@ -174,6 +181,14 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
               >
                 <li v-for="e in exercises(s.sets)" :key="e.id">
                   <span class="exercise-name">
+                    <router-link
+                      v-if="thumbnailOf(e.id)"
+                      :to="cardLink(e.id)"
+                      class="thumb"
+                      :aria-label="t('session.seeMovementOf', { name: e.name })"
+                    >
+                      <img :src="thumbnailOf(e.id)" alt="" />
+                    </router-link>
                     {{ e.name }}
                     <span
                       v-if="isRecord(s.id, e.id)"
@@ -297,7 +312,23 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
   border-block-start: 1px solid var(--ion-color-light);
 }
 .exercise-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 600;
+}
+.thumb {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .record {
   margin-inline-start: 4px;

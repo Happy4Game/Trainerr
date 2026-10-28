@@ -1205,6 +1205,7 @@
       "catalogTab": "Le Catalogue retrouve son onglet, à côté du Planning. Poids, mensurations et photos passent dans Progrès, segment « Corps », avec tes séances et tes stats.",
       "moreDrawings": "26 fiches de plus ont un dessin Everkinetic, dont les tractions et dips assistés, les mollets assis et le crunch à la machine. Quand le dessin montre le même geste avec un autre matériel, son nom est indiqué dessous.",
       "tapDrawing": "Un appui sur le dessin d'une machine ouvre sa fiche : liste des exercices de la séance, machine suivante, machine occupée, Aujourd'hui…",
+      "historyDrawings": "Dans Progrès, chaque séance de l'historique montre le dessin de ses machines ; un appui ouvre leur fiche.",
       "restTaken": "Le repos réellement pris entre deux séries est enregistré. Coche « Afficher le repos pris » dans Réglages pour le voir en petit à côté de chaque série, pendant la séance et dans l'historique.",
       "cardioDrawings": "Les machines cardio ont un dessin. Aucun dessin libre n'existait : ceux-ci sont faits par une IA, et le disent."
     }
