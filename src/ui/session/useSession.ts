@@ -642,7 +642,7 @@ async function logSet(set: SetLog): Promise<void> {
   // Compared before the set joins today's sets: the record to beat is the one shown.
   const realLoad = realLoadFor(set.exerciseId, set.loadKg);
   const beaten = beatsRecord({ ...set, loadKg: realLoad }, recordFor(set.exerciseId));
-  const stored = await addSet(db, active.value.id, set);
+  const stored = await addSet(db, active.value.id, { ...set, doneAt: Date.now() });
   active.value = { ...active.value, sets: [...active.value.sets, stored] };
   if (set.warmup) return;
   recordBeaten.value = beaten

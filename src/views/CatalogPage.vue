@@ -33,8 +33,7 @@ import {
   matchesSearch,
   type CatalogSection,
 } from '@/domain/catalogSearch';
-import { CARDIO_MACHINES } from '@/domain/cardio';
-import CardioIcon from '@/ui/cardio/CardioIcon.vue';
+import { CARDIO_MACHINES, cardioDrawing } from '@/domain/cardio';
 import LoadNoteModal from '@/ui/LoadNoteModal.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useCatalog } from '@/ui/useCatalog';
@@ -129,6 +128,7 @@ const matching = computed<Row[]>(() => {
 });
 const visible = computed(() => matching.value.slice(0, shown.value));
 /** Cardio tab: the cardio machines, apart from the weight machines. */
+const baseUrl = import.meta.env.BASE_URL;
 const cardioMachines = computed(() =>
   CARDIO_MACHINES.map((m) => ({ ...m, name: t(`cardio.machines.${m.id}`) })).filter((m) =>
     matchesSearch([m.name], query.value),
@@ -214,7 +214,9 @@ function onFilter(value: unknown): void {
             :router-link="`/tabs/catalog/cardio/${m.id}`"
             detail
           >
-            <span slot="start" class="cardio-icon"><CardioIcon :icon="m.icon" /></span>
+            <ion-thumbnail slot="start" class="thumbnail" aria-hidden="true">
+              <img :src="`${baseUrl}${cardioDrawing(m.id)}`" alt="" loading="lazy" />
+            </ion-thumbnail>
             <ion-label class="ion-text-wrap">
               <h2>{{ m.name }}</h2>
               <p>{{ m.primaryMuscles.map((id) => t(`muscles.${id}`)).join(', ') }}</p>
@@ -318,16 +320,6 @@ function onFilter(value: unknown): void {
 </template>
 
 <style scoped>
-.cardio-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  background: var(--tr-surface-2);
-  color: var(--ion-color-primary);
-}
 .body-search {
   margin: 8px 16px;
   padding: 12px;

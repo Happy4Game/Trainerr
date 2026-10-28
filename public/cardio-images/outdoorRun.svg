@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Chaussure de course (dessin IA) -->
+  <path d="M28 150 Q26 120 52 112 L92 100 Q104 96 112 86 L124 70 Q130 62 140 66 L150 72 Q158 78 166 78 L186 80 Q206 84 212 110 L216 138 Q218 152 204 154 L44 160 Q30 160 28 150 Z" fill="#fff"/>
+  <path d="M30 146 L214 136"/>
+  <path d="M40 160 Q120 168 210 152"/>
+  <path d="M112 90 L136 100"/>
+  <path d="M104 100 L128 110"/>
+  <path d="M96 110 L120 120"/>
+  <path d="M150 72 Q158 104 186 110"/>
+</svg>

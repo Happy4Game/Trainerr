@@ -12,6 +12,12 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', redirect: '/tabs/today' },
       { path: 'today', component: () => import('@/views/TodayPage.vue') },
+      // Machine card opened from Today: stays in the Today tab.
+      {
+        path: 'today/exercise/:id',
+        component: () => import('@/views/ExercisePage.vue'),
+        props: (route) => ({ id: route.params.id, from: 'today' }),
+      },
       { path: 'session', component: () => import('@/views/SessionPage.vue') },
       {
         path: 'session/custom/:id',
@@ -23,7 +29,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'session/exercise/:id',
         component: () => import('@/views/ExercisePage.vue'),
-        props: (route) => ({ id: route.params.id, fromSession: true }),
+        props: (route) => ({ id: route.params.id, from: 'session' }),
       },
       { path: 'catalog', component: () => import('@/views/CatalogPage.vue') },
       {

@@ -39,6 +39,7 @@ import SetEditModal from '@/ui/session/SetEditModal.vue';
 import { useUnits } from '@/ui/useUnits';
 import { updateSettings, useSettings } from '@/ui/useSettings';
 import { startOfWeek } from '@/domain/dates';
+import { restClock, restsTaken } from '@/domain/restTaken';
 import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
 import { useSession } from '@/ui/session/useSession';
 import SessionCardio from '@/ui/cardio/SessionCardio.vue';
@@ -261,6 +262,10 @@ const loggedSets = computed(() =>
 );
 
 const newestFirst = computed(() => [...loggedSets.value].reverse());
+/** Rest really taken before each set, shown when chosen in Settings. */
+const rests = computed(() =>
+  appSettings.value?.showRest ? restsTaken(active.value?.sets ?? []) : new Map<string, number>(),
+);
 
 /** Set being corrected, and the last set logged (shown under the rest timer). */
 const editing = ref<(typeof loggedSets.value)[number]>();
@@ -448,12 +453,16 @@ async function logWarmup(): Promise<void> {
                 :key="alternative.exercise.id"
                 class="alternative"
               >
-                <img
+                <router-link
                   v-if="thumbnailOf(alternative.exercise.id)"
-                  :src="thumbnailOf(alternative.exercise.id)"
-                  alt=""
-                  class="alt-thumb"
-                />
+                  :to="cardLink(alternative.exercise.id)"
+                  class="thumb-link"
+                  :aria-label="
+                    t('session.seeMovementOf', { name: exerciseName(alternative.exercise) })
+                  "
+                >
+                  <img :src="thumbnailOf(alternative.exercise.id)" alt="" class="alt-thumb" />
+                </router-link>
                 <div class="alt-body">
                   <h3>{{ exerciseName(alternative.exercise) }}</h3>
                   <p class="alt-kind">{{ t(`session.alternative.${alternative.kind}`) }}</p>
@@ -570,12 +579,14 @@ async function logWarmup(): Promise<void> {
             ✓ {{ t('session.nextMachine.finished', { name: nameOf(nextMachine.finished) }) }}
           </p>
           <p class="label">{{ t('session.nextMachine.title') }}</p>
-          <img
+          <router-link
             v-if="nextMachine.thumbnail"
-            :src="nextMachine.thumbnail"
-            alt=""
-            class="next-thumb"
-          />
+            :to="cardLink(nextMachine.id)"
+            class="thumb-link"
+            :aria-label="t('session.seeMovementOf', { name: nameOf(nextMachine.id) })"
+          >
+            <img :src="nextMachine.thumbnail" alt="" class="next-thumb" />
+          </router-link>
           <h2>{{ nameOf(nextMachine.id) }}</h2>
           <p class="plan-line">
             {{ t('session.nextMachine.plan', nextMachine.sets) }}
@@ -714,6 +725,9 @@ async function logWarmup(): Promise<void> {
                   <span class="muted">
                     ·
                     {{ set.warmup ? t('session.warmupShort') : t(`difficulty.${set.difficulty}`) }}
+                    <template v-if="rests.has(set.id)">
+                      · {{ t('session.restTaken', { time: restClock(rests.get(set.id)!) }) }}
+                    </template>
                   </span>
                 </span>
                 <Pencil :size="16" aria-hidden="true" />
@@ -1079,5 +1093,11 @@ async function logWarmup(): Promise<void> {
 }
 .finish {
   margin-block-start: 24px;
+}
+/* The drawing opens the machine card. */
+.thumb-link {
+  display: inline-block;
+  flex: none;
+  line-height: 0;
 }
 </style>

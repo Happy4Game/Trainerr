@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Vélo de biking (dessin IA) -->
+  <path d="M30 182 L100 182"/>
+  <path d="M140 182 L214 182"/>
+  <circle cx="62" cy="128" r="40" fill="#fff"/>
+  <circle cx="62" cy="128" r="30"/>
+  <circle cx="62" cy="128" r="6" fill="#111"/>
+  <path d="M68 180 L62 168"/>
+  <path d="M180 182 L150 122 L96 98"/>
+  <path d="M150 122 L162 64"/>
+  <path d="M146 60 Q166 52 188 60 Q182 70 164 68 Q150 68 146 60 Z" fill="#fff"/>
+  <path d="M96 98 L86 54"/>
+  <path d="M64 50 L104 46 Q114 46 112 56 L108 70"/>
+  <path d="M68 50 Q56 54 58 66"/>
+  <circle cx="116" cy="144" r="10"/>
+  <path d="M116 144 L134 156 L144 154"/>
+  <path d="M116 144 L100 130 L90 132"/>
+</svg>

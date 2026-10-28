@@ -83,9 +83,9 @@ export async function addSet(db: SqlDatabase, sessionId: string, set: SetLog): P
   const id = newId();
   await db.run(
     `INSERT INTO set_log (id, session_id, exercise_id, position, load_kg, reps, difficulty,
-       warmup, slow_tempo, complete_reps, rir, note)
+       warmup, slow_tempo, complete_reps, rir, note, done_at)
      VALUES (?, ?, ?, (SELECT COALESCE(MAX(position), 0) + 1 FROM set_log WHERE session_id = ?),
-       ?, ?, ?, ?, ?, ?, ?, ?)`,
+       ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       id,
       sessionId,
@@ -99,6 +99,7 @@ export async function addSet(db: SqlDatabase, sessionId: string, set: SetLog): P
       set.completeReps === false ? 0 : 1,
       set.rir ?? null,
       set.note?.trim() || null,
+      set.doneAt ?? null,
     ],
   );
   return { ...set, id };
@@ -180,6 +181,7 @@ interface SetRow {
   complete_reps: number;
   rir: number | null;
   note: string | null;
+  done_at: number | null;
 }
 
 function toSet(row: SetRow): StoredSet {
@@ -194,6 +196,7 @@ function toSet(row: SetRow): StoredSet {
     ...(row.complete_reps ? {} : { completeReps: false }),
     ...(row.rir === null || row.rir === undefined ? {} : { rir: row.rir }),
     ...(row.note ? { note: row.note } : {}),
+    ...(row.done_at ? { doneAt: row.done_at } : {}),
   };
 }
 

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Escalier ou stepper (dessin IA) -->
+  <path d="M40 182 L200 182"/>
+  <path d="M60 182 L60 60"/>
+  <path d="M180 182 L180 60"/>
+  <path d="M60 170 L100 170 L100 150 L120 150 L120 130 L140 130 L140 110 L160 110 L160 90 L180 90" fill="#fff"/>
+  <path d="M60 170 L60 182 L180 182 L180 90"/>
+  <path d="M100 170 L100 182"/>
+  <path d="M120 150 L120 182"/>
+  <path d="M140 130 L140 182"/>
+  <path d="M160 110 L160 182"/>
+  <path d="M60 60 L46 120"/>
+  <path d="M180 60 L194 120"/>
+  <path d="M96 30 L144 30 L148 54 L92 54 Z" fill="#fff"/>
+  <path d="M60 60 L92 50"/>
+  <path d="M180 60 L148 50"/>
+</svg>

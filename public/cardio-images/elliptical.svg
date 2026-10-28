@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Vélo elliptique (dessin IA) -->
+  <path d="M20 182 L224 182"/>
+  <path d="M168 182 L168 150" />
+  <path d="M150 112 Q150 96 172 96 Q196 96 196 120 Q196 150 172 150 Q150 150 150 132 Z" fill="#fff"/>
+  <circle cx="174" cy="124" r="8"/>
+  <path d="M40 182 L46 160"/>
+  <path d="M46 160 L172 124"/>
+  <path d="M64 168 L172 130"/>
+  <path d="M60 154 L96 144 L100 152 L64 162 Z" fill="#fff"/>
+  <path d="M50 156 L36 40"/>
+  <path d="M66 166 L56 44"/>
+  <path d="M30 36 L44 34"/>
+  <path d="M50 40 L64 38"/>
+  <path d="M40 182 L40 100"/>
+  <path d="M24 74 L60 70 L62 86 L26 90 Z" fill="#fff"/>
+</svg>

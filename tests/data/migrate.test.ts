@@ -130,7 +130,7 @@ describe('migrations', () => {
     await migrate(db);
     await expect(
       db.run(
-        "INSERT INTO set_log VALUES ('x', 'no-session', 'no-ex', 1, 10, 8, 'ok', 0, 0, 1, NULL, NULL, NULL)",
+        "INSERT INTO set_log VALUES ('x', 'no-session', 'no-ex', 1, 10, 8, 'ok', 0, 0, 1, NULL, NULL, NULL, NULL)",
       ),
     ).rejects.toThrow(/FOREIGN KEY/);
     await expect(

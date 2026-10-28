@@ -4,9 +4,9 @@ import type { Goal } from './sessionBuilder';
 import type { IsoDate, PplGroup } from './types';
 
 /**
- * Cardio machines of the gym, done before or after the weights. Free drawings
- * of these machines do not exist in Everkinetic: each one shows an icon and
- * the muscles it works on the body map.
+ * Cardio machines of the gym, done before or after the weights. Neither
+ * Everkinetic nor wger.de has a free drawing of them: the drawings in
+ * public/cardio-images were made by an AI, and say so (cardioDrawing).
  */
 export type CardioId =
   | 'treadmill'
@@ -232,4 +232,9 @@ export function recommendedCardioPosition(
   if (groups.includes('legs') && (machine?.legHeavy ?? true))
     return { position: 'after', reason: 'legsDay' };
   return { position: 'either', reason: 'noDifference' };
+}
+
+/** Line drawing of the machine, made by an AI (public/cardio-images): to be labelled as such. */
+export function cardioDrawing(id: CardioId): string {
+  return `cardio-images/${id}.svg`;
 }

@@ -34,7 +34,9 @@ import {
   updateSet,
   type StoredSet,
 } from '@/data/repositories/sessionRepository';
+import { restClock, restsTaken } from '@/domain/restTaken';
 import type { Difficulty } from '@/domain/types';
+import { useSettings } from '@/ui/useSettings';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import type { CardioEntry, DatedCardio } from '@/domain/cardio';
 import CardioEntryModal from '@/ui/cardio/CardioEntryModal.vue';
@@ -72,6 +74,22 @@ async function removeCardio(): Promise<void> {
 const nameOf = (id: string) => {
   const e = session.entryOf(id)?.exercise;
   return e ? (locale.value.startsWith('fr') ? e.name : e.nameEn) : id;
+};
+
+const { settings } = useSettings();
+/** Rest really taken before each set, shown when chosen in Settings. */
+const rests = computed(() =>
+  settings.value?.showRest
+    ? restsTaken((past.value?.sets ?? []) as StoredSet[])
+    : new Map<string, number>(),
+);
+/** Small line under a set: rest taken, reps in reserve. */
+const extraOf = (set: StoredSet) => {
+  const rest = rests.value.get(set.id);
+  return [
+    rest === undefined ? undefined : t('session.restTaken', { time: restClock(rest) }),
+    set.rir === undefined ? undefined : rirText(set.rir),
+  ].filter(Boolean);
 };
 
 /** Sets grouped by exercise, in the order they were done. */
@@ -232,9 +250,9 @@ async function remove() {
               >
                 <Trash2 :size="20" aria-hidden="true" />
               </ion-button>
-              <p v-if="set.rir !== undefined || set.note" class="set-extra">
-                <span v-if="set.rir !== undefined">{{ rirText(set.rir) }}</span>
-                <span v-if="set.rir !== undefined && set.note"> · </span>
+              <p v-if="extraOf(set).length > 0 || set.note" class="set-extra">
+                <span>{{ extraOf(set).join(' · ') }}</span>
+                <span v-if="extraOf(set).length > 0 && set.note"> · </span>
                 <em v-if="set.note">{{ set.note }}</em>
               </p>
             </div>

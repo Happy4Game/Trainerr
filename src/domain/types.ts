@@ -43,6 +43,8 @@ export interface SetLog {
   readonly rir?: number;
   /** Free text for this set: "grip slipped", "seat 4"… */
   readonly note?: string;
+  /** When it was logged during the session (ms since 1970); absent for a set added afterwards. */
+  readonly doneAt?: number;
 }
 
 export interface SessionLog {

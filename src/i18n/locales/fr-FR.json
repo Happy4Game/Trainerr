@@ -533,7 +533,8 @@
     },
     "saved": "✓ Série enregistrée : {set}",
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
-    "seeMovementOf": "Voir la fiche de {name}"
+    "seeMovementOf": "Voir la fiche de {name}",
+    "restTaken": "repos {time}"
   },
   "availability": {
     "day": "Jour",
@@ -974,7 +975,9 @@
       "max": "Reps maximum",
       "invalid": "Choisis entre {lowest} et {highest} reps, avec au moins {width} reps d'écart.",
       "why": "Le muscle grossit sur une large plage de reps, de 6 à plus de 20, tant que la série finit proche de l'échec. 8 à 12 est un très bon choix. L'appli monte la charge quand tu atteins le haut de la fourchette."
-    }
+    },
+    "showRest": "Afficher le repos pris",
+    "showRestHelp": "Toujours enregistré : le temps entre deux séries s'affiche en petit à côté de chacune, pendant la séance et dans l'historique."
   },
   "tips": {
     "title": "Bien débuter",
@@ -1079,7 +1082,8 @@
       "and": "et",
       "muscleMap": "silhouettes musculaires, licence MIT.",
       "lucide": "icônes, licence ISC.",
-      "images": "illustrations des mouvements (départ et arrivée), redimensionnées et passées en niveaux de gris :"
+      "images": "illustrations des mouvements (départ et arrivée), redimensionnées et passées en niveaux de gris :",
+      "aiDrawings": "Dessins des machines cardio : faits par une IA (Claude) pour Trainerr, faute de dessin libre chez Everkinetic et wger.de. Pas forcément vérifiés par un spécialiste."
     },
     "sources": {
       "title": "Sources scientifiques",
@@ -1137,7 +1141,8 @@
       "bodyTab": "Un onglet Corps et la caméra dans l'appli",
       "planningTab": "Le Planning revient en onglet",
       "flexibleSession": "Séance plus souple",
-      "catalogTab": "Catalogue et Planning en onglets"
+      "catalogTab": "Catalogue et Planning en onglets",
+      "drawingsAndRest": "Plus de dessins, repos réellement pris"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1197,7 +1202,11 @@
       "restKept": "Le repos continue même si tu fermes l'appli de force.",
       "ownRepRange": "Réglages : ta propre fourchette de reps pour tous les exercices (8 à 12 par défaut), avec les études qui l'expliquent.",
       "newestFirst": "Les séries de la séance s'affichent de la plus récente à la plus ancienne : la dernière, celle qu'on corrige le plus souvent, est en haut.",
-      "catalogTab": "Le Catalogue retrouve son onglet, à côté du Planning. Poids, mensurations et photos passent dans Progrès, segment « Corps », avec tes séances et tes stats."
+      "catalogTab": "Le Catalogue retrouve son onglet, à côté du Planning. Poids, mensurations et photos passent dans Progrès, segment « Corps », avec tes séances et tes stats.",
+      "moreDrawings": "26 fiches de plus ont un dessin Everkinetic, dont les tractions et dips assistés, les mollets assis et le crunch à la machine. Quand le dessin montre le même geste avec un autre matériel, son nom est indiqué dessous.",
+      "tapDrawing": "Un appui sur le dessin d'une machine ouvre sa fiche : liste des exercices de la séance, machine suivante, machine occupée, Aujourd'hui…",
+      "restTaken": "Le repos réellement pris entre deux séries est enregistré. Coche « Afficher le repos pris » dans Réglages pour le voir en petit à côté de chaque série, pendant la séance et dans l'historique.",
+      "cardioDrawings": "Les machines cardio ont un dessin. Aucun dessin libre n'existait : ceux-ci sont faits par une IA, et le disent."
     }
   },
   "data": {
@@ -1771,6 +1780,10 @@
       "noHistory": "Pas encore de perf sur cette machine.",
       "longest": "Plus longue distance : {km} km",
       "editNamed": "Modifier le cardio du {date}"
+    },
+    "drawing": {
+      "ai": "Dessiné par une IA, pas forcément vérifié par un spécialiste.",
+      "alt": "Dessin : {name}"
     }
   },
   "modelInfo": {

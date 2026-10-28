@@ -69,6 +69,12 @@ test('right after the questionnaire, Today offers to note the usual loads too', 
   await page.getByRole('textbox', { name: 'Reps' }).fill('10');
   await page.getByRole('button', { name: 'Enregistrer' }).click();
   await expect(usual).toHaveCount(0);
+
+  // The drawing of a machine of the day opens its card, with a way back to Today.
+  await hero.getByRole('link', { name: 'Voir la fiche de Écarté à la machine' }).click();
+  await expect(page).toHaveURL(/\/tabs\/today\/exercise\/Butterfly$/);
+  await page.getByRole('button', { name: "Aujourd'hui" }).first().click();
+  await expect(page).toHaveURL(/\/tabs\/today$/);
 });
 
 test('a machine of the session is swapped for a very close one, before and during', async ({

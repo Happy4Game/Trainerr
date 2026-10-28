@@ -198,6 +198,13 @@ export const migrations: readonly Migration[] = [
       CREATE INDEX cardio_log_session ON cardio_log (session_id);
     `,
   },
+  {
+    version: 9,
+    description: 'When each set was logged (ms since 1970), for the rest really taken',
+    sql: `
+      ALTER TABLE set_log ADD COLUMN done_at INTEGER;
+    `,
+  },
 ];
 
 export const latestSchemaVersion = migrations.at(-1)?.version ?? 0;
