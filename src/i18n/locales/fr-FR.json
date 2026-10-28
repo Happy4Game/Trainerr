@@ -533,7 +533,8 @@
     },
     "saved": "✓ Série enregistrée : {set}",
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
-    "seeMovementOf": "Voir la fiche de {name}"
+    "seeMovementOf": "Voir la fiche de {name}",
+    "restTaken": "repos {time}"
   },
   "availability": {
     "day": "Jour",
@@ -974,7 +975,9 @@
       "max": "Reps maximum",
       "invalid": "Choisis entre {lowest} et {highest} reps, avec au moins {width} reps d'écart.",
       "why": "Le muscle grossit sur une large plage de reps, de 6 à plus de 20, tant que la série finit proche de l'échec. 8 à 12 est un très bon choix. L'appli monte la charge quand tu atteins le haut de la fourchette."
-    }
+    },
+    "showRest": "Afficher le repos pris",
+    "showRestHelp": "Toujours enregistré : le temps entre deux séries s'affiche en petit à côté de chacune, pendant la séance et dans l'historique."
   },
   "tips": {
     "title": "Bien débuter",

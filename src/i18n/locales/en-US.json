@@ -533,7 +533,8 @@
     },
     "saved": "✓ Set saved: {set}",
     "testSetQuestion": "Too light? Could you have done 3 more reps?",
-    "seeMovementOf": "See the card of {name}"
+    "seeMovementOf": "See the card of {name}",
+    "restTaken": "rest {time}"
   },
   "availability": {
     "day": "Day",
@@ -974,7 +975,9 @@
       "max": "Maximum reps",
       "invalid": "Pick between {lowest} and {highest} reps, at least {width} reps apart.",
       "why": "Muscle grows over a wide range of reps, from 6 to over 20, as long as the set ends close to failure. 8 to 12 is a very good choice. The app raises the load when you reach the top of the range."
-    }
+    },
+    "showRest": "Show the rest taken",
+    "showRestHelp": "Always recorded: the time between two sets shows in small print next to each one, during the workout and in the history."
   },
   "tips": {
     "title": "Getting started",
