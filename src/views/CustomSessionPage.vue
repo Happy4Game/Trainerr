@@ -170,9 +170,13 @@ async function remove(): Promise<void> {
       <ol class="list">
         <li v-for="(exerciseId, index) in exerciseIds" :key="exerciseId" class="row">
           <span class="number" aria-hidden="true">{{ index + 1 }}</span>
-          <span class="thumb" aria-hidden="true">
+          <router-link
+            :to="`/tabs/session/exercise/${encodeURIComponent(exerciseId)}`"
+            class="thumb"
+            :aria-label="t('session.seeMovementOf', { name: nameOf(exerciseId) })"
+          >
             <img v-if="thumbnailOf(exerciseId)" :src="thumbnailOf(exerciseId)" alt="" />
-          </span>
+          </router-link>
           <span class="name">
             {{ nameOf(exerciseId) }}
             <span v-if="lines?.[exerciseId]" class="line-summary">

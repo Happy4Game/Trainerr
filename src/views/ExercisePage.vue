@@ -36,7 +36,8 @@ import { defaultStepsFor } from '@/domain/loadSteps';
 import MuscleMap from '@/ui/muscleMap/MuscleMap.vue';
 import { useCatalog } from '@/ui/useCatalog';
 
-const props = defineProps<{ id: string; fromSession?: boolean }>();
+/** `from`: the tab the card was opened from, where "Back" leads. */
+const props = defineProps<{ id: string; from?: 'session' | 'today' }>();
 
 const { t, locale } = useI18n();
 const {
@@ -115,8 +116,14 @@ const muscleList = (muscles: readonly MuscleId[]) =>
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button
-            :default-href="fromSession ? '/tabs/session' : '/tabs/catalog'"
-            :text="fromSession ? t('exercise.session') : t('common.back')"
+            :default-href="from ? `/tabs/${from}` : '/tabs/catalog'"
+            :text="
+              from === 'session'
+                ? t('exercise.session')
+                : from === 'today'
+                  ? t('tabs.today')
+                  : t('common.back')
+            "
           />
         </ion-buttons>
         <ion-title>{{ title }}</ion-title>

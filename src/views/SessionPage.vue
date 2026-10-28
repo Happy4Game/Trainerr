@@ -448,12 +448,16 @@ async function logWarmup(): Promise<void> {
                 :key="alternative.exercise.id"
                 class="alternative"
               >
-                <img
+                <router-link
                   v-if="thumbnailOf(alternative.exercise.id)"
-                  :src="thumbnailOf(alternative.exercise.id)"
-                  alt=""
-                  class="alt-thumb"
-                />
+                  :to="cardLink(alternative.exercise.id)"
+                  class="thumb-link"
+                  :aria-label="
+                    t('session.seeMovementOf', { name: exerciseName(alternative.exercise) })
+                  "
+                >
+                  <img :src="thumbnailOf(alternative.exercise.id)" alt="" class="alt-thumb" />
+                </router-link>
                 <div class="alt-body">
                   <h3>{{ exerciseName(alternative.exercise) }}</h3>
                   <p class="alt-kind">{{ t(`session.alternative.${alternative.kind}`) }}</p>
@@ -570,12 +574,14 @@ async function logWarmup(): Promise<void> {
             ✓ {{ t('session.nextMachine.finished', { name: nameOf(nextMachine.finished) }) }}
           </p>
           <p class="label">{{ t('session.nextMachine.title') }}</p>
-          <img
+          <router-link
             v-if="nextMachine.thumbnail"
-            :src="nextMachine.thumbnail"
-            alt=""
-            class="next-thumb"
-          />
+            :to="cardLink(nextMachine.id)"
+            class="thumb-link"
+            :aria-label="t('session.seeMovementOf', { name: nameOf(nextMachine.id) })"
+          >
+            <img :src="nextMachine.thumbnail" alt="" class="next-thumb" />
+          </router-link>
           <h2>{{ nameOf(nextMachine.id) }}</h2>
           <p class="plan-line">
             {{ t('session.nextMachine.plan', nextMachine.sets) }}
@@ -1079,5 +1085,11 @@ async function logWarmup(): Promise<void> {
 }
 .finish {
   margin-block-start: 24px;
+}
+/* The drawing opens the machine card. */
+.thumb-link {
+  display: inline-block;
+  flex: none;
+  line-height: 0;
 }
 </style>

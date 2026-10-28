@@ -51,7 +51,14 @@ async function take(id: string): Promise<void> {
       </p>
       <ul class="options">
         <li v-for="e in options" :key="e.id" class="option">
-          <img v-if="thumbnailOf(e.id)" :src="thumbnailOf(e.id)" alt="" class="thumb" />
+          <router-link
+            v-if="thumbnailOf(e.id)"
+            :to="`/tabs/session/exercise/${encodeURIComponent(e.id)}`"
+            class="thumb-link"
+            :aria-label="t('session.seeMovementOf', { name: nameOf(e.id) })"
+          >
+            <img :src="thumbnailOf(e.id)" alt="" class="thumb" />
+          </router-link>
           <div class="body">
             <h3>{{ nameOf(e.id) }}</h3>
             <p class="detail">
@@ -123,5 +130,11 @@ async function take(id: string): Promise<void> {
   margin: 2px 0 4px;
   font-size: 0.85rem;
   color: var(--ion-color-medium-shade);
+}
+/* The drawing opens the machine card. */
+.thumb-link {
+  display: inline-block;
+  flex: none;
+  line-height: 0;
 }
 </style>

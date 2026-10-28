@@ -47,6 +47,10 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   const offer = page.getByRole('listitem').filter({ hasText: 'Écarté à la machine' });
   await expect(offer.getByText(/Pectoraux/)).toBeVisible();
   await expect(offer.getByRole('link', { name: 'Voir le mouvement' })).toBeVisible();
+  // The drawing opens the machine card too, as everywhere else.
+  await expect(
+    offer.getByRole('link', { name: 'Voir la fiche de Écarté à la machine' }),
+  ).toBeVisible();
   await expect(
     offer.getByRole('button', {
       name: 'Remplacer Développé épaules machine par Écarté à la machine',

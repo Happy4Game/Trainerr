@@ -31,6 +31,7 @@ const thumbnailOf = (id: string) => {
   const image = illustrationFor(id)?.images[0];
   return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
 };
+const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const setsLine = (id: string) =>
   t('session.overview.sets', {
     done: session.workSetsInSession(id).length,
@@ -90,9 +91,14 @@ const inSession = () => props.exercises.filter((e) => e.status !== 'done').map((
             <Check v-if="e.status === 'done'" :size="18" />
             <template v-else>{{ index + 1 }}</template>
           </span>
-          <span class="thumb" aria-hidden="true">
+          <router-link
+            :to="cardLink(e.id)"
+            class="thumb"
+            :aria-label="t('session.seeMovementOf', { name: e.name })"
+            @click="emit('close')"
+          >
             <img v-if="thumbnailOf(e.id)" :src="thumbnailOf(e.id)" alt="" />
-          </span>
+          </router-link>
           <span class="text">
             <span class="name">{{ e.name }}</span>
             <span class="detail">

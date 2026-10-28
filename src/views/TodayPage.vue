@@ -182,7 +182,14 @@ const streak = computed(() =>
           <p v-if="catchUpText" class="hint">{{ catchUpText }}</p>
           <ol v-if="rows.length > 0" class="preview">
             <li v-for="row in rows" :key="row.id" :class="{ done: row.done }">
-              <img v-if="row.thumbnail" :src="row.thumbnail" alt="" />
+              <router-link
+                v-if="row.thumbnail"
+                :to="`/tabs/today/exercise/${encodeURIComponent(row.id)}`"
+                class="thumb-link"
+                :aria-label="t('session.seeMovementOf', { name: row.name })"
+              >
+                <img :src="row.thumbnail" alt="" />
+              </router-link>
               <span class="preview-text">
                 <span class="preview-name">{{ row.name }}</span>
                 <span class="preview-detail">{{ row.detail }}</span>
@@ -521,5 +528,11 @@ const streak = computed(() =>
   background: var(--ion-color-light);
   color: var(--ion-color-light-contrast);
   font-size: 0.85rem;
+}
+/* The drawing opens the machine card. */
+.thumb-link {
+  display: inline-block;
+  flex: none;
+  line-height: 0;
 }
 </style>
