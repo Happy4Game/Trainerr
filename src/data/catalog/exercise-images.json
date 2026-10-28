@@ -4787,6 +4787,111 @@
       }
     ]
   },
+  "Seated_Calf_Raise": {
+    "sourceName": "Seated Calf Raise with Barbell",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0272",
+    "images": [
+      {
+        "file": "ek-0272-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0272-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
+  "Ab_Crunch_Machine": {
+    "sourceName": "Seated Ab Crunch with Cable",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0288",
+    "images": [
+      {
+        "file": "ek-0288-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0288-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
+  "Reverse_Machine_Flyes": {
+    "sourceName": "Lying Rear Lateral Raise",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0023",
+    "images": [
+      {
+        "file": "ek-0023-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0023-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
+  "trainerr:diverging-seated-row": {
+    "sourceName": "Seated Cable Rows",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0025",
+    "images": [
+      {
+        "file": "ek-0025-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0025-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
+  "trainerr:machine-lateral-raise": {
+    "sourceName": "Lateral Dumbbell Raises",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0018",
+    "images": [
+      {
+        "file": "ek-0018-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0018-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
   "trainerr:assisted-pullup": {
     "sourceName": "Pull Ups",
     "source": "Everkinetic",

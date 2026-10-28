@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Vélo d'appartement (dessin IA) -->
+  <path d="M40 178 L120 178"/>
+  <path d="M140 178 L210 178"/>
+  <circle cx="72" cy="122" r="36" fill="#fff"/>
+  <circle cx="72" cy="122" r="8"/>
+  <path d="M80 176 L72 158"/>
+  <path d="M176 178 L150 120 L80 110"/>
+  <path d="M150 120 L158 60"/>
+  <path d="M140 56 Q160 48 182 56 Q178 66 160 64 Q146 64 140 56 Z" fill="#fff"/>
+  <path d="M84 116 L70 60"/>
+  <path d="M52 52 Q66 46 80 52 L92 64"/>
+  <path d="M60 48 L56 40 L84 36"/>
+  <circle cx="116" cy="146" r="10"/>
+  <path d="M116 146 L132 160 L142 160"/>
+  <path d="M116 146 L100 132 L90 132"/>
+</svg>

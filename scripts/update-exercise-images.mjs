@@ -266,6 +266,12 @@ const EVERKINETIC = {
   Barbell_Side_Split_Squat: '0131',
   Butt_Lift_Bridge: '0109',
   Side_Bridge: '0113',
+  // Machines sans dessin : le même geste, avec des haltères, une barre ou une poulie.
+  Seated_Calf_Raise: '0272',
+  Ab_Crunch_Machine: '0288',
+  Reverse_Machine_Flyes: '0023',
+  'trainerr:diverging-seated-row': '0025',
+  'trainerr:machine-lateral-raise': '0018',
   // Machines d'assistance : le dessin montre le même geste sans l'aide.
   'trainerr:assisted-pullup': '0087',
   'trainerr:assisted-dip': '0054',

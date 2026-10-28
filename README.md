@@ -40,14 +40,14 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 - **Tous les muscles sur la semaine** : chaque séance choisit en priorité les exercices des muscles qui ont eu moins de 10 séries sur les 7 derniers jours, et l'aperçu dit lesquels elle rattrape.
 - **Machines très proches** : depuis l'aperçu, remplace une machine par une autre du même mouvement (le choix est gardé pour les séances suivantes) ; pendant la séance, le bouton **⇄ Changer** à côté du nom de la machine (à chaque série, et sur l'écran « Machine suivante ») ouvre les machines du même mouvement, et les plus proches sont proposées sous l'exercice avant la première série.
 - **Machine occupée** : alternatives avec aperçu (dessin, muscles, charge), et deux choix nets : « En attendant » (la machine est reproposée juste après) ou « Remplacer » (retirée de la séance).
-- **Corrections précises** : une série déjà validée se corrige à la valeur exacte (charge, demi-reps, reps en réserve, note). Le repos continue même après une fermeture forcée de l'appli.
+- **Corrections précises** : une série déjà validée se corrige à la valeur exacte (charge, demi-reps, reps en réserve, note). Le repos continue même après une fermeture forcée de l'appli, et le repos réellement pris entre deux séries est toujours enregistré (affiché en petit si « Afficher le repos pris » est coché dans Réglages).
 - **Fourchette de reps réglable** (Réglages) : celle de l'appli, adaptée à chaque exercice, ou la tienne pour tous (8 à 12 par défaut).
 - **Changement de machine visible** : « ✓ Terminé · Machine suivante » avec le dessin du mouvement.
 - **Supersets en option**, séance express, séance à la maison, **séances personnalisées**.
 
 ### Pour progresser
 
-- **Catalogue de 480 exercices** avec dessins du mouvement, muscles travaillés, consignes en français, **recherche par zone du corps** et ta charge sur chaque machine.
+- **Catalogue de 480 exercices** avec dessins du mouvement (un appui sur un dessin ouvre la fiche, partout dans l'appli), muscles travaillés, consignes en français, **recherche par zone du corps** et ta charge sur chaque machine.
 - **Statistiques** : régularité, évolution de la force (1RM estimé), séries par muscle, records.
 - **Récap de fin de séance** : volume gagné depuis la dernière fois, durée, records, et une image à partager.
 - **Historique modifiable**, avec trophées sur les records. Téléphone oublié ? **Ajoute après coup une séance faite sans l'appli** : elle compte dans les stats et le cycle.
@@ -158,14 +158,15 @@ Pour aller plus loin : le cahier des charges [SPEC.md](SPEC.md), l'avancement [P
 
 Tout ce que l'appli embarque a une licence connue ; la page **Crédits** de l'appli liste chaque ressource, chaque auteur et le texte de chaque licence.
 
-| Ressource                                                       | Usage                                     | Licence                                 |
-| --------------------------------------------------------------- | ----------------------------------------- | --------------------------------------- |
-| [free-exercise-db](https://github.com/yuhonas/free-exercise-db) | Catalogue : exercices, muscles, consignes | Domaine public (Unlicense)              |
-| [Everkinetic](https://github.com/everkinetic/data)              | Dessins du mouvement (départ et arrivée)  | CC BY-SA 4.0                            |
-| [wger](https://wger.de)                                         | Quelques dessins complémentaires          | CC BY-SA (auteur noté sur chaque fiche) |
-| [MuscleMapJS](https://github.com/abdofallah/MuscleMapJS)        | Silhouettes des muscles                   | MIT                                     |
-| [Lucide](https://lucide.dev)                                    | Icônes et logo de l'appli (l'haltère)     | ISC                                     |
-| Ionic, Vue, Capacitor et les autres bibliothèques               | Code de l'appli                           | MIT, ISC, BSD, Apache 2.0               |
+| Ressource                                                       | Usage                                       | Licence                                              |
+| --------------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------- |
+| [free-exercise-db](https://github.com/yuhonas/free-exercise-db) | Catalogue : exercices, muscles, consignes   | Domaine public (Unlicense)                           |
+| [Everkinetic](https://github.com/everkinetic/data)              | Dessins du mouvement (départ et arrivée)    | CC BY-SA 4.0                                         |
+| [wger](https://wger.de)                                         | Quelques dessins complémentaires            | CC BY-SA (auteur noté sur chaque fiche)              |
+| Dessins IA (Claude)                                             | Machines cardio, sans dessin libre ailleurs | Licence de Trainerr, signalés « Dessiné par une IA » |
+| [MuscleMapJS](https://github.com/abdofallah/MuscleMapJS)        | Silhouettes des muscles                     | MIT                                                  |
+| [Lucide](https://lucide.dev)                                    | Icônes et logo de l'appli (l'haltère)       | ISC                                                  |
+| Ionic, Vue, Capacitor et les autres bibliothèques               | Code de l'appli                             | MIT, ISC, BSD, Apache 2.0                            |
 
 Les règles d'entraînement (fourchettes de reps, volume par muscle, progression, repos) s'appuient sur des publications citées dans l'appli (onglet **Bien débuter**) et dans [SPEC.md](SPEC.md). Les consignes traduites sont une traduction automatique, signalée comme telle sur chaque fiche, avec le texte original à la demande.
 

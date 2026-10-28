@@ -16,9 +16,10 @@ import {
   WHO_WEEKLY_MINUTES,
   type CardioEntry,
   type DatedCardio,
+  cardioDrawing,
+  type CardioId,
 } from '@/domain/cardio';
 import CardioEntryModal from '@/ui/cardio/CardioEntryModal.vue';
-import CardioIcon from '@/ui/cardio/CardioIcon.vue';
 import { useCardioText } from '@/ui/cardio/useCardioText';
 import MuscleMap from '@/ui/muscleMap/MuscleMap.vue';
 import { useCardio } from '@/ui/session/useCardio';
@@ -28,6 +29,7 @@ const props = defineProps<{ id: string }>();
 
 const { t, n, locale } = useI18n();
 const text = useCardioText();
+const drawingOf = (id: CardioId) => `${import.meta.env.BASE_URL}${cardioDrawing(id)}`;
 const cardio = useCardio();
 
 const machine = computed(() => cardioMachine(props.id));
@@ -76,10 +78,14 @@ async function remove(): Promise<void> {
     <ion-content class="ion-padding">
       <p v-if="!machine">{{ t('cardio.page.unknown') }}</p>
       <template v-else>
-        <div class="hero">
-          <span class="icon"><CardioIcon :icon="machine.icon" :size="40" /></span>
-          <p>{{ t(`cardio.descriptions.${machine.id}`) }}</p>
-        </div>
+        <figure class="drawing">
+          <img
+            :src="drawingOf(machine.id)"
+            :alt="t('cardio.drawing.alt', { name: text.name(machine.id) })"
+          />
+          <figcaption>{{ t('cardio.drawing.ai') }}</figcaption>
+        </figure>
+        <p>{{ t(`cardio.descriptions.${machine.id}`) }}</p>
 
         <h2>{{ t('cardio.page.worked') }}</h2>
         <MuscleMap :primary="machine.primaryMuscles" :secondary="machine.secondaryMuscles" />
@@ -132,21 +138,23 @@ async function remove(): Promise<void> {
 </template>
 
 <style scoped>
-.hero {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.drawing {
+  margin: 0;
 }
-.icon {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 72px;
-  height: 72px;
-  border-radius: var(--tr-radius-m);
-  background: var(--tr-surface-2);
-  color: var(--ion-color-primary);
+.drawing img {
+  display: block;
+  width: 100%;
+  max-height: 220px;
+  padding: 12px;
+  border-radius: 12px;
+  object-fit: contain;
+  /* Black-on-white drawing: white card in the dark theme too. */
+  background: #fff;
+}
+.drawing figcaption {
+  margin-block-start: 6px;
+  color: var(--tr-text-muted);
+  font-size: 0.8rem;
 }
 h2 {
   margin-block: 20px 8px;

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Tapis de course (dessin IA) -->
+  <path d="M30 170 L200 150 Q214 148 214 160 Q214 170 200 172 L42 186 Q28 187 28 178 Z" fill="#fff"/>
+  <path d="M46 176 L196 160"/>
+  <circle cx="42" cy="180" r="4" fill="#111"/>
+  <circle cx="204" cy="161" r="4" fill="#111"/>
+  <path d="M190 156 L176 60"/>
+  <path d="M206 154 L192 58"/>
+  <path d="M160 48 L212 40 Q220 39 220 47 L220 60 Q220 66 213 67 L163 74 Q156 75 156 68 L156 55 Q156 49 160 48 Z" fill="#fff"/>
+  <path d="M170 56 L206 51"/>
+  <path d="M178 78 L130 86 Q122 88 124 96"/>
+  <path d="M190 76 L142 84"/>
+</svg>

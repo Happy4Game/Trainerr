@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Vélo semi-allongé (dessin IA) -->
+  <path d="M20 180 L224 180"/>
+  <path d="M200 180 L196 120"/>
+  <path d="M156 116 L210 112 Q218 112 218 120 L218 128 L160 132 Z" fill="#fff"/>
+  <path d="M190 112 L176 52 Q172 40 184 40 L198 42 Q206 44 206 54 L210 112" fill="#fff"/>
+  <path d="M160 132 L60 140"/>
+  <circle cx="58" cy="128" r="30" fill="#fff"/>
+  <circle cx="58" cy="128" r="7"/>
+  <path d="M58 158 L60 180"/>
+  <path d="M74 112 L84 64"/>
+  <path d="M70 60 L104 54 L108 66 L74 72 Z" fill="#fff"/>
+  <path d="M160 128 L166 152 L178 152"/>
+  <circle cx="84" cy="128" r="9"/>
+  <path d="M84 128 L98 112 L108 112"/>
+</svg>

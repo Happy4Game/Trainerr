@@ -60,6 +60,11 @@ test('cardio: chosen before the session, logged in it, kept in the history and c
   await page.locator('ion-segment-button', { hasText: 'Cardio' }).click();
   await page.getByRole('link', { name: /Rameur/ }).click();
   await expect(page.getByText('Muscles qui travaillent')).toBeVisible();
+  // No free drawing exists: this one comes from an AI, and says so.
+  await expect(page.getByRole('img', { name: 'Dessin : Rameur' })).toBeVisible();
+  await expect(
+    page.getByText('Dessiné par une IA, pas forcément vérifié par un spécialiste.'),
+  ).toBeVisible();
   await expect(
     page.getByText("Cette semaine : 10 min sur les 150 min conseillées par l'OMS."),
   ).toBeVisible();
