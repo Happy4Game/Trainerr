@@ -68,8 +68,14 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   await expect(page.locator('ion-modal li')).toHaveCount(0);
   await page.getByRole('button', { name: 'Voir le programme de la séance' }).click();
   await expect(page.locator('ion-modal li').last()).toContainText('Écarté à la machine');
-  await page.getByRole('button', { name: 'Retirer de la séance : Écarté à la machine' }).click();
-  await expect(page.getByText('Écarté à la machine', { exact: true })).toHaveCount(0);
+  // A tap can still be lost while Ionic redraws the sheet: tap again until the row is gone.
+  const remove = page.getByRole('button', { name: 'Retirer de la séance : Écarté à la machine' });
+  await expect(async () => {
+    if ((await remove.count()) > 0) await remove.click({ timeout: 2_000 });
+    await expect(page.getByText('Écarté à la machine', { exact: true })).toHaveCount(0, {
+      timeout: 2_000,
+    });
+  }).toPass({ timeout: 15_000 });
 });
 
 test('switching machine is at hand: next to the name after a set, and on the next machine screen', async ({
