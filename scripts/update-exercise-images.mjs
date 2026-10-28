@@ -170,7 +170,7 @@ const EVERKINETIC = {
   'Seated_Close-Grip_Concentration_Barbell_Curl': '0242',
   Incline_Dumbbell_Curl: '0214',
   Alternate_Incline_Dumbbell_Curl: '0214',
-  Incline_Inner_Biceps_Curl: '0230',
+  Incline_Inner_Biceps_Curl: '0231',
   Flexor_Incline_Dumbbell_Curls: '0228',
   Dumbbell_Prone_Incline_Curl: '0225',
   Barbell_Curls_Lying_Against_An_Incline: '0215',
@@ -247,6 +247,28 @@ const EVERKINETIC = {
   Air_Bike: '0284',
   'Barbell_Ab_Rollout_-_On_Knees': '0286',
   Dumbbell_Side_Bend: '0294',
+  // Dessins restés inutilisés jusqu'au 28 oct. 2026, rapprochés des fiches sans image.
+  Incline_Cable_Flye: '0060',
+  'One-Arm_Flat_Bench_Dumbbell_Flye': '0071',
+  Seated_Dumbbell_Press: '0012',
+  Cable_Seated_Lateral_Raise: '0035',
+  'Lying_One-Arm_Lateral_Raise': '0037',
+  'One-Arm_Dumbbell_Row': '0024',
+  Smith_Machine_Bent_Over_Row: '0022',
+  'V-Bar_Pullup': '0090',
+  'EZ-Bar_Skullcrusher': '0183',
+  'Dumbbell_Tricep_Extension_-Pronated_Grip': '0184',
+  One_Arm_Pronated_Dumbbell_Triceps_Extension: '0186',
+  'Stiff-Legged_Dumbbell_Deadlift': '0107',
+  'Smith_Machine_Stiff-Legged_Deadlift': '0100',
+  Plie_Dumbbell_Squat: '0152',
+  Weighted_Sissy_Squat: '0158',
+  Barbell_Side_Split_Squat: '0131',
+  Butt_Lift_Bridge: '0109',
+  Side_Bridge: '0113',
+  // Machines d'assistance : le dessin montre le même geste sans l'aide.
+  'trainerr:assisted-pullup': '0087',
+  'trainerr:assisted-dip': '0054',
 };
 
 // Secours : fiche du catalogue → exercice wger (choisi à la main).
@@ -372,15 +394,23 @@ for (const [exerciseId, number] of Object.entries(EVERKINETIC)) {
   };
 }
 
-// 2. wger, pour les fiches restantes
-const images = (await json('https://wger.de/api/v2/exerciseimage/?limit=1000&format=json')).results;
-const infos = new Map(
-  (await json('https://wger.de/api/v2/exerciseinfo/?limit=2000&format=json')).results.map((e) => [
-    e.id,
-    e,
-  ]),
-);
+// 2. wger, pour les fiches restantes. Injoignable (réseau filtré, par exemple) :
+// les dessins Everkinetic suffisent, le script continue sans.
+let images = [];
+let infos = new Map();
+try {
+  images = (await json('https://wger.de/api/v2/exerciseimage/?limit=1000&format=json')).results;
+  infos = new Map(
+    (await json('https://wger.de/api/v2/exerciseinfo/?limit=2000&format=json')).results.map((e) => [
+      e.id,
+      e,
+    ]),
+  );
+} catch (error) {
+  console.warn(`wger.de injoignable, fiches wger ignorées : ${error.message}`);
+}
 for (const [exerciseId, wgerId] of Object.entries(WGER)) {
+  if (images.length === 0) break;
   if (output[exerciseId]) continue;
   const info = infos.get(wgerId);
   const sourceName =
