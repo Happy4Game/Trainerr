@@ -28,9 +28,18 @@ test('a session done without the app is added to the history afterwards', async 
   await set.getByRole('spinbutton').first().fill('100');
   await set.getByRole('spinbutton').first().blur();
 
+  // The drawing opens the machine card, in the Progress tab.
+  await page.getByRole('link', { name: 'Voir la fiche de Presse à cuisses' }).click();
+  await expect(page).toHaveURL(/\/tabs\/history\/exercise\/Leg_Press$/);
+  await page.getByRole('button', { name: 'Progrès' }).click();
+  await expect(page.getByRole('group', { name: /Série 1 : Presse à cuisses/ })).toBeVisible();
+
   await page.getByRole('button', { name: 'Retour' }).click();
   const exercises = page.getByRole('list', { name: 'Exercices de Haut du corps A' });
   await expect(exercises).toContainText('100 kg × 10');
+  await exercises.getByRole('link', { name: 'Voir la fiche de Presse à cuisses' }).click();
+  await expect(page).toHaveURL(/\/tabs\/history\/exercise\/Leg_Press$/);
+  await page.getByRole('button', { name: 'Progrès' }).click();
   await expect(
     page.getByRole('link', {
       name: new RegExp(`^Modifier Haut du corps A · \\S+ ${day.getDate()} `),

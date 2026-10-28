@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openTab, skipOnboarding } from './helpers';
+import { skipOnboarding } from './helpers';
 
 test('the rest really taken between sets is always recorded, shown on demand', async ({ page }) => {
   await page.clock.install();
@@ -10,7 +10,10 @@ test('the rest really taken between sets is always recorded, shown on demand', a
     .getByRole('button', { name: 'Ajouter Développé épaules machine à mes machines' })
     .click();
 
-  await openTab(page, 'Séance');
+  await page
+    .locator('ion-tab-bar')
+    .getByRole('tab', { name: /^Séance/ })
+    .click();
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
   await page.getByRole('button', { name: 'Correct', exact: true }).click();
   await page.clock.fastForward('02:15');
@@ -25,8 +28,18 @@ test('the rest really taken between sets is always recorded, shown on demand', a
   await expect(logged).not.toContainText('repos');
 
   await page.goto('/tabs/settings');
-  await page.getByRole('switch', { name: /Afficher le repos pris/ }).click();
-  await page.goto('/tabs/session');
+  // A tap can be lost while the page settles: tap until the switch is on.
+  const show = page.getByRole('switch', { name: /Afficher le repos pris/ });
+  await expect(async () => {
+    if (!(await show.isChecked())) await show.click({ timeout: 2_000 });
+    await expect(show).toBeChecked({ timeout: 2_000 });
+  }).toPass({ timeout: 15_000 });
+  // Within the app, without reloading: the setting may still be on its way to the database.
+  // Its name in the tab bar also says a session is under way.
+  await page
+    .locator('ion-tab-bar')
+    .getByRole('tab', { name: /^Séance/ })
+    .click();
   // 2 min 15 s of rest, plus the time of the taps.
   await expect(page.locator('section.logged')).toContainText(/repos 2:1\d/, { timeout: 20_000 });
 });

@@ -34,6 +34,7 @@ import {
   updateSet,
   type StoredSet,
 } from '@/data/repositories/sessionRepository';
+import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { restClock, restsTaken } from '@/domain/restTaken';
 import type { Difficulty } from '@/domain/types';
 import { useSettings } from '@/ui/useSettings';
@@ -75,6 +76,12 @@ const nameOf = (id: string) => {
   const e = session.entryOf(id)?.exercise;
   return e ? (locale.value.startsWith('fr') ? e.name : e.nameEn) : id;
 };
+
+const thumbnailOf = (id: string) => {
+  const image = illustrationFor(id)?.images[0];
+  return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
+};
+const cardLink = (id: string) => `/tabs/history/exercise/${encodeURIComponent(id)}`;
 
 const { settings } = useSettings();
 /** Rest really taken before each set, shown when chosen in Settings. */
@@ -194,7 +201,15 @@ async function remove() {
           {{ t('historyEdit.emptyHint') }}
         </p>
         <ion-card v-for="group in groups" :key="group.exerciseId">
-          <ion-card-header>
+          <ion-card-header class="exercise-head">
+            <router-link
+              v-if="thumbnailOf(group.exerciseId)"
+              :to="cardLink(group.exerciseId)"
+              class="thumb"
+              :aria-label="t('session.seeMovementOf', { name: nameOf(group.exerciseId) })"
+            >
+              <img :src="thumbnailOf(group.exerciseId)" alt="" />
+            </router-link>
             <ion-card-title>{{ nameOf(group.exerciseId) }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -372,6 +387,25 @@ async function remove() {
 </template>
 
 <style scoped>
+.exercise-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.thumb {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .cardio-list {
   margin: 0;
   padding: 0;

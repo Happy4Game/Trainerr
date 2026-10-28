@@ -37,7 +37,7 @@ import MuscleMap from '@/ui/muscleMap/MuscleMap.vue';
 import { useCatalog } from '@/ui/useCatalog';
 
 /** `from`: the tab the card was opened from, where "Back" leads. */
-const props = defineProps<{ id: string; from?: 'session' | 'today' }>();
+const props = defineProps<{ id: string; from?: 'session' | 'today' | 'history' }>();
 
 const { t, locale } = useI18n();
 const {
@@ -122,7 +122,9 @@ const muscleList = (muscles: readonly MuscleId[]) =>
                 ? t('exercise.session')
                 : from === 'today'
                   ? t('tabs.today')
-                  : t('common.back')
+                  : from === 'history'
+                    ? t('tabs.history')
+                    : t('common.back')
             "
           />
         </ion-buttons>

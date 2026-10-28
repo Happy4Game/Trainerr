@@ -15,7 +15,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     id: 'drawingsAndRest',
     date: '2026-10-28',
-    items: ['moreDrawings', 'tapDrawing', 'restTaken', 'cardioDrawings'],
+    items: ['moreDrawings', 'tapDrawing', 'historyDrawings', 'restTaken', 'cardioDrawings'],
   },
   {
     id: 'catalogTab',

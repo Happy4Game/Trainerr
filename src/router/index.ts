@@ -51,6 +51,12 @@ const routes: RouteRecordRaw[] = [
       // Progress: sessions, stats and body (weight, measurements, photos).
       { path: 'history', component: () => import('@/views/HistoryPage.vue') },
       { path: 'history/photos', component: () => import('@/views/PhotosPage.vue') },
+      // Machine card opened from the history: stays in the Progress tab.
+      {
+        path: 'history/exercise/:id',
+        component: () => import('@/views/ExercisePage.vue'),
+        props: (route) => ({ id: route.params.id, from: 'history' }),
+      },
       {
         path: 'history/:id',
         component: () => import('@/views/HistorySessionPage.vue'),
