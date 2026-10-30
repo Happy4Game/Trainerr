@@ -48,13 +48,20 @@ beforeEach(async () => {
     gymId: DEFAULT_GYM_ID,
     plan: { exercises: [{ exerciseId: 'Leg_Press', sets: 3 }], queue: startQueue(['Leg_Press']) },
   });
-  await addSet(db, id, { exerciseId: 'Leg_Press', loadKg: 107, reps: 10, difficulty: 'ok' });
+  await addSet(db, id, {
+    exerciseId: 'Leg_Press',
+    loadKg: 107,
+    reps: 10,
+    difficulty: 'ok',
+    doneAt: 1_000_000,
+  });
   await addSet(db, id, {
     exerciseId: 'Leg_Press',
     loadKg: 107,
     reps: 9.5,
     difficulty: 'hard',
     completeReps: false,
+    doneAt: 1_095_000,
   });
   await finishSession(db, id, { exercises: [], queue: startQueue([]) });
   await addMeasurement(db, { date: '2026-10-24', weightKg: 72.5, measurements: { arm: 33 } });
@@ -96,12 +103,30 @@ describe('backup', () => {
     expect(await db.query('SELECT id FROM exercise LIMIT 1')).toHaveLength(1);
   });
 
-  it('exports the sets as CSV', async () => {
+  it('exports the sets as CSV, with the rest really taken', async () => {
+    // Same day, done later: its first set has no rest, even with a time.
+    const id = await startSession(db, {
+      date: '2026-10-24',
+      templateId: 'pushA',
+      gymId: DEFAULT_GYM_ID,
+      plan: { exercises: [], queue: startQueue([]) },
+    });
+    await addSet(db, id, {
+      exerciseId: 'Butterfly',
+      loadKg: 52,
+      reps: 12,
+      difficulty: 'ok',
+      doneAt: 5_000_000,
+    });
+    await addSet(db, id, { exerciseId: 'Butterfly', loadKg: 52, reps: 11, difficulty: 'ok' });
+    await finishSession(db, id, { exercises: [], queue: startQueue([]) });
     const csv = await exportSetsCsv(db);
     expect(csv.split('\n')).toEqual([
-      'date,template,exercise_id,exercise,load_kg,reps,difficulty,warmup,slow_tempo,complete_reps,rir,note',
-      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,10,ok,0,0,1,,',
-      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,9.5,hard,0,0,0,,',
+      'date,template,exercise_id,exercise,load_kg,reps,difficulty,warmup,slow_tempo,complete_reps,rir,note,rest_seconds',
+      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,10,ok,0,0,1,,,',
+      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,9.5,hard,0,0,0,,,95',
+      '2026-10-24,pushA,Butterfly,Écarté à la machine,52,12,ok,0,0,1,,,',
+      '2026-10-24,pushA,Butterfly,Écarté à la machine,52,11,ok,0,0,1,,,',
     ]);
   });
 });

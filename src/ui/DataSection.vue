@@ -96,6 +96,8 @@ async function shareWithCoach(): Promise<void> {
       history: t('coach.history'),
       warmup: t('session.warmupShort'),
       note: t('coach.note'),
+      rest: (time) => t('session.restTaken', { time }),
+      averageRest: (time) => t('coach.averageRest', { time }),
     },
     lang: locale.value,
   });

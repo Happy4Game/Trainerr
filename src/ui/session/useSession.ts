@@ -86,6 +86,7 @@ import { useCatalog } from '@/ui/useCatalog';
 import { PRESET_PREFIX, resolvePreset } from '@/domain/presets';
 import { firstTimeEstimateKg } from '@/domain/firstLoad';
 import { restAfterSet } from '@/domain/restTime';
+import { averageRest } from '@/domain/restTaken';
 import {
   afterMovingSets,
   applySwaps,
@@ -152,6 +153,8 @@ export interface SessionSummary {
   volumeGain?: number;
   /** Minutes of cardio done with the session. */
   cardioMinutes?: number;
+  /** Mean rest really taken between two sets, in seconds, when known. */
+  averageRest?: number;
 }
 const summary = ref<SessionSummary>();
 
@@ -1146,6 +1149,7 @@ async function finish(): Promise<void> {
     const previous = realHistory.value.filter((s) => s.templateId === finished.templateId).at(-1);
     const minutes = sessionMinutes(active.value.plan.startedAt, Date.now());
     const volumeGain = previous && volumeGainPercent(workload(previous.sets), workloadKg);
+    const rest = averageRest(finished.sets);
     summary.value = {
       templateId: finished.templateId,
       sets: work.length,
@@ -1153,6 +1157,7 @@ async function finish(): Promise<void> {
       ...(minutes !== undefined ? { minutes } : {}),
       ...(volumeGain !== undefined ? { volumeGain } : {}),
       ...(cardioMinutes > 0 ? { cardioMinutes } : {}),
+      ...(rest !== undefined ? { averageRest: rest } : {}),
       carryOver,
       records,
       backToLevel,

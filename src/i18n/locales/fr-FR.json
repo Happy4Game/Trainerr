@@ -353,7 +353,8 @@
       "volumeGain": "+{percent} % de volume par rapport à la dernière fois que tu as fait cette séance.",
       "minutes": "Séance bouclée en {minutes} min.",
       "share": "Partager ma séance",
-      "shareGain": "+{percent} % de volume depuis la dernière fois"
+      "shareGain": "+{percent} % de volume depuis la dernière fois",
+      "averageRest": "Repos moyen entre deux séries : {time}."
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",
@@ -977,7 +978,7 @@
       "why": "Le muscle grossit sur une large plage de reps, de 6 à plus de 20, tant que la série finit proche de l'échec. 8 à 12 est un très bon choix. L'appli monte la charge quand tu atteins le haut de la fourchette."
     },
     "showRest": "Afficher le repos pris",
-    "showRestHelp": "Toujours enregistré : le temps entre deux séries s'affiche en petit à côté de chacune, pendant la séance et dans l'historique."
+    "showRestHelp": "Toujours enregistré : le temps entre deux séries s'affiche en petit à côté de chacune, pendant la séance, dans l'historique et en fin de séance (repos moyen). Le partage avec un coach et l'export CSV le contiennent toujours."
   },
   "tips": {
     "title": "Bien débuter",
@@ -1142,6 +1143,7 @@
       "planningTab": "Le Planning revient en onglet",
       "flexibleSession": "Séance plus souple",
       "catalogTab": "Catalogue et Planning en onglets",
+      "restEverywhere": "Le repos dans les exports",
       "drawingsAndRest": "Plus de dessins, repos réellement pris"
     },
     "items": {
@@ -1207,7 +1209,9 @@
       "tapDrawing": "Un appui sur le dessin d'une machine ouvre sa fiche : liste des exercices de la séance, machine suivante, machine occupée, Aujourd'hui…",
       "historyDrawings": "Dans Progrès, chaque séance de l'historique montre le dessin de ses machines ; un appui ouvre leur fiche.",
       "restTaken": "Le repos réellement pris entre deux séries est enregistré. Coche « Afficher le repos pris » dans Réglages pour le voir en petit à côté de chaque série, pendant la séance et dans l'historique.",
-      "cardioDrawings": "Les machines cardio ont un dessin. Aucun dessin libre n'existait : ceux-ci sont faits par une IA, et le disent."
+      "cardioDrawings": "Les machines cardio ont un dessin. Aucun dessin libre n'existait : ceux-ci sont faits par une IA, et le disent.",
+      "restInExports": "Le repos réellement pris entre deux séries apparaît dans le partage avec un coach (avec le repos moyen de chaque séance) et dans l'export CSV.",
+      "restInSummary": "Avec « Afficher le repos pris », la fin de séance montre aussi ton repos moyen."
     }
   },
   "data": {
@@ -1385,7 +1389,8 @@
     "goal": "Objectif",
     "duration": "Durée d'une séance",
     "zone": "Zone à ménager",
-    "note": "Généré par Trainerr. Les charges proposées suivent les règles décrites dans l'appli ; merci pour tes corrections !"
+    "note": "Généré par Trainerr. Les charges proposées suivent les règles décrites dans l'appli ; merci pour tes corrections !",
+    "averageRest": "repos moyen {time}"
   },
   "recap": {
     "share": "Partager mon récap du mois",
