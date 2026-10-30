@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { restClock, restsTaken } from '@/domain/restTaken';
+import { averageRest, restClock, restsBefore, restsTaken } from '@/domain/restTaken';
 import type { SetLog } from '@/domain/types';
 
 const set = (id: string, doneAt?: number): SetLog & { id: string } => ({
@@ -22,6 +22,27 @@ describe('rest really taken', () => {
   it('is missing when a set has no time', () => {
     const rests = restsTaken([set('a', 0), set('b'), set('c', 60_000)]);
     expect(rests.size).toBe(0);
+  });
+});
+
+describe('rest before each set, in order', () => {
+  it('follows the sets, with nothing for the first one', () => {
+    expect(restsBefore([set('a', 0), set('b', 95_400), set('c')])).toEqual([
+      undefined,
+      95,
+      undefined,
+    ]);
+  });
+});
+
+describe('average rest', () => {
+  it('is the mean of the known rests', () => {
+    expect(averageRest([set('a', 0), set('b', 90_000), set('c', 240_000), set('d')])).toBe(120);
+  });
+
+  it('is missing when no rest is known', () => {
+    expect(averageRest([set('a', 0), set('b')])).toBeUndefined();
+    expect(averageRest([])).toBeUndefined();
   });
 });
 

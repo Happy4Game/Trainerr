@@ -62,6 +62,8 @@ date,template,exercise_id,exercise,load_kg,reps,warmup
 | `reps`        | Reps                                                                             |
 | `warmup`      | `1` pour une série d'échauffement, `0` sinon                                     |
 
+L'export de l'appli ajoute d'autres colonnes (ressenti, RIR, note…), dont `rest_seconds` : le repos réellement pris avant la série, en secondes (vide pour la première série d'une séance ou quand l'heure n'est pas connue). Elles sont ignorées à l'import.
+
 Après l'import, l'appli demande par quelle séance continuer : les séances importées ne suivent pas forcément son programme. Le choix se change ensuite dans **Planning → Ordre des séances**.
 
 Les exports de **Strong** et **Hevy** s'importent tels quels.

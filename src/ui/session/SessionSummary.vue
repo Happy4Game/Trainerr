@@ -9,6 +9,8 @@ import { useTemplateName } from '@/ui/useTemplateName';
 import { useUnits } from '@/ui/useUnits';
 import { todayIso } from '@/ui/useWeekPlan';
 import { WHO_WEEKLY_MINUTES } from '@/domain/cardio';
+import { restClock } from '@/domain/restTaken';
+import { useSettings } from '@/ui/useSettings';
 import { useCardio } from './useCardio';
 import { useSession, type SessionSummary } from './useSession';
 
@@ -20,6 +22,7 @@ const session = useSession();
 const templateLabel = useTemplateName();
 const { load: kg } = useUnits();
 const cardio = useCardio();
+const { settings } = useSettings();
 /** Where the week stands against the WHO bar, in moderate minutes. */
 const cardioWeek = computed(() =>
   t('cardio.week.short', {
@@ -96,6 +99,9 @@ async function shareSummary(): Promise<void> {
     </p>
     <p v-if="summary.minutes !== undefined" class="note-line">
       ⏱️ {{ t('session.summary.minutes', { minutes: n(summary.minutes) }) }}
+    </p>
+    <p v-if="settings?.showRest && summary.averageRest !== undefined" class="note-line">
+      ⏸️ {{ t('session.summary.averageRest', { time: restClock(summary.averageRest) }) }}
     </p>
     <p v-if="summary.cardioMinutes !== undefined" class="note-line">
       ❤️ {{ t('cardio.summary', { minutes: n(summary.cardioMinutes) }) }} · {{ cardioWeek }}
