@@ -123,6 +123,9 @@ test('switching machine is at hand: next to the name after a set, and on the nex
   await next.getByRole('button', { name: 'Changer de machine' }).click();
   await expect(page.locator('ion-card.replace')).toBeInViewport();
   await expect(page.locator('ion-card.replace')).toContainText(
-    'Remplacer Développé épaules haltères',
+    'Changer Développé épaules haltères',
   );
+  await expect(
+    page.locator('ion-card.replace').getByRole('radio', { name: /Remplacer/ }),
+  ).toHaveAttribute('aria-checked', 'true');
 });

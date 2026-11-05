@@ -302,20 +302,14 @@
     "slowTempo": "Slow tempo",
     "howWasIt": "How was it?",
     "busy": "Machine taken",
-    "busyTitle": "{name} is taken",
-    "busyHelp": "Two choices: \"Meanwhile\" has you do another machine now, and {name} is offered again right after. \"Replace\" takes it out of the session for good.",
     "alternative": {
       "substitute": "Same muscles",
       "swap": "Next exercise of the workout",
       "take": "I'll take this one",
       "choose": "Take {name}",
       "none": "No other machine for these muscles in your favorites: wait a bit or move on.",
-      "meanwhile": "Meanwhile",
-      "meanwhileNamed": "Do {name} meanwhile",
-      "replace": "Replace",
-      "replaceNamed": "Replace {busy} with {name}"
+      "meanwhileNamed": "Do {name} meanwhile"
     },
-    "continue": "Go on with the rest",
     "isFree": "Is {name} free?",
     "free": "Yes, going",
     "stillBusy": "Still taken",
@@ -492,7 +486,6 @@
     },
     "replaceCard": {
       "open": "Change machine",
-      "title": "Replace {name}",
       "help": "Same movement on another machine: the suggested load is the one of that machine.",
       "keepDone": "{count} set already done stays on {name}. The new machine takes the sets left. | {count} sets already done stay on {name}. The new machine takes the sets left.",
       "mine": "My machine",
@@ -555,6 +548,17 @@
         "same": "same as last time",
         "down": "less than last time"
       }
+    },
+    "switch": {
+      "title": "Change {name}",
+      "why": "Why are you changing?",
+      "busy": "Taken",
+      "busySub": "I'll come back to it",
+      "replace": "Replace",
+      "replaceSub": "for the whole session",
+      "busyHelp": "Do another machine now: {name} comes back right after.",
+      "later": "Nothing, I'll go to the next exercise",
+      "cancel": "Cancel, I'm staying on {name}"
     }
   },
   "availability": {
@@ -1321,7 +1325,8 @@
       "failureKept": "\"Failure\" means \"all out, last rep missed\": with your reps in your range, the load stays (in the session and next time). It only goes down below the range.",
       "restPreview": "Clearer feeling buttons: an arrow for the load of the next set, and the length of the rest they start.",
       "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card.",
-      "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better."
+      "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better.",
+      "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it."
     }
   },
   "data": {

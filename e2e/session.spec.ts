@@ -43,23 +43,36 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
 
-  // The machine gets taken: two clear choices, another machine meanwhile, or a replacement for good.
+  // The machine gets taken: one sheet, "taken, I'll come back" already chosen.
+  const sheet = page.locator('ion-card.replace');
+  // Leaving the sheet changes nothing, and it does not stay on screen.
   await page.getByRole('button', { name: 'Machine occupée' }).click();
-  await expect(page.getByText('Développé épaules machine est occupée')).toBeVisible();
-  // Each machine offered comes with a preview: drawing, muscles, load, movement.
-  const offer = page.getByRole('listitem').filter({ hasText: 'Écarté à la machine' });
+  await expect(sheet.getByRole('radio', { name: /Occupée/ })).toHaveAttribute(
+    'aria-checked',
+    'true',
+  );
+  await sheet
+    .getByRole('button', { name: 'Annuler, je reste sur Développé épaules machine' })
+    .click();
+  await expect(sheet).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
+  await expect(page.getByText('Série 2 sur 3')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Machine occupée' }).click();
+  await expect(sheet.getByText(/Développé épaules machine revient juste après/)).toBeVisible();
+  // Each machine offered comes with a preview: drawing, muscles, load.
+  const offer = sheet.getByRole('listitem').filter({ hasText: 'Écarté à la machine' });
   await expect(offer.getByText(/Pectoraux/)).toBeVisible();
-  await expect(offer.getByRole('link', { name: 'Voir le mouvement' })).toBeVisible();
-  // The drawing opens the machine card too, as everywhere else.
+  // The drawing opens the machine card, as everywhere else.
   await expect(
     offer.getByRole('link', { name: 'Voir la fiche de Écarté à la machine' }),
   ).toBeVisible();
-  await expect(
-    offer.getByRole('button', {
-      name: 'Remplacer Développé épaules machine par Écarté à la machine',
-    }),
-  ).toBeVisible();
+  // The other choice is one tap away, in the same sheet.
+  await sheet.getByRole('radio', { name: /Remplacer/ }).click();
+  await expect(sheet.getByText(/pour toute la séance/)).toBeVisible();
+  await sheet.getByRole('radio', { name: /Occupée/ }).click();
   await offer.getByRole('button', { name: 'Faire Écarté à la machine en attendant' }).click();
+  await expect(sheet).toHaveCount(0);
   await expect(page.getByRole('region', { name: 'Écarté à la machine' })).toBeVisible();
 
   // Survives a reload in the middle of the workout.

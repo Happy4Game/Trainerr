@@ -863,16 +863,6 @@ const sessionMuscles = computed<MuscleId[]>(() => {
   return [...muscles];
 });
 
-/**
- * The busy machine replaced for good: the other one is done now, and the
- * busy one is not offered again in this session.
- */
-async function replaceBusyMachine(busyId: string, withId: string): Promise<void> {
-  await replaceExercise(busyId, withId);
-  if (!active.value) return;
-  await updatePlan({ ...active.value.plan, queue: startNow(active.value.plan.queue, withId) });
-}
-
 async function machineFree(exerciseId: string): Promise<void> {
   if (!active.value) return;
   await updatePlan({ ...active.value.plan, queue: startNow(active.value.plan.queue, exerciseId) });
@@ -1368,7 +1358,6 @@ export function useSession() {
     removeSessionSet,
     markMachineBusy,
     chooseAlternative,
-    replaceBusyMachine,
     sessionMuscles,
     machineFree,
     machineStillBusy,

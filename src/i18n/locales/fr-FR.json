@@ -302,20 +302,14 @@
     "slowTempo": "Tempo lent",
     "howWasIt": "Comment c'était ?",
     "busy": "Machine occupée",
-    "busyTitle": "{name} est occupée",
-    "busyHelp": "Deux choix : « En attendant » te fait faire une autre machine maintenant, et {name} t'est reproposée juste après. « Remplacer » la retire de la séance pour de bon.",
     "alternative": {
       "substitute": "Mêmes muscles",
       "swap": "Exercice suivant de la séance",
       "take": "Je prends celle-ci",
       "choose": "Prendre {name}",
       "none": "Pas d'autre machine pour ces muscles dans tes favoris : attends un peu ou passe à la suite.",
-      "meanwhile": "En attendant",
-      "meanwhileNamed": "Faire {name} en attendant",
-      "replace": "Remplacer",
-      "replaceNamed": "Remplacer {busy} par {name}"
+      "meanwhileNamed": "Faire {name} en attendant"
     },
-    "continue": "Continuer avec la suite",
     "isFree": "{name} est libre ?",
     "free": "Oui, j'y vais",
     "stillBusy": "Toujours occupée",
@@ -492,7 +486,6 @@
     },
     "replaceCard": {
       "open": "Changer de machine",
-      "title": "Remplacer {name}",
       "help": "Même mouvement sur une autre machine : la charge proposée est celle de cette machine.",
       "keepDone": "{count} série déjà faite reste sur {name}. La nouvelle machine reprend les séries qui restent. | {count} séries déjà faites restent sur {name}. La nouvelle machine reprend les séries qui restent.",
       "mine": "Ma machine",
@@ -555,6 +548,17 @@
         "same": "pareil que la dernière fois",
         "down": "moins que la dernière fois"
       }
+    },
+    "switch": {
+      "title": "Changer {name}",
+      "why": "Pourquoi tu changes ?",
+      "busy": "Occupée",
+      "busySub": "j'y reviens après",
+      "replace": "Remplacer",
+      "replaceSub": "pour toute la séance",
+      "busyHelp": "Fais une autre machine maintenant : {name} revient juste après.",
+      "later": "Rien, je passe à l'exercice suivant",
+      "cancel": "Annuler, je reste sur {name}"
     }
   },
   "availability": {
@@ -1321,7 +1325,8 @@
       "failureKept": "« Échec » veut dire « à fond, dernière rep ratée » : si tes reps sont dans ta fourchette, la charge reste la même (pendant la séance et la fois suivante). Elle ne baisse que sous la fourchette.",
       "restPreview": "Boutons de ressenti plus clairs : une flèche pour la charge de la série suivante, et la durée du repos qu'ils lancent.",
       "machineRange": "Ta fourchette de reps pour une machine précise (12–20 à la presse, par exemple), sur sa fiche.",
-      "compareSets": "Pendant la séance, tes séries d'aujourd'hui à côté de celles de la dernière fois, série par série, avec une flèche verte quand tu fais mieux."
+      "compareSets": "Pendant la séance, tes séries d'aujourd'hui à côté de celles de la dernière fois, série par série, avec une flèche verte quand tu fais mieux.",
+      "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes."
     }
   },
   "data": {
