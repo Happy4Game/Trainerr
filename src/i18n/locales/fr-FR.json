@@ -543,7 +543,25 @@
       "morning": "Matin",
       "noon": "Midi",
       "evening": "Soir",
-      "late": "Tard"
+      "late": "Tard",
+      "early": "Tôt",
+      "afternoon": "Après-midi"
+    },
+    "everyDay": "{period} tous les jours",
+    "columnHint": "Un appui sur le nom d'un créneau le coche pour toute la semaine.",
+    "custom": {
+      "title": "Créneaux précis",
+      "none": "Aucun pour l'instant. Pratique pour 7 h 15–8 h 30 ou une pause de midi plus longue.",
+      "open": "Ajouter un créneau précis",
+      "days": "Jours",
+      "weekdays": "Du lundi au vendredi",
+      "everyDay": "Tous les jours",
+      "from": "De",
+      "to": "À",
+      "add": "Ajouter",
+      "invalid": "Indique une heure de début et une heure de fin.",
+      "tooShort": "Le créneau doit durer au moins {minutes} min.",
+      "remove": "Retirer le créneau du {day}, {start}–{end}"
     }
   },
   "models": {
@@ -615,7 +633,7 @@
     },
     "notifications": {
       "question": "Des rappels ?",
-      "why": "Un rappel 1 h avant chaque séance prévue, et un petit mot si ça fait longtemps. Au maximum une notification par jour, jamais entre 22 h et 8 h.",
+      "why": "Un rappel avant chaque séance prévue, ta semaine le lundi matin, et un petit mot si ça fait longtemps. Au maximum 2 notifications par jour, jamais entre 22 h et 8 h. Chaque type se coupe dans les Réglages.",
       "privacy": "Tout reste sur ton téléphone : aucun serveur, aucune donnée envoyée.",
       "accept": "Activer les rappels",
       "later": "Plus tard"
@@ -673,7 +691,11 @@
   "notifications": {
     "reminder": "{template} à {time} aujourd'hui. Ta séance t'attend !",
     "nudge": "Ça fait {days} jours. Une séance courte de 30 min, ça te dit ?",
-    "tip": "Le savais-tu ? {title}"
+    "tip": "Le savais-tu ? {title}",
+    "eve": "Demain à {time} : {template}. Prépare ton sac ce soir !",
+    "weekPlan": "Ta semaine : {count} séance prévue, {template} {day} à {time}. | Ta semaine : {count} séances prévues, la première {day} à {time} ({template}).",
+    "weighIn": "Pesée de la semaine : au réveil, avant le petit-déjeuner, comme la dernière fois.",
+    "photo": "{weeks} semaines depuis ta dernière photo. Une nouvelle, même pose et même lumière ?"
   },
   "history": {
     "empty": "Pas encore de séance terminée.",
@@ -816,7 +838,7 @@
     "title": "Suivi du corps",
     "weight": "Poids ({unit})",
     "arm": "Bras (cm)",
-    "waist": "Taille (cm)",
+    "waist": "Tour de taille (cm)",
     "save": "Enregistrer",
     "privacy": "Ces données restent sur ton téléphone et ne sont jamais synchronisées.",
     "cm": "{value} cm",
@@ -830,7 +852,8 @@
       "title": "Photos du corps",
       "help": "Une photo par mois, même lumière, même endroit, même pose : plus parlant que le miroir. Elles restent sur ton téléphone.",
       "take": "Prendre une photo",
-      "alt": "Photo du {date}"
+      "alt": "Photo du {date}",
+      "recent": "Dernières photos"
     },
     "front": "Face",
     "back": "Dos",
@@ -900,6 +923,51 @@
         "busy": "La caméra est déjà utilisée par une autre appli.",
         "other": "La caméra n'a pas pu démarrer."
       }
+    },
+    "names": {
+      "arm": "Bras",
+      "waist": "Tour de taille"
+    },
+    "viewer": {
+      "previous": "Photo précédente",
+      "next": "Photo suivante",
+      "position": "{n} sur {total}",
+      "zoomIn": "Agrandir",
+      "zoomOut": "Revenir à la taille normale",
+      "compare": "Comparer avec une autre photo"
+    },
+    "compare": {
+      "title": "Comparer",
+      "open": "Comparer en détail",
+      "needTwo": "Il faut au moins deux photos pour comparer.",
+      "needTwoPose": "Il faut au moins deux photos de cette pose. Choisis une autre pose ou prends-en une nouvelle.",
+      "allPoses": "Toutes les poses sont mélangées : pour bien voir le changement, compare plutôt la même pose.",
+      "mode": "Affichage",
+      "modes": {
+        "side": "Côte à côte",
+        "slider": "Curseur",
+        "fade": "Fondu"
+      },
+      "before": "Avant",
+      "after": "Après",
+      "sliderLabel": "Curseur : à gauche la photo d'avant, à droite celle d'après",
+      "fadeLabel": "Fondu de la photo d'avant vers celle d'après",
+      "facts": "Entre les deux photos",
+      "weight": "Poids : {before} → {after} ({change}).",
+      "noWeight": "Pèse-toi les jours de photo pour voir aussi l'écart de poids.",
+      "shortcuts": "Choix rapides pour la photo d'avant",
+      "first": "Première photo",
+      "monthsAgo": "Il y a {count} mois | Il y a {count} mois",
+      "swap": "Inverser",
+      "pick": {
+        "before": "Photo d'avant",
+        "after": "Photo d'après"
+      },
+      "pickNamed": {
+        "before": "Prendre la photo du {date} comme photo d'avant",
+        "after": "Prendre la photo du {date} comme photo d'après"
+      },
+      "toGallery": "Retour à ma galerie"
     }
   },
   "settings": {
@@ -932,12 +1000,12 @@
     "kinds": {
       "sessionReminder": "Rappel avant une séance",
       "nudge": "Relance douce",
-      "record": "Record battu",
-      "streak": "Régularité",
-      "backToLevel": "Retour au niveau",
-      "tip": "Conseil de la semaine"
+      "tip": "Conseil de la semaine",
+      "weekPlan": "Ma semaine, le lundi matin",
+      "weighIn": "Pesée de la semaine",
+      "photo": "Photo du mois"
     },
-    "quietHours": "Jamais de notification entre {start} et {end}, ni pendant tes créneaux bloqués.",
+    "quietHours": "Au maximum 2 notifications par jour, jamais entre {start} et {end}, ni pendant tes créneaux bloqués. Un appui sur une notification ouvre le bon écran.",
     "language": {
       "title": "Langue et unités",
       "label": "Langue",
@@ -978,7 +1046,15 @@
       "why": "Le muscle grossit sur une large plage de reps, de 6 à plus de 20, tant que la série finit proche de l'échec. 8 à 12 est un très bon choix. L'appli monte la charge quand tu atteins le haut de la fourchette."
     },
     "showRest": "Afficher le repos pris",
-    "showRestHelp": "Toujours enregistré : le temps entre deux séries s'affiche en petit à côté de chacune, pendant la séance, dans l'historique et en fin de séance (repos moyen). Le partage avec un coach et l'export CSV le contiennent toujours."
+    "showRestHelp": "Toujours enregistré : le temps entre deux séries s'affiche en petit à côté de chacune, pendant la séance, dans l'historique et en fin de séance (repos moyen). Le partage avec un coach et l'export CSV le contiennent toujours.",
+    "kindsHelp": {
+      "sessionReminder": "1 h avant la séance, ou la veille à 20 h pour une séance tôt le matin.",
+      "nudge": "Un petit mot quand ça fait 3 jours de plus que ton rythme habituel.",
+      "weekPlan": "Le nombre de séances prévues et la première de la semaine.",
+      "weighIn": "Une semaine après ta dernière pesée, si tu te pèses dans l'appli.",
+      "photo": "4 semaines après ta dernière photo, si tu en prends.",
+      "tip": "Une fiche « Bien débuter », le dimanche soir."
+    }
   },
   "tips": {
     "title": "Bien débuter",
@@ -1144,7 +1220,8 @@
       "flexibleSession": "Séance plus souple",
       "catalogTab": "Catalogue et Planning en onglets",
       "restEverywhere": "Le repos dans les exports",
-      "drawingsAndRest": "Plus de dessins, repos réellement pris"
+      "drawingsAndRest": "Plus de dessins, repos réellement pris",
+      "photosAndReminders": "Photos, créneaux et rappels"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1188,7 +1265,7 @@
       "usualLoadsToday": "Tu t'entraînes déjà ? Note tes charges habituelles dès la page Aujourd'hui, avant ta première séance.",
       "photoGallery": "Historique › Corps › Ma galerie : tes photos mois par mois, avec le nombre de séances faites à chaque photo.",
       "photoImport": "Prends une photo devant le miroir ou importe celles de ta galerie, en une fois. La date se corrige si besoin.",
-      "photoCompare": "Classe-les par pose (face, profil, dos) et compare la première et la dernière côte à côte. Elles restent sur ton téléphone.",
+      "photoCompare": "Nouvelle page « Comparer » : choisis les deux photos (ou « il y a 1, 3, 6 mois »), côte à côte, avec un curseur ou en fondu, et l'écart de poids entre les deux.",
       "cardioSessions": "Séance › « Ajouter du cardio à mes séances » : choisis la machine, la durée, et avant ou après la muscu, avec le conseil des études pour ta séance du jour.",
       "cardioLog": "Pendant la séance, saisis tes perfs de cardio : durée, distance, vitesse, pente, niveau, cadence, fréquence cardiaque et calories, selon la machine.",
       "cardioCatalog": "Catalogue › Cardio : chaque machine avec les muscles travaillés et tes perfs, et ta semaine comparée au repère de l'OMS (150 min).",
@@ -1211,7 +1288,15 @@
       "restTaken": "Le repos réellement pris entre deux séries est enregistré. Coche « Afficher le repos pris » dans Réglages pour le voir en petit à côté de chaque série, pendant la séance et dans l'historique.",
       "cardioDrawings": "Les machines cardio ont un dessin. Aucun dessin libre n'existait : ceux-ci sont faits par une IA, et le disent.",
       "restInExports": "Le repos réellement pris entre deux séries apparaît dans le partage avec un coach (avec le repos moyen de chaque séance) et dans l'export CSV.",
-      "restInSummary": "Avec « Afficher le repos pris », la fin de séance montre aussi ton repos moyen."
+      "restInSummary": "Avec « Afficher le repos pris », la fin de séance montre aussi ton repos moyen.",
+      "photoViewer": "Chaque photo du corps s'ouvre en grand, partout : flèches ou glissement pour passer à la suivante, zoom d'un appui.",
+      "moreSlots": "Plus de créneaux de disponibilité : tôt le matin (6 h–8 h) et l'après-midi (14 h–18 h). Un appui sur le nom d'un créneau le coche toute la semaine.",
+      "exactSlots": "Créneaux précis à l'heure près (par exemple 7 h 15–8 h 30), pour un jour, la semaine ou tous les jours.",
+      "moreReminders": "Nouveaux rappels : ta semaine le lundi matin, la pesée de la semaine, la photo du mois, et la veille au soir pour une séance tôt le matin. Au maximum 2 par jour.",
+      "reminderTap": "Un appui sur une notification ouvre le bon écran.",
+      "fixPastReminders": "Corrigé : un rappel dont l'heure était passée partait tout de suite après un changement de réglage.",
+      "fixPlanningStart": "Corrigé : le Planning ne parle plus de séances « non faites » avant ton premier jour avec l'appli.",
+      "fixDisplay": "Corrigé : textes d'aide coupés dans les Réglages, unité « cm » en double dans les mensurations, avant/après qui mélangeait face et dos."
     }
   },
   "data": {
@@ -1279,7 +1364,8 @@
   },
   "common": {
     "back": "Retour",
-    "close": "Fermer"
+    "close": "Fermer",
+    "cancel": "Annuler"
   },
   "badges": {
     "firstSession": "Première séance",

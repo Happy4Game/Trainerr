@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  closestPhoto,
   importedPhotoDate,
   lastPhotoOfPose,
   photoComparison,
   photosOfPose,
   photoTimeline,
+  samePoseComparison,
+  weightAround,
   type DatedPhoto,
 } from '@/domain/photos';
 
@@ -58,5 +61,61 @@ describe('camera overlay', () => {
   it('shows the newest photo of each pose', () => {
     const shots = photos.map((p) => ({ ...p, photo: `data:${p.id}` }));
     expect(lastPhotoOfPose(shots)).toEqual({ front: 'data:c', side: 'data:b' });
+  });
+
+  it("compares one pose only: the newest photo's pose, never front against back", () => {
+    const mixed: DatedPhoto[] = [
+      { id: 'back1', date: '2026-08-01', pose: 'back' },
+      ...photos,
+      { id: 'back2', date: '2026-10-30', pose: 'back' },
+    ];
+    expect(samePoseComparison(mixed, sessions)).toMatchObject({
+      before: { id: 'back1' },
+      after: { id: 'back2' },
+    });
+    expect(samePoseComparison(mixed, sessions, 'front')).toMatchObject({
+      before: { id: 'a' },
+      after: { id: 'c' },
+    });
+    // The newest pose has a single photo: the newest pose with two is compared.
+    const lonely = [
+      ...mixed.slice(0, -1),
+      { id: 'side2', date: '2026-11-01', pose: 'side' as const },
+    ];
+    expect(
+      samePoseComparison(
+        lonely.filter((p) => p.id !== 'b'),
+        sessions,
+      ),
+    ).toMatchObject({
+      before: { id: 'a' },
+      after: { id: 'c' },
+    });
+    // Nothing tagged: every photo counts.
+    const untagged = [
+      { id: 'x', date: '2026-09-01' },
+      { id: 'y', date: '2026-10-01' },
+    ];
+    expect(samePoseComparison(untagged, [])).toMatchObject({
+      before: { id: 'x' },
+      after: { id: 'y' },
+    });
+  });
+
+  it('finds the photo nearest to a date, for "a month ago"', () => {
+    expect(closestPhoto(photos, '2026-09-26')?.id).toBe('b');
+    expect(closestPhoto([], '2026-09-26')).toBeUndefined();
+  });
+
+  it('takes the weighing nearest to a photo, within a week only', () => {
+    const weighings = [
+      { date: '2026-09-01', weightKg: 82 },
+      { date: '2026-09-05' },
+      { date: '2026-10-20', weightKg: 80.4 },
+      { date: '2026-10-25', weightKg: 80 },
+    ];
+    expect(weightAround(weighings, '2026-10-27')).toBe(80);
+    expect(weightAround(weighings, '2026-09-04')).toBe(82);
+    expect(weightAround(weighings, '2026-09-20')).toBeUndefined();
   });
 });

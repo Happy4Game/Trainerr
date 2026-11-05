@@ -25,6 +25,8 @@ export function weekOverview(input: {
   }[];
   done: readonly SessionLog[];
   today: IsoDate;
+  /** First day with the app: a slot before it was never a session to do. */
+  since?: IsoDate | undefined;
 }): {
   days: DayView[];
   doneCount: number;
@@ -40,6 +42,7 @@ export function weekOverview(input: {
       ...(day.slot ? { slot: day.slot } : {}),
     };
     if (log) return { ...base, status: 'done', doneTemplateId: log.templateId };
+    if (input.since && day.date < input.since) return { date: day.date, status: 'rest' };
     if (day.slot) return { ...base, status: 'missed' };
     if (!day.session) return { ...base, status: 'rest' };
     if (day.date === input.today) return { ...base, status: 'today' };

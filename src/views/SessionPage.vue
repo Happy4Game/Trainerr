@@ -146,7 +146,8 @@ const remainingExercises = computed(() => {
     .map((id) => session.entryOf(id)?.exercise)
     .filter((e): e is CatalogExercise => !!e);
 });
-const today = () => new Date().toISOString().slice(0, 10);
+// The phone's day, not UTC: a session after midnight belongs to the new day.
+const today = todayIso;
 // Same discomfort reported again this week: the advice gets stronger.
 const reportsThisWeek = computed(() => {
   const counts: Record<string, number> = {};

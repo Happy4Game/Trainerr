@@ -195,10 +195,11 @@ function earliestStart(input: PlanningInput, weekday: Weekday): number | undefin
     .filter((slot) => slot.weekday === weekday)
     .map((slot) => [timeToMinutes(slot.start), timeToMinutes(slot.end)] as const);
 
-  const free = input.freeSlots
-    .filter((slot) => slot.weekday === weekday)
-    .map((slot) => [timeToMinutes(slot.start), timeToMinutes(slot.end)] as const)
-    .sort(([a], [b]) => a - b);
+  const free = mergeRanges(
+    input.freeSlots
+      .filter((slot) => slot.weekday === weekday)
+      .map((slot) => [timeToMinutes(slot.start), timeToMinutes(slot.end)] as const),
+  );
 
   for (const [freeStart, freeEnd] of free) {
     for (
@@ -211,6 +212,20 @@ function earliestStart(input: PlanningInput, weekday: Weekday): number | undefin
     }
   }
   return undefined;
+}
+
+/**
+ * Free ranges that touch or overlap become one: "noon" (12:00–14:00) and
+ * "afternoon" (14:00–18:00) leave room for a session at 13:30.
+ */
+function mergeRanges(ranges: readonly (readonly [number, number])[]): [number, number][] {
+  const merged: [number, number][] = [];
+  for (const [start, end] of [...ranges].sort(([a], [b]) => a - b)) {
+    const last = merged.at(-1);
+    if (last && start <= last[1]) last[1] = Math.max(last[1], end);
+    else merged.push([start, end]);
+  }
+  return merged;
 }
 
 function conflictsWithSport(

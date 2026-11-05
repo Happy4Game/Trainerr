@@ -250,21 +250,23 @@ Les séries d'échauffement et les séries en tempo lent sont exclues des courbe
 
 ## Notifications de motivation
 
-L'appli envoie au maximum 1 notification par jour, uniquement si l'utilisateur l'a accepté, et toujours en lien avec son propre planning ou ses propres résultats.
+L'appli envoie au maximum 2 notifications par jour, uniquement si l'utilisateur l'a accepté, et toujours en lien avec son propre planning ou ses propres résultats.
 
 | Type | Déclencheur | Exemple de message |
 | --- | --- | --- |
-| Rappel de séance | Séance prévue dans le planning, 1 h avant le créneau | « Push A ce soir à 21h : DC à 18 kg au programme. » |
+| Rappel de séance | Séance prévue dans le planning, 1 h avant le créneau (la veille à 20 h si 1 h avant tombe dans les heures de silence) | « Push A ce soir à 21h : DC à 18 kg au programme. » |
 | Relance douce | Aucune séance depuis 3 jours de plus que le rythme visé | « Ça fait 4 jours. Une séance courte de 30 min, ça te dit ? » |
-| Record battu | Nouveau record de charge ou de 1RM estimé | « Nouveau record au leg press : 107 kg × 10. » |
-| Régularité | Semaine au rythme visé atteinte | « 3e semaine d'affilée au rythme. Continue. » |
-| Retour au niveau | Un exercice atteint 100 % en mode reprise | « Tu as retrouvé ton niveau d'avant au DC haltères. » |
+| Semaine à venir | Lundi 8 h 30, s'il y a des séances prévues | « Ta semaine : 4 séances prévues, la première mardi à 18:00 (Push A). » |
+| Pesée | 7 jours après la dernière pesée, 8 h 30, si l'utilisateur se pèse | « Pesée de la semaine : au réveil, avant le petit-déjeuner. » |
+| Photo | 28 jours après la dernière photo, 10 h, si l'utilisateur en prend | « 4 semaines depuis ta dernière photo. » |
 | Conseil | 1 fois par semaine au plus, fiche de la page « Bien débuter » | « Le savais-tu ? Machines et poids libres font autant grossir le muscle. » |
+
+Records, semaines au rythme et retour au niveau ne sont pas des notifications : ils arrivent pendant que l'appli est ouverte, et s'affichent dans le récap de fin de séance.
 
 **Règles**
 
 - **Permission demandée au bon moment** : après le questionnaire, avec une phrase qui explique à quoi servent les notifications, jamais au premier écran. Android (depuis la version 13) et iOS exigent une autorisation explicite.
-- **Plafond** : 1 notification par jour, aucune pendant les heures de silence (par défaut 22h–8h, réglable) ni pendant les créneaux bloqués (cours, autre sport).
+- **Plafond** : 2 notifications par jour (1 rappel de séance au plus), jamais pour une heure déjà passée, aucune pendant les heures de silence (par défaut 22h–8h, réglable) ni pendant les créneaux bloqués (cours, autre sport).
 - **Ton** : encourageant, jamais culpabilisant ; pas de « tu as raté », pas de compte à rebours, pas de fausse urgence.
 - **Réglages** : chaque type s'active ou se désactive séparément, plus un interrupteur général.
 - **Pas de relance** si une gêne ou une douleur a été signalée récemment : le repos passe avant.

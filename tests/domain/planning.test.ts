@@ -143,6 +143,28 @@ describe('weekly planning', () => {
     expect(plan.sessions[0]).toMatchObject({ weekday: 1, start: '20:30', end: '21:30' });
   });
 
+  it('joins slots that touch: a session can run from noon into the afternoon', () => {
+    const plan = planWeek(
+      input({
+        sessionsPerWeek: 1,
+        sessionMinutes: 90,
+        freeSlots: [
+          { weekday: 1, start: '14:00', end: '18:00' },
+          { weekday: 1, start: '12:00', end: '14:00' },
+        ],
+        blockedSlots: [{ weekday: 1, start: '12:00', end: '13:00' }],
+      }),
+    );
+    expect(plan.sessions[0]).toMatchObject({ weekday: 1, start: '13:00', end: '14:30' });
+  });
+
+  it('places early-morning sessions', () => {
+    const plan = planWeek(
+      input({ sessionsPerWeek: 1, freeSlots: [{ weekday: 2, start: '06:00', end: '08:00' }] }),
+    );
+    expect(plan.sessions[0]).toMatchObject({ weekday: 2, start: '06:00', end: '07:00' });
+  });
+
   it('places late sessions: quiet hours only apply to notifications', () => {
     const plan = planWeek(
       input({
@@ -227,13 +249,16 @@ describe('weekly planning', () => {
                 start < timeToMinutes(blocked.end) && timeToMinutes(blocked.start) < end;
               expect(overlaps).toBe(false);
             }
-            const insideFree = p.freeSlots.some(
-              (free) =>
-                free.weekday === session.weekday &&
-                timeToMinutes(free.start) <= start &&
-                end <= timeToMinutes(free.end),
-            );
-            expect(insideFree).toBe(true);
+            // Free time all along, possibly over two slots that touch.
+            for (let minute = start; minute < end; minute++) {
+              const free = p.freeSlots.some(
+                (slot) =>
+                  slot.weekday === session.weekday &&
+                  timeToMinutes(slot.start) <= minute &&
+                  minute < timeToMinutes(slot.end),
+              );
+              expect(free).toBe(true);
+            }
           }
           const days = new Set(plan.sessions.map((s) => s.weekday));
           expect(days.size).toBe(plan.sessions.length); // at most one session a day

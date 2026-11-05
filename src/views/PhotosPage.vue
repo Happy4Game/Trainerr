@@ -5,31 +5,31 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
-  IonInput,
-  IonModal,
   IonPage,
   IonSegment,
   IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { Camera, ImagePlus } from 'lucide-vue-next';
+import { Camera, Columns2, ImagePlus } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
   importedPhotoDate,
   lastPhotoOfPose,
   PHOTO_POSES,
-  photoComparison,
   photosOfPose,
   photoTimeline,
+  samePoseComparison,
   type PhotoPose,
 } from '@/domain/photos';
 import CameraCapture from '@/ui/body/CameraCapture.vue';
+import PhotoViewer from '@/ui/body/PhotoViewer.vue';
 import { useBodyMeasurements, type BodyPhoto } from '@/ui/body/useBodyMeasurements';
 import { readPhoto } from '@/ui/photo';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso } from '@/ui/useWeekPlan';
+import { useRouter } from 'vue-router';
 
 /**
  * Body photos over time: taken with the camera inside the app or imported
@@ -45,9 +45,9 @@ const body = useBodyMeasurements();
 const photos = body.photos;
 const pose = ref<PhotoPose | 'all'>('all');
 const busy = ref(false);
-const opened = ref<Photo>();
-const confirmDelete = ref(false);
+const opened = ref<string>();
 const camera = ref(false);
+const router = useRouter();
 
 onMounted(body.reload);
 
@@ -58,11 +58,14 @@ const shown = computed(() =>
 const months = computed(() => photoTimeline(shown.value, sessionDates.value));
 /** Side by side: the same pose only, so that the change is the body, not the angle. */
 const comparison = computed(() =>
-  photoComparison(
-    pose.value === 'all' ? shown.value : shown.value.filter((p) => p.pose === pose.value),
+  samePoseComparison(
+    shown.value,
     sessionDates.value,
+    pose.value === 'all' ? undefined : pose.value,
   ),
 );
+/** In the order of the screen, newest first: the viewer's arrows follow it. */
+const ordered = computed(() => months.value.flatMap((m) => m.photos.map((p) => p.photo)));
 
 const monthName = (month: string) =>
   new Intl.DateTimeFormat(locale.value, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
@@ -101,26 +104,11 @@ async function taken(photo: string, takenPose: PhotoPose): Promise<void> {
   await body.add({ date: todayIso(), measurements: {}, photo, pose: takenPose });
 }
 
-function open(photo: Photo): void {
-  opened.value = photo;
-  confirmDelete.value = false;
-}
-
-async function change(edit: { date?: string; pose?: PhotoPose | undefined }): Promise<void> {
-  const current = opened.value;
-  if (!current) return;
-  const date = edit.date ?? current.date;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || date > todayIso()) return;
-  const nextPose = 'pose' in edit ? edit.pose : current.pose;
-  await body.changePhoto(current.id, { date, ...(nextPose ? { pose: nextPose } : {}) });
-  opened.value = photos.value.find((p) => p.id === current.id);
-}
-
-async function remove(): Promise<void> {
-  const current = opened.value;
-  if (!current) return;
-  await body.remove(current.id);
+function compare(photo?: Photo): void {
   opened.value = undefined;
+  const c = comparison.value;
+  const query = photo ? { after: photo.id } : c ? { before: c.before.id, after: c.after.id } : {};
+  void router.push({ path: '/tabs/history/photos/compare', query });
 }
 </script>
 
@@ -177,10 +165,21 @@ async function remove(): Promise<void> {
         </p>
         <div class="compare">
           <figure v-for="p in [comparison.before, comparison.after]" :key="p.id">
-            <img :src="p.photo" :alt="t('body.photo.alt', { date: shortDate(p.date) })" />
+            <button
+              type="button"
+              class="photo-button"
+              :aria-label="t('body.gallery.openNamed', { date: shortDate(p.date) })"
+              @click="opened = p.id"
+            >
+              <img :src="p.photo" :alt="t('body.photo.alt', { date: shortDate(p.date) })" />
+            </button>
             <figcaption>{{ shortDate(p.date) }}</figcaption>
           </figure>
         </div>
+        <ion-button expand="block" fill="outline" class="compare-more" @click="compare()">
+          <Columns2 :size="20" aria-hidden="true" class="icon" />
+          {{ t('body.compare.open') }}
+        </ion-button>
       </section>
 
       <section v-for="m in months" :key="m.month" class="month" :aria-label="monthName(m.month)">
@@ -192,7 +191,7 @@ async function remove(): Promise<void> {
             type="button"
             class="thumb"
             :aria-label="t('body.gallery.openNamed', { date: shortDate(item.photo.date) })"
-            @click="open(item.photo)"
+            @click="opened = item.photo.id"
           >
             <img :src="item.photo.photo" alt="" />
             <span class="caption">
@@ -211,57 +210,7 @@ async function remove(): Promise<void> {
         @close="camera = false"
       />
 
-      <ion-modal :is-open="opened !== undefined" @did-dismiss="opened = undefined">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>{{ opened ? shortDate(opened.date) : '' }}</ion-title>
-            <ion-buttons slot="end">
-              <ion-button @click="opened = undefined">{{ t('common.close') }}</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content v-if="opened" class="ion-padding">
-          <img
-            class="full"
-            :src="opened.photo"
-            :alt="t('body.photo.alt', { date: shortDate(opened.date) })"
-          />
-          <ion-input
-            type="date"
-            label-placement="stacked"
-            fill="outline"
-            :label="t('body.gallery.date')"
-            :value="opened.date"
-            :max="todayIso()"
-            @ion-change="change({ date: String($event.detail.value ?? '') })"
-          />
-          <p class="pose-title">{{ t('body.gallery.pose') }}</p>
-          <div class="poses" role="group" :aria-label="t('body.gallery.pose')">
-            <ion-button
-              v-for="p in PHOTO_POSES"
-              :key="p"
-              size="small"
-              :fill="opened.pose === p ? 'solid' : 'outline'"
-              :aria-pressed="opened.pose === p"
-              @click="change({ pose: opened.pose === p ? undefined : p })"
-            >
-              {{ t(`body.gallery.poses.${p}`) }}
-            </ion-button>
-          </div>
-          <ion-button
-            v-if="!confirmDelete"
-            expand="block"
-            fill="clear"
-            color="danger"
-            @click="confirmDelete = true"
-          >
-            {{ t('body.gallery.delete') }}
-          </ion-button>
-          <ion-button v-else expand="block" color="danger" @click="remove">
-            {{ t('body.gallery.deleteConfirm') }}
-          </ion-button>
-        </ion-content>
-      </ion-modal>
+      <PhotoViewer v-model:opened-id="opened" :photos="ordered" editable @compare="compare" />
     </ion-content>
   </ion-page>
 </template>
@@ -357,18 +306,21 @@ async function remove(): Promise<void> {
   display: block;
   color: var(--tr-text-muted);
 }
-.full {
+.photo-button {
+  display: block;
   width: 100%;
-  margin-block-end: 12px;
-  border-radius: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
 }
-.pose-title {
-  margin-block: 16px 6px;
-  font-weight: 700;
+.compare img {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
 }
-.poses {
-  display: flex;
-  gap: 6px;
-  margin-block-end: 16px;
+.compare-more {
+  margin-block-start: 8px;
+}
+.icon {
+  margin-inline-end: 8px;
 }
 </style>

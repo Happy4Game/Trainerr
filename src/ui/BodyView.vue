@@ -7,7 +7,7 @@ import {
   IonCardTitle,
   IonInput,
 } from '@ionic/vue';
-import { Camera } from 'lucide-vue-next';
+import { Camera, Columns2 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { weighingsToAdd } from '@/domain/healthWeights';
@@ -19,13 +19,15 @@ import {
   healthConnectSupported,
   readHealthWeighings,
 } from '@/ui/healthConnect';
-import { lastPhotoOfPose, type PhotoPose } from '@/domain/photos';
+import { lastPhotoOfPose, samePoseComparison, type PhotoPose } from '@/domain/photos';
 import { proteinTargetGrams } from '@/domain/tracking';
 import CameraCapture from '@/ui/body/CameraCapture.vue';
+import PhotoViewer from '@/ui/body/PhotoViewer.vue';
 import { useBodyMeasurements } from '@/ui/body/useBodyMeasurements';
 import { todayIso } from '@/ui/useWeekPlan';
 import { useUnits } from '@/ui/useUnits';
 import { useSession } from '@/ui/session/useSession';
+import { useRouter } from 'vue-router';
 
 const { t, n, locale } = useI18n();
 const session = useSession();
@@ -117,9 +119,25 @@ const addYears = (date: string, years: number) =>
   `${Number(date.slice(0, 4)) + years}${date.slice(4, 10)}`.replace(/-02-29$/, '-02-28');
 
 const photos = body.photos;
+/** First and last photo of the newest photo's pose: a front photo is never set against a back one. */
 const comparison = computed(() =>
-  photos.value.length >= 2 ? [photos.value[0], photos.value.at(-1)] : [],
+  samePoseComparison(
+    photos.value,
+    session.history.value.map((h) => h.date),
+  ),
 );
+/** The last photos, newest first: each one opens on the whole screen. */
+const RECENT = 4;
+const recent = computed(() => [...photos.value].reverse().slice(0, RECENT));
+const newestFirst = computed(() => [...photos.value].reverse());
+const opened = ref<string>();
+const router = useRouter();
+function compare(photoId?: string): void {
+  opened.value = undefined;
+  const c = comparison.value;
+  const query = photoId ? { after: photoId } : c ? { before: c.before.id, after: c.after.id } : {};
+  void router.push({ path: '/tabs/history/photos/compare', query });
+}
 /** Weighings and measurements; the photos are in the gallery. */
 const entries = computed(() => [...measurements.value].reverse().filter((m) => !m.photo));
 
@@ -248,12 +266,46 @@ async function remove(id: string): Promise<void> {
           photos.length > 0 ? t('body.gallery.link', photos.length) : t('body.gallery.linkEmpty')
         }}
       </ion-button>
-      <div v-if="comparison.length === 2" class="compare">
-        <figure v-for="m in comparison" :key="m!.id">
-          <img :src="m!.photo" :alt="t('body.photo.alt', { date: shortDate(m!.date) })" />
-          <figcaption>{{ shortDate(m!.date) }}</figcaption>
-        </figure>
+      <div v-if="recent.length > 0" class="recent" role="list" :aria-label="t('body.photo.recent')">
+        <button
+          v-for="p in recent"
+          :key="p.id"
+          type="button"
+          role="listitem"
+          class="photo-button"
+          :aria-label="t('body.gallery.openNamed', { date: shortDate(p.date) })"
+          @click="opened = p.id"
+        >
+          <img :src="p.photo" alt="" />
+          <span>{{ shortDate(p.date) }}</span>
+        </button>
       </div>
+      <template v-if="comparison">
+        <h3 class="compare-title">{{ t('body.gallery.compareTitle') }}</h3>
+        <div class="compare">
+          <figure v-for="m in [comparison.before, comparison.after]" :key="m.id">
+            <button
+              type="button"
+              class="photo-button"
+              :aria-label="t('body.gallery.openNamed', { date: shortDate(m.date) })"
+              @click="opened = m.id"
+            >
+              <img :src="m.photo" :alt="t('body.photo.alt', { date: shortDate(m.date) })" />
+            </button>
+            <figcaption>{{ shortDate(m.date) }}</figcaption>
+          </figure>
+        </div>
+        <ion-button expand="block" fill="outline" @click="compare()">
+          <Columns2 :size="20" aria-hidden="true" class="icon" />
+          {{ t('body.compare.open') }}
+        </ion-button>
+      </template>
+      <PhotoViewer
+        v-model:opened-id="opened"
+        :photos="newestFirst"
+        editable
+        @compare="(p) => compare(p.id)"
+      />
       <CameraCapture
         :open="camera"
         :last-of-pose="lastPhotoOfPose(photos)"
@@ -281,7 +333,7 @@ async function remove(id: string): Promise<void> {
         {{ shortDate(m.date) }} ·
         <template v-if="m.weightKg !== undefined">{{ load(m.weightKg) }}</template>
         <template v-for="(value, key) in m.measurements" :key="key">
-          · {{ t(`body.${key}`) }} {{ t('body.cm', { value: n(value) }) }}
+          · {{ t(`body.names.${key}`) }} {{ t('body.cm', { value: n(value) }) }}
         </template>
       </span>
       <ion-button
@@ -339,7 +391,41 @@ async function remove(id: string): Promise<void> {
 }
 .compare img {
   width: 100%;
+  aspect-ratio: 3 / 4;
   border-radius: 8px;
+  object-fit: cover;
+}
+.compare-title {
+  margin: 16px 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tr-text);
+}
+.photo-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+.recent {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-block-start: 12px;
+}
+.recent img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.recent span {
+  display: block;
+  font-size: 0.72rem;
+  text-align: center;
 }
 .compare figure {
   margin: 0;
@@ -347,9 +433,13 @@ async function remove(id: string): Promise<void> {
 }
 .inputs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-block-end: 8px;
+}
+/* The weight on its own line: "Tour de taille (cm)" was cut on three columns. */
+.inputs > :first-child {
+  grid-column: 1 / -1;
 }
 .small {
   font-size: 0.85rem;

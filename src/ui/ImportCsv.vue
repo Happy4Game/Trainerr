@@ -23,6 +23,7 @@ import { useSession } from '@/ui/session/useSession';
 import { useCatalog } from '@/ui/useCatalog';
 import { useSettings } from '@/ui/useSettings';
 import { useUnits } from '@/ui/useUnits';
+import { todayIso } from '@/ui/useWeekPlan';
 
 const { t, locale } = useI18n();
 const { entries } = useCatalog();
@@ -132,7 +133,7 @@ async function confirm(): Promise<void> {
   await session.reload();
   // Badges already earned in the imported past: given now, quietly, so the
   // next summary does not hail a "first session" after fifty of them.
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayIso();
   await addBadges(
     db,
     earnedBadges({

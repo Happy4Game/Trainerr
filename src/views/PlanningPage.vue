@@ -37,7 +37,15 @@ const session = useSession();
 const router = useRouter();
 
 const week = computed(() =>
-  weekOverview({ days: days.value, done: session.history.value, today: todayIso() }),
+  weekOverview({
+    days: days.value,
+    done: session.history.value,
+    today: todayIso(),
+    // A new user is not told about sessions "missed" before they started.
+    since: [settings.value?.programStart, session.history.value[0]?.date]
+      .filter((d): d is string => !!d)
+      .sort()[0],
+  }),
 );
 const upcoming = computed(() => week.value.next ?? nextWeekFirst.value);
 const target = computed(() => settings.value?.sessionsPerWeek ?? 0);

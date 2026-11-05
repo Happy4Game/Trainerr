@@ -543,7 +543,25 @@
       "morning": "Morning",
       "noon": "Noon",
       "evening": "Evening",
-      "late": "Late"
+      "late": "Late",
+      "early": "Early",
+      "afternoon": "Afternoon"
+    },
+    "everyDay": "{period} every day",
+    "columnHint": "Tap the name of a slot to tick it for the whole week.",
+    "custom": {
+      "title": "Exact slots",
+      "none": "None yet. Handy for 7:15–8:30 or a longer lunch break.",
+      "open": "Add an exact slot",
+      "days": "Days",
+      "weekdays": "Monday to Friday",
+      "everyDay": "Every day",
+      "from": "From",
+      "to": "To",
+      "add": "Add",
+      "invalid": "Enter a start time and an end time.",
+      "tooShort": "The slot must last at least {minutes} min.",
+      "remove": "Remove the {day} slot, {start}–{end}"
     }
   },
   "models": {
@@ -615,7 +633,7 @@
     },
     "notifications": {
       "question": "Reminders?",
-      "why": "A reminder 1 h before each planned workout, and a short note if it has been a while. At most one notification a day, never between 10 pm and 8 am.",
+      "why": "A reminder before each planned workout, your week on Monday morning, and a short note if it has been a while. At most 2 notifications a day, never between 10 pm and 8 am. Each kind can be turned off in Settings.",
       "privacy": "Everything stays on your phone: no server, no data sent.",
       "accept": "Turn on reminders",
       "later": "Later"
@@ -673,7 +691,11 @@
   "notifications": {
     "reminder": "{template} at {time} today. Your workout is waiting!",
     "nudge": "It's been {days} days. A short 30-minute workout?",
-    "tip": "Did you know? {title}"
+    "tip": "Did you know? {title}",
+    "eve": "Tomorrow at {time}: {template}. Pack your bag tonight!",
+    "weekPlan": "Your week: {count} workout planned, {template} on {day} at {time}. | Your week: {count} workouts planned, the first on {day} at {time} ({template}).",
+    "weighIn": "Weekly weigh-in: after waking up, before breakfast, like last time.",
+    "photo": "{weeks} weeks since your last photo. A new one, same pose and same light?"
   },
   "history": {
     "empty": "No finished workout yet.",
@@ -830,7 +852,8 @@
       "title": "Body photos",
       "help": "One photo a month, same light, same place, same pose: it tells more than the mirror. They stay on your phone.",
       "take": "Take a photo",
-      "alt": "Photo of {date}"
+      "alt": "Photo of {date}",
+      "recent": "Latest photos"
     },
     "front": "Front",
     "back": "Back",
@@ -900,6 +923,51 @@
         "busy": "The camera is already used by another app.",
         "other": "The camera couldn't start."
       }
+    },
+    "names": {
+      "arm": "Arm",
+      "waist": "Waist"
+    },
+    "viewer": {
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "position": "{n} of {total}",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Back to normal size",
+      "compare": "Compare with another photo"
+    },
+    "compare": {
+      "title": "Compare",
+      "open": "Compare in detail",
+      "needTwo": "You need at least two photos to compare.",
+      "needTwoPose": "You need at least two photos of this pose. Pick another pose or take a new one.",
+      "allPoses": "All poses are mixed: to really see the change, compare the same pose.",
+      "mode": "Display",
+      "modes": {
+        "side": "Side by side",
+        "slider": "Slider",
+        "fade": "Fade"
+      },
+      "before": "Before",
+      "after": "After",
+      "sliderLabel": "Slider: the before photo on the left, the after photo on the right",
+      "fadeLabel": "Fade from the before photo to the after photo",
+      "facts": "Between the two photos",
+      "weight": "Weight: {before} → {after} ({change}).",
+      "noWeight": "Weigh yourself on photo days to see the weight change too.",
+      "shortcuts": "Quick picks for the before photo",
+      "first": "First photo",
+      "monthsAgo": "{count} month ago | {count} months ago",
+      "swap": "Swap",
+      "pick": {
+        "before": "Before photo",
+        "after": "After photo"
+      },
+      "pickNamed": {
+        "before": "Use the photo of {date} as the before photo",
+        "after": "Use the photo of {date} as the after photo"
+      },
+      "toGallery": "Back to my gallery"
     }
   },
   "settings": {
@@ -932,12 +1000,12 @@
     "kinds": {
       "sessionReminder": "Reminder before a workout",
       "nudge": "Gentle nudge",
-      "record": "Record beaten",
-      "streak": "Consistency",
-      "backToLevel": "Back to level",
-      "tip": "Tip of the week"
+      "tip": "Tip of the week",
+      "weekPlan": "My week, on Monday morning",
+      "weighIn": "Weekly weigh-in",
+      "photo": "Monthly photo"
     },
-    "quietHours": "Never a notification between {start} and {end}, nor during your blocked slots.",
+    "quietHours": "At most 2 notifications a day, never between {start} and {end}, nor during your blocked slots. Tapping a notification opens the right screen.",
     "language": {
       "title": "Language and units",
       "label": "Language",
@@ -978,7 +1046,15 @@
       "why": "Muscle grows over a wide range of reps, from 6 to over 20, as long as the set ends close to failure. 8 to 12 is a very good choice. The app raises the load when you reach the top of the range."
     },
     "showRest": "Show the rest taken",
-    "showRestHelp": "Always recorded: the time between two sets shows in small print next to each one, during the workout, in the history and at the end of the session (average rest). The report for a coach and the CSV export always include it."
+    "showRestHelp": "Always recorded: the time between two sets shows in small print next to each one, during the workout, in the history and at the end of the session (average rest). The report for a coach and the CSV export always include it.",
+    "kindsHelp": {
+      "sessionReminder": "1 h before the workout, or at 8 pm the day before for an early-morning workout.",
+      "nudge": "A short note when it has been 3 days longer than your usual pace.",
+      "weekPlan": "How many workouts are planned and the first one of the week.",
+      "weighIn": "A week after your last weigh-in, if you weigh yourself in the app.",
+      "photo": "4 weeks after your last photo, if you take some.",
+      "tip": "A \"Getting started\" card, on Sunday evening."
+    }
   },
   "tips": {
     "title": "Getting started",
@@ -1144,7 +1220,8 @@
       "flexibleSession": "A more flexible workout",
       "catalogTab": "Catalog and Planning as tabs",
       "restEverywhere": "Rest in the exports",
-      "drawingsAndRest": "More drawings, rest really taken"
+      "drawingsAndRest": "More drawings, rest really taken",
+      "photosAndReminders": "Photos, slots and reminders"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1188,7 +1265,7 @@
       "usualLoadsToday": "Already training? Note your usual loads right from Today, before your first session.",
       "photoGallery": "History › Body › My gallery: your photos month by month, with the sessions done at each photo.",
       "photoImport": "Take a photo in front of the mirror or import those from your gallery, all at once. The date can be corrected.",
-      "photoCompare": "Sort them by pose (front, side, back) and compare the first and last side by side. They stay on your phone.",
+      "photoCompare": "New \"Compare\" page: pick the two photos (or \"1, 3, 6 months ago\"), side by side, with a slider or a fade, and the weight change between them.",
       "cardioSessions": "Session › “Add cardio to my sessions”: pick the machine, the duration, and before or after the weights, with the advice of the studies for today's session.",
       "cardioLog": "During the session, log your cardio results: time, distance, speed, incline, level, cadence, heart rate and calories, depending on the machine.",
       "cardioCatalog": "Catalog › Cardio: each machine with the muscles worked and your results, and your week against the WHO bar (150 min).",
@@ -1211,7 +1288,15 @@
       "restTaken": "The rest really taken between two sets is recorded. Tick \"Show the rest taken\" in Settings to see it in small print next to each set, during the workout and in the history.",
       "cardioDrawings": "Cardio machines have a drawing. No free one existed: these were made by an AI, and say so.",
       "restInExports": "The rest really taken between two sets now shows in the report shared with a coach (with the average rest of each session) and in the CSV export.",
-      "restInSummary": "With \"Show the rest taken\", the end of the session also shows your average rest."
+      "restInSummary": "With \"Show the rest taken\", the end of the session also shows your average rest.",
+      "photoViewer": "Every body photo opens full screen, everywhere: arrows or a swipe to the next one, zoom in one tap.",
+      "moreSlots": "More availability slots: early morning (6–8 am) and afternoon (2–6 pm). Tap the name of a slot to tick it for the whole week.",
+      "exactSlots": "Exact slots to the minute (for example 7:15–8:30), for one day, weekdays or every day.",
+      "moreReminders": "New reminders: your week on Monday morning, the weekly weigh-in, the monthly photo, and the evening before an early-morning workout. At most 2 a day.",
+      "reminderTap": "Tapping a notification opens the right screen.",
+      "fixPastReminders": "Fixed: a reminder whose time was past went off at once after a setting change.",
+      "fixPlanningStart": "Fixed: Planning no longer mentions workouts \"not done\" before your first day with the app.",
+      "fixDisplay": "Fixed: help texts cut in Settings, \"cm\" shown twice in measurements, before/after mixing front and back."
     }
   },
   "data": {
@@ -1279,7 +1364,8 @@
   },
   "common": {
     "back": "Back",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel"
   },
   "badges": {
     "firstSession": "First workout",

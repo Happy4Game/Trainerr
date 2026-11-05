@@ -1,7 +1,11 @@
 import type { CardioPlan } from '@/domain/cardio';
 import type { PauseLength } from '@/domain/comeback';
 import type { ProtectedZone } from '@/domain/muscles';
-import { DEFAULT_NOTIFICATION_PREFS, type NotificationPrefs } from '@/domain/notifications';
+import {
+  DEFAULT_NOTIFICATION_PREFS,
+  withDefaultKinds,
+  type NotificationPrefs,
+} from '@/domain/notifications';
 import type { NextChoice, SportId, WeeklySlot } from '@/domain/planning';
 import type { PlateConfig } from '@/domain/plates';
 import type { SessionLine } from '@/domain/presets';
@@ -116,7 +120,12 @@ const KEY = 'settings';
 export async function getSettings(db: SqlDatabase): Promise<Settings> {
   const rows = await db.query<{ value: string }>('SELECT value FROM app_meta WHERE key = ?', [KEY]);
   const stored = rows[0] ? (JSON.parse(rows[0].value) as Partial<Settings>) : {};
-  return { ...DEFAULT_SETTINGS, ...stored };
+  return {
+    ...DEFAULT_SETTINGS,
+    ...stored,
+    // Kinds of notification added since the settings were saved are on.
+    notifications: withDefaultKinds(stored.notifications),
+  };
 }
 
 export async function saveSettings(db: SqlDatabase, settings: Settings): Promise<void> {
