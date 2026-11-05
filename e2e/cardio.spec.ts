@@ -13,9 +13,14 @@ test('cardio: chosen before the session, logged in it, kept in the history and c
   await page.getByRole('tab', { name: 'Séance' }).click();
   await page.locator('ion-toggle', { hasText: 'Ajouter du cardio à mes séances' }).click();
   const plan = page.getByRole('region', { name: 'Cardio de la séance' });
-  await plan.getByRole('radio', { name: 'Rameur' }).click();
-  await plan.getByRole('radio', { name: '10 min' }).click();
-  await plan.getByRole('radio', { name: 'Avant la muscu' }).click();
+  // A tap can be lost while the page redraws: tap until the choice is made.
+  for (const name of ['Rameur', '10 min', 'Avant la muscu']) {
+    const choice = plan.getByRole('radio', { name });
+    await expect(async () => {
+      if (!(await choice.isChecked())) await choice.click({ timeout: 2_000 });
+      await expect(choice).toBeChecked({ timeout: 2_000 });
+    }).toPass({ timeout: 15_000 });
+  }
   // Upper body, hypertrophy: the order is free, and the studies are named.
   await expect(plan.getByRole('note')).toContainText('Eddens 2018');
 

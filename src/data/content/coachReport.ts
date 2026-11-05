@@ -1,3 +1,4 @@
+import { averageRest, restClock, restsBefore } from '@/domain/restTaken';
 import type { IsoDate, SessionLog } from '@/domain/types';
 
 /**
@@ -18,6 +19,10 @@ export interface CoachReportInput {
     readonly history: string;
     readonly warmup: string;
     readonly note: string;
+    /** "rest {time}": rest really taken before a set. */
+    readonly rest: (time: string) => string;
+    /** "average rest {time}", for the whole session. */
+    readonly averageRest: (time: string) => string;
   };
   readonly lang: string;
 }
@@ -36,14 +41,27 @@ export function buildCoachReport(input: CoachReportInput): string {
   const sessions = [...input.sessions]
     .sort((a, b) => b.date.localeCompare(a.date))
     .map((session) => {
+      const rests = restsBefore(session.sets);
       const rows = session.sets
-        .map(
-          (set) =>
+        .map((set, index) => {
+          const rest = rests[index];
+          return (
             `<li>${escape(input.exerciseName(set.exerciseId))} — ${escape(input.loadLabel(set.loadKg))} × ${set.reps}` +
-            ` (${escape(set.warmup ? texts.warmup : input.difficultyLabel(set.difficulty))})</li>`,
-        )
+            ` (${escape(set.warmup ? texts.warmup : input.difficultyLabel(set.difficulty))})` +
+            (rest === undefined ? '' : ` · ${escape(texts.rest(restClock(rest)))}`) +
+            '</li>'
+          );
+        })
         .join('');
-      return `<section><h3>${escape(session.date)} · ${escape(input.templateName(session.templateId))}</h3><ul>${rows}</ul></section>`;
+      const average = averageRest(session.sets);
+      const title = [
+        session.date,
+        input.templateName(session.templateId),
+        ...(average === undefined ? [] : [texts.averageRest(restClock(average))]),
+      ]
+        .map(escape)
+        .join(' · ');
+      return `<section><h3>${title}</h3><ul>${rows}</ul></section>`;
     })
     .join('');
   return `<!doctype html>

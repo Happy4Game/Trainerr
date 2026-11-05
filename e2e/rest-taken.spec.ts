@@ -42,4 +42,8 @@ test('the rest really taken between sets is always recorded, shown on demand', a
     .click();
   // 2 min 15 s of rest, plus the time of the taps.
   await expect(page.locator('section.logged')).toContainText(/repos 2:1\d/, { timeout: 20_000 });
+
+  // The end of the session gives the average: one rest only, so the same.
+  await page.getByRole('button', { name: 'Terminer la séance' }).click();
+  await expect(page.getByText(/Repos moyen entre deux séries : 2:1\d\./)).toBeVisible();
 });

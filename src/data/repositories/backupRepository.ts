@@ -1,3 +1,4 @@
+import { restsBefore } from '@/domain/restTaken';
 import type { SqlDatabase, SqlValue } from '../sqlite/database';
 import { latestSchemaVersion } from '../sqlite/migrations';
 import { sqlLiteral as q } from '../sqlite/sqlLiteral';
@@ -89,11 +90,11 @@ function deleteStatements(): string[] {
 /** CSV of every set, for spreadsheets or other apps. */
 export async function exportSetsCsv(db: SqlDatabase): Promise<string> {
   const rows = await db.query<Record<string, SqlValue>>(
-    `SELECT s.date, s.template, l.exercise_id, e.name AS exercise, l.load_kg, l.reps, l.difficulty,
-            l.warmup, l.slow_tempo, l.complete_reps, l.rir, l.note
+    `SELECT s.id AS session_id, s.date, s.template, l.exercise_id, e.name AS exercise, l.load_kg,
+            l.reps, l.difficulty, l.warmup, l.slow_tempo, l.complete_reps, l.rir, l.note, l.done_at
        FROM set_log l JOIN session s ON s.id = l.session_id
        LEFT JOIN exercise e ON e.id = l.exercise_id
-      ORDER BY s.date, l.position`,
+      ORDER BY s.date, s.rowid, l.position`,
   );
   const header = [
     'date',
@@ -108,10 +109,22 @@ export async function exportSetsCsv(db: SqlDatabase): Promise<string> {
     'complete_reps',
     'rir',
     'note',
+    'rest_seconds',
   ];
+  // Rest really taken: the time since the set just before, in the same session.
+  const rests = restsBefore(
+    rows.map((r) => (typeof r['done_at'] === 'number' ? { doneAt: r['done_at'] } : {})),
+  );
+  const withRest = rows.map((row, index): Record<string, SqlValue> => ({
+    ...row,
+    rest_seconds:
+      rows[index - 1]?.['session_id'] === row['session_id'] ? (rests[index] ?? null) : null,
+  }));
   const cell = (value: SqlValue | undefined) => {
     const text = value === null || value === undefined ? '' : String(value);
     return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
   };
-  return [header.join(','), ...rows.map((r) => header.map((h) => cell(r[h])).join(','))].join('\n');
+  return [header.join(','), ...withRest.map((r) => header.map((h) => cell(r[h])).join(','))].join(
+    '\n',
+  );
 }
