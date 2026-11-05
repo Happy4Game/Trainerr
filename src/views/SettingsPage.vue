@@ -23,7 +23,7 @@ import PlatesSection from '@/ui/PlatesSection.vue';
 import ProfileSection from '@/ui/ProfileSection.vue';
 import RepRangeSection from '@/ui/RepRangeSection.vue';
 import UpdatesSection from '@/ui/UpdatesSection.vue';
-import type { NotificationKind } from '@/domain/notifications';
+import { NOTIFICATION_KINDS, type NotificationKind } from '@/domain/notifications';
 import type { WeightUnit } from '@/domain/units';
 import type { LanguagePreference } from '@/i18n';
 import type { ThemePreference } from '@/data/repositories/settingsRepository';
@@ -42,14 +42,7 @@ const LANGUAGES: LanguagePreference[] = ['system', 'fr-FR', 'en-US'];
 const UNITS: WeightUnit[] = ['kg', 'lb'];
 const THEMES: ThemePreference[] = ['dark', 'light', 'system'];
 
-const KINDS: NotificationKind[] = [
-  'sessionReminder',
-  'nudge',
-  'record',
-  'streak',
-  'backToLevel',
-  'tip',
-];
+const KINDS = NOTIFICATION_KINDS;
 
 async function setNotifications(enabled: boolean): Promise<void> {
   if (!settings.value) return;
@@ -171,7 +164,10 @@ async function redoQuestionnaire(): Promise<void> {
             :disabled="!settings.notifications.enabled"
             @ion-change="setKind(kind, $event.detail.checked)"
           >
-            {{ t(`settings.kinds.${kind}`) }}
+            <ion-label class="ion-text-wrap">
+              {{ t(`settings.kinds.${kind}`) }}
+              <p>{{ t(`settings.kindsHelp.${kind}`) }}</p>
+            </ion-label>
           </ion-toggle>
         </ion-item>
         <ion-item lines="none">

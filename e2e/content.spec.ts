@@ -6,7 +6,7 @@ test('settings lead to the getting started, about and credits pages', async ({ p
   await page.getByRole('tab', { name: "Aujourd'hui" }).click();
   await page.getByRole('link', { name: 'Réglages' }).click();
 
-  await page.getByText('Bien débuter').click();
+  await page.getByText('Bien débuter', { exact: true }).click();
   await expect(page.getByText('La technique passe avant la charge')).toBeVisible();
   await expect(page.getByRole('link', { name: /Morton et al., 2018/ })).toBeVisible();
   await page

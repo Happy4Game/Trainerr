@@ -32,6 +32,7 @@ import { useTemplateName } from '@/ui/useTemplateName';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings } from '@/ui/useSettings';
+import { todayIso } from '@/ui/useWeekPlan';
 
 const { t, n } = useI18n();
 const templateLabel = useTemplateName();
@@ -141,7 +142,7 @@ function answers(): Partial<Settings> {
     model: model.value,
     level: level.value,
     ...(level.value === 'comeback'
-      ? { comeback: { pause: pause.value, startedOn: new Date().toISOString().slice(0, 10) } }
+      ? { comeback: { pause: pause.value, startedOn: todayIso() } }
       : {}),
     freeSlots: freeSlots.value,
     sessionMinutes: sessionMinutes.value,
@@ -159,7 +160,7 @@ async function finish(withNotifications: boolean): Promise<void> {
   const saved = await updateSettings({
     ...answers(),
     notifications: { ...DEFAULT_SETTINGS.notifications, enabled: granted },
-    programStart: new Date().toISOString().slice(0, 10),
+    programStart: todayIso(),
     onboarded: true,
   });
   await rescheduleNotifications(saved);
@@ -169,7 +170,7 @@ async function finish(withNotifications: boolean): Promise<void> {
 
 /** "Passer": hypertrophy, 4 sessions, 1 h, no other sport, straight to the catalog. */
 async function skip(): Promise<void> {
-  await updateSettings({ onboarded: true });
+  await updateSettings({ onboarded: true, programStart: todayIso() });
   await session.reload();
   await router.replace('/tabs/catalog');
 }

@@ -453,3 +453,13 @@ ion-back-button {
   font-weight: 700;
   min-height: var(--tr-touch);
 }
+
+/*
+ * Ionic cuts the label of a toggle or checkbox on one line (white-space: nowrap
+ * in its shadow DOM): the help text under a setting was cut mid-word. The
+ * `label` part lets it wrap.
+ */
+ion-toggle::part(label),
+ion-checkbox::part(label) {
+  white-space: normal;
+}

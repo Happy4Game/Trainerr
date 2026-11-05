@@ -99,3 +99,53 @@ export function lastPhotoOfPose<P extends DatedPhoto & { readonly photo: string 
   for (const p of [...photos].sort(byDate)) if (p.pose) last[p.pose] = p.photo;
   return last;
 }
+
+/** The photo taken closest to a date: "a month ago" picks the one nearest to that day. */
+export function closestPhoto<P extends DatedPhoto>(
+  photos: readonly P[],
+  date: IsoDate,
+): P | undefined {
+  let best: P | undefined;
+  for (const p of photos) {
+    if (!best || Math.abs(daysBetween(p.date, date)) < Math.abs(daysBetween(best.date, date))) {
+      best = p;
+    }
+  }
+  return best;
+}
+
+/**
+ * The weighing nearest to a photo, within a week: the weight change goes with
+ * the photos compared. None when no weighing is that close.
+ */
+export function weightAround(
+  weighings: readonly { readonly date: IsoDate; readonly weightKg?: number | undefined }[],
+  date: IsoDate,
+  maxDays = 7,
+): number | undefined {
+  let best: { gap: number; kg: number } | undefined;
+  for (const w of weighings) {
+    if (w.weightKg === undefined) continue;
+    const gap = Math.abs(daysBetween(w.date, date));
+    if (gap <= maxDays && (!best || gap < best.gap)) best = { gap, kg: w.weightKg };
+  }
+  return best?.kg;
+}
+
+/**
+ * Before / after of one pose only: the pose asked, or else the pose of the
+ * newest photo that has another photo to compare with. Comparing a front
+ * photo with a back one shows nothing. Untagged photos are compared only when
+ * no pose has two photos.
+ */
+export function samePoseComparison<P extends DatedPhoto>(
+  photos: readonly P[],
+  sessionDates: readonly IsoDate[],
+  pose?: PhotoPose,
+): ReturnType<typeof photoComparison<P>> {
+  const ofPose = (p: PhotoPose) => photos.filter((photo) => photo.pose === p);
+  if (pose) return photoComparison(ofPose(pose), sessionDates);
+  const newestFirst = [...photos].sort(byDate).reverse();
+  const chosen = newestFirst.find((p) => p.pose && ofPose(p.pose).length >= 2)?.pose;
+  return photoComparison(chosen ? ofPose(chosen) : photos, sessionDates);
+}

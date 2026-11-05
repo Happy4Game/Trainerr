@@ -48,6 +48,12 @@ describe('weekOverview', () => {
     expect(week.next).toEqual(planned('2026-10-22', 'legs-a'));
   });
 
+  it('a new user is not told about sessions "missed" before their first day', () => {
+    const week = weekOverview({ days, done: [], today: '2026-10-22', since: '2026-10-22' });
+    expect(week.days.slice(0, 4).map((d) => d.status)).toEqual(['rest', 'rest', 'rest', 'today']);
+    expect(week.postponed).toBeUndefined();
+  });
+
   it('a session done on a free day counts and shows what was done', () => {
     const week = weekOverview({
       days,
