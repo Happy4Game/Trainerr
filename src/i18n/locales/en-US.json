@@ -198,6 +198,22 @@
       "notch": "Notch (backrest, arm, pad)",
       "notchPlaceholder": "E.g. 2",
       "addOther": "Add this weight"
+    },
+    "range": {
+      "title": "My reps on this machine",
+      "min": "Minimum",
+      "max": "Maximum",
+      "less": {
+        "min": "One rep less at minimum",
+        "max": "One rep less at maximum"
+      },
+      "more": {
+        "min": "One rep more at minimum",
+        "max": "One rep more at maximum"
+      },
+      "mine": "Your range for this machine. The load goes up once every set reaches the maximum.",
+      "usual": "Usual range. Change it here for this machine only.",
+      "reset": "Back to {min}–{max} reps"
     }
   },
   "templates": {
@@ -406,12 +422,6 @@
       "doHelp": "The advised load and reps are already filled in. Only change them if you did something else.",
       "feelHelp": "One tap saves the set and starts the rest."
     },
-    "difficultyHint": {
-      "easy": "3+ reps left",
-      "ok": "1 or 2 left",
-      "hard": "nothing left",
-      "fail": "all out, last rep missed"
-    },
     "progress": {
       "title": "Exercise {current} of {total}",
       "done": "{count} exercise done | {count} exercises done",
@@ -522,12 +532,6 @@
       "add": "+ {name}"
     },
     "testSetFeel": "If so, pick Easy: the load goes up from the next set. Otherwise, OK keeps it.",
-    "testSetHint": {
-      "easy": "too light: the load goes up",
-      "ok": "right load: we keep it",
-      "hard": "heavy: we keep it",
-      "fail": "all out: we keep it, unless below your range"
-    },
     "closeOnes": {
       "title": "Not this machine? Very close ones:",
       "take": "Do {name} instead"
@@ -536,7 +540,11 @@
     "testSetQuestion": "Too light? Could you have done 3 more reps?",
     "seeMovementOf": "See the card of {name}",
     "restTaken": "rest {time}",
-    "restPreview": "rest {time}"
+    "effect": {
+      "up": "The load goes up next set",
+      "same": "The load stays the same",
+      "down": "The load goes down next set"
+    }
   },
   "availability": {
     "day": "Day",
@@ -1300,7 +1308,8 @@
       "fixPlanningStart": "Fixed: Planning no longer mentions workouts \"not done\" before your first day with the app.",
       "fixDisplay": "Fixed: help texts cut in Settings, \"cm\" shown twice in measurements, before/after mixing front and back.",
       "failureKept": "\"Failure\" means \"all out, last rep missed\": with your reps in your range, the load stays (in the session and next time). It only goes down below the range.",
-      "restPreview": "Each feeling button shows the rest it will start, before you tap it."
+      "restPreview": "Clearer feeling buttons: an arrow with the load of the next set, and the length of the rest they start.",
+      "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card."
     }
   },
   "data": {

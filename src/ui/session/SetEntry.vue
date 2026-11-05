@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { IonButton, IonChip, IonInput, IonLabel } from '@ionic/vue';
-import { ArrowLeftRight, Mic, Minus, Pencil, Plus, Timer } from 'lucide-vue-next';
+import {
+  ArrowDown,
+  ArrowLeftRight,
+  ArrowUp,
+  Equal,
+  Mic,
+  Minus,
+  Pencil,
+  Plus,
+  Timer,
+} from 'lucide-vue-next';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
@@ -15,7 +25,7 @@ import {
 import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
-import { useSession } from './useSession';
+import { useSession, type LoadEffect } from './useSession';
 import { useRirText } from './useRirText';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
@@ -230,6 +240,15 @@ const DIFFICULTIES: { value: Difficulty; color: string }[] = [
   { value: 'fail', color: 'danger' },
 ];
 
+/** Next load for each feeling, read at a glance: an arrow and the load. */
+const EFFECT_ICON = { up: ArrowUp, same: Equal, down: ArrowDown } as const;
+const effects = computed(() => {
+  const preview = session.effectPreview(props.exerciseId, load.value, reps.value);
+  if (!preview || !incomplete.value) return preview;
+  // An incomplete rep never counts: the load goes down whatever the feeling.
+  const down: LoadEffect = { effect: 'down' };
+  return { easy: down, ok: down, hard: down, fail: down };
+});
 /** The rest each feeling starts, seen before the tap: no surprise once the timer runs. */
 const restPreview = computed(() => session.restPreview(props.exerciseId));
 const clock = (seconds: number) =>
@@ -529,12 +548,22 @@ function listen(): void {
       >
         <span class="difficulty">
           <span class="difficulty-name">{{ t(`difficulty.${d.value}`) }}</span>
-          <span class="difficulty-hint">{{
-            t(`session.${testSet ? 'testSetHint' : 'difficultyHint'}.${d.value}`)
-          }}</span>
-          <span v-if="restPreview" class="difficulty-rest" data-testid="rest-preview">
-            <Timer :size="13" aria-hidden="true" />
-            {{ t('session.restPreview', { time: clock(restPreview[d.value]) }) }}
+          <span class="difficulty-facts">
+            <span
+              v-if="effects"
+              class="fact"
+              :data-testid="`effect-${d.value}`"
+              :title="t(`session.effect.${effects[d.value].effect}`)"
+            >
+              <component :is="EFFECT_ICON[effects[d.value].effect]" :size="15" aria-hidden="true" />
+              <template v-if="effects[d.value].loadKg !== undefined">
+                {{ loadText(effects[d.value].loadKg!) }}
+              </template>
+            </span>
+            <span v-if="restPreview" class="fact" data-testid="rest-preview">
+              <Timer :size="14" aria-hidden="true" />
+              {{ clock(restPreview[d.value]) }}
+            </span>
           </span>
         </span>
       </ion-button>
@@ -820,17 +849,23 @@ h2 {
   text-transform: none;
   font-weight: 400;
 }
-.difficulty-rest {
+.difficulty-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.fact {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 3px;
-  margin-block-start: 2px;
-  font-size: 0.72rem;
-  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 14%);
+  font-size: 0.8rem;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-transform: none;
-  opacity: 0.9;
 }
 .more {
   margin-block-start: 12px;

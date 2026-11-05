@@ -198,6 +198,22 @@
       "notch": "Cran (dossier, bras, coussin)",
       "notchPlaceholder": "Ex. 2",
       "addOther": "Ajouter ce poids"
+    },
+    "range": {
+      "title": "Mes reps sur cette machine",
+      "min": "Minimum",
+      "max": "Maximum",
+      "less": {
+        "min": "Une rep de moins au minimum",
+        "max": "Une rep de moins au maximum"
+      },
+      "more": {
+        "min": "Une rep de plus au minimum",
+        "max": "Une rep de plus au maximum"
+      },
+      "mine": "Ta fourchette pour cette machine. La charge monte quand toutes tes séries atteignent le maximum.",
+      "usual": "Fourchette habituelle. Change-la ici pour cette machine seulement.",
+      "reset": "Revenir à {min}–{max} reps"
     }
   },
   "templates": {
@@ -406,12 +422,6 @@
       "doHelp": "La charge et les reps conseillées sont déjà remplies. Change-les seulement si tu as fait autre chose.",
       "feelHelp": "Un appui enregistre la série et lance le repos."
     },
-    "difficultyHint": {
-      "easy": "3 reps ou plus en réserve",
-      "ok": "1 ou 2 en réserve",
-      "hard": "plus rien en réserve",
-      "fail": "à fond, dernière rep ratée"
-    },
     "progress": {
       "title": "Exercice {current} sur {total}",
       "done": "{count} exercice fait | {count} exercices faits",
@@ -522,12 +532,6 @@
       "add": "+ {name}"
     },
     "testSetFeel": "Si oui, choisis Facile : la charge monte dès la série suivante. Sinon, Correct la garde.",
-    "testSetHint": {
-      "easy": "trop léger : la charge monte",
-      "ok": "bonne charge : on la garde",
-      "hard": "lourd : on la garde",
-      "fail": "à fond : on la garde, sauf sous ta fourchette"
-    },
     "closeOnes": {
       "title": "Pas cette machine ? Très proches :",
       "take": "Faire {name} à la place"
@@ -536,7 +540,11 @@
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
     "seeMovementOf": "Voir la fiche de {name}",
     "restTaken": "repos {time}",
-    "restPreview": "repos {time}"
+    "effect": {
+      "up": "La charge monte à la série suivante",
+      "same": "La charge reste la même",
+      "down": "La charge baisse à la série suivante"
+    }
   },
   "availability": {
     "day": "Jour",
@@ -1300,7 +1308,8 @@
       "fixPlanningStart": "Corrigé : le Planning ne parle plus de séances « non faites » avant ton premier jour avec l'appli.",
       "fixDisplay": "Corrigé : textes d'aide coupés dans les Réglages, unité « cm » en double dans les mensurations, avant/après qui mélangeait face et dos.",
       "failureKept": "« Échec » veut dire « à fond, dernière rep ratée » : si tes reps sont dans ta fourchette, la charge reste la même (pendant la séance et la fois suivante). Elle ne baisse que sous la fourchette.",
-      "restPreview": "Chaque bouton de ressenti affiche le repos qu'il va lancer, avant l'appui."
+      "restPreview": "Boutons de ressenti plus clairs : une flèche et la charge de la série suivante, et la durée du repos qu'ils lancent.",
+      "machineRange": "Ta fourchette de reps pour une machine précise (12–20 à la presse, par exemple), sur sa fiche."
     }
   },
   "data": {

@@ -39,6 +39,13 @@ describe('rep ranges and rest', () => {
     expect(repRangeFor(ex.pecFly)).toEqual(isolation);
     expect(repRangeFor(ex.legExtension)).toEqual({ min: 8, max: 10 });
   });
+
+  it("the user's range for one machine wins over their range for every exercise", () => {
+    const own = { min: 8, max: 12 };
+    const machines = { [ex.legExtension.id]: { min: 12, max: 20 } };
+    expect(repRangeFor(ex.legExtension, own, machines)).toEqual({ min: 12, max: 20 });
+    expect(repRangeFor(ex.pecFly, own, machines)).toEqual(own);
+  });
 });
 
 describe('between two sets', () => {

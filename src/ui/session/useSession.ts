@@ -310,11 +310,13 @@ function previousFor(exerciseId: string): SetLog | undefined {
 const sharedSettings = useSettings().settings;
 
 /**
- * Rep range of an exercise today: the ready-made session's own, else the
- * user's own range from the settings, else the exercise default.
+ * Rep range of an exercise today: the user's own for this machine, else the
+ * ready-made session's, else the user's own for every exercise, else the
+ * exercise default.
  */
 function rangeOf(entry: CatalogEntry) {
   return (
+    sharedSettings.value?.machineRepRanges?.[entry.exercise.id] ??
     active.value?.plan.exercises.find((e) => e.exerciseId === entry.exercise.id)?.repRange ??
     repRangeFor(entry.exercise, sharedSettings.value?.repRange)
   );
@@ -688,6 +690,34 @@ function usualRest(exerciseId: string): number {
     active.value?.plan.exercises.find((e) => e.exerciseId === exerciseId)?.restSeconds ??
     REST_SECONDS[kind].max
   );
+}
+
+/** What each feeling would do to the load of the next set: shown on its button. */
+export interface LoadEffect {
+  readonly effect: 'up' | 'same' | 'down';
+  /** Load of the next set, on the machine; none on an assisted machine (help, not load). */
+  readonly loadKg?: number;
+}
+function effectPreview(
+  exerciseId: string,
+  loadKg: number,
+  reps: number,
+): Record<Difficulty, LoadEffect> | undefined {
+  const entry = entryOf(exerciseId);
+  if (!entry) return undefined;
+  const scale = scaleOf(entry);
+  const isLastSet = workSetsInSession(exerciseId).length + 1 >= plannedSets(exerciseId);
+  const effect = (difficulty: Difficulty): LoadEffect => {
+    const rule = nextSetProposal({
+      set: toRealSet(scale, { exerciseId, loadKg, reps, difficulty }),
+      range: rangeOf(entry),
+      steps: scale?.realSteps ?? stepsOf(entry),
+      isLastSet,
+    });
+    const effect = rule.action === 'increase' ? 'up' : rule.action === 'keep' ? 'same' : 'down';
+    return scale ? { effect } : { effect, loadKg: rule.loadKg };
+  };
+  return { easy: effect('easy'), ok: effect('ok'), hard: effect('hard'), fail: effect('fail') };
 }
 
 /**
@@ -1325,6 +1355,7 @@ export function useSession() {
     planned: (id: string) => active.value?.plan.exercises.find((e) => e.exerciseId === id),
     logSet,
     restPreview,
+    effectPreview,
     undoLastSet,
     editSessionSet,
     removeSessionSet,
