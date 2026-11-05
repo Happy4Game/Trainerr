@@ -94,8 +94,12 @@ export function nextSetProposal(input: {
 
   // Rule 4: a rep without full range of motion does not count.
   if (set.completeReps === false) return goDown('incompleteReps', ['rangeOfMotion']);
-  if (set.difficulty === 'fail') return goDown('failure');
   if (set.reps < range.min) return goDown('belowRange');
+  // A set taken to failure with the reps in the range is a goal, not a problem:
+  // failure or 1–2 reps short of it build as much muscle (Refalo et al. 2023,
+  // Sports Med, meta-analysis on proximity to failure). The load stays; the
+  // missed rep only lowers it when the reps fall below the range.
+  if (set.difficulty === 'fail') return keep('failure');
   // Never heavier after a Limite set.
   if (set.difficulty === 'hard') return keep(set.reps > range.max ? 'hard' : 'inRange');
 
@@ -197,8 +201,9 @@ export function firstTimeProposal(input: {
   };
 }
 
+/** Missed: incomplete reps, or fewer than the range. A set to failure within the range is not. */
 function isFailedSet(set: SetLog, range: RepRange): boolean {
-  return set.difficulty === 'fail' || set.completeReps === false || set.reps < range.min;
+  return set.completeReps === false || set.reps < range.min;
 }
 
 /** Starting load of an exercise in a new session: history, then comeback reference, then a test set. */

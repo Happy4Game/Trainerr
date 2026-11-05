@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonButton, IonChip, IonInput, IonLabel } from '@ionic/vue';
-import { ArrowLeftRight, Mic, Minus, Pencil, Plus } from 'lucide-vue-next';
+import { ArrowLeftRight, Mic, Minus, Pencil, Plus, Timer } from 'lucide-vue-next';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
@@ -229,6 +229,11 @@ const DIFFICULTIES: { value: Difficulty; color: string }[] = [
   { value: 'hard', color: 'warning' },
   { value: 'fail', color: 'danger' },
 ];
+
+/** The rest each feeling starts, seen before the tap: no surprise once the timer runs. */
+const restPreview = computed(() => session.restPreview(props.exerciseId));
+const clock = (seconds: number) =>
+  `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
 async function validate(difficulty: Difficulty): Promise<void> {
   // A short buzz: the set is saved, no need to look at the screen.
@@ -527,6 +532,10 @@ function listen(): void {
           <span class="difficulty-hint">{{
             t(`session.${testSet ? 'testSetHint' : 'difficultyHint'}.${d.value}`)
           }}</span>
+          <span v-if="restPreview" class="difficulty-rest" data-testid="rest-preview">
+            <Timer :size="13" aria-hidden="true" />
+            {{ t('session.restPreview', { time: clock(restPreview[d.value]) }) }}
+          </span>
         </span>
       </ion-button>
     </div>
@@ -810,6 +819,18 @@ h2 {
   font-size: 0.75rem;
   text-transform: none;
   font-weight: 400;
+}
+.difficulty-rest {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  margin-block-start: 2px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  opacity: 0.9;
 }
 .more {
   margin-block-start: 12px;

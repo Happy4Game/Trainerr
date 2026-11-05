@@ -252,7 +252,7 @@
       "inRange": "Tu es dans ta fourchette : même charge, une rep de plus si tu peux.",
       "hard": "La série précédente était limite : on garde la charge.",
       "belowRange": "Tu es sous ta fourchette de reps : on allège un peu.",
-      "failure": "Échec à la série précédente : on allège.",
+      "failure": "Série à l'échec dans ta fourchette : bien joué, on garde la charge.",
       "incompleteReps": "Reps incomplètes : on allège pour garder l'amplitude complète.",
       "missingStep": "Le palier suivant de la machine est trop lourd : ajoute plutôt des reps.",
       "noHeavierStep": "Tu es au palier le plus lourd de la machine.",
@@ -263,7 +263,7 @@
     },
     "reminder": {
       "rangeOfMotion": "Amplitude complète : une rep incomplète ne compte pas.",
-      "technique": "Deux échecs de suite : relis les consignes de la fiche."
+      "technique": "Deux séances de suite sous ta fourchette : relis les consignes de la fiche."
     },
     "load": "Charge",
     "reps": "Reps",
@@ -410,7 +410,7 @@
       "easy": "3 reps ou plus en réserve",
       "ok": "1 ou 2 en réserve",
       "hard": "plus rien en réserve",
-      "fail": "pas pu finir"
+      "fail": "à fond, dernière rep ratée"
     },
     "progress": {
       "title": "Exercice {current} sur {total}",
@@ -526,7 +526,7 @@
       "easy": "trop léger : la charge monte",
       "ok": "bonne charge : on la garde",
       "hard": "lourd : on la garde",
-      "fail": "trop lourd : la charge baisse"
+      "fail": "à fond : on la garde, sauf sous ta fourchette"
     },
     "closeOnes": {
       "title": "Pas cette machine ? Très proches :",
@@ -535,7 +535,8 @@
     "saved": "✓ Série enregistrée : {set}",
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
     "seeMovementOf": "Voir la fiche de {name}",
-    "restTaken": "repos {time}"
+    "restTaken": "repos {time}",
+    "restPreview": "repos {time}"
   },
   "availability": {
     "day": "Jour",
@@ -1221,7 +1222,8 @@
       "catalogTab": "Catalogue et Planning en onglets",
       "restEverywhere": "Le repos dans les exports",
       "drawingsAndRest": "Plus de dessins, repos réellement pris",
-      "photosAndReminders": "Photos, créneaux et rappels"
+      "photosAndReminders": "Photos, créneaux et rappels",
+      "failureAndRest": "Échec moins punitif, repos visible"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1296,7 +1298,9 @@
       "reminderTap": "Un appui sur une notification ouvre le bon écran.",
       "fixPastReminders": "Corrigé : un rappel dont l'heure était passée partait tout de suite après un changement de réglage.",
       "fixPlanningStart": "Corrigé : le Planning ne parle plus de séances « non faites » avant ton premier jour avec l'appli.",
-      "fixDisplay": "Corrigé : textes d'aide coupés dans les Réglages, unité « cm » en double dans les mensurations, avant/après qui mélangeait face et dos."
+      "fixDisplay": "Corrigé : textes d'aide coupés dans les Réglages, unité « cm » en double dans les mensurations, avant/après qui mélangeait face et dos.",
+      "failureKept": "« Échec » veut dire « à fond, dernière rep ratée » : si tes reps sont dans ta fourchette, la charge reste la même (pendant la séance et la fois suivante). Elle ne baisse que sous la fourchette.",
+      "restPreview": "Chaque bouton de ressenti affiche le repos qu'il va lancer, avant l'appui."
     }
   },
   "data": {

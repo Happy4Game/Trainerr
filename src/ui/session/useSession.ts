@@ -65,7 +65,7 @@ import {
   type SessionBlock,
 } from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
-import type { Exercise, SessionLog, SetLog } from '@/domain/types';
+import type { Difficulty, Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupRamp } from '@/domain/warmup';
 import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
@@ -676,14 +676,38 @@ async function logSet(set: SetLog): Promise<void> {
   );
   if (superset.next) queue = startNow(queue, superset.next);
   if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
-  const kind = entry?.exercise.kind ?? 'isolation';
   // Usual rest of the exercise, adapted to how hard the set was.
-  const rest = restAfterSet(
-    active.value.plan.exercises.find((e) => e.exerciseId === set.exerciseId)?.restSeconds ??
-      REST_SECONDS[kind].max,
-    set.difficulty,
-  );
+  const rest = restAfterSet(usualRest(set.exerciseId), set.difficulty);
   restEndsAt.value = superset.rest ? Date.now() + rest * 1000 : undefined;
+}
+
+/** Usual rest of an exercise in the session, before the feeling adjusts it. */
+function usualRest(exerciseId: string): number {
+  const kind = entryOf(exerciseId)?.exercise.kind ?? 'isolation';
+  return (
+    active.value?.plan.exercises.find((e) => e.exerciseId === exerciseId)?.restSeconds ??
+    REST_SECONDS[kind].max
+  );
+}
+
+/**
+ * The rest each feeling would start, shown on its button before the tap.
+ * None: first exercise of a superset, the partner comes straight after.
+ */
+function restPreview(exerciseId: string): Record<Difficulty, number> | undefined {
+  const plan = active.value?.plan;
+  if (!plan) return undefined;
+  const superset = afterSupersetSet(plan.supersets ?? [], exerciseId, (id) =>
+    plan.queue.pending.includes(id),
+  );
+  if (!superset.rest) return undefined;
+  const usual = usualRest(exerciseId);
+  return {
+    easy: restAfterSet(usual, 'easy'),
+    ok: restAfterSet(usual, 'ok'),
+    hard: restAfterSet(usual, 'hard'),
+    fail: restAfterSet(usual, 'fail'),
+  };
 }
 
 /** The set just logged beat the record: the screen celebrates it. */
@@ -1300,6 +1324,7 @@ export function useSession() {
     /** Ready-made session line: seconds held, or reps per leg. */
     planned: (id: string) => active.value?.plan.exercises.find((e) => e.exerciseId === id),
     logSet,
+    restPreview,
     undoLastSet,
     editSessionSet,
     removeSessionSet,

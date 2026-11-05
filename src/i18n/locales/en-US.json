@@ -252,7 +252,7 @@
       "inRange": "You are in your range: same load, one more rep if you can.",
       "hard": "The previous set was hard: keep the load.",
       "belowRange": "You are below your rep range: a bit lighter.",
-      "failure": "Failure on the previous set: lighter.",
+      "failure": "Set to failure within your range: well done, the load stays.",
       "incompleteReps": "Incomplete reps: lighter, to keep the full range of motion.",
       "missingStep": "The next step of the machine is too heavy: add reps instead.",
       "noHeavierStep": "You are at the heaviest step of the machine.",
@@ -263,7 +263,7 @@
     },
     "reminder": {
       "rangeOfMotion": "Full range of motion: an incomplete rep does not count.",
-      "technique": "Two failures in a row: read the cues on the card again."
+      "technique": "Two sessions in a row below your range: read the card again."
     },
     "load": "Load",
     "reps": "Reps",
@@ -410,7 +410,7 @@
       "easy": "3+ reps left",
       "ok": "1 or 2 left",
       "hard": "nothing left",
-      "fail": "could not finish"
+      "fail": "all out, last rep missed"
     },
     "progress": {
       "title": "Exercise {current} of {total}",
@@ -526,7 +526,7 @@
       "easy": "too light: the load goes up",
       "ok": "right load: we keep it",
       "hard": "heavy: we keep it",
-      "fail": "too heavy: the load goes down"
+      "fail": "all out: we keep it, unless below your range"
     },
     "closeOnes": {
       "title": "Not this machine? Very close ones:",
@@ -535,7 +535,8 @@
     "saved": "✓ Set saved: {set}",
     "testSetQuestion": "Too light? Could you have done 3 more reps?",
     "seeMovementOf": "See the card of {name}",
-    "restTaken": "rest {time}"
+    "restTaken": "rest {time}",
+    "restPreview": "rest {time}"
   },
   "availability": {
     "day": "Day",
@@ -1221,7 +1222,8 @@
       "catalogTab": "Catalog and Planning as tabs",
       "restEverywhere": "Rest in the exports",
       "drawingsAndRest": "More drawings, rest really taken",
-      "photosAndReminders": "Photos, slots and reminders"
+      "photosAndReminders": "Photos, slots and reminders",
+      "failureAndRest": "Gentler failure, rest shown first"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1296,7 +1298,9 @@
       "reminderTap": "Tapping a notification opens the right screen.",
       "fixPastReminders": "Fixed: a reminder whose time was past went off at once after a setting change.",
       "fixPlanningStart": "Fixed: Planning no longer mentions workouts \"not done\" before your first day with the app.",
-      "fixDisplay": "Fixed: help texts cut in Settings, \"cm\" shown twice in measurements, before/after mixing front and back."
+      "fixDisplay": "Fixed: help texts cut in Settings, \"cm\" shown twice in measurements, before/after mixing front and back.",
+      "failureKept": "\"Failure\" means \"all out, last rep missed\": with your reps in your range, the load stays (in the session and next time). It only goes down below the range.",
+      "restPreview": "Each feeling button shows the rest it will start, before you tap it."
     }
   },
   "data": {
