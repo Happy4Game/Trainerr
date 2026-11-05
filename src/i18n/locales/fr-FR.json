@@ -395,7 +395,6 @@
     "addExercise": "+ Ajouter un exercice",
     "moreOptions": "Préciser la série (RIR, note, reps incomplètes, tempo lent, dictée)",
     "coach": {
-      "lastTime": "La dernière fois : {sets}",
       "noHistory": "Première fois sur cet exercice.",
       "advice": {
         "moreLoad": "Monte la charge : {load} × {reps}",
@@ -544,6 +543,18 @@
       "up": "La charge monte à la série suivante",
       "same": "La charge reste la même",
       "down": "La charge baisse à la série suivante"
+    },
+    "compare": {
+      "title": "Comparaison avec la dernière fois",
+      "set": "Série",
+      "before": "Dernière fois",
+      "today": "Aujourd'hui",
+      "now": "en cours",
+      "trend": {
+        "up": "mieux que la dernière fois",
+        "same": "pareil que la dernière fois",
+        "down": "moins que la dernière fois"
+      }
     }
   },
   "availability": {
@@ -1308,8 +1319,9 @@
       "fixPlanningStart": "Corrigé : le Planning ne parle plus de séances « non faites » avant ton premier jour avec l'appli.",
       "fixDisplay": "Corrigé : textes d'aide coupés dans les Réglages, unité « cm » en double dans les mensurations, avant/après qui mélangeait face et dos.",
       "failureKept": "« Échec » veut dire « à fond, dernière rep ratée » : si tes reps sont dans ta fourchette, la charge reste la même (pendant la séance et la fois suivante). Elle ne baisse que sous la fourchette.",
-      "restPreview": "Boutons de ressenti plus clairs : une flèche et la charge de la série suivante, et la durée du repos qu'ils lancent.",
-      "machineRange": "Ta fourchette de reps pour une machine précise (12–20 à la presse, par exemple), sur sa fiche."
+      "restPreview": "Boutons de ressenti plus clairs : une flèche pour la charge de la série suivante, et la durée du repos qu'ils lancent.",
+      "machineRange": "Ta fourchette de reps pour une machine précise (12–20 à la presse, par exemple), sur sa fiche.",
+      "compareSets": "Pendant la séance, tes séries d'aujourd'hui à côté de celles de la dernière fois, série par série, avec une flèche verte quand tu fais mieux."
     }
   },
   "data": {

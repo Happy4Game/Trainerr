@@ -15,7 +15,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     id: 'failureAndRest',
     date: '2026-11-05',
-    items: ['failureKept', 'restPreview', 'machineRange'],
+    items: ['failureKept', 'restPreview', 'compareSets', 'machineRange'],
   },
   {
     id: 'photosAndReminders',

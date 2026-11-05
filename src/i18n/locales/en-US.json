@@ -395,7 +395,6 @@
     "addExercise": "+ Add an exercise",
     "moreOptions": "Add details (RIR, note, incomplete reps, slow tempo, voice)",
     "coach": {
-      "lastTime": "Last time: {sets}",
       "noHistory": "First time on this exercise.",
       "advice": {
         "moreLoad": "Go heavier: {load} × {reps}",
@@ -544,6 +543,18 @@
       "up": "The load goes up next set",
       "same": "The load stays the same",
       "down": "The load goes down next set"
+    },
+    "compare": {
+      "title": "Compared with last time",
+      "set": "Set",
+      "before": "Last time",
+      "today": "Today",
+      "now": "now",
+      "trend": {
+        "up": "better than last time",
+        "same": "same as last time",
+        "down": "less than last time"
+      }
     }
   },
   "availability": {
@@ -1308,8 +1319,9 @@
       "fixPlanningStart": "Fixed: Planning no longer mentions workouts \"not done\" before your first day with the app.",
       "fixDisplay": "Fixed: help texts cut in Settings, \"cm\" shown twice in measurements, before/after mixing front and back.",
       "failureKept": "\"Failure\" means \"all out, last rep missed\": with your reps in your range, the load stays (in the session and next time). It only goes down below the range.",
-      "restPreview": "Clearer feeling buttons: an arrow with the load of the next set, and the length of the rest they start.",
-      "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card."
+      "restPreview": "Clearer feeling buttons: an arrow for the load of the next set, and the length of the rest they start.",
+      "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card.",
+      "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better."
     }
   },
   "data": {

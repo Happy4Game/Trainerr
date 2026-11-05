@@ -68,3 +68,36 @@ test('a session added but left empty is not kept', async ({ page }) => {
   await page.getByRole('button', { name: 'Retour' }).click();
   await expect(page.getByText('Pas encore de séance terminée.')).toBeVisible();
 });
+
+test('during the workout, each set sits next to the same set last time', async ({ page }) => {
+  const day = new Date(Date.now() - 2 * 86_400_000);
+  const iso = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('searchbox').fill('leg press');
+  await page.getByRole('button', { name: 'Ajouter Presse à cuisses à mes machines' }).click();
+
+  // Last time, two days ago (an upper body session: legs come next): 30 kg × 10.
+  await page.getByRole('tab', { name: 'Progrès' }).click();
+  await page.getByRole('button', { name: "Ajouter une séance faite sans l'appli" }).click();
+  const form = page.getByRole('region', { name: "Séance faite sans l'appli" });
+  await form.getByLabel('Date').fill(iso);
+  await form.getByRole('button', { name: 'Créer et remplir' }).click();
+  await page.getByRole('button', { name: 'Ajouter un exercice' }).click();
+  await page.getByRole('search').last().getByRole('searchbox').fill('presse');
+  await page
+    .locator('ion-modal.show-modal')
+    .getByRole('heading', { name: 'Presse à cuisses', exact: true })
+    .click();
+  const set = page.getByRole('group', { name: /Série 1 : Presse à cuisses/ });
+  await set.getByRole('spinbutton').first().fill('30');
+  await set.getByRole('spinbutton').first().blur();
+  await page.getByRole('button', { name: 'Retour' }).click();
+
+  await page.getByRole('tab', { name: 'Séance', exact: true }).click();
+  await page.getByRole('button', { name: 'Commencer la séance' }).click();
+  const table = page.getByRole('table', { name: 'Comparaison avec la dernière fois' });
+  await expect(table.getByTestId('compare-1')).toContainText('30 kg × 10');
+  await expect(table.getByTestId('compare-1')).toContainText('en cours');
+  await expect(table.getByTestId('compare-2')).toContainText('—');
+});

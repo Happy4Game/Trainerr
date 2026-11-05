@@ -10,7 +10,10 @@ import {
   Pencil,
   Plus,
   Timer,
+  TrendingDown,
+  TrendingUp,
 } from 'lucide-vue-next';
+import { compareWithLastTime } from '@/domain/setComparison';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
@@ -187,7 +190,6 @@ const setText = (set: { loadKg: number; reps: number }) =>
   assisted.value
     ? t('session.assisted.set', { load: kg(set.loadKg), reps: n(set.reps) })
     : `${loadText(set.loadKg)} × ${repsText(set.reps)}`;
-const lastTimeText = computed(() => lastTime.value.map(setText).join(', '));
 const real = (set: { loadKg: number; reps: number }) => ({
   ...set,
   loadKg: session.realLoadFor(props.exerciseId, set.loadKg),
@@ -240,7 +242,31 @@ const DIFFICULTIES: { value: Difficulty; color: string }[] = [
   { value: 'fail', color: 'danger' },
 ];
 
-/** Next load for each feeling, read at a glance: an arrow and the load. */
+/** Last session next to today, set by set (real load: less help counts as heavier). */
+const lastDate = computed(() => session.lastTimeDate(props.exerciseId));
+const comparison = computed(() => {
+  const rows = compareWithLastTime(
+    lastTime.value,
+    session.workSetsInSession(props.exerciseId),
+    target.value,
+  );
+  // Trend on the real load, shown sets stay as typed on the machine.
+  return rows.map((row) =>
+    row.before && row.now
+      ? {
+          ...row,
+          trend: compareWithLastTime([real(row.before)], [real(row.now)])[0]?.trend,
+        }
+      : row,
+  );
+});
+const TREND_ICON = { up: TrendingUp, same: Equal, down: TrendingDown } as const;
+const shortDay = (date: string) =>
+  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(
+    new Date(`${date}T00:00:00Z`),
+  );
+
+/** Next load for each feeling, read at a glance: an arrow. */
 const EFFECT_ICON = { up: ArrowUp, same: Equal, down: ArrowDown } as const;
 const effects = computed(() => {
   const preview = session.effectPreview(props.exerciseId, load.value, reps.value);
@@ -385,17 +411,57 @@ function listen(): void {
       </ion-button>
     </div>
 
+    <!-- Set by set: last session against today -->
+    <table v-if="lastTime.length > 0" class="compare" :aria-label="t('session.compare.title')">
+      <thead>
+        <tr>
+          <th scope="col">{{ t('session.compare.set') }}</th>
+          <th scope="col">
+            {{ t('session.compare.before') }}
+            <small v-if="lastDate">{{ shortDay(lastDate) }}</small>
+          </th>
+          <th scope="col">{{ t('session.compare.today') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="row in comparison"
+          :key="row.number"
+          :class="{ current: row.number === done + 1 }"
+          :data-testid="`compare-${row.number}`"
+        >
+          <th scope="row">{{ row.number }}</th>
+          <td>{{ row.before ? setText(row.before) : '—' }}</td>
+          <td>
+            <template v-if="row.now">
+              {{ setText(row.now) }}
+              <component
+                :is="TREND_ICON[row.trend ?? 'same']"
+                v-if="row.trend"
+                :size="15"
+                :class="['trend', row.trend]"
+                :aria-label="t(`session.compare.trend.${row.trend}`)"
+              />
+            </template>
+            <span v-else-if="row.number === done + 1" class="now">{{
+              t('session.compare.now')
+            }}</span>
+            <span v-else class="todo">·</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <!-- What was done before, and what to do now -->
     <div class="coach" :class="advice" role="note">
-      <p v-if="previousToday" class="before">
+      <!-- The table above already shows last time and today's sets. -->
+      <template v-if="lastTime.length > 0" />
+      <p v-else-if="previousToday" class="before">
         {{
           t('session.coach.previousSet', {
             set: setText(previousToday),
           })
         }}
-      </p>
-      <p v-else-if="lastTime.length > 0" class="before">
-        {{ t('session.coach.lastTime', { sets: lastTimeText }) }}
       </p>
       <p v-else-if="usual" class="before">
         {{ t('session.coach.usual', { set: setText(usual) }) }}
@@ -556,9 +622,6 @@ function listen(): void {
               :title="t(`session.effect.${effects[d.value].effect}`)"
             >
               <component :is="EFFECT_ICON[effects[d.value].effect]" :size="15" aria-hidden="true" />
-              <template v-if="effects[d.value].loadKg !== undefined">
-                {{ loadText(effects[d.value].loadKg!) }}
-              </template>
             </span>
             <span v-if="restPreview" class="fact" data-testid="rest-preview">
               <Timer :size="14" aria-hidden="true" />
@@ -848,6 +911,61 @@ h2 {
   font-size: 0.75rem;
   text-transform: none;
   font-weight: 400;
+}
+.compare {
+  width: 100%;
+  margin-block: 8px 12px;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+.compare th,
+.compare td {
+  padding: 4px 6px;
+  text-align: start;
+}
+.compare thead th {
+  color: var(--ion-color-medium);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.compare thead small {
+  font-weight: 400;
+  text-transform: none;
+}
+.compare tbody th {
+  width: 2.5em;
+  color: var(--ion-color-medium);
+}
+.compare tbody tr {
+  border-top: 1px solid var(--ion-color-step-150, rgb(128 128 128 / 20%));
+}
+.compare tr.current {
+  background: rgb(var(--ion-color-primary-rgb) / 12%);
+}
+.compare td {
+  white-space: nowrap;
+}
+.trend {
+  vertical-align: -2px;
+  margin-inline-start: 4px;
+}
+.trend.up {
+  color: var(--ion-color-success);
+}
+.trend.same {
+  color: var(--ion-color-medium);
+}
+.trend.down {
+  color: var(--ion-color-danger);
+}
+.now {
+  color: var(--ion-color-primary);
+  font-weight: 700;
+}
+.todo {
+  color: var(--ion-color-medium);
 }
 .difficulty-facts {
   display: flex;

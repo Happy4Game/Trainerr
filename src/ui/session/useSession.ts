@@ -292,6 +292,12 @@ function workSetsInSession(exerciseId: string): SetLog[] {
 }
 
 /** Work sets of the last finished session with this exercise ("last time"). */
+/** Day of the last session with this exercise. */
+function lastTimeDate(exerciseId: string): string | undefined {
+  return history.value.filter((s) => s.sets.some((set) => set.exerciseId === exerciseId)).at(-1)
+    ?.date;
+}
+
 function lastTimeSets(exerciseId: string): SetLog[] {
   return (historyFor(exerciseId).at(-1) ?? []).filter((s) => !s.warmup);
 }
@@ -1344,6 +1350,7 @@ export function useSession() {
       return entry ? rangeOf(entry) : undefined;
     },
     lastTimeSets,
+    lastTimeDate,
     previousFor,
     plannedSets,
     setsInSession,
