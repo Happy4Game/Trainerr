@@ -30,7 +30,7 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   // One set less.
   await page.getByRole('button', { name: 'Une série de moins sur cet exercice' }).click();
   await expect(page.getByText('Série 1 sur 2')).toBeVisible();
-  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
 
   // That set was in fact on the machine: moved, the dumbbells come back to do.
@@ -50,7 +50,7 @@ test('during a session: another machine, fewer sets, reorder, and sets moved to 
   await expect(async () => {
     if ((await page.getByText('Série 2 sur 2').count()) > 0)
       await page
-        .getByRole('button', { name: '2 en réserve : Correct', exact: true })
+        .getByRole('button', { name: /^(Série faite|Non, ça va)$/ })
         .click({ timeout: 1000 });
     await expect(page.getByText('Série 2 sur 2')).toHaveCount(0, { timeout: 3000 });
   }).toPass({ timeout: 15_000 });
@@ -101,7 +101,7 @@ test('switching machine is at hand: next to the name after a set, and on the nex
       .locator('ion-content.ion-padding:visible')
       .first()
       .evaluate(async (el) => (await (el as HTMLIonContentElement).getScrollElement()).scrollTop);
-  const correct = page.getByRole('button', { name: '2 en réserve : Correct', exact: true });
+  const correct = page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ });
   await correct.scrollIntoViewIfNeeded();
   expect(await scrollTop()).toBeGreaterThan(0);
   await correct.click();

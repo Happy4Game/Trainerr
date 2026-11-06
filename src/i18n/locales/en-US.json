@@ -292,14 +292,14 @@
     "rir": {
       "label": "Reps in reserve (optional)",
       "value": "{count} rep in reserve | {count} reps in reserve",
-      "plenty": "4 or more reps in reserve"
+      "plenty": "4 or more reps in reserve",
+      "help": "Optional: how many more reps you could have done cleanly. 4+ = plenty."
     },
     "setNote": {
       "label": "Note on this set",
       "placeholder": "Grip slipping, seat 4…"
     },
     "slowTempo": "Slow tempo",
-    "howWasIt": "How many more reps could you have done?",
     "busy": "Machine taken",
     "alternative": {
       "substitute": "Same muscles",
@@ -387,7 +387,7 @@
       "previous": "+1 set on: {name}"
     },
     "addExercise": "+ Add an exercise",
-    "moreOptions": "Add details (note, incomplete reps, slow tempo, voice)",
+    "moreOptions": "Add details (RIR, note, incomplete reps, slow tempo, voice)",
     "coach": {
       "noHistory": "First time on this exercise.",
       "advice": {
@@ -413,7 +413,7 @@
     "steps": {
       "do": "Do your set",
       "doHelp": "The advised load and reps are already filled in. Only change them if you did something else.",
-      "feelHelp": "One tap logs the set and starts the rest. 0 = failure, 3+ = too light."
+      "feelHelp": "One tap logs the set and starts the rest. Your reps drive the load: above your range it goes up, below it goes down."
     },
     "progress": {
       "title": "Exercise {current} of {total}",
@@ -523,7 +523,7 @@
       "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
       "add": "+ {name}"
     },
-    "testSetFeel": "If so, tap 3+: the load goes up from the next set. Otherwise, 2 keeps it.",
+    "testSetFeel": "If so, the load goes up from the next set.",
     "closeOnes": {
       "title": "Not this machine? Very close ones:",
       "take": "Do {name} instead"
@@ -556,9 +556,15 @@
       "cancel": "Cancel, I'm staying on {name}"
     },
     "reserve": {
-      "button": "{reps} in reserve: {name}",
       "rest": "Rest after the set: {time}"
-    }
+    },
+    "validate": {
+      "title": "Log your set",
+      "done": "Set done",
+      "tooLight": "Yes, too light",
+      "fine": "No, it's fine"
+    },
+    "howWasIt": "How was it?"
   },
   "availability": {
     "day": "Day",
@@ -1246,7 +1252,7 @@
       "drawingsAndRest": "More drawings, rest really taken",
       "photosAndReminders": "Photos, slots and reminders",
       "failureAndRest": "Gentler failure, rest shown first",
-      "rirRest": "Reps in reserve, fixed rest"
+      "rirRest": "One tap, like with a coach"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1327,8 +1333,8 @@
       "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card.",
       "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better.",
       "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it.",
-      "rirButtons": "The feeling buttons become the reps you could still have done: 0 (failure), 1, 2 or 3+. No icons.",
-      "fixedRest": "The rest no longer depends on the feeling, only on the exercise (longer on big movements). It shows under the buttons, and the orange timer shows its full length."
+      "rirButtons": "No more difficulty choice: one \"Set done\" button. Your reps drive the load, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
+      "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length."
     }
   },
   "data": {

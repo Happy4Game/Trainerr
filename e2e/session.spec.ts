@@ -26,14 +26,14 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   // First exercise: compound first. First time on it: a light test set, no warm-up below it.
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   await expect(page.getByText(/série test légère/)).toBeVisible();
-  // The feeling is the reps left in the tank: 0 (failure) to 3+ (too light).
+  // The test set asks one thing: was it too light?
   await expect(page.getByText('Trop léger ? Tu aurais pu faire 3 reps de plus ?')).toBeVisible();
-  await expect(page.getByRole('button', { name: '3+ en réserve : Facile' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Oui, trop léger' })).toBeVisible();
   await expect(page.getByText(/Échauffement conseillé/)).toHaveCount(0);
   await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 
   // One tap on the difficulty records the pre-filled set and starts the rest timer.
-  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await expect(page.getByRole('timer')).toBeVisible();
   // The orange timer shows the full length of the rest, and follows the +30 s.
   const total = page.getByTestId('rest-total');
@@ -98,7 +98,7 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
 
   for (let set = 1; set <= 3; set++) {
     await expect(page.getByText(`Série ${set} sur 3`)).toBeVisible();
-    await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+    await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   }
   await expect(page.getByText('Développé épaules machine est libre ?')).toBeVisible();
   // Back to the busy machine: its drawing, which opens its card.
@@ -112,7 +112,7 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await page.getByRole('button', { name: 'Annuler la dernière série' }).click();
   await expect(page.getByRole('region', { name: 'Écarté à la machine' })).toBeVisible();
   await expect(page.getByText('Série 3 sur 3')).toBeVisible();
-  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
@@ -141,7 +141,7 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await expect(page.getByRole('group', { name: "Dernière séance aujourd'hui" })).toBeVisible();
 });
 
-test('the feeling is the reps in reserve, the rest shows once; reps are set per machine', async ({
+test('one tap logs a set, like with a coach; the rest shows once; reps are set per machine', async ({
   page,
 }) => {
   await skipOnboarding(page);
@@ -163,10 +163,12 @@ test('the feeling is the reps in reserve, the rest shows once; reps are set per 
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
   const entry = page.getByRole('region', { name: 'Écarté à la machine' });
   await expect(entry).toBeVisible();
-  // Four buttons, 0 to 3+, and one rest for all of them: it depends on the exercise only.
-  for (const name of ['0 en réserve : Échec', '1 en réserve : Limite', '2 en réserve : Correct'])
-    await expect(entry.getByRole('button', { name })).toBeVisible();
-  await expect(entry.getByRole('button', { name: '3+ en réserve : Facile' })).toBeVisible();
+  // The rest depends on the exercise only: shown once, before the tap.
   await expect(entry.getByTestId('rest-preview')).toHaveCount(1);
   await expect(entry.getByTestId('rest-preview')).toHaveText(/Repos après la série : \d+:\d\d/);
+  // After the test set, a single button: the reps decide the load, no feeling to pick.
+  await entry.getByRole('button', { name: 'Non, ça va' }).click();
+  await page.getByRole('button', { name: 'Passer', exact: true }).click();
+  await expect(entry.getByRole('button', { name: 'Série faite' })).toBeVisible();
+  await expect(entry.getByRole('button', { name: 'Oui, trop léger' })).toHaveCount(0);
 });

@@ -43,7 +43,7 @@ test('during a session, the machine card opens and leads back to the session', a
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('tab', { name: 'Séance' }).click();
   await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
-  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
   const current = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
@@ -83,7 +83,7 @@ test('more sets than planned: during the exercise or right after it', async ({ p
   await page.getByRole('button', { name: 'Ajouter une série à cet exercice' }).click();
   await expect(page.getByText('Série 1 sur 4')).toBeVisible();
   for (let set = 1; set <= 4; set++) {
-    await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+    await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
     if (set < 4) await page.getByRole('button', { name: 'Passer', exact: true }).click();
   }
   await expect(page.getByRole('region', { name: first })).toHaveCount(0);
@@ -152,7 +152,7 @@ test('the next machine, then the machine once there, start at the top of the scr
       .last()
       .evaluate(async (el) => (await (el as HTMLIonContentElement).getScrollElement()).scrollTop);
   for (let set = 1; set <= 3; set++) {
-    await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+    await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
     if (set < 3) await page.getByRole('button', { name: 'Passer', exact: true }).click();
   }
   const next = page.getByRole('region', { name: 'Machine suivante' });

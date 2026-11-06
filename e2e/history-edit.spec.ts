@@ -8,7 +8,7 @@ async function doOneSet(page: Page): Promise<string> {
   await page.getByRole('tab', { name: 'Séance' }).click();
   await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
   const first = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
-  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   return first;
 }
 
@@ -101,7 +101,7 @@ test('a set validated too fast can be fixed or deleted during the session', asyn
   // Finish the exercise, then delete one of its sets: it reopens.
   for (let i = 0; i < 2; i++) {
     await page.getByRole('button', { name: 'Passer', exact: true }).click();
-    await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+    await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   }
   await expect(page.getByRole('region', { name: 'Machine suivante' })).toBeVisible();
   // Newest set first: the corrected first set is now at the bottom of the list.

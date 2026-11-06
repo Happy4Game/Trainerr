@@ -34,7 +34,7 @@ test('a custom session is created, reordered, started and kept in the history', 
   await expect(page.getByText('Séance · Bras du vendredi')).toBeVisible();
   await expect(page.getByRole('region', { name: 'Extension triceps à la poulie' })).toBeVisible();
 
-  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await page.getByRole('button', { name: 'Fermer' }).first().click();
   await page.getByRole('tab', { name: 'Progrès' }).click();

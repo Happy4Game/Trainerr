@@ -27,7 +27,7 @@ test('today shows the whole next session, and a lighter one when not in shape', 
   await expect(page.getByText('Série 1 sur 2')).toBeVisible();
 
   // Once done, today says so, and another session is an extra.
-  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await page.getByRole('button', { name: 'Fermer' }).click();
   await page.getByRole('tab', { name: "Aujourd'hui" }).click();

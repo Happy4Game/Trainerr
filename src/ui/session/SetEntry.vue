@@ -9,6 +9,7 @@ import {
   Plus,
   TrendingDown,
   TrendingUp,
+  Check,
 } from 'lucide-vue-next';
 import { compareWithLastTime } from '@/domain/setComparison';
 import { computed, nextTick, ref, watch } from 'vue';
@@ -26,6 +27,7 @@ import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
 import { useSession } from './useSession';
+import { useRirText } from './useRirText';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
 import { unlockSound } from './restSound';
@@ -65,7 +67,8 @@ const load = ref(0);
 const reps = ref(0);
 const incomplete = ref(false);
 const slowTempo = ref(false);
-/** Optional: a free note on the set. */
+/** Optional: reps left in the tank (0 to 4+), and a free note on the set. */
+const rir = ref<number>();
 const setNote = ref('');
 const heard = ref<Difficulty>();
 const listening = ref(false);
@@ -79,6 +82,7 @@ watch(
     reps.value = proposal.value.targetReps;
     incomplete.value = false;
     slowTempo.value = false;
+    rir.value = undefined;
     setNote.value = '';
     heard.value = undefined;
   },
@@ -226,16 +230,7 @@ const ADVICE_ICON: Record<SetAdvice, string> = {
   comeback: '↺',
 };
 
-/**
- * The feeling of a set is the reps left in the tank (Zourdos et al. 2016,
- * doi:10.1519/JSC.0000000000001049): 0 = failure, 3+ = too light.
- */
-const RESERVES: { value: Difficulty; rir: number; label: string; color: string }[] = [
-  { value: 'fail', rir: 0, label: '0', color: 'danger' },
-  { value: 'hard', rir: 1, label: '1', color: 'warning' },
-  { value: 'ok', rir: 2, label: '2', color: 'primary' },
-  { value: 'easy', rir: 3, label: '3+', color: 'success' },
-];
+const RIR_VALUES = [0, 1, 2, 3, 4] as const;
 
 /** Last session next to today, set by set (real load: less help counts as heavier). */
 const lastDate = computed(() => session.lastTimeDate(props.exerciseId));
@@ -261,12 +256,18 @@ const shortDay = (date: string) =>
     new Date(`${date}T00:00:00Z`),
   );
 
-/** The rest a set starts, the same whatever the reps left: seen before the tap. */
+/** The rest a set starts, set by the exercise only: seen before the tap. */
+const rirText = useRirText();
 const restPreview = computed(() => session.restPreview(props.exerciseId));
 const clock = (seconds: number) =>
   `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
-async function validate(difficulty: Difficulty, rir: number): Promise<void> {
+/**
+ * Like a coach: the reps done drive the load (double progression, ACSM 2009,
+ * doi:10.1249/MSS.0b013e3181915670). Above the range the load goes up, below
+ * it goes down. Only the test set asks if it was too light.
+ */
+async function validate(difficulty: Difficulty = heard.value ?? 'ok'): Promise<void> {
   // A short buzz: the set is saved, no need to look at the screen.
   navigator.vibrate?.(35);
   // This tap allows the beep at the end of the rest.
@@ -278,7 +279,7 @@ async function validate(difficulty: Difficulty, rir: number): Promise<void> {
     difficulty,
     ...(incomplete.value ? { completeReps: false } : {}),
     ...(slowTempo.value ? { slowTempo: true } : {}),
-    rir,
+    ...(rir.value === undefined ? {} : { rir: rir.value }),
     ...(setNote.value.trim() ? { note: setNote.value.trim() } : {}),
   });
   // A record: a happier buzz.
@@ -585,27 +586,22 @@ function listen(): void {
 
     <h3 class="step">
       <span class="badge">2</span>
-      {{ testSet ? t('session.testSetQuestion') : t('session.howWasIt') }}
+      {{ testSet ? t('session.testSetQuestion') : t('session.validate.title') }}
     </h3>
     <p v-if="testSet" class="help test-help">{{ t('session.testSetFeel') }}</p>
     <p v-else-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
-    <div class="difficulties">
-      <ion-button
-        v-for="r in RESERVES"
-        :key="r.value"
-        :color="r.color"
-        :fill="heard && heard !== r.value ? 'outline' : 'solid'"
-        :aria-label="
-          t('session.reserve.button', { reps: r.label, name: t(`difficulty.${r.value}`) })
-        "
-        @click="validate(r.value, r.rir)"
-      >
-        <span class="difficulty">
-          <span class="reserve">{{ r.label }}</span>
-          <span class="difficulty-name">{{ t(`difficulty.${r.value}`) }}</span>
-        </span>
+    <div v-if="testSet" class="test-answers">
+      <ion-button color="success" size="large" @click="validate('easy')">
+        {{ t('session.validate.tooLight') }}
+      </ion-button>
+      <ion-button size="large" @click="validate('ok')">
+        {{ t('session.validate.fine') }}
       </ion-button>
     </div>
+    <ion-button v-else class="done-button" expand="block" size="large" @click="validate()">
+      <Check :size="26" aria-hidden="true" class="icon" />
+      {{ t('session.validate.done') }}
+    </ion-button>
     <p v-if="restPreview" class="rest-line" data-testid="rest-preview">
       {{ t('session.reserve.rest', { time: clock(restPreview) }) }}
     </p>
@@ -632,6 +628,22 @@ function listen(): void {
           <ion-label>{{ t('session.slowTempo') }}</ion-label>
         </ion-chip>
       </div>
+      <fieldset class="rir">
+        <legend>{{ t('session.rir.label') }}</legend>
+        <ion-chip
+          v-for="value in RIR_VALUES"
+          :key="value"
+          :outline="rir !== value"
+          v-bind="rir === value ? { color: 'primary' } : {}"
+          role="radio"
+          :aria-checked="rir === value"
+          :aria-label="rirText(value)"
+          @click="rir = rir === value ? undefined : value"
+        >
+          <ion-label>{{ value === 4 ? '4+' : value }}</ion-label>
+        </ion-chip>
+      </fieldset>
+      <p class="help">{{ t('session.rir.help') }}</p>
       <ion-input
         v-model="setNote"
         class="set-note"
@@ -842,26 +854,39 @@ h2 {
   color: var(--tr-text);
   font-weight: 600;
 }
-.difficulty {
+.rir {
+  border: 0;
+  margin: 8px 0 0;
+  padding: 0;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
 }
-.reserve {
-  font-size: 1.6rem;
+.rir legend {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.rir ion-chip {
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+}
+.done-button {
+  min-height: 64px;
+  margin: 0;
+  font-size: 1.15rem;
   font-weight: 800;
-  line-height: 1;
-  text-transform: none;
 }
-.difficulty-name {
-  font-size: 0.8rem;
-  text-transform: none;
+.test-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
-.difficulty-hint {
-  font-size: 0.75rem;
-  text-transform: none;
-  font-weight: 400;
+.test-answers ion-button {
+  margin: 0;
+  min-height: 64px;
+  white-space: normal;
 }
 .compare {
   width: 100%;
@@ -1065,17 +1090,6 @@ h2 {
 .flags {
   display: flex;
   flex-wrap: wrap;
-}
-.difficulties {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-.difficulties ion-button {
-  margin: 0;
-  min-height: 72px;
-  --padding-start: 4px;
-  --padding-end: 4px;
 }
 .tools {
   display: flex;
