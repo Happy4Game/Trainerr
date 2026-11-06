@@ -198,6 +198,22 @@
       "notch": "Notch (backrest, arm, pad)",
       "notchPlaceholder": "E.g. 2",
       "addOther": "Add this weight"
+    },
+    "range": {
+      "title": "My reps on this machine",
+      "min": "Minimum",
+      "max": "Maximum",
+      "less": {
+        "min": "One rep less at minimum",
+        "max": "One rep less at maximum"
+      },
+      "more": {
+        "min": "One rep more at minimum",
+        "max": "One rep more at maximum"
+      },
+      "mine": "Your range for this machine. The load goes up once every set reaches the maximum.",
+      "usual": "Usual range. Change it here for this machine only.",
+      "reset": "Back to {min}–{max} reps"
     }
   },
   "templates": {
@@ -252,7 +268,7 @@
       "inRange": "You are in your range: same load, one more rep if you can.",
       "hard": "The previous set was hard: keep the load.",
       "belowRange": "You are below your rep range: a bit lighter.",
-      "failure": "Failure on the previous set: lighter.",
+      "failure": "Set to failure within your range: well done, the load stays.",
       "incompleteReps": "Incomplete reps: lighter, to keep the full range of motion.",
       "missingStep": "The next step of the machine is too heavy: add reps instead.",
       "noHeavierStep": "You are at the heaviest step of the machine.",
@@ -263,7 +279,7 @@
     },
     "reminder": {
       "rangeOfMotion": "Full range of motion: an incomplete rep does not count.",
-      "technique": "Two failures in a row: read the cues on the card again."
+      "technique": "Two sessions in a row below your range: read the card again."
     },
     "load": "Load",
     "reps": "Reps",
@@ -286,20 +302,14 @@
     "slowTempo": "Slow tempo",
     "howWasIt": "How was it?",
     "busy": "Machine taken",
-    "busyTitle": "{name} is taken",
-    "busyHelp": "Two choices: \"Meanwhile\" has you do another machine now, and {name} is offered again right after. \"Replace\" takes it out of the session for good.",
     "alternative": {
       "substitute": "Same muscles",
       "swap": "Next exercise of the workout",
       "take": "I'll take this one",
       "choose": "Take {name}",
       "none": "No other machine for these muscles in your favorites: wait a bit or move on.",
-      "meanwhile": "Meanwhile",
-      "meanwhileNamed": "Do {name} meanwhile",
-      "replace": "Replace",
-      "replaceNamed": "Replace {busy} with {name}"
+      "meanwhileNamed": "Do {name} meanwhile"
     },
-    "continue": "Go on with the rest",
     "isFree": "Is {name} free?",
     "free": "Yes, going",
     "stillBusy": "Still taken",
@@ -379,7 +389,6 @@
     "addExercise": "+ Add an exercise",
     "moreOptions": "Add details (RIR, note, incomplete reps, slow tempo, voice)",
     "coach": {
-      "lastTime": "Last time: {sets}",
       "noHistory": "First time on this exercise.",
       "advice": {
         "moreLoad": "Go heavier: {load} × {reps}",
@@ -405,12 +414,6 @@
       "do": "Do your set",
       "doHelp": "The advised load and reps are already filled in. Only change them if you did something else.",
       "feelHelp": "One tap saves the set and starts the rest."
-    },
-    "difficultyHint": {
-      "easy": "3+ reps left",
-      "ok": "1 or 2 left",
-      "hard": "nothing left",
-      "fail": "could not finish"
     },
     "progress": {
       "title": "Exercise {current} of {total}",
@@ -483,7 +486,6 @@
     },
     "replaceCard": {
       "open": "Change machine",
-      "title": "Replace {name}",
       "help": "Same movement on another machine: the suggested load is the one of that machine.",
       "keepDone": "{count} set already done stays on {name}. The new machine takes the sets left. | {count} sets already done stay on {name}. The new machine takes the sets left.",
       "mine": "My machine",
@@ -522,12 +524,6 @@
       "add": "+ {name}"
     },
     "testSetFeel": "If so, pick Easy: the load goes up from the next set. Otherwise, OK keeps it.",
-    "testSetHint": {
-      "easy": "too light: the load goes up",
-      "ok": "right load: we keep it",
-      "hard": "heavy: we keep it",
-      "fail": "too heavy: the load goes down"
-    },
     "closeOnes": {
       "title": "Not this machine? Very close ones:",
       "take": "Do {name} instead"
@@ -535,7 +531,35 @@
     "saved": "✓ Set saved: {set}",
     "testSetQuestion": "Too light? Could you have done 3 more reps?",
     "seeMovementOf": "See the card of {name}",
-    "restTaken": "rest {time}"
+    "restTaken": "rest {time}",
+    "effect": {
+      "up": "The load goes up next set",
+      "same": "The load stays the same",
+      "down": "The load goes down next set"
+    },
+    "compare": {
+      "title": "Compared with last time",
+      "set": "Set",
+      "before": "Last time",
+      "today": "Today",
+      "now": "now",
+      "trend": {
+        "up": "better than last time",
+        "same": "same as last time",
+        "down": "less than last time"
+      }
+    },
+    "switch": {
+      "title": "Change {name}",
+      "why": "Why are you changing?",
+      "busy": "Taken",
+      "busySub": "I'll come back to it",
+      "replace": "Replace",
+      "replaceSub": "for the whole session",
+      "busyHelp": "Do another machine now: {name} comes back right after.",
+      "later": "Nothing, I'll go to the next exercise",
+      "cancel": "Cancel, I'm staying on {name}"
+    }
   },
   "availability": {
     "day": "Day",
@@ -1221,7 +1245,8 @@
       "catalogTab": "Catalog and Planning as tabs",
       "restEverywhere": "Rest in the exports",
       "drawingsAndRest": "More drawings, rest really taken",
-      "photosAndReminders": "Photos, slots and reminders"
+      "photosAndReminders": "Photos, slots and reminders",
+      "failureAndRest": "Gentler failure, rest shown first"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1296,7 +1321,12 @@
       "reminderTap": "Tapping a notification opens the right screen.",
       "fixPastReminders": "Fixed: a reminder whose time was past went off at once after a setting change.",
       "fixPlanningStart": "Fixed: Planning no longer mentions workouts \"not done\" before your first day with the app.",
-      "fixDisplay": "Fixed: help texts cut in Settings, \"cm\" shown twice in measurements, before/after mixing front and back."
+      "fixDisplay": "Fixed: help texts cut in Settings, \"cm\" shown twice in measurements, before/after mixing front and back.",
+      "failureKept": "\"Failure\" means \"all out, last rep missed\": with your reps in your range, the load stays (in the session and next time). It only goes down below the range.",
+      "restPreview": "Clearer feeling buttons: an arrow for the load of the next set, and the length of the rest they start.",
+      "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card.",
+      "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better.",
+      "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it."
     }
   },
   "data": {

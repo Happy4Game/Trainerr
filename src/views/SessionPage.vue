@@ -20,7 +20,6 @@ import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
 import { ArrowLeftRight, Pencil } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
-import type { Alternative } from '@/domain/busyMachine';
 import { crowdedFallback } from '@/domain/busyMachine';
 import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { Exercise } from '@/domain/types';
@@ -53,9 +52,8 @@ useSessionNotification();
 const { phase, template, active, step, warmup, restEndsAt, summary, crowded } = session;
 const { previousExercise } = session;
 
-const busyFor = ref<string>();
-/** Machine being swapped for another one doing the same movement. */
-const replacing = ref<string>();
+/** Machine being left, and why: taken for now, or replaced for good. */
+const switching = ref<{ id: string; mode: 'busy' | 'replace' }>();
 const overviewOpen = ref(false);
 const content = ref<{ $el: { scrollToTop: (duration?: number) => Promise<void> } }>();
 
@@ -165,7 +163,6 @@ async function onDiscomfort(response: DiscomfortResponse, zone: DiscomfortZone):
     discomforts: [...(appSettings.value?.discomforts ?? []), { date: today(), zone }].slice(-20),
   });
 }
-const busyAlternatives = ref<Alternative[]>([]);
 const platesLoad = ref<number>();
 
 const nameOf = (id: string) => {
@@ -178,7 +175,6 @@ const thumbnailOf = (id: string) => {
   const image = illustrationFor(id)?.images[0];
   return image ? `${import.meta.env.BASE_URL}exercise-images/${image.file}` : undefined;
 };
-const musclesOf = (e: Exercise) => e.primaryMuscles.map((m) => t(`muscles.${m}`)).join(', ');
 const loadOf = useLoadLabel();
 const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id)}`;
 const { load: kg } = useUnits();
@@ -207,35 +203,15 @@ const currentId = computed(() =>
   step.value?.kind === 'exercise' ? step.value.exerciseId : undefined,
 );
 
-/** The busy and replace cards sit at the top of the screen: bring them into view. */
-async function showTop(): Promise<void> {
-  await nextTick();
-  void content.value?.$el.scrollToTop(300);
+/** Both open the same sheet over the screen, where the user is looking. */
+function onBusy(id = currentId.value): void {
+  if (id) switching.value = { id, mode: 'busy' };
 }
-async function onBusy(): Promise<void> {
-  const id = currentId.value;
-  if (!id) return;
-  busyAlternatives.value = session.alternatives(id);
-  busyFor.value = id;
-  void showTop();
-  await session.markMachineBusy(id);
-}
-/** Opens over the screen, where the user is looking. */
 function openReplace(id: string): void {
-  replacing.value = id;
+  switching.value = { id, mode: 'replace' };
 }
-/** Another machine now; the busy one is offered again after it. */
-async function choose(alternative: Alternative): Promise<void> {
-  await session.chooseAlternative(alternative);
-  busyFor.value = undefined;
-}
-/** The busy machine leaves the session for good: the other one takes its place. */
-async function replaceBusy(alternative: Alternative): Promise<void> {
-  const id = busyFor.value;
-  if (!id) return;
-  await session.replaceBusyMachine(id, alternative.exercise.id);
-  busyFor.value = undefined;
-}
+// The sheet is about one machine: once the session moved on, it has no reason to stay.
+watch(currentId, () => (switching.value = undefined));
 
 const fallback = computed(() => {
   const s = active.value;
@@ -442,88 +418,20 @@ async function logWarmup(): Promise<void> {
           </ion-button>
         </div>
 
-        <ion-card v-if="busyFor" class="busy">
-          <ion-card-header>
-            <ion-card-title>{{ t('session.busyTitle', { name: nameOf(busyFor) }) }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p>{{ t('session.busyHelp', { name: nameOf(busyFor) }) }}</p>
-            <ul class="alternatives">
-              <li
-                v-for="alternative in busyAlternatives"
-                :key="alternative.exercise.id"
-                class="alternative"
-              >
-                <router-link
-                  v-if="thumbnailOf(alternative.exercise.id)"
-                  :to="cardLink(alternative.exercise.id)"
-                  class="thumb-link"
-                  :aria-label="
-                    t('session.seeMovementOf', { name: exerciseName(alternative.exercise) })
-                  "
-                >
-                  <img :src="thumbnailOf(alternative.exercise.id)" alt="" class="alt-thumb" />
-                </router-link>
-                <div class="alt-body">
-                  <h3>{{ exerciseName(alternative.exercise) }}</h3>
-                  <p class="alt-kind">{{ t(`session.alternative.${alternative.kind}`) }}</p>
-                  <p class="alt-detail">
-                    {{ musclesOf(alternative.exercise) }}
-                    <template v-if="alternative.loadKg !== undefined">
-                      · {{ kg(alternative.loadKg) }}
-                    </template>
-                  </p>
-                  <div class="alt-actions">
-                    <ion-button
-                      size="small"
-                      :aria-label="
-                        t('session.alternative.meanwhileNamed', {
-                          name: exerciseName(alternative.exercise),
-                        })
-                      "
-                      @click="choose(alternative)"
-                    >
-                      {{ t('session.alternative.meanwhile') }}
-                    </ion-button>
-                    <ion-button
-                      size="small"
-                      fill="outline"
-                      :aria-label="
-                        t('session.alternative.replaceNamed', {
-                          busy: nameOf(busyFor),
-                          name: exerciseName(alternative.exercise),
-                        })
-                      "
-                      @click="replaceBusy(alternative)"
-                    >
-                      {{ t('session.alternative.replace') }}
-                    </ion-button>
-                    <ion-button
-                      size="small"
-                      fill="clear"
-                      :router-link="cardLink(alternative.exercise.id)"
-                    >
-                      {{ t('session.seeMovement') }}
-                    </ion-button>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <p v-if="busyAlternatives.length === 0">{{ t('session.alternative.none') }}</p>
-            <ion-button fill="clear" @click="busyFor = undefined">{{
-              t('session.continue')
-            }}</ion-button>
-          </ion-card-content>
-        </ion-card>
-
         <ion-modal
-          :is-open="replacing !== undefined"
+          :is-open="switching !== undefined"
           :initial-breakpoint="0.9"
           :breakpoints="[0, 0.9, 1]"
-          @did-dismiss="replacing = undefined"
+          @did-dismiss="switching = undefined"
         >
           <ion-content class="ion-padding">
-            <ReplaceCard v-if="replacing" :exercise-id="replacing" @close="replacing = undefined" />
+            <ReplaceCard
+              v-if="switching"
+              :key="`${switching.id}-${switching.mode}`"
+              :exercise-id="switching.id"
+              :mode="switching.mode"
+              @close="switching = undefined"
+            />
           </ion-content>
         </ion-modal>
         <ion-toast
@@ -606,7 +514,7 @@ async function logWarmup(): Promise<void> {
               <ArrowLeftRight :size="18" aria-hidden="true" class="icon" />
               {{ t('session.replaceCard.open') }}
             </ion-button>
-            <ion-button fill="outline" color="medium" @click="onBusy">
+            <ion-button fill="outline" color="medium" @click="onBusy(nextMachine.id)">
               {{ t('session.busy') }}
             </ion-button>
           </div>
@@ -643,7 +551,7 @@ async function logWarmup(): Promise<void> {
           </ion-card>
           <SetEntry
             :exercise-id="step.exerciseId"
-            @busy="onBusy"
+            @busy="onBusy()"
             @replace="openReplace(step.exerciseId)"
             @plates="platesLoad = $event"
           />
@@ -884,47 +792,6 @@ async function logWarmup(): Promise<void> {
 .plan-line {
   margin-block: 0 12px;
   color: var(--ion-color-medium-shade);
-}
-.alternatives {
-  margin: 8px 0;
-  padding: 0;
-  list-style: none;
-}
-.alternative {
-  display: flex;
-  gap: 12px;
-  padding-block: 10px;
-  border-block-end: 1px solid var(--ion-color-light);
-}
-.alt-thumb {
-  flex: none;
-  width: 88px;
-  height: 88px;
-  object-fit: contain;
-  border-radius: 10px;
-  background: #fff;
-}
-.alt-body h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--ion-text-color, #000);
-}
-.alt-kind {
-  margin: 2px 0 0;
-  font-size: 0.8rem;
-  color: var(--ion-color-primary);
-}
-.alt-detail {
-  margin: 2px 0 4px;
-  font-size: 0.85rem;
-  color: var(--ion-color-medium-shade);
-}
-.alt-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-inline-start: -6px;
 }
 .free-machine {
   display: flex;

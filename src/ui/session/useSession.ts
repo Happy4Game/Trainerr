@@ -65,7 +65,7 @@ import {
   type SessionBlock,
 } from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
-import type { Exercise, SessionLog, SetLog } from '@/domain/types';
+import type { Difficulty, Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupRamp } from '@/domain/warmup';
 import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
@@ -292,6 +292,12 @@ function workSetsInSession(exerciseId: string): SetLog[] {
 }
 
 /** Work sets of the last finished session with this exercise ("last time"). */
+/** Day of the last session with this exercise. */
+function lastTimeDate(exerciseId: string): string | undefined {
+  return history.value.filter((s) => s.sets.some((set) => set.exerciseId === exerciseId)).at(-1)
+    ?.date;
+}
+
 function lastTimeSets(exerciseId: string): SetLog[] {
   return (historyFor(exerciseId).at(-1) ?? []).filter((s) => !s.warmup);
 }
@@ -310,11 +316,13 @@ function previousFor(exerciseId: string): SetLog | undefined {
 const sharedSettings = useSettings().settings;
 
 /**
- * Rep range of an exercise today: the ready-made session's own, else the
- * user's own range from the settings, else the exercise default.
+ * Rep range of an exercise today: the user's own for this machine, else the
+ * ready-made session's, else the user's own for every exercise, else the
+ * exercise default.
  */
 function rangeOf(entry: CatalogEntry) {
   return (
+    sharedSettings.value?.machineRepRanges?.[entry.exercise.id] ??
     active.value?.plan.exercises.find((e) => e.exerciseId === entry.exercise.id)?.repRange ??
     repRangeFor(entry.exercise, sharedSettings.value?.repRange)
   );
@@ -676,14 +684,66 @@ async function logSet(set: SetLog): Promise<void> {
   );
   if (superset.next) queue = startNow(queue, superset.next);
   if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
-  const kind = entry?.exercise.kind ?? 'isolation';
   // Usual rest of the exercise, adapted to how hard the set was.
-  const rest = restAfterSet(
-    active.value.plan.exercises.find((e) => e.exerciseId === set.exerciseId)?.restSeconds ??
-      REST_SECONDS[kind].max,
-    set.difficulty,
-  );
+  const rest = restAfterSet(usualRest(set.exerciseId), set.difficulty);
   restEndsAt.value = superset.rest ? Date.now() + rest * 1000 : undefined;
+}
+
+/** Usual rest of an exercise in the session, before the feeling adjusts it. */
+function usualRest(exerciseId: string): number {
+  const kind = entryOf(exerciseId)?.exercise.kind ?? 'isolation';
+  return (
+    active.value?.plan.exercises.find((e) => e.exerciseId === exerciseId)?.restSeconds ??
+    REST_SECONDS[kind].max
+  );
+}
+
+/** What each feeling would do to the load of the next set: shown on its button. */
+export interface LoadEffect {
+  readonly effect: 'up' | 'same' | 'down';
+  /** Load of the next set, on the machine; none on an assisted machine (help, not load). */
+  readonly loadKg?: number;
+}
+function effectPreview(
+  exerciseId: string,
+  loadKg: number,
+  reps: number,
+): Record<Difficulty, LoadEffect> | undefined {
+  const entry = entryOf(exerciseId);
+  if (!entry) return undefined;
+  const scale = scaleOf(entry);
+  const isLastSet = workSetsInSession(exerciseId).length + 1 >= plannedSets(exerciseId);
+  const effect = (difficulty: Difficulty): LoadEffect => {
+    const rule = nextSetProposal({
+      set: toRealSet(scale, { exerciseId, loadKg, reps, difficulty }),
+      range: rangeOf(entry),
+      steps: scale?.realSteps ?? stepsOf(entry),
+      isLastSet,
+    });
+    const effect = rule.action === 'increase' ? 'up' : rule.action === 'keep' ? 'same' : 'down';
+    return scale ? { effect } : { effect, loadKg: rule.loadKg };
+  };
+  return { easy: effect('easy'), ok: effect('ok'), hard: effect('hard'), fail: effect('fail') };
+}
+
+/**
+ * The rest each feeling would start, shown on its button before the tap.
+ * None: first exercise of a superset, the partner comes straight after.
+ */
+function restPreview(exerciseId: string): Record<Difficulty, number> | undefined {
+  const plan = active.value?.plan;
+  if (!plan) return undefined;
+  const superset = afterSupersetSet(plan.supersets ?? [], exerciseId, (id) =>
+    plan.queue.pending.includes(id),
+  );
+  if (!superset.rest) return undefined;
+  const usual = usualRest(exerciseId);
+  return {
+    easy: restAfterSet(usual, 'easy'),
+    ok: restAfterSet(usual, 'ok'),
+    hard: restAfterSet(usual, 'hard'),
+    fail: restAfterSet(usual, 'fail'),
+  };
 }
 
 /** The set just logged beat the record: the screen celebrates it. */
@@ -802,16 +862,6 @@ const sessionMuscles = computed<MuscleId[]>(() => {
     for (const m of entryOf(line.exerciseId)?.exercise.primaryMuscles ?? []) muscles.add(m);
   return [...muscles];
 });
-
-/**
- * The busy machine replaced for good: the other one is done now, and the
- * busy one is not offered again in this session.
- */
-async function replaceBusyMachine(busyId: string, withId: string): Promise<void> {
-  await replaceExercise(busyId, withId);
-  if (!active.value) return;
-  await updatePlan({ ...active.value.plan, queue: startNow(active.value.plan.queue, withId) });
-}
 
 async function machineFree(exerciseId: string): Promise<void> {
   if (!active.value) return;
@@ -1290,6 +1340,7 @@ export function useSession() {
       return entry ? rangeOf(entry) : undefined;
     },
     lastTimeSets,
+    lastTimeDate,
     previousFor,
     plannedSets,
     setsInSession,
@@ -1300,12 +1351,13 @@ export function useSession() {
     /** Ready-made session line: seconds held, or reps per leg. */
     planned: (id: string) => active.value?.plan.exercises.find((e) => e.exerciseId === id),
     logSet,
+    restPreview,
+    effectPreview,
     undoLastSet,
     editSessionSet,
     removeSessionSet,
     markMachineBusy,
     chooseAlternative,
-    replaceBusyMachine,
     sessionMuscles,
     machineFree,
     machineStillBusy,

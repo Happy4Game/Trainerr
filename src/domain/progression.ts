@@ -23,14 +23,18 @@ export const REST_SECONDS: Readonly<Record<ExerciseKind, { min: number; max: num
 export const MISSING_STEP_EXTRA_REPS = 3;
 
 /**
- * Rep range of an exercise: the user's own when set in the settings (8–12 for
- * every exercise, say), else the exercise's. Muscle grows over a wide range of
+ * Rep range of an exercise: the user's own for this machine, else the user's
+ * own for every exercise (8–12, say), else the exercise's. Muscle grows over a wide range of
  * reps when the sets end close to failure (Schoenfeld et al. 2017,
  * doi:10.1519/JSC.0000000000002200; Schoenfeld et al. 2021, doi:10.3390/sports9020032):
  * the default only fits the range to the kind of exercise.
  */
-export function repRangeFor(exercise: Exercise, own?: RepRange): RepRange {
-  return own ?? exercise.repRange ?? DEFAULT_REP_RANGES[exercise.kind];
+export function repRangeFor(
+  exercise: Exercise,
+  own?: RepRange,
+  machines?: Readonly<Record<string, RepRange>>,
+): RepRange {
+  return machines?.[exercise.id] ?? own ?? exercise.repRange ?? DEFAULT_REP_RANGES[exercise.kind];
 }
 
 /** Bounds of a range the user can set: from 1 to 30 reps, at least 2 reps wide. */
@@ -94,8 +98,12 @@ export function nextSetProposal(input: {
 
   // Rule 4: a rep without full range of motion does not count.
   if (set.completeReps === false) return goDown('incompleteReps', ['rangeOfMotion']);
-  if (set.difficulty === 'fail') return goDown('failure');
   if (set.reps < range.min) return goDown('belowRange');
+  // A set taken to failure with the reps in the range is a goal, not a problem:
+  // failure or 1–2 reps short of it build as much muscle (Refalo et al. 2023,
+  // Sports Med, meta-analysis on proximity to failure). The load stays; the
+  // missed rep only lowers it when the reps fall below the range.
+  if (set.difficulty === 'fail') return keep('failure');
   // Never heavier after a Limite set.
   if (set.difficulty === 'hard') return keep(set.reps > range.max ? 'hard' : 'inRange');
 
@@ -197,8 +205,9 @@ export function firstTimeProposal(input: {
   };
 }
 
+/** Missed: incomplete reps, or fewer than the range. A set to failure within the range is not. */
 function isFailedSet(set: SetLog, range: RepRange): boolean {
-  return set.difficulty === 'fail' || set.completeReps === false || set.reps < range.min;
+  return set.completeReps === false || set.reps < range.min;
 }
 
 /** Starting load of an exercise in a new session: history, then comeback reference, then a test set. */

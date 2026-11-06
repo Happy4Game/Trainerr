@@ -35,6 +35,7 @@ L'appli tient en cinq écrans principaux : Aujourd'hui, Séance en cours, Catalo
 
 1. Un bouton « Occupée » sur chaque exercice de la séance, accessible d'une tape.
 2. L'appli propose 2 ou 3 alternatives qui travaillent les mêmes muscles, parmi les favoris, avec la charge déjà calculée (ex. seated row pris → diverging seated row ou rear delt).
+2 bis. « Occupée » et « Changer de machine » ouvrent le même menu, avec deux choix en haut : « Occupée, j'y reviens » ou « Remplacer pour toute la séance ». Rien ne change tant qu'aucune option n'est prise : annuler ferme le menu, et il se ferme seul si la séance passe à un autre exercice. « Rien, je passe à l'exercice suivant » met la machine en attente sans en prendre une autre.
 3. L'exercice occupé passe en file d'attente : l'appli le repropose après l'exercice suivant (« Le seated row est libre ? »).
 4. Si l'exercice reste occupé jusqu'à la fin, il est reporté à la prochaine séance du même type, et le compteur de séries par muscle en tient compte.
 5. **Salle bondée** : dès 2 machines occupées, l'appli propose de refaire la fin de séance avec haltères et poulies, mêmes muscles visés.
@@ -58,14 +59,14 @@ La charge monte d'un palier quand les reps dépassent le haut de la fourchette o
 
 1. Reps au-dessus de la fourchette, ou difficulté Facile → +1 palier.
 2. Reps dans la fourchette, difficulté Correct ou Limite → même charge.
-3. Reps sous le bas de la fourchette, ou Échec → −1 palier (ou arrêt de l'exercice si c'est la dernière série).
+3. Reps sous le bas de la fourchette → −1 palier (ou arrêt de l'exercice si c'est la dernière série). Une série Échec (« à fond, dernière rep ratée ») avec des reps dans la fourchette garde la charge : aller à l'échec ou s'en approcher fait autant progresser (Refalo et al. 2023, Sports Medicine).
 4. Une rep incomplète (amplitude non atteinte) ne compte pas.
 
 **Règles entre deux séances (même exercice)**
 
 1. Toutes les séries au haut de la fourchette → +1 palier à la séance suivante.
 2. Charge montée en cours de séance et tenue → nouvelle charge de départ.
-3. Échec répété 2 séances de suite → −1 palier et rappel technique.
+3. Reps sous la fourchette (ou reps incomplètes) 2 séances de suite → −1 palier et rappel technique.
 
 **Cas particuliers**
 

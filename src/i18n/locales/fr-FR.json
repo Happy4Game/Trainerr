@@ -198,6 +198,22 @@
       "notch": "Cran (dossier, bras, coussin)",
       "notchPlaceholder": "Ex. 2",
       "addOther": "Ajouter ce poids"
+    },
+    "range": {
+      "title": "Mes reps sur cette machine",
+      "min": "Minimum",
+      "max": "Maximum",
+      "less": {
+        "min": "Une rep de moins au minimum",
+        "max": "Une rep de moins au maximum"
+      },
+      "more": {
+        "min": "Une rep de plus au minimum",
+        "max": "Une rep de plus au maximum"
+      },
+      "mine": "Ta fourchette pour cette machine. La charge monte quand toutes tes séries atteignent le maximum.",
+      "usual": "Fourchette habituelle. Change-la ici pour cette machine seulement.",
+      "reset": "Revenir à {min}–{max} reps"
     }
   },
   "templates": {
@@ -252,7 +268,7 @@
       "inRange": "Tu es dans ta fourchette : même charge, une rep de plus si tu peux.",
       "hard": "La série précédente était limite : on garde la charge.",
       "belowRange": "Tu es sous ta fourchette de reps : on allège un peu.",
-      "failure": "Échec à la série précédente : on allège.",
+      "failure": "Série à l'échec dans ta fourchette : bien joué, on garde la charge.",
       "incompleteReps": "Reps incomplètes : on allège pour garder l'amplitude complète.",
       "missingStep": "Le palier suivant de la machine est trop lourd : ajoute plutôt des reps.",
       "noHeavierStep": "Tu es au palier le plus lourd de la machine.",
@@ -263,7 +279,7 @@
     },
     "reminder": {
       "rangeOfMotion": "Amplitude complète : une rep incomplète ne compte pas.",
-      "technique": "Deux échecs de suite : relis les consignes de la fiche."
+      "technique": "Deux séances de suite sous ta fourchette : relis les consignes de la fiche."
     },
     "load": "Charge",
     "reps": "Reps",
@@ -286,20 +302,14 @@
     "slowTempo": "Tempo lent",
     "howWasIt": "Comment c'était ?",
     "busy": "Machine occupée",
-    "busyTitle": "{name} est occupée",
-    "busyHelp": "Deux choix : « En attendant » te fait faire une autre machine maintenant, et {name} t'est reproposée juste après. « Remplacer » la retire de la séance pour de bon.",
     "alternative": {
       "substitute": "Mêmes muscles",
       "swap": "Exercice suivant de la séance",
       "take": "Je prends celle-ci",
       "choose": "Prendre {name}",
       "none": "Pas d'autre machine pour ces muscles dans tes favoris : attends un peu ou passe à la suite.",
-      "meanwhile": "En attendant",
-      "meanwhileNamed": "Faire {name} en attendant",
-      "replace": "Remplacer",
-      "replaceNamed": "Remplacer {busy} par {name}"
+      "meanwhileNamed": "Faire {name} en attendant"
     },
-    "continue": "Continuer avec la suite",
     "isFree": "{name} est libre ?",
     "free": "Oui, j'y vais",
     "stillBusy": "Toujours occupée",
@@ -379,7 +389,6 @@
     "addExercise": "+ Ajouter un exercice",
     "moreOptions": "Préciser la série (RIR, note, reps incomplètes, tempo lent, dictée)",
     "coach": {
-      "lastTime": "La dernière fois : {sets}",
       "noHistory": "Première fois sur cet exercice.",
       "advice": {
         "moreLoad": "Monte la charge : {load} × {reps}",
@@ -405,12 +414,6 @@
       "do": "Fais ta série",
       "doHelp": "La charge et les reps conseillées sont déjà remplies. Change-les seulement si tu as fait autre chose.",
       "feelHelp": "Un appui enregistre la série et lance le repos."
-    },
-    "difficultyHint": {
-      "easy": "3 reps ou plus en réserve",
-      "ok": "1 ou 2 en réserve",
-      "hard": "plus rien en réserve",
-      "fail": "pas pu finir"
     },
     "progress": {
       "title": "Exercice {current} sur {total}",
@@ -483,7 +486,6 @@
     },
     "replaceCard": {
       "open": "Changer de machine",
-      "title": "Remplacer {name}",
       "help": "Même mouvement sur une autre machine : la charge proposée est celle de cette machine.",
       "keepDone": "{count} série déjà faite reste sur {name}. La nouvelle machine reprend les séries qui restent. | {count} séries déjà faites restent sur {name}. La nouvelle machine reprend les séries qui restent.",
       "mine": "Ma machine",
@@ -522,12 +524,6 @@
       "add": "+ {name}"
     },
     "testSetFeel": "Si oui, choisis Facile : la charge monte dès la série suivante. Sinon, Correct la garde.",
-    "testSetHint": {
-      "easy": "trop léger : la charge monte",
-      "ok": "bonne charge : on la garde",
-      "hard": "lourd : on la garde",
-      "fail": "trop lourd : la charge baisse"
-    },
     "closeOnes": {
       "title": "Pas cette machine ? Très proches :",
       "take": "Faire {name} à la place"
@@ -535,7 +531,35 @@
     "saved": "✓ Série enregistrée : {set}",
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
     "seeMovementOf": "Voir la fiche de {name}",
-    "restTaken": "repos {time}"
+    "restTaken": "repos {time}",
+    "effect": {
+      "up": "La charge monte à la série suivante",
+      "same": "La charge reste la même",
+      "down": "La charge baisse à la série suivante"
+    },
+    "compare": {
+      "title": "Comparaison avec la dernière fois",
+      "set": "Série",
+      "before": "Dernière fois",
+      "today": "Aujourd'hui",
+      "now": "en cours",
+      "trend": {
+        "up": "mieux que la dernière fois",
+        "same": "pareil que la dernière fois",
+        "down": "moins que la dernière fois"
+      }
+    },
+    "switch": {
+      "title": "Changer {name}",
+      "why": "Pourquoi tu changes ?",
+      "busy": "Occupée",
+      "busySub": "j'y reviens après",
+      "replace": "Remplacer",
+      "replaceSub": "pour toute la séance",
+      "busyHelp": "Fais une autre machine maintenant : {name} revient juste après.",
+      "later": "Rien, je passe à l'exercice suivant",
+      "cancel": "Annuler, je reste sur {name}"
+    }
   },
   "availability": {
     "day": "Jour",
@@ -1221,7 +1245,8 @@
       "catalogTab": "Catalogue et Planning en onglets",
       "restEverywhere": "Le repos dans les exports",
       "drawingsAndRest": "Plus de dessins, repos réellement pris",
-      "photosAndReminders": "Photos, créneaux et rappels"
+      "photosAndReminders": "Photos, créneaux et rappels",
+      "failureAndRest": "Échec moins punitif, repos visible"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1296,7 +1321,12 @@
       "reminderTap": "Un appui sur une notification ouvre le bon écran.",
       "fixPastReminders": "Corrigé : un rappel dont l'heure était passée partait tout de suite après un changement de réglage.",
       "fixPlanningStart": "Corrigé : le Planning ne parle plus de séances « non faites » avant ton premier jour avec l'appli.",
-      "fixDisplay": "Corrigé : textes d'aide coupés dans les Réglages, unité « cm » en double dans les mensurations, avant/après qui mélangeait face et dos."
+      "fixDisplay": "Corrigé : textes d'aide coupés dans les Réglages, unité « cm » en double dans les mensurations, avant/après qui mélangeait face et dos.",
+      "failureKept": "« Échec » veut dire « à fond, dernière rep ratée » : si tes reps sont dans ta fourchette, la charge reste la même (pendant la séance et la fois suivante). Elle ne baisse que sous la fourchette.",
+      "restPreview": "Boutons de ressenti plus clairs : une flèche pour la charge de la série suivante, et la durée du repos qu'ils lancent.",
+      "machineRange": "Ta fourchette de reps pour une machine précise (12–20 à la presse, par exemple), sur sa fiche.",
+      "compareSets": "Pendant la séance, tes séries d'aujourd'hui à côté de celles de la dernière fois, série par série, avec une flèche verte quand tu fais mieux.",
+      "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes."
     }
   },
   "data": {

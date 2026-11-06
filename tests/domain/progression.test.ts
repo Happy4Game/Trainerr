@@ -39,6 +39,13 @@ describe('rep ranges and rest', () => {
     expect(repRangeFor(ex.pecFly)).toEqual(isolation);
     expect(repRangeFor(ex.legExtension)).toEqual({ min: 8, max: 10 });
   });
+
+  it("the user's range for one machine wins over their range for every exercise", () => {
+    const own = { min: 8, max: 12 };
+    const machines = { [ex.legExtension.id]: { min: 12, max: 20 } };
+    expect(repRangeFor(ex.legExtension, own, machines)).toEqual({ min: 12, max: 20 });
+    expect(repRangeFor(ex.pecFly, own, machines)).toEqual(own);
+  });
 });
 
 describe('between two sets', () => {
@@ -83,11 +90,19 @@ describe('between two sets', () => {
     });
   });
 
-  it('rule 3: Échec → one step down', () => {
+  it('Échec with the reps in the range: trained to failure, the load stays', () => {
     expect(next(set(16, 9, 'fail'))).toMatchObject({
+      action: 'keep',
+      loadKg: 16,
+      reason: 'failure',
+    });
+  });
+
+  it('rule 3: Échec below the range → one step down', () => {
+    expect(next(set(16, 6, 'fail'))).toMatchObject({
       action: 'decrease',
       loadKg: 14,
-      reason: 'failure',
+      reason: 'belowRange',
     });
   });
 
@@ -228,6 +243,16 @@ describe('between two sessions', () => {
       loadKg: 14,
       reason: 'repeatedFailure',
       reminders: ['technique'],
+    });
+  });
+
+  it('sets to failure within the range, session after session, never lower the start', () => {
+    const toFailure = [set(16, 10), set(16, 8, 'fail')];
+    expect(next([toFailure, toFailure])).toMatchObject({ loadKg: 16, reason: 'keep' });
+    // Every set at the top of the range, the last one to failure: heavier next time.
+    expect(next([[set(16, 10), set(16, 10, 'fail')]])).toMatchObject({
+      loadKg: 18,
+      reason: 'allSetsAtTop',
     });
   });
 

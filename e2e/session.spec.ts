@@ -27,7 +27,10 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   await expect(page.getByText(/série test légère/)).toBeVisible();
   // Each feeling says what it does to the load: the test set finds the right one.
-  await expect(page.getByText('trop léger : la charge monte')).toBeVisible();
+  await expect(page.getByTestId('effect-easy')).toHaveAttribute(
+    'title',
+    'La charge monte à la série suivante',
+  );
   await expect(page.getByText(/Échauffement conseillé/)).toHaveCount(0);
   await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 
@@ -40,23 +43,36 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
 
-  // The machine gets taken: two clear choices, another machine meanwhile, or a replacement for good.
+  // The machine gets taken: one sheet, "taken, I'll come back" already chosen.
+  const sheet = page.locator('ion-card.replace');
+  // Leaving the sheet changes nothing, and it does not stay on screen.
   await page.getByRole('button', { name: 'Machine occupée' }).click();
-  await expect(page.getByText('Développé épaules machine est occupée')).toBeVisible();
-  // Each machine offered comes with a preview: drawing, muscles, load, movement.
-  const offer = page.getByRole('listitem').filter({ hasText: 'Écarté à la machine' });
+  await expect(sheet.getByRole('radio', { name: /Occupée/ })).toHaveAttribute(
+    'aria-checked',
+    'true',
+  );
+  await sheet
+    .getByRole('button', { name: 'Annuler, je reste sur Développé épaules machine' })
+    .click();
+  await expect(sheet).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
+  await expect(page.getByText('Série 2 sur 3')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Machine occupée' }).click();
+  await expect(sheet.getByText(/Développé épaules machine revient juste après/)).toBeVisible();
+  // Each machine offered comes with a preview: drawing, muscles, load.
+  const offer = sheet.getByRole('listitem').filter({ hasText: 'Écarté à la machine' });
   await expect(offer.getByText(/Pectoraux/)).toBeVisible();
-  await expect(offer.getByRole('link', { name: 'Voir le mouvement' })).toBeVisible();
-  // The drawing opens the machine card too, as everywhere else.
+  // The drawing opens the machine card, as everywhere else.
   await expect(
     offer.getByRole('link', { name: 'Voir la fiche de Écarté à la machine' }),
   ).toBeVisible();
-  await expect(
-    offer.getByRole('button', {
-      name: 'Remplacer Développé épaules machine par Écarté à la machine',
-    }),
-  ).toBeVisible();
+  // The other choice is one tap away, in the same sheet.
+  await sheet.getByRole('radio', { name: /Remplacer/ }).click();
+  await expect(sheet.getByText(/pour toute la séance/)).toBeVisible();
+  await sheet.getByRole('radio', { name: /Occupée/ }).click();
   await offer.getByRole('button', { name: 'Faire Écarté à la machine en attendant' }).click();
+  await expect(sheet).toHaveCount(0);
   await expect(page.getByRole('region', { name: 'Écarté à la machine' })).toBeVisible();
 
   // Survives a reload in the middle of the workout.
@@ -115,4 +131,32 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   );
   await expect(page.getByText('Suis-je régulier ?')).toBeVisible();
   await expect(page.getByRole('group', { name: "Dernière séance aujourd'hui" })).toBeVisible();
+});
+
+test('the feeling buttons show the next load and the rest; reps are set per machine', async ({
+  page,
+}) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await star(page, 'pec deck', 'Écarté à la machine');
+
+  // Reps for this machine only, on its card.
+  await page
+    .getByRole('link', { name: /Écarté à la machine/ })
+    .first()
+    .click();
+  const group = page.getByRole('group', { name: 'Mes reps sur cette machine' });
+  await expect(group.getByTestId('range-max')).toHaveText('15');
+  await group.getByRole('button', { name: 'Une rep de plus au maximum' }).click();
+  await expect(group.getByTestId('range-max')).toHaveText('16');
+  await expect(page.getByText('Ta fourchette pour cette machine.', { exact: false })).toBeVisible();
+
+  await tab(page, 'Séance');
+  await page.getByRole('button', { name: 'Commencer la séance' }).click();
+  const entry = page.getByRole('region', { name: 'Écarté à la machine' });
+  await expect(entry).toBeVisible();
+  // Every button: what happens to the load, and the rest it starts.
+  await expect(entry.getByTestId('rest-preview')).toHaveCount(4);
+  await expect(entry.getByTestId('effect-ok')).toBeVisible();
+  await expect(entry.getByTestId('rest-preview').first()).toHaveText(/\d+:\d\d/);
 });

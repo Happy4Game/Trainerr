@@ -30,6 +30,7 @@ import ComebackCard from '@/ui/ComebackCard.vue';
 import ExerciseProgress from '@/ui/ExerciseProgress.vue';
 import { readPhoto } from '@/ui/photo';
 import LoadStepsEditor from '@/ui/LoadStepsEditor.vue';
+import MachineRepRange from '@/ui/MachineRepRange.vue';
 import MachineSetupEditor from '@/ui/MachineSetupEditor.vue';
 import { useSettings } from '@/ui/useSettings';
 import { defaultStepsFor } from '@/domain/loadSteps';
@@ -95,7 +96,9 @@ const displayed = computed(() =>
 );
 const illustration = computed(() => illustrationFor(props.id));
 const range = computed(() =>
-  exercise.value ? repRangeFor(exercise.value, settings.value?.repRange) : undefined,
+  exercise.value
+    ? repRangeFor(exercise.value, settings.value?.repRange, settings.value?.machineRepRanges)
+    : undefined,
 );
 
 const stepsSaved = ref(false);
@@ -249,6 +252,8 @@ const muscleList = (muscles: readonly MuscleId[]) =>
             <ion-card-title>{{ t('exercise.machine.title') }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <h2 class="section">{{ t('exercise.range.title') }}</h2>
+            <MachineRepRange :exercise="exercise" />
             <h2 class="section">{{ t('exercise.steps.title') }}</h2>
             <LoadStepsEditor
               :steps="entry.loadSteps"

@@ -63,6 +63,8 @@ export interface Settings {
   readonly autoUpdateCheck?: boolean;
   /** The user's own rep range for every exercise (8–12…); absent: the range of each exercise. */
   readonly repRange?: RepRange;
+  /** A range for one machine (12–20 on the leg extension…): wins over every other range. */
+  readonly machineRepRanges?: Readonly<Record<string, RepRange>>;
   /** Rest really taken shown next to each set (always recorded). Off by default. */
   readonly showRest?: boolean;
   /** Beeps at the end of the rest (app open). On by default. */
