@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { Check, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { addMonths, monthGrid, sessionsByDay, startOfMonth, weekDays } from '@/domain/calendar';
 import { addDays } from '@/domain/dates';
@@ -23,16 +23,20 @@ const view = ref<'month' | 'week'>('month');
 const shown = ref<IsoDate>(props.today);
 
 const byDay = computed(() => sessionsByDay(props.sessions));
-const weeks = computed(() => monthGrid(shown.value));
+/** Days shown: the whole month, or the week. */
+const days = computed(() =>
+  view.value === 'month'
+    ? monthGrid(shown.value)
+        .flat()
+        .filter((d): d is IsoDate => !!d)
+    : week.value,
+);
 const week = computed(() => weekDays(shown.value));
 
 const format = (date: IsoDate, options: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat(locale.value, { ...options, timeZone: 'UTC' }).format(
     new Date(`${date}T00:00:00Z`),
   );
-const dayNames = computed(() =>
-  weekDays('2026-11-02').map((d) => format(d, { weekday: 'narrow' })),
-);
 
 const title = computed(() =>
   view.value === 'month'
@@ -71,6 +75,14 @@ const isCurrent = computed(() =>
     : week.value.includes(props.today),
 );
 const dayLabel = (day: IsoDate) => format(day, { weekday: 'long', day: 'numeric', month: 'long' });
+/** A month is a long list: today comes into view, not the 1st. */
+const list = ref<HTMLElement>();
+async function showToday(): Promise<void> {
+  await nextTick();
+  list.value?.querySelector('.is-today')?.scrollIntoView({ block: 'center' });
+}
+onMounted(showToday);
+watch([view, shown], showToday);
 const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
 </script>
 
@@ -111,64 +123,41 @@ const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
       {{ t('calendar.today') }}
     </ion-button>
 
-    <template v-if="view === 'month'">
-      <table class="month" :aria-label="title">
-        <thead>
-          <tr>
-            <th v-for="(name, i) in dayNames" :key="i" scope="col">{{ name }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(days, w) in weeks" :key="w">
-            <td v-for="(day, i) in days" :key="i">
-              <div
-                v-if="day"
-                class="cell"
-                :class="{ trained: byDay.has(day), 'is-today': day === today }"
-              >
-                <span class="number">{{ Number(day.slice(8)) }}</span>
-                <button
-                  v-for="s in byDay.get(day) ?? []"
-                  :key="s.id"
-                  type="button"
-                  class="chip"
-                  :aria-label="
-                    t('calendar.openSession', {
-                      name: templateLabel(s.templateId),
-                      day: dayLabel(day),
-                    })
-                  "
-                  @click="emit('open', s.id)"
-                >
-                  {{ templateLabel(s.templateId) }}
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </template>
-
-    <ul v-else class="week">
-      <li v-for="day in week" :key="day" :class="{ 'is-today': day === today }">
-        <span class="week-day">
-          <strong>{{ format(day, { weekday: 'short' }) }}</strong>
-          {{ format(day, { day: 'numeric', month: 'short' }) }}
-        </span>
-        <div class="week-sessions">
+    <!-- Same rows as "Your week" on Planning: one per day, the sessions done as cards. -->
+    <ul ref="list" class="days" :aria-label="title">
+      <template v-for="day in days" :key="day">
+        <li v-for="s in byDay.get(day) ?? []" :key="s.id" class="done">
           <button
-            v-for="s in byDay.get(day) ?? []"
-            :key="s.id"
             type="button"
-            class="session"
+            class="row"
+            :class="{ 'is-today': day === today }"
+            :aria-label="
+              t('calendar.openSession', { name: templateLabel(s.templateId), day: dayLabel(day) })
+            "
             @click="emit('open', s.id)"
           >
-            <strong>{{ templateLabel(s.templateId) }}</strong>
-            <span>{{ t('calendar.sets', { count: setsOf(s) }, setsOf(s)) }}</span>
+            <span class="date" aria-hidden="true">
+              <span class="weekday">{{ format(day, { weekday: 'short' }) }}</span>
+              <span class="number">{{ Number(day.slice(8)) }}</span>
+            </span>
+            <span class="body">
+              <strong class="name">{{ templateLabel(s.templateId) }}</strong>
+              <span class="time">{{ t('calendar.sets', { count: setsOf(s) }, setsOf(s)) }}</span>
+            </span>
+            <span class="badge" aria-hidden="true">
+              <Check :size="16" />{{ t('planning.done') }}
+            </span>
           </button>
-          <span v-if="!byDay.has(day) && day <= today" class="none">{{ t('calendar.rest') }}</span>
-        </div>
-      </li>
+        </li>
+        <li v-if="!byDay.has(day)" class="rest" :class="{ 'is-today': day === today }">
+          <span class="date" aria-hidden="true">
+            <span class="weekday">{{ format(day, { weekday: 'short' }) }}</span>
+            <span class="number">{{ Number(day.slice(8)) }}</span>
+          </span>
+          <span class="visually-hidden">{{ dayLabel(day) }}</span>
+          <span v-if="day <= today" class="rest-label">{{ t('calendar.rest') }}</span>
+        </li>
+      </template>
     </ul>
   </div>
 </template>
@@ -232,109 +221,103 @@ const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
   display: block;
   margin: 0 auto;
 }
-.month {
-  width: 100%;
-  margin-block: 8px;
-  border-collapse: separate;
-  border-spacing: 1px 3px;
-  table-layout: fixed;
-}
-.month th {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--ion-color-medium);
-  text-transform: uppercase;
-}
-.cell {
+.days {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 2px;
-  min-height: 96px;
-  padding: 3px 1px;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  font-variant-numeric: tabular-nums;
-}
-.cell.trained {
-  background: rgb(var(--ion-color-primary-rgb) / 14%);
-}
-.cell.is-today {
-  border-color: var(--ion-color-primary);
-}
-.number {
-  font-size: 0.85rem;
-  text-align: center;
-}
-.cell.trained .number {
-  font-weight: 800;
-}
-/* The session's name, on the day itself: a tap opens it. */
-.chip {
-  display: -webkit-box;
-  overflow: hidden;
-  padding: 3px 1px;
-  border: 0;
-  border-radius: 6px;
-  background: var(--ion-color-primary);
-  color: var(--ion-color-primary-contrast);
-  font: inherit;
-  font-size: 0.64rem;
-  font-weight: 700;
-  line-height: 1.15;
-  text-align: center;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
-}
-.week {
-  margin: 0;
+  gap: 8px;
+  margin: 12px 0 16px;
   padding: 0;
   list-style: none;
 }
-.session {
+.row {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
   width: 100%;
-  min-height: 48px;
-  margin-block: 4px;
-  padding: 8px 12px;
-  border: 1px solid var(--ion-color-primary);
-  border-radius: 12px;
-  background: transparent;
+  padding: 10px 12px;
+  border: 1.5px solid transparent;
+  border-radius: var(--app-radius-small);
+  background: var(--ion-card-background);
+  box-shadow: var(--app-shadow);
   color: var(--ion-text-color);
   font: inherit;
   text-align: start;
 }
-.session span {
-  font-size: 0.85rem;
-  color: var(--ion-color-medium);
-  white-space: nowrap;
+.row.is-today {
+  border-color: var(--ion-color-primary);
 }
-.none {
-  color: var(--ion-color-medium);
-}
-.week li {
-  display: grid;
-  grid-template-columns: 5.5em 1fr;
-  align-items: center;
-  gap: 8px;
-  min-height: 56px;
-  border-bottom: 1px solid var(--ion-color-light);
-}
-.week li.is-today .week-day {
-  color: var(--ion-color-primary);
-}
-.week-day {
+.rest {
   display: flex;
-  flex-direction: column;
-  font-size: 0.85rem;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
 }
-.week-day strong::first-letter {
-  text-transform: uppercase;
+.date {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  line-height: 1.05;
+}
+.rest .date {
+  height: 40px;
+  color: var(--ion-color-medium-shade);
+}
+.rest.is-today .date {
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+.done .date {
+  background: rgba(var(--ion-color-success-rgb), 0.16);
+  color: var(--ion-color-success-shade);
+}
+.weekday {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.number {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.name {
+  font-size: 1.05rem;
+}
+.time {
+  color: var(--ion-color-medium-shade);
+  font-size: 0.9rem;
+}
+.rest-label {
+  color: var(--ion-color-medium-shade);
+}
+.badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(var(--ion-color-success-rgb), 0.16);
+  color: var(--ion-color-success-shade);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 </style>
