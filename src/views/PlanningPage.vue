@@ -2,6 +2,7 @@
 import { useTemplateName } from '@/ui/useTemplateName';
 import {
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -9,13 +10,14 @@ import {
   IonContent,
   IonHeader,
   IonItem,
+  IonModal,
   IonPage,
   IonSelect,
   IonSelectOption,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { CalendarClock, Check, Dumbbell } from 'lucide-vue-next';
+import { CalendarClock, CalendarDays, Check, Dumbbell } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { suggestProgramChange } from '@/domain/cycles';
@@ -23,6 +25,7 @@ import { useI18n } from 'vue-i18n';
 import type { WeeklySlot } from '@/domain/planning';
 import { TRAINING_MODELS, type TrainingModelId } from '@/domain/trainingModels';
 import AvailabilityGrid from '@/ui/AvailabilityGrid.vue';
+import SessionCalendar from '@/ui/SessionCalendar.vue';
 import NextSessionChooser from '@/ui/NextSessionChooser.vue';
 import { rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
@@ -69,6 +72,13 @@ const pushedOut = computed(() => {
   const coming = week.value.days.filter((d) => d.status === 'today' || d.status === 'planned');
   return ifMissed.value.length < coming.length ? coming.at(-1)?.session?.templateId : undefined;
 });
+
+/** Every session done, day by day, month by month or week by week. */
+const calendarOpen = ref(false);
+async function openSession(id: string): Promise<void> {
+  calendarOpen.value = false;
+  await router.push(`/tabs/history/${encodeURIComponent(id)}`);
+}
 
 const editing = ref(false);
 const freeSlots = ref<WeeklySlot[]>([]);
@@ -191,6 +201,34 @@ const changeSuggested = computed(() =>
           </p>
         </section>
 
+        <ion-button
+          expand="block"
+          fill="outline"
+          class="calendar-open"
+          @click="calendarOpen = true"
+        >
+          <CalendarDays :size="20" aria-hidden="true" class="icon" />
+          {{ t('calendar.open') }}
+        </ion-button>
+        <ion-modal :is-open="calendarOpen" @did-dismiss="calendarOpen = false">
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>{{ t('calendar.title') }}</ion-title>
+              <ion-buttons slot="end">
+                <ion-button @click="calendarOpen = false">{{ t('common.close') }}</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <SessionCalendar
+              v-if="calendarOpen"
+              :sessions="session.history.value"
+              :today="todayIso()"
+              @open="openSession"
+            />
+          </ion-content>
+        </ion-modal>
+
         <h2 class="section">{{ t('planning.week') }}</h2>
         <ul class="week">
           <li
@@ -308,6 +346,12 @@ const changeSuggested = computed(() =>
 </template>
 
 <style scoped>
+.calendar-open {
+  margin-block: 12px 0;
+}
+.calendar-open .icon {
+  margin-inline-end: 8px;
+}
 .model-info {
   margin: 8px 16px;
   color: var(--ion-color-medium-shade);

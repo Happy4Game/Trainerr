@@ -1335,7 +1335,8 @@
       "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better.",
       "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it.",
       "rirButtons": "No more difficulty choice: a big \"Set done\" button, and a small \"Too light\" button that raises the load from the next set. Otherwise your reps decide, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
-      "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length."
+      "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length.",
+      "calendar": "Planning: a calendar of all your sessions, month by month or week by week. Tap a day to see its sessions and open them."
     }
   },
   "data": {
@@ -1925,5 +1926,28 @@
     "phul": "Upper and lower body, once heavy for strength, once lighter for volume.",
     "arnold": "Chest and back, shoulders and arms, then legs, each twice.",
     "broSplit": "One muscle group a day: each muscle works only once a week."
+  },
+  "calendar": {
+    "open": "My sessions calendar",
+    "title": "My sessions",
+    "view": "View",
+    "month": "Month",
+    "week": "Week",
+    "weekOf": "Week of {from} to {to}",
+    "count": "{count} session | {count} sessions",
+    "previous": {
+      "month": "Previous month",
+      "week": "Previous week"
+    },
+    "next": {
+      "month": "Next month",
+      "week": "Next week"
+    },
+    "today": "Back to today",
+    "dayWith": "{day}: {count} session | {day}: {count} sessions",
+    "sets": "{count} set | {count} sets",
+    "noSession": "No session that day.",
+    "rest": "Rest",
+    "none": "No session"
   }
 }

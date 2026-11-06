@@ -1335,7 +1335,8 @@
       "compareSets": "Pendant la séance, tes séries d'aujourd'hui à côté de celles de la dernière fois, série par série, avec une flèche verte quand tu fais mieux.",
       "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes.",
       "rirButtons": "Plus de choix de difficulté : un gros bouton « Série faite », et un petit bouton « Trop léger » qui monte la charge dès la série suivante. Sinon ce sont tes reps qui décident, comme le fait un coach (au-dessus de ta fourchette elle monte, en dessous elle baisse). Les reps en réserve restent possibles dans « Préciser la série ».",
-      "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale."
+      "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale.",
+      "calendar": "Planning : un calendrier de toutes tes séances, mois par mois ou semaine par semaine. Un appui sur un jour montre ses séances, et ouvre leur détail."
     }
   },
   "data": {
@@ -1925,5 +1926,28 @@
     "phul": "Haut et bas du corps, une fois lourd pour la force, une fois plus léger pour le volume.",
     "arnold": "Pecs et dos, épaules et bras, puis jambes, chacun deux fois.",
     "broSplit": "Un groupe de muscles par jour : chaque muscle ne travaille qu'une fois par semaine."
+  },
+  "calendar": {
+    "open": "Calendrier de mes séances",
+    "title": "Mes séances",
+    "view": "Affichage",
+    "month": "Mois",
+    "week": "Semaine",
+    "weekOf": "Semaine du {from} au {to}",
+    "count": "{count} séance | {count} séances",
+    "previous": {
+      "month": "Mois précédent",
+      "week": "Semaine précédente"
+    },
+    "next": {
+      "month": "Mois suivant",
+      "week": "Semaine suivante"
+    },
+    "today": "Revenir à aujourd'hui",
+    "dayWith": "{day} : {count} séance | {day} : {count} séances",
+    "sets": "{count} série | {count} séries",
+    "noSession": "Pas de séance ce jour-là.",
+    "rest": "Repos",
+    "none": "Aucune séance"
   }
 }
