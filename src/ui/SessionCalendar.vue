@@ -23,13 +23,10 @@ const view = ref<'month' | 'week'>('month');
 const shown = ref<IsoDate>(props.today);
 
 const byDay = computed(() => sessionsByDay(props.sessions));
-/** Days shown: the whole month, or the week. */
-const days = computed(() =>
-  view.value === 'month'
-    ? monthGrid(shown.value)
-        .flat()
-        .filter((d): d is IsoDate => !!d)
-    : week.value,
+/** The month in whole weeks, Monday first; the week as a list of days. */
+const weeks = computed(() => monthGrid(shown.value));
+const dayNames = computed(() =>
+  weekDays('2026-11-02').map((d) => format(d, { weekday: 'narrow' })),
 );
 const week = computed(() => weekDays(shown.value));
 
@@ -123,9 +120,45 @@ const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
       {{ t('calendar.today') }}
     </ion-button>
 
-    <!-- Same rows as "Your week" on Planning: one per day, the sessions done as cards. -->
-    <ul ref="list" class="days" :aria-label="title">
-      <template v-for="day in days" :key="day">
+    <table v-if="view === 'month'" class="month" :aria-label="title">
+      <thead>
+        <tr>
+          <th v-for="(name, i) in dayNames" :key="i" scope="col">{{ name }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(row, w) in weeks" :key="w">
+          <td v-for="(day, i) in row" :key="i">
+            <div
+              v-if="day"
+              class="cell"
+              :class="{ trained: byDay.has(day), 'is-today': day === today }"
+            >
+              <span class="cell-number">{{ Number(day.slice(8)) }}</span>
+              <button
+                v-for="s in byDay.get(day) ?? []"
+                :key="s.id"
+                type="button"
+                class="cell-name"
+                :aria-label="
+                  t('calendar.openSession', {
+                    name: templateLabel(s.templateId),
+                    day: dayLabel(day),
+                  })
+                "
+                @click="emit('open', s.id)"
+              >
+                {{ templateLabel(s.templateId) }}
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- The week: same rows as "Your week" on Planning, the sessions done as cards. -->
+    <ul v-else ref="list" class="days" :aria-label="title">
+      <template v-for="day in week" :key="day">
         <li v-for="s in byDay.get(day) ?? []" :key="s.id" class="done">
           <button
             type="button"
@@ -319,5 +352,65 @@ const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+.month {
+  width: 100%;
+  margin-block: 8px;
+  border-collapse: separate;
+  border-spacing: 2px 3px;
+  table-layout: fixed;
+}
+.month th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ion-color-medium);
+  text-transform: uppercase;
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  min-height: 92px;
+  padding: 4px 2px;
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+}
+/* A day trained: the green of "Done" in "Your week". */
+.cell.trained {
+  background: rgba(var(--ion-color-success-rgb), 0.16);
+}
+.cell.is-today {
+  border-color: var(--ion-color-primary);
+}
+.cell-number {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ion-color-medium-shade);
+}
+.cell.trained .cell-number {
+  font-weight: 800;
+  color: var(--ion-color-success-shade);
+}
+/* The session's name, written in the box: a tap opens the whole session. */
+.cell-name {
+  display: -webkit-box;
+  overflow: hidden;
+  padding: 2px 1px;
+  border: 0;
+  background: transparent;
+  color: var(--ion-text-color);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
 }
 </style>

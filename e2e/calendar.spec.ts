@@ -16,11 +16,10 @@ test('Planning opens a calendar of the sessions done, month by month or week by 
   await openTab(page, 'Planning');
   await page.getByRole('button', { name: 'Calendrier de mes séances' }).click();
   const sheet = page.locator('ion-modal').filter({ hasText: 'Mes séances' });
-  // This month: every day in a row, as in "Your week", the session done as a card.
+  // This month: a grid, the session's name written in its day's box.
   await expect(sheet.getByText('1 séance', { exact: true })).toBeVisible();
   const chip = sheet.getByRole('button', { name: /^Voir Haut du corps A du / });
-  await expect(chip).toContainText('Haut du corps A');
-  await expect(chip).toContainText('Faite');
+  await expect(chip).toHaveText('Haut du corps A');
   const title = sheet.getByTestId('calendar-title');
   const thisMonth = (await title.textContent()) ?? '';
 
