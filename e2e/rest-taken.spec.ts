@@ -15,13 +15,13 @@ test('the rest really taken between sets is always recorded, shown on demand', a
     .getByRole('tab', { name: /^Séance/ })
     .click();
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
   await page.clock.fastForward('02:15');
   // The rest timer may have ended on its own by then.
   const skip = page.getByRole('button', { name: 'Passer', exact: true });
   if (await skip.isVisible()) await skip.click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
   // Hidden by default.
   const logged = page.locator('section.logged');
   await expect(logged).toBeVisible();

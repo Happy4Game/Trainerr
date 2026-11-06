@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { IonButton, IonChip, IonInput, IonLabel } from '@ionic/vue';
 import {
-  ArrowDown,
   ArrowLeftRight,
-  ArrowUp,
   Equal,
   Mic,
   Minus,
   Pencil,
   Plus,
-  Timer,
   TrendingDown,
   TrendingUp,
 } from 'lucide-vue-next';
@@ -28,8 +25,7 @@ import {
 import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
-import { useSession, type LoadEffect } from './useSession';
-import { useRirText } from './useRirText';
+import { useSession } from './useSession';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
 import { unlockSound } from './restSound';
@@ -43,7 +39,6 @@ const emit = defineEmits<{ busy: []; replace: []; plates: [loadKg: number] }>();
 
 const { t, n, locale } = useI18n();
 const session = useSession();
-const rirText = useRirText();
 
 const entry = computed(() => session.entryOf(props.exerciseId));
 const proposal = computed(() => session.proposalFor(props.exerciseId));
@@ -70,8 +65,7 @@ const load = ref(0);
 const reps = ref(0);
 const incomplete = ref(false);
 const slowTempo = ref(false);
-/** Optional: reps left in the tank (0 to 4+), and a free note on the set. */
-const rir = ref<number>();
+/** Optional: a free note on the set. */
 const setNote = ref('');
 const heard = ref<Difficulty>();
 const listening = ref(false);
@@ -85,7 +79,6 @@ watch(
     reps.value = proposal.value.targetReps;
     incomplete.value = false;
     slowTempo.value = false;
-    rir.value = undefined;
     setNote.value = '';
     heard.value = undefined;
   },
@@ -233,13 +226,15 @@ const ADVICE_ICON: Record<SetAdvice, string> = {
   comeback: '↺',
 };
 
-const RIR_VALUES = [0, 1, 2, 3, 4] as const;
-
-const DIFFICULTIES: { value: Difficulty; color: string }[] = [
-  { value: 'easy', color: 'success' },
-  { value: 'ok', color: 'primary' },
-  { value: 'hard', color: 'warning' },
-  { value: 'fail', color: 'danger' },
+/**
+ * The feeling of a set is the reps left in the tank (Zourdos et al. 2016,
+ * doi:10.1519/JSC.0000000000001049): 0 = failure, 3+ = too light.
+ */
+const RESERVES: { value: Difficulty; rir: number; label: string; color: string }[] = [
+  { value: 'fail', rir: 0, label: '0', color: 'danger' },
+  { value: 'hard', rir: 1, label: '1', color: 'warning' },
+  { value: 'ok', rir: 2, label: '2', color: 'primary' },
+  { value: 'easy', rir: 3, label: '3+', color: 'success' },
 ];
 
 /** Last session next to today, set by set (real load: less help counts as heavier). */
@@ -266,21 +261,12 @@ const shortDay = (date: string) =>
     new Date(`${date}T00:00:00Z`),
   );
 
-/** Next load for each feeling, read at a glance: an arrow. */
-const EFFECT_ICON = { up: ArrowUp, same: Equal, down: ArrowDown } as const;
-const effects = computed(() => {
-  const preview = session.effectPreview(props.exerciseId, load.value, reps.value);
-  if (!preview || !incomplete.value) return preview;
-  // An incomplete rep never counts: the load goes down whatever the feeling.
-  const down: LoadEffect = { effect: 'down' };
-  return { easy: down, ok: down, hard: down, fail: down };
-});
-/** The rest each feeling starts, seen before the tap: no surprise once the timer runs. */
+/** The rest a set starts, the same whatever the reps left: seen before the tap. */
 const restPreview = computed(() => session.restPreview(props.exerciseId));
 const clock = (seconds: number) =>
   `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
-async function validate(difficulty: Difficulty): Promise<void> {
+async function validate(difficulty: Difficulty, rir: number): Promise<void> {
   // A short buzz: the set is saved, no need to look at the screen.
   navigator.vibrate?.(35);
   // This tap allows the beep at the end of the rest.
@@ -292,7 +278,7 @@ async function validate(difficulty: Difficulty): Promise<void> {
     difficulty,
     ...(incomplete.value ? { completeReps: false } : {}),
     ...(slowTempo.value ? { slowTempo: true } : {}),
-    ...(rir.value === undefined ? {} : { rir: rir.value }),
+    rir,
     ...(setNote.value.trim() ? { note: setNote.value.trim() } : {}),
   });
   // A record: a happier buzz.
@@ -605,32 +591,24 @@ function listen(): void {
     <p v-else-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
     <div class="difficulties">
       <ion-button
-        v-for="d in DIFFICULTIES"
-        :key="d.value"
-        :color="d.color"
-        :fill="heard && heard !== d.value ? 'outline' : 'solid'"
-        :aria-label="t(`difficulty.${d.value}`)"
-        @click="validate(d.value)"
+        v-for="r in RESERVES"
+        :key="r.value"
+        :color="r.color"
+        :fill="heard && heard !== r.value ? 'outline' : 'solid'"
+        :aria-label="
+          t('session.reserve.button', { reps: r.label, name: t(`difficulty.${r.value}`) })
+        "
+        @click="validate(r.value, r.rir)"
       >
         <span class="difficulty">
-          <span class="difficulty-name">{{ t(`difficulty.${d.value}`) }}</span>
-          <span class="difficulty-facts">
-            <span
-              v-if="effects"
-              class="fact"
-              :data-testid="`effect-${d.value}`"
-              :title="t(`session.effect.${effects[d.value].effect}`)"
-            >
-              <component :is="EFFECT_ICON[effects[d.value].effect]" :size="15" aria-hidden="true" />
-            </span>
-            <span v-if="restPreview" class="fact" data-testid="rest-preview">
-              <Timer :size="14" aria-hidden="true" />
-              {{ clock(restPreview[d.value]) }}
-            </span>
-          </span>
+          <span class="reserve">{{ r.label }}</span>
+          <span class="difficulty-name">{{ t(`difficulty.${r.value}`) }}</span>
         </span>
       </ion-button>
     </div>
+    <p v-if="restPreview" class="rest-line" data-testid="rest-preview">
+      {{ t('session.reserve.rest', { time: clock(restPreview) }) }}
+    </p>
 
     <details class="more">
       <summary>{{ t('session.moreOptions') }}</summary>
@@ -654,22 +632,6 @@ function listen(): void {
           <ion-label>{{ t('session.slowTempo') }}</ion-label>
         </ion-chip>
       </div>
-      <fieldset class="rir">
-        <legend>{{ t('session.rir.label') }}</legend>
-        <ion-chip
-          v-for="value in RIR_VALUES"
-          :key="value"
-          :outline="rir !== value"
-          v-bind="rir === value ? { color: 'primary' } : {}"
-          role="radio"
-          :aria-checked="rir === value"
-          :aria-label="rirText(value)"
-          @click="rir = rir === value ? undefined : value"
-        >
-          <ion-label>{{ value === 4 ? '4+' : value }}</ion-label>
-        </ion-chip>
-      </fieldset>
-      <p class="help">{{ t('session.rir.help') }}</p>
       <ion-input
         v-model="setNote"
         class="set-note"
@@ -708,24 +670,6 @@ function listen(): void {
 </template>
 
 <style scoped>
-.rir {
-  border: 0;
-  margin: 8px 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-}
-.rir legend {
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.rir ion-chip {
-  min-width: 48px;
-  min-height: 48px;
-  justify-content: center;
-}
 .set-note {
   margin: 8px 0;
 }
@@ -904,8 +848,15 @@ h2 {
   align-items: center;
   gap: 2px;
 }
+.reserve {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: none;
+}
 .difficulty-name {
-  font-size: 1.05rem;
+  font-size: 0.8rem;
+  text-transform: none;
 }
 .difficulty-hint {
   font-size: 0.75rem;
@@ -967,23 +918,12 @@ h2 {
 .todo {
   color: var(--ion-color-medium);
 }
-.difficulty-facts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-}
-.fact {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgb(0 0 0 / 14%);
-  font-size: 0.8rem;
-  font-weight: 800;
+.rest-line {
+  margin: 8px 0 0;
+  text-align: center;
+  color: var(--ion-color-medium-shade);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  text-transform: none;
 }
 .more {
   margin-block-start: 12px;
@@ -1128,12 +1068,14 @@ h2 {
 }
 .difficulties {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
 .difficulties ion-button {
   margin: 0;
-  min-height: 64px;
+  min-height: 72px;
+  --padding-start: 4px;
+  --padding-end: 4px;
 }
 .tools {
   display: flex;

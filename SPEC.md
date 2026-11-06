@@ -19,7 +19,7 @@ L'appli tient en cinq écrans principaux : Aujourd'hui, Séance en cours, Catalo
 | Catalogue machines | Parcourt, cherche par nom ou muscle | Liste toutes les machines, avec fiche et schéma |
 | Favoris | Met une étoile sur les machines de sa salle | Ne propose que les favoris dans les séances |
 | Saisie d'une série | Tape charge, reps, difficulté | Enregistre, calcule le 1RM estimé |
-| Difficulté de la série | Choisit Facile / Correct / Limite / Échec | Sert au calcul de la charge suivante |
+| Difficulté de la série | Choisit les reps en réserve : 0 (Échec), 1 (Limite), 2 (Correct), 3+ (Facile) | Sert au calcul de la charge suivante ; le repos, lui, ne dépend que de l'exercice |
 | Précisions facultatives | Note les reps en réserve (RIR 0 à 4+) et une note sur la série | Les garde dans l'historique et l'export CSV, sans changer la charge proposée |
 | Proposition de charge | Accepte ou modifie | Propose la charge de la série ou de la séance suivante |
 | **Mode « machine prise »** | Tape « occupée » sur un exercice | Propose une alternative, garde l'exercice en attente (détail ci-dessous) |

@@ -41,7 +41,7 @@ test('fine loads: add-on weights, typed load, seat and notch recalled during the
   await typed.fill('12,3');
   await typed.press('Enter');
   await expect(entry.getByTestId('load')).toHaveText('12,5 kg');
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
   await expect(page.getByText('Série 2 sur 3')).toBeVisible();
   await expect(entry.getByTestId('load')).toHaveText('12,5 kg');
 });

@@ -5,27 +5,31 @@ import { useI18n } from 'vue-i18n';
 import { useSettings } from '@/ui/useSettings';
 import { playRestOver } from './restSound';
 
-const props = defineProps<{ endsAt: number }>();
+const props = defineProps<{ endsAt: number; startedAt?: number | undefined }>();
 const emit = defineEmits<{ done: []; adjust: [seconds: number] }>();
 
 const { t } = useI18n();
 const { settings } = useSettings();
 const now = ref(Date.now());
-// Full length of the rest, for the ring; grows when the rest is extended.
-const total = ref(Math.max(1, props.endsAt - Date.now()));
+// Full length of the rest, for the ring and the "of 2:00" under the countdown:
+// from its start when known (the ±15 s/+30 s change it), else what was left when shown.
+const seen = ref(Math.max(1, props.endsAt - Date.now()));
 watch(
   () => props.endsAt,
-  (endsAt) => (total.value = Math.max(total.value, endsAt - Date.now(), 1)),
+  (endsAt) => (seen.value = Math.max(seen.value, endsAt - Date.now(), 1)),
+);
+const total = computed(() =>
+  props.startedAt === undefined ? seen.value : Math.max(1, props.endsAt - props.startedAt),
 );
 let timer: ReturnType<typeof setInterval> | undefined;
 
 // The end time is absolute: the countdown stays right after the screen was off.
 const remainingMs = computed(() => Math.max(0, props.endsAt - now.value));
 const remaining = computed(() => Math.ceil(remainingMs.value / 1000));
-const label = computed(() => {
-  const minutes = Math.floor(remaining.value / 60);
-  return `${minutes}:${String(remaining.value % 60).padStart(2, '0')}`;
-});
+const clock = (seconds: number) =>
+  `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+const label = computed(() => clock(remaining.value));
+const totalLabel = computed(() => clock(Math.round(total.value / 1000)));
 const RADIUS = 54;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const dash = computed(() => CIRCUMFERENCE * (remainingMs.value / total.value));
@@ -60,6 +64,9 @@ onBeforeUnmount(() => clearInterval(timer));
       <div class="text">
         <span class="title">{{ t('session.rest.title') }}</span>
         <span class="time" aria-hidden="true">{{ label }}</span>
+        <span class="total" data-testid="rest-total">{{
+          t('session.rest.of', { time: totalLabel })
+        }}</span>
       </div>
     </div>
     <div class="actions">
@@ -126,6 +133,13 @@ onBeforeUnmount(() => clearInterval(timer));
 .title {
   font-size: var(--tr-font-s);
   font-weight: 700;
+  opacity: 0.85;
+}
+.total {
+  margin-top: 6px;
+  font-size: var(--tr-font-s);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
   opacity: 0.85;
 }
 .time {

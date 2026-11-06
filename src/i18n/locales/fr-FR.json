@@ -292,15 +292,14 @@
     "rir": {
       "label": "Reps en réserve (facultatif)",
       "value": "{count} rep en réserve | {count} reps en réserve",
-      "plenty": "4 reps ou plus en réserve",
-      "help": "Combien de reps tu aurais encore pu faire proprement. 4+ = largement."
+      "plenty": "4 reps ou plus en réserve"
     },
     "setNote": {
       "label": "Note sur la série",
       "placeholder": "Prise qui glisse, siège 4…"
     },
     "slowTempo": "Tempo lent",
-    "howWasIt": "Comment c'était ?",
+    "howWasIt": "Combien de reps tu aurais encore pu faire ?",
     "busy": "Machine occupée",
     "alternative": {
       "substitute": "Mêmes muscles",
@@ -329,7 +328,8 @@
       "label": "Repos : {time} restant",
       "skip": "Passer",
       "less": " (raccourcir le repos)",
-      "more": " (allonger le repos)"
+      "more": " (allonger le repos)",
+      "of": "sur {time}"
     },
     "voice": {
       "start": "Dicter",
@@ -387,7 +387,7 @@
       "previous": "+1 série sur : {name}"
     },
     "addExercise": "+ Ajouter un exercice",
-    "moreOptions": "Préciser la série (RIR, note, reps incomplètes, tempo lent, dictée)",
+    "moreOptions": "Préciser la série (note, reps incomplètes, tempo lent, dictée)",
     "coach": {
       "noHistory": "Première fois sur cet exercice.",
       "advice": {
@@ -413,7 +413,7 @@
     "steps": {
       "do": "Fais ta série",
       "doHelp": "La charge et les reps conseillées sont déjà remplies. Change-les seulement si tu as fait autre chose.",
-      "feelHelp": "Un appui enregistre la série et lance le repos."
+      "feelHelp": "Un appui enregistre la série et lance le repos. 0 = échec, 3+ = trop léger."
     },
     "progress": {
       "title": "Exercice {current} sur {total}",
@@ -523,7 +523,7 @@
       "intro": "Tu connais déjà ta charge sur cette machine ? Note-la : la séance partira de là au lieu d'une série test. | Tu connais déjà tes charges sur ces {count} machines ? Note-les : la séance partira de là au lieu de séries test.",
       "add": "+ {name}"
     },
-    "testSetFeel": "Si oui, choisis Facile : la charge monte dès la série suivante. Sinon, Correct la garde.",
+    "testSetFeel": "Si oui, appuie sur 3+ : la charge monte dès la série suivante. Sinon, 2 la garde.",
     "closeOnes": {
       "title": "Pas cette machine ? Très proches :",
       "take": "Faire {name} à la place"
@@ -532,11 +532,6 @@
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
     "seeMovementOf": "Voir la fiche de {name}",
     "restTaken": "repos {time}",
-    "effect": {
-      "up": "La charge monte à la série suivante",
-      "same": "La charge reste la même",
-      "down": "La charge baisse à la série suivante"
-    },
     "compare": {
       "title": "Comparaison avec la dernière fois",
       "set": "Série",
@@ -559,6 +554,10 @@
       "busyHelp": "Fais une autre machine maintenant : {name} revient juste après.",
       "later": "Rien, je passe à l'exercice suivant",
       "cancel": "Annuler, je reste sur {name}"
+    },
+    "reserve": {
+      "button": "{reps} en réserve : {name}",
+      "rest": "Repos après la série : {time}"
     }
   },
   "availability": {
@@ -1060,7 +1059,7 @@
     "keepAwake": "Écran allumé pendant la séance",
     "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances.",
     "restSound": "Bip à la fin du repos",
-    "restSoundHelp": "Trois bips et une vibration quand le repos est fini. Le repos s'allonge après une série « Limite » (+30 s) ou « Échec » (+1 min), et raccourcit après « Facile » (−15 s).",
+    "restSoundHelp": "Trois bips et une vibration quand le repos est fini.",
     "repRange": {
       "own": "Ma propre fourchette de reps",
       "auto": "Désactivé : l'appli adapte la fourchette à chaque exercice ({heavy} reps sur les gros mouvements, {machine} sur machine, {isolation} en isolation). Activé : la même pour tous.",
@@ -1246,7 +1245,8 @@
       "restEverywhere": "Le repos dans les exports",
       "drawingsAndRest": "Plus de dessins, repos réellement pris",
       "photosAndReminders": "Photos, créneaux et rappels",
-      "failureAndRest": "Échec moins punitif, repos visible"
+      "failureAndRest": "Échec moins punitif, repos visible",
+      "rirRest": "Reps en réserve, repos fixe"
     },
     "items": {
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
@@ -1326,7 +1326,9 @@
       "restPreview": "Boutons de ressenti plus clairs : une flèche pour la charge de la série suivante, et la durée du repos qu'ils lancent.",
       "machineRange": "Ta fourchette de reps pour une machine précise (12–20 à la presse, par exemple), sur sa fiche.",
       "compareSets": "Pendant la séance, tes séries d'aujourd'hui à côté de celles de la dernière fois, série par série, avec une flèche verte quand tu fais mieux.",
-      "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes."
+      "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes.",
+      "rirButtons": "Les boutons de ressenti deviennent les reps que tu aurais encore pu faire : 0 (échec), 1, 2 ou 3+. Sans logos.",
+      "fixedRest": "Le repos ne dépend plus du ressenti, seulement de l'exercice (plus long sur les gros mouvements). Il s'affiche sous les boutons, et le chrono orange montre sa durée totale."
     }
   },
   "data": {

@@ -25,7 +25,7 @@ test('assisted pull-ups: the help counts backwards, less help is progress', asyn
     "Charge réelle : 40 kg (80 kg de poids du corps − 40 kg d'aide)",
   );
 
-  await page.getByRole('button', { name: 'Facile', exact: true }).click();
+  await page.getByRole('button', { name: '3+ en réserve : Facile', exact: true }).click();
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
   // An easy set: the next one has less help, shown as progress.
   await expect(entry.getByText(/Baisse l'aide : 35 kg × \d+/)).toBeVisible();

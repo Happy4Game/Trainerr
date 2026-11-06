@@ -306,6 +306,7 @@ async function logWarmup(): Promise<void> {
         <RestTimer
           v-if="restEndsAt"
           :ends-at="restEndsAt"
+          :started-at="session.restStartedAt.value"
           @done="session.endRest()"
           @adjust="session.adjustRest($event)"
         />

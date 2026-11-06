@@ -19,7 +19,8 @@ test('express workout: 3 exercises, curl and pushdown in a superset', async ({ p
   await page.getByRole('switch', { name: /Enchaîner en supersets/ }).click();
   await page.getByRole('button', { name: 'Séance express (20–30 min)' }).click();
 
-  const correct = () => page.getByRole('button', { name: 'Correct', exact: true }).click();
+  const correct = () =>
+    page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
   for (let i = 0; i < 3; i++) await correct();
 
@@ -56,7 +57,7 @@ test('an express session without supersets, and a superset split on the spot', a
   await page.getByRole('button', { name: /Séparer le superset avec/ }).click();
   await expect(page.getByText(/Superset [12]\/2/)).toHaveCount(0);
   // Rest after each set again.
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
   await expect(page.getByRole('timer')).toBeVisible();
 });
 
@@ -76,7 +77,7 @@ test('the session plan shows the supersets as soon as they are switched on', asy
   // During the session, each exercise says its place in the pair.
   await page.getByRole('button', { name: 'Commencer la séance' }).click();
   await expect(page.getByText(/Superset 1\/2/)).toBeVisible();
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: '2 en réserve : Correct', exact: true }).click();
   await expect(page.getByText(/Superset 2\/2/)).toBeVisible();
   await expect(page.getByText(/repos après cette série/)).toBeVisible();
 });

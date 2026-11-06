@@ -65,7 +65,7 @@ import {
   type SessionBlock,
 } from '@/domain/supersets';
 import { rotationFor, type SessionTemplate } from '@/domain/trainingModels';
-import type { Difficulty, Exercise, SessionLog, SetLog } from '@/domain/types';
+import type { Exercise, SessionLog, SetLog } from '@/domain/types';
 import { warmupRamp } from '@/domain/warmup';
 import { myLoad, type MyLoad } from '@/domain/myLoad';
 import { cycleWeek, setsForWeek } from '@/domain/cycles';
@@ -85,7 +85,6 @@ import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useCatalog } from '@/ui/useCatalog';
 import { PRESET_PREFIX, resolvePreset } from '@/domain/presets';
 import { firstTimeEstimateKg } from '@/domain/firstLoad';
-import { restAfterSet } from '@/domain/restTime';
 import { averageRest } from '@/domain/restTaken';
 import {
   afterMovingSets,
@@ -131,7 +130,12 @@ const references = ref<ReferenceLoad[]>([]);
 const weighings = ref<BodyMeasurement[]>([]);
 const active = ref<ActiveSession>();
 const restEndsAt = ref<number>();
-watch(restEndsAt, (endsAt) => saveRest(active.value?.id, endsAt));
+/** When the rest started: the timer shows its full length (with the ±15 s/+30 s). */
+const restStartedAt = ref<number>();
+watch(restEndsAt, (endsAt) => {
+  if (endsAt === undefined) restStartedAt.value = undefined;
+  saveRest(active.value?.id, endsAt, restStartedAt.value);
+});
 /** Record just beaten, for the celebration on the screen (cleared at the next set). */
 const recordBeaten = ref<{ exerciseId: string; loadKg: number; reps: number }>();
 /** What the end-of-session screen shows. */
@@ -442,7 +446,11 @@ async function load(): Promise<void> {
     weighings.value = await listMeasurements(db);
     active.value = await getActiveSession(db);
     // A rest still running when the app was closed goes on where it was.
-    restEndsAt.value ??= restoredRest(active.value?.id, Date.now());
+    if (restEndsAt.value === undefined) {
+      const saved = restoredRest(active.value?.id, Date.now());
+      restStartedAt.value = saved?.startedAt;
+      restEndsAt.value = saved?.endsAt;
+    }
     phase.value = active.value ? 'active' : 'idle';
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : String(error);
@@ -684,12 +692,13 @@ async function logSet(set: SetLog): Promise<void> {
   );
   if (superset.next) queue = startNow(queue, superset.next);
   if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
-  // Usual rest of the exercise, adapted to how hard the set was.
-  const rest = restAfterSet(usualRest(set.exerciseId), set.difficulty);
-  restEndsAt.value = superset.rest ? Date.now() + rest * 1000 : undefined;
+  // Rest of the exercise, the same whatever the feeling: longer on big movements.
+  const now = Date.now();
+  restStartedAt.value = superset.rest ? now : undefined;
+  restEndsAt.value = superset.rest ? now + usualRest(set.exerciseId) * 1000 : undefined;
 }
 
-/** Usual rest of an exercise in the session, before the feeling adjusts it. */
+/** Rest of an exercise in the session: set on its plan line, or by kind of exercise. */
 function usualRest(exerciseId: string): number {
   const kind = entryOf(exerciseId)?.exercise.kind ?? 'isolation';
   return (
@@ -698,52 +707,17 @@ function usualRest(exerciseId: string): number {
   );
 }
 
-/** What each feeling would do to the load of the next set: shown on its button. */
-export interface LoadEffect {
-  readonly effect: 'up' | 'same' | 'down';
-  /** Load of the next set, on the machine; none on an assisted machine (help, not load). */
-  readonly loadKg?: number;
-}
-function effectPreview(
-  exerciseId: string,
-  loadKg: number,
-  reps: number,
-): Record<Difficulty, LoadEffect> | undefined {
-  const entry = entryOf(exerciseId);
-  if (!entry) return undefined;
-  const scale = scaleOf(entry);
-  const isLastSet = workSetsInSession(exerciseId).length + 1 >= plannedSets(exerciseId);
-  const effect = (difficulty: Difficulty): LoadEffect => {
-    const rule = nextSetProposal({
-      set: toRealSet(scale, { exerciseId, loadKg, reps, difficulty }),
-      range: rangeOf(entry),
-      steps: scale?.realSteps ?? stepsOf(entry),
-      isLastSet,
-    });
-    const effect = rule.action === 'increase' ? 'up' : rule.action === 'keep' ? 'same' : 'down';
-    return scale ? { effect } : { effect, loadKg: rule.loadKg };
-  };
-  return { easy: effect('easy'), ok: effect('ok'), hard: effect('hard'), fail: effect('fail') };
-}
-
 /**
- * The rest each feeling would start, shown on its button before the tap.
+ * The rest after a set of this exercise, shown under the buttons before the tap.
  * None: first exercise of a superset, the partner comes straight after.
  */
-function restPreview(exerciseId: string): Record<Difficulty, number> | undefined {
+function restPreview(exerciseId: string): number | undefined {
   const plan = active.value?.plan;
   if (!plan) return undefined;
   const superset = afterSupersetSet(plan.supersets ?? [], exerciseId, (id) =>
     plan.queue.pending.includes(id),
   );
-  if (!superset.rest) return undefined;
-  const usual = usualRest(exerciseId);
-  return {
-    easy: restAfterSet(usual, 'easy'),
-    ok: restAfterSet(usual, 'ok'),
-    hard: restAfterSet(usual, 'hard'),
-    fail: restAfterSet(usual, 'fail'),
-  };
+  return superset.rest ? usualRest(exerciseId) : undefined;
 }
 
 /** The set just logged beat the record: the screen celebrates it. */
@@ -1327,6 +1301,7 @@ export function useSession() {
       warmupSkipped.value = [...warmupSkipped.value, exerciseId];
     },
     restEndsAt,
+    restStartedAt,
     summary,
     favoriteExercises: computed(() => favorites.value.map((e) => e.exercise)),
     crowded: computed(() => (active.value ? isCrowded(active.value.plan.queue) : false)),
@@ -1352,7 +1327,6 @@ export function useSession() {
     planned: (id: string) => active.value?.plan.exercises.find((e) => e.exerciseId === id),
     logSet,
     restPreview,
-    effectPreview,
     undoLastSet,
     editSessionSet,
     removeSessionSet,
