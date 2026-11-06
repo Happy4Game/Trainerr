@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'rirRest',
+    date: '2026-11-06',
+    items: ['rirButtons', 'fixedRest', 'calendar'],
+  },
+  {
     id: 'failureAndRest',
     date: '2026-11-05',
     items: ['failureKept', 'restPreview', 'compareSets', 'machineRange', 'machineSwitch'],

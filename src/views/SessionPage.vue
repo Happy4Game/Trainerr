@@ -22,7 +22,7 @@ import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import { crowdedFallback } from '@/domain/busyMachine';
 import type { CatalogExercise } from '@/data/catalog/catalog';
-import type { Exercise } from '@/domain/types';
+import type { Exercise, SetLog } from '@/domain/types';
 import PlateCalculator from '@/ui/session/PlateCalculator.vue';
 import RestTimer from '@/ui/session/RestTimer.vue';
 import DiscomfortCard from '@/ui/session/DiscomfortCard.vue';
@@ -30,6 +30,7 @@ import SetEntry from '@/ui/session/SetEntry.vue';
 import ReplaceCard from '@/ui/session/ReplaceCard.vue';
 import { useSessionNotification } from '@/ui/session/useSessionNotification';
 import { useLoadLabel } from '@/ui/session/useLoadLabel';
+import { useRirText } from '@/ui/session/useRirText';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import SessionSummary from '@/ui/session/SessionSummary.vue';
 import SessionStart from '@/ui/session/SessionStart.vue';
@@ -46,6 +47,16 @@ import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/useWeekPlan';
 
 const { t, n, locale } = useI18n();
+const rirText = useRirText();
+/** Warm-up, reps in reserve, or a feeling other than a plain "set done". */
+const setTag = (set: SetLog): string | undefined =>
+  set.warmup
+    ? t('session.warmupShort')
+    : set.rir !== undefined
+      ? rirText(set.rir)
+      : set.difficulty === 'ok'
+        ? undefined
+        : t(`difficulty.${set.difficulty}`);
 const templateLabel = useTemplateName();
 const session = useSession();
 useSessionNotification();
@@ -306,6 +317,7 @@ async function logWarmup(): Promise<void> {
         <RestTimer
           v-if="restEndsAt"
           :ends-at="restEndsAt"
+          :started-at="session.restStartedAt.value"
           @done="session.endRest()"
           @adjust="session.adjustRest($event)"
         />
@@ -632,8 +644,7 @@ async function logWarmup(): Promise<void> {
                 <span>
                   {{ set.label }}
                   <span class="muted">
-                    ·
-                    {{ set.warmup ? t('session.warmupShort') : t(`difficulty.${set.difficulty}`) }}
+                    <template v-if="setTag(set)">· {{ setTag(set) }}</template>
                     <template v-if="rests.has(set.id)">
                       · {{ t('session.restTaken', { time: restClock(rests.get(set.id)!) }) }}
                     </template>

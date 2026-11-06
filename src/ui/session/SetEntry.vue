@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { IonButton, IonChip, IonInput, IonLabel } from '@ionic/vue';
 import {
-  ArrowDown,
   ArrowLeftRight,
-  ArrowUp,
   Equal,
   Mic,
   Minus,
   Pencil,
   Plus,
-  Timer,
   TrendingDown,
   TrendingUp,
+  Check,
 } from 'lucide-vue-next';
 import { compareWithLastTime } from '@/domain/setComparison';
 import { computed, nextTick, ref, watch } from 'vue';
@@ -28,7 +26,7 @@ import {
 import type { Difficulty } from '@/domain/types';
 import { parseVoiceSet } from '@/domain/voiceInput';
 import { setAdvice, type SetAdvice } from '@/domain/setAdvice';
-import { useSession, type LoadEffect } from './useSession';
+import { useSession } from './useSession';
 import { useRirText } from './useRirText';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { createRecognition, voiceSupported } from './voice';
@@ -43,7 +41,6 @@ const emit = defineEmits<{ busy: []; replace: []; plates: [loadKg: number] }>();
 
 const { t, n, locale } = useI18n();
 const session = useSession();
-const rirText = useRirText();
 
 const entry = computed(() => session.entryOf(props.exerciseId));
 const proposal = computed(() => session.proposalFor(props.exerciseId));
@@ -235,13 +232,6 @@ const ADVICE_ICON: Record<SetAdvice, string> = {
 
 const RIR_VALUES = [0, 1, 2, 3, 4] as const;
 
-const DIFFICULTIES: { value: Difficulty; color: string }[] = [
-  { value: 'easy', color: 'success' },
-  { value: 'ok', color: 'primary' },
-  { value: 'hard', color: 'warning' },
-  { value: 'fail', color: 'danger' },
-];
-
 /** Last session next to today, set by set (real load: less help counts as heavier). */
 const lastDate = computed(() => session.lastTimeDate(props.exerciseId));
 const comparison = computed(() => {
@@ -266,21 +256,18 @@ const shortDay = (date: string) =>
     new Date(`${date}T00:00:00Z`),
   );
 
-/** Next load for each feeling, read at a glance: an arrow. */
-const EFFECT_ICON = { up: ArrowUp, same: Equal, down: ArrowDown } as const;
-const effects = computed(() => {
-  const preview = session.effectPreview(props.exerciseId, load.value, reps.value);
-  if (!preview || !incomplete.value) return preview;
-  // An incomplete rep never counts: the load goes down whatever the feeling.
-  const down: LoadEffect = { effect: 'down' };
-  return { easy: down, ok: down, hard: down, fail: down };
-});
-/** The rest each feeling starts, seen before the tap: no surprise once the timer runs. */
+/** The rest a set starts, set by the exercise only: seen before the tap. */
+const rirText = useRirText();
 const restPreview = computed(() => session.restPreview(props.exerciseId));
 const clock = (seconds: number) =>
   `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
-async function validate(difficulty: Difficulty): Promise<void> {
+/**
+ * Like a coach: the reps done drive the load (double progression, ACSM 2009,
+ * doi:10.1249/MSS.0b013e3181915670). Above the range the load goes up, below
+ * it goes down. Only the test set asks if it was too light.
+ */
+async function validate(difficulty: Difficulty = heard.value ?? 'ok'): Promise<void> {
   // A short buzz: the set is saved, no need to look at the screen.
   navigator.vibrate?.(35);
   // This tap allows the beep at the end of the rest.
@@ -599,38 +586,31 @@ function listen(): void {
 
     <h3 class="step">
       <span class="badge">2</span>
-      {{ testSet ? t('session.testSetQuestion') : t('session.howWasIt') }}
+      {{ testSet ? t('session.testSetQuestion') : t('session.validate.title') }}
     </h3>
     <p v-if="testSet" class="help test-help">{{ t('session.testSetFeel') }}</p>
     <p v-else-if="learning" class="help">{{ t('session.steps.feelHelp') }}</p>
-    <div class="difficulties">
-      <ion-button
-        v-for="d in DIFFICULTIES"
-        :key="d.value"
-        :color="d.color"
-        :fill="heard && heard !== d.value ? 'outline' : 'solid'"
-        :aria-label="t(`difficulty.${d.value}`)"
-        @click="validate(d.value)"
-      >
-        <span class="difficulty">
-          <span class="difficulty-name">{{ t(`difficulty.${d.value}`) }}</span>
-          <span class="difficulty-facts">
-            <span
-              v-if="effects"
-              class="fact"
-              :data-testid="`effect-${d.value}`"
-              :title="t(`session.effect.${effects[d.value].effect}`)"
-            >
-              <component :is="EFFECT_ICON[effects[d.value].effect]" :size="15" aria-hidden="true" />
-            </span>
-            <span v-if="restPreview" class="fact" data-testid="rest-preview">
-              <Timer :size="14" aria-hidden="true" />
-              {{ clock(restPreview[d.value]) }}
-            </span>
-          </span>
-        </span>
+    <div v-if="testSet" class="test-answers">
+      <ion-button color="success" size="large" @click="validate('easy')">
+        {{ t('session.validate.tooLight') }}
+      </ion-button>
+      <ion-button size="large" @click="validate('ok')">
+        {{ t('session.validate.fine') }}
       </ion-button>
     </div>
+    <div v-else class="done-row">
+      <ion-button class="done-button" size="large" @click="validate()">
+        <Check :size="26" aria-hidden="true" class="icon" />
+        {{ t('session.validate.done') }}
+      </ion-button>
+      <!-- Stopped well before failure: the load goes up from the next set. -->
+      <ion-button class="light-button" fill="outline" color="success" @click="validate('easy')">
+        {{ t('session.validate.light') }}
+      </ion-button>
+    </div>
+    <p v-if="restPreview" class="rest-line" data-testid="rest-preview">
+      {{ t('session.reserve.rest', { time: clock(restPreview) }) }}
+    </p>
 
     <details class="more">
       <summary>{{ t('session.moreOptions') }}</summary>
@@ -708,24 +688,6 @@ function listen(): void {
 </template>
 
 <style scoped>
-.rir {
-  border: 0;
-  margin: 8px 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-}
-.rir legend {
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.rir ion-chip {
-  min-width: 48px;
-  min-height: 48px;
-  justify-content: center;
-}
 .set-note {
   margin: 8px 0;
 }
@@ -898,19 +860,50 @@ h2 {
   color: var(--tr-text);
   font-weight: 600;
 }
-.difficulty {
+.rir {
+  border: 0;
+  margin: 8px 0 0;
+  padding: 0;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
 }
-.difficulty-name {
-  font-size: 1.05rem;
+.rir legend {
+  font-weight: 600;
+  margin-bottom: 4px;
 }
-.difficulty-hint {
-  font-size: 0.75rem;
-  text-transform: none;
-  font-weight: 400;
+.rir ion-chip {
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+}
+.done-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+.light-button {
+  margin: 0;
+  min-height: 64px;
+  white-space: normal;
+  font-weight: 700;
+}
+.done-button {
+  min-height: 64px;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.test-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.test-answers ion-button {
+  margin: 0;
+  min-height: 64px;
+  white-space: normal;
 }
 .compare {
   width: 100%;
@@ -967,23 +960,12 @@ h2 {
 .todo {
   color: var(--ion-color-medium);
 }
-.difficulty-facts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-}
-.fact {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgb(0 0 0 / 14%);
-  font-size: 0.8rem;
-  font-weight: 800;
+.rest-line {
+  margin: 8px 0 0;
+  text-align: center;
+  color: var(--ion-color-medium-shade);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  text-transform: none;
 }
 .more {
   margin-block-start: 12px;
@@ -1125,15 +1107,6 @@ h2 {
 .flags {
   display: flex;
   flex-wrap: wrap;
-}
-.difficulties {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.difficulties ion-button {
-  margin: 0;
-  min-height: 64px;
 }
 .tools {
   display: flex;

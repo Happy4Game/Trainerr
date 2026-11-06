@@ -24,7 +24,7 @@ test('the record to beat is shown, and beating it is celebrated', async ({ page 
   await oneSetSession(page);
   await expect(page.getByTestId('record')).toHaveCount(0);
   const first = (await page.getByTestId('load').textContent())?.trim() ?? '';
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await page.getByRole('button', { name: 'Fermer' }).first().click();
 
@@ -36,7 +36,7 @@ test('the record to beat is shown, and beating it is celebrated', async ({ page 
     `Objectif : toutes tes séries à 15 reps avec ${first}`,
   );
   await page.getByRole('button', { name: 'Palier plus lourd' }).click();
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await expect(page.getByText('Nouveau record !')).toBeVisible();
 
   // The history keeps the trophy on that day.

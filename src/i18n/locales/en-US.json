@@ -293,14 +293,13 @@
       "label": "Reps in reserve (optional)",
       "value": "{count} rep in reserve | {count} reps in reserve",
       "plenty": "4 or more reps in reserve",
-      "help": "How many more clean reps you could have done. 4+ = plenty."
+      "help": "Optional: how many more reps you could have done cleanly. 4+ = plenty."
     },
     "setNote": {
       "label": "Note on this set",
       "placeholder": "Grip slipping, seat 4…"
     },
     "slowTempo": "Slow tempo",
-    "howWasIt": "How was it?",
     "busy": "Machine taken",
     "alternative": {
       "substitute": "Same muscles",
@@ -329,7 +328,8 @@
       "label": "Rest: {time} left",
       "skip": "Skip",
       "less": " (shorter rest)",
-      "more": " (longer rest)"
+      "more": " (longer rest)",
+      "of": "of {time}"
     },
     "voice": {
       "start": "Dictate",
@@ -413,7 +413,7 @@
     "steps": {
       "do": "Do your set",
       "doHelp": "The advised load and reps are already filled in. Only change them if you did something else.",
-      "feelHelp": "One tap saves the set and starts the rest."
+      "feelHelp": "One tap logs the set and starts the rest. Your reps drive the load: above your range it goes up, below it goes down."
     },
     "progress": {
       "title": "Exercise {current} of {total}",
@@ -523,7 +523,7 @@
       "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
       "add": "+ {name}"
     },
-    "testSetFeel": "If so, pick Easy: the load goes up from the next set. Otherwise, OK keeps it.",
+    "testSetFeel": "If so, the load goes up from the next set.",
     "closeOnes": {
       "title": "Not this machine? Very close ones:",
       "take": "Do {name} instead"
@@ -532,11 +532,6 @@
     "testSetQuestion": "Too light? Could you have done 3 more reps?",
     "seeMovementOf": "See the card of {name}",
     "restTaken": "rest {time}",
-    "effect": {
-      "up": "The load goes up next set",
-      "same": "The load stays the same",
-      "down": "The load goes down next set"
-    },
     "compare": {
       "title": "Compared with last time",
       "set": "Set",
@@ -559,7 +554,18 @@
       "busyHelp": "Do another machine now: {name} comes back right after.",
       "later": "Nothing, I'll go to the next exercise",
       "cancel": "Cancel, I'm staying on {name}"
-    }
+    },
+    "reserve": {
+      "rest": "Rest after the set: {time}"
+    },
+    "validate": {
+      "title": "Log your set",
+      "done": "Set done",
+      "tooLight": "Yes, too light",
+      "fine": "No, it's fine",
+      "light": "Too light"
+    },
+    "howWasIt": "How was it?"
   },
   "availability": {
     "day": "Day",
@@ -1060,7 +1066,7 @@
     "keepAwake": "Screen on during the session",
     "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions.",
     "restSound": "Beep at the end of the rest",
-    "restSoundHelp": "Three beeps and a buzz when the rest is over. The rest gets longer after a \"Hard\" set (+30 s) or a \"Failed\" set (+1 min), and shorter after \"Easy\" (−15 s).",
+    "restSoundHelp": "Three beeps and a vibration when the rest is over.",
     "repRange": {
       "own": "My own rep range",
       "auto": "Off: the app fits the range to each exercise ({heavy} reps on big lifts, {machine} on machines, {isolation} on isolation). On: the same for all.",
@@ -1246,7 +1252,8 @@
       "restEverywhere": "Rest in the exports",
       "drawingsAndRest": "More drawings, rest really taken",
       "photosAndReminders": "Photos, slots and reminders",
-      "failureAndRest": "Gentler failure, rest shown first"
+      "failureAndRest": "Gentler failure, rest shown first",
+      "rirRest": "One tap, like with a coach"
     },
     "items": {
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
@@ -1326,7 +1333,10 @@
       "restPreview": "Clearer feeling buttons: an arrow for the load of the next set, and the length of the rest they start.",
       "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card.",
       "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better.",
-      "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it."
+      "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it.",
+      "rirButtons": "No more difficulty choice: a big \"Set done\" button, and a small \"Too light\" button that raises the load from the next set. Otherwise your reps decide, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
+      "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length.",
+      "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full."
     }
   },
   "data": {
@@ -1916,5 +1926,27 @@
     "phul": "Upper and lower body, once heavy for strength, once lighter for volume.",
     "arnold": "Chest and back, shoulders and arms, then legs, each twice.",
     "broSplit": "One muscle group a day: each muscle works only once a week."
+  },
+  "calendar": {
+    "open": "My sessions calendar",
+    "title": "My sessions",
+    "view": "View",
+    "month": "Month",
+    "week": "Week",
+    "weekOf": "Week of {from} to {to}",
+    "count": "{count} session | {count} sessions",
+    "previous": {
+      "month": "Previous month",
+      "week": "Previous week"
+    },
+    "next": {
+      "month": "Next month",
+      "week": "Next week"
+    },
+    "today": "Back to today",
+    "sets": "{count} set | {count} sets",
+    "rest": "Rest",
+    "none": "No session",
+    "openSession": "See {name} of {day}"
   }
 }

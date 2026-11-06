@@ -12,7 +12,7 @@ test('reps in reserve and a note can be added to a set, and are kept in the hist
   await page.getByText('Préciser la série').click();
   await page.getByRole('radio', { name: '2 reps en réserve' }).click();
   await page.getByRole('textbox', { name: 'Note sur la série' }).fill('Prise qui glisse');
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
   await page.getByRole('button', { name: 'Fermer' }).first().click();
 

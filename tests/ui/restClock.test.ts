@@ -14,7 +14,7 @@ describe('rest kept across a hard quit', () => {
 
   it('goes on after a restart, for the same session only', () => {
     saveRest('s1', 10_000);
-    expect(restoredRest('s1', 4_000)).toBe(10_000);
+    expect(restoredRest('s1', 4_000)).toEqual({ endsAt: 10_000 });
     expect(restoredRest('s2', 4_000)).toBeUndefined();
   });
 
@@ -23,5 +23,10 @@ describe('rest kept across a hard quit', () => {
     expect(restoredRest('s1', 10_001)).toBeUndefined();
     saveRest('s1', undefined);
     expect(restoredRest('s1', 4_000)).toBeUndefined();
+  });
+
+  it('keeps the start of the rest, for its full length on the timer', () => {
+    saveRest('s1', 10_000, 1_000);
+    expect(restoredRest('s1', 4_000)).toEqual({ endsAt: 10_000, startedAt: 1_000 });
   });
 });

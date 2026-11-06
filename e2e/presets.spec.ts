@@ -63,7 +63,7 @@ test('the machines of a ready-made session join my machines in one tap', async (
   const push = page.getByRole('region', { name: 'Push', exact: true });
   await push.getByRole('button', { name: 'Commencer : Push' }).click();
   await expect(page.getByRole('region', { name: 'Développé couché barre' })).toBeVisible();
-  await page.getByRole('button', { name: 'Correct', exact: true }).click();
+  await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   await page.getByRole('button', { name: 'Terminer la séance' }).click();
 
   await expect(page.getByText('Tu as utilisé Développé couché barre')).toBeVisible();
