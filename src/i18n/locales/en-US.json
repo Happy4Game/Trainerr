@@ -1336,7 +1336,7 @@
       "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it.",
       "rirButtons": "No more difficulty choice: a big \"Set done\" button, and a small \"Too light\" button that raises the load from the next set. Otherwise your reps decide, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
       "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length.",
-      "calendar": "Planning: a calendar of all your sessions, month by month or week by week. Tap a day to see its sessions and open them."
+      "calendar": "Planning: a calendar of all your sessions, month by month or week by week. Each session's name is written on its day, and a tap opens the whole session."
     }
   },
   "data": {
@@ -1944,10 +1944,9 @@
       "week": "Next week"
     },
     "today": "Back to today",
-    "dayWith": "{day}: {count} session | {day}: {count} sessions",
     "sets": "{count} set | {count} sets",
-    "noSession": "No session that day.",
     "rest": "Rest",
-    "none": "No session"
+    "none": "No session",
+    "openSession": "See {name} of {day}"
   }
 }

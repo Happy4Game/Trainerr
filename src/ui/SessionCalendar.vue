@@ -21,8 +21,6 @@ const templateLabel = useTemplateName();
 const view = ref<'month' | 'week'>('month');
 /** Any day of the month or week shown. */
 const shown = ref<IsoDate>(props.today);
-/** Day tapped in the month: its sessions show under the grid. */
-const picked = ref<IsoDate>(props.today);
 
 const byDay = computed(() => sessionsByDay(props.sessions));
 const weeks = computed(() => monthGrid(shown.value));
@@ -56,21 +54,16 @@ const count = computed(() => {
 function move(step: -1 | 1): void {
   shown.value =
     view.value === 'month' ? addMonths(shown.value, step) : addDays(shown.value, 7 * step);
-  if (view.value === 'month') picked.value = shown.value;
 }
 function backToToday(): void {
   shown.value = props.today;
-  picked.value = props.today;
-}
-function pick(day: IsoDate): void {
-  picked.value = day;
-  shown.value = day;
 }
 function setView(next: 'month' | 'week'): void {
   view.value = next;
-  // The week of the day picked in the month: from "which day" to "which session".
-  if (next === 'week') shown.value = picked.value;
-  else picked.value = shown.value;
+  // From a month to its week: the current one when it is this month, else its first.
+  if (next === 'week' && startOfMonth(shown.value) !== startOfMonth(props.today))
+    shown.value = startOfMonth(shown.value);
+  else if (next === 'week') shown.value = props.today;
 }
 const isCurrent = computed(() =>
   view.value === 'month'
@@ -128,48 +121,32 @@ const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
         <tbody>
           <tr v-for="(days, w) in weeks" :key="w">
             <td v-for="(day, i) in days" :key="i">
-              <button
+              <div
                 v-if="day"
-                type="button"
-                :class="{
-                  trained: byDay.has(day),
-                  picked: day === picked,
-                  'is-today': day === today,
-                }"
-                :aria-pressed="day === picked"
-                :aria-label="
-                  byDay.has(day)
-                    ? t(
-                        'calendar.dayWith',
-                        {
-                          day: dayLabel(day),
-                          count: byDay.get(day)!.length,
-                        },
-                        byDay.get(day)!.length,
-                      )
-                    : dayLabel(day)
-                "
-                @click="pick(day)"
+                class="cell"
+                :class="{ trained: byDay.has(day), 'is-today': day === today }"
               >
                 <span class="number">{{ Number(day.slice(8)) }}</span>
-                <span v-if="byDay.has(day)" class="dot" aria-hidden="true" />
-              </button>
+                <button
+                  v-for="s in byDay.get(day) ?? []"
+                  :key="s.id"
+                  type="button"
+                  class="chip"
+                  :aria-label="
+                    t('calendar.openSession', {
+                      name: templateLabel(s.templateId),
+                      day: dayLabel(day),
+                    })
+                  "
+                  @click="emit('open', s.id)"
+                >
+                  {{ templateLabel(s.templateId) }}
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
-      <section class="day" :aria-label="dayLabel(picked)">
-        <h3>{{ dayLabel(picked) }}</h3>
-        <ul v-if="byDay.has(picked)" class="sessions">
-          <li v-for="s in byDay.get(picked)" :key="s.id">
-            <button type="button" class="session" @click="emit('open', s.id)">
-              <strong>{{ templateLabel(s.templateId) }}</strong>
-              <span>{{ t('calendar.sets', { count: setsOf(s) }, setsOf(s)) }}</span>
-            </button>
-          </li>
-        </ul>
-        <p v-else class="none">{{ t('calendar.noSession') }}</p>
-      </section>
     </template>
 
     <ul v-else class="week">
@@ -259,7 +236,7 @@ const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
   width: 100%;
   margin-block: 8px;
   border-collapse: separate;
-  border-spacing: 2px;
+  border-spacing: 1px 3px;
   table-layout: fixed;
 }
 .month th {
@@ -268,47 +245,50 @@ const setsOf = (s: SessionLog) => s.sets.filter((set) => !set.warmup).length;
   color: var(--ion-color-medium);
   text-transform: uppercase;
 }
-.month td button {
-  position: relative;
+.cell {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 44px;
+  align-items: stretch;
+  gap: 2px;
+  min-height: 96px;
+  padding: 3px 1px;
   border: 2px solid transparent;
   border-radius: 10px;
-  background: transparent;
-  color: var(--ion-text-color);
-  font: inherit;
   font-variant-numeric: tabular-nums;
 }
-.month td button.trained {
-  background: rgb(var(--ion-color-primary-rgb) / 18%);
-  font-weight: 800;
+.cell.trained {
+  background: rgb(var(--ion-color-primary-rgb) / 14%);
 }
-.month td button.is-today {
-  border-color: var(--ion-color-medium);
-}
-.month td button.picked {
+.cell.is-today {
   border-color: var(--ion-color-primary);
 }
-.dot {
-  width: 6px;
-  height: 6px;
-  margin-top: 2px;
-  border-radius: 50%;
+.number {
+  font-size: 0.85rem;
+  text-align: center;
+}
+.cell.trained .number {
+  font-weight: 800;
+}
+/* The session's name, on the day itself: a tap opens it. */
+.chip {
+  display: -webkit-box;
+  overflow: hidden;
+  padding: 3px 1px;
+  border: 0;
+  border-radius: 6px;
   background: var(--ion-color-primary);
-}
-.day h3 {
-  margin: 8px 0 4px;
-  font-size: 1rem;
+  color: var(--ion-color-primary-contrast);
+  font: inherit;
+  font-size: 0.64rem;
   font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
 }
-.day h3::first-letter {
-  text-transform: uppercase;
-}
-.sessions,
 .week {
   margin: 0;
   padding: 0;

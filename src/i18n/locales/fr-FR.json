@@ -1336,7 +1336,7 @@
       "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes.",
       "rirButtons": "Plus de choix de difficulté : un gros bouton « Série faite », et un petit bouton « Trop léger » qui monte la charge dès la série suivante. Sinon ce sont tes reps qui décident, comme le fait un coach (au-dessus de ta fourchette elle monte, en dessous elle baisse). Les reps en réserve restent possibles dans « Préciser la série ».",
       "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale.",
-      "calendar": "Planning : un calendrier de toutes tes séances, mois par mois ou semaine par semaine. Un appui sur un jour montre ses séances, et ouvre leur détail."
+      "calendar": "Planning : un calendrier de toutes tes séances, mois par mois ou semaine par semaine. Le nom de chaque séance est écrit sur son jour, et un appui ouvre la séance complète."
     }
   },
   "data": {
@@ -1944,10 +1944,9 @@
       "week": "Semaine suivante"
     },
     "today": "Revenir à aujourd'hui",
-    "dayWith": "{day} : {count} séance | {day} : {count} séances",
     "sets": "{count} série | {count} séries",
-    "noSession": "Pas de séance ce jour-là.",
     "rest": "Repos",
-    "none": "Aucune séance"
+    "none": "Aucune séance",
+    "openSession": "Voir {name} du {day}"
   }
 }

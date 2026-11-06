@@ -16,9 +16,10 @@ test('Planning opens a calendar of the sessions done, month by month or week by 
   await openTab(page, 'Planning');
   await page.getByRole('button', { name: 'Calendrier de mes séances' }).click();
   const sheet = page.locator('ion-modal').filter({ hasText: 'Mes séances' });
-  // This month: today is trained, and picked, with its session under the grid.
+  // This month: the session's name is written on its day.
   await expect(sheet.getByText('1 séance', { exact: true })).toBeVisible();
-  await expect(sheet.getByRole('button', { name: /: 1 séance$/ })).toBeVisible();
+  const chip = sheet.getByRole('button', { name: /^Voir Haut du corps A du / });
+  await expect(chip).toHaveText('Haut du corps A');
   const title = sheet.getByTestId('calendar-title');
   const thisMonth = (await title.textContent()) ?? '';
 
@@ -41,5 +42,11 @@ test('Planning opens a calendar of the sessions done, month by month or week by 
   // A session opens its detail in the history.
   await done.click();
   await expect(page).toHaveURL(/\/tabs\/history\/[^/]+$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Haut du corps A' })).toBeVisible();
+
+  // From the month too: a tap on the name opens the whole session.
+  await openTab(page, 'Planning');
+  await page.getByRole('button', { name: 'Calendrier de mes séances' }).click();
+  await chip.click();
   await expect(page.getByRole('heading', { level: 1, name: 'Haut du corps A' })).toBeVisible();
 });
