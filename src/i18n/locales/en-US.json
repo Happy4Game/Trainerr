@@ -562,7 +562,8 @@
       "title": "Log your set",
       "done": "Set done",
       "tooLight": "Yes, too light",
-      "fine": "No, it's fine"
+      "fine": "No, it's fine",
+      "light": "Too light"
     },
     "howWasIt": "How was it?"
   },
@@ -1333,7 +1334,7 @@
       "machineRange": "Your rep range for one machine (12–20 on the leg press, say), on its card.",
       "compareSets": "During the workout, today's sets next to last time's, set by set, with a green arrow when you do better.",
       "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it.",
-      "rirButtons": "No more difficulty choice: one \"Set done\" button. Your reps drive the load, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
+      "rirButtons": "No more difficulty choice: a big \"Set done\" button, and a small \"Too light\" button that raises the load from the next set. Otherwise your reps decide, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
       "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length."
     }
   },

@@ -598,10 +598,16 @@ function listen(): void {
         {{ t('session.validate.fine') }}
       </ion-button>
     </div>
-    <ion-button v-else class="done-button" expand="block" size="large" @click="validate()">
-      <Check :size="26" aria-hidden="true" class="icon" />
-      {{ t('session.validate.done') }}
-    </ion-button>
+    <div v-else class="done-row">
+      <ion-button class="done-button" size="large" @click="validate()">
+        <Check :size="26" aria-hidden="true" class="icon" />
+        {{ t('session.validate.done') }}
+      </ion-button>
+      <!-- Stopped well before failure: the load goes up from the next set. -->
+      <ion-button class="light-button" fill="outline" color="success" @click="validate('easy')">
+        {{ t('session.validate.light') }}
+      </ion-button>
+    </div>
     <p v-if="restPreview" class="rest-line" data-testid="rest-preview">
       {{ t('session.reserve.rest', { time: clock(restPreview) }) }}
     </p>
@@ -871,6 +877,17 @@ h2 {
   min-width: 48px;
   min-height: 48px;
   justify-content: center;
+}
+.done-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+.light-button {
+  margin: 0;
+  min-height: 64px;
+  white-space: normal;
+  font-weight: 700;
 }
 .done-button {
   min-height: 64px;

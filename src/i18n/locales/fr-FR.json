@@ -562,7 +562,8 @@
       "title": "Valide ta série",
       "done": "Série faite",
       "tooLight": "Oui, trop léger",
-      "fine": "Non, ça va"
+      "fine": "Non, ça va",
+      "light": "Trop léger"
     },
     "howWasIt": "Comment c'était ?"
   },
@@ -1333,7 +1334,7 @@
       "machineRange": "Ta fourchette de reps pour une machine précise (12–20 à la presse, par exemple), sur sa fiche.",
       "compareSets": "Pendant la séance, tes séries d'aujourd'hui à côté de celles de la dernière fois, série par série, avec une flèche verte quand tu fais mieux.",
       "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes.",
-      "rirButtons": "Plus de choix de difficulté : un seul bouton « Série faite ». Ce sont tes reps qui décident de la charge, comme le fait un coach (au-dessus de ta fourchette elle monte, en dessous elle baisse). Les reps en réserve restent possibles dans « Préciser la série ».",
+      "rirButtons": "Plus de choix de difficulté : un gros bouton « Série faite », et un petit bouton « Trop léger » qui monte la charge dès la série suivante. Sinon ce sont tes reps qui décident, comme le fait un coach (au-dessus de ta fourchette elle monte, en dessous elle baisse). Les reps en réserve restent possibles dans « Préciser la série ».",
       "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale."
     }
   },

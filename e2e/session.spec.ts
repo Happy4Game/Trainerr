@@ -170,5 +170,7 @@ test('one tap logs a set, like with a coach; the rest shows once; reps are set p
   await entry.getByRole('button', { name: 'Non, ça va' }).click();
   await page.getByRole('button', { name: 'Passer', exact: true }).click();
   await expect(entry.getByRole('button', { name: 'Série faite' })).toBeVisible();
+  // A load far too light still goes up at once, with the small button next to it.
+  await expect(entry.getByRole('button', { name: 'Trop léger' })).toBeVisible();
   await expect(entry.getByRole('button', { name: 'Oui, trop léger' })).toHaveCount(0);
 });

@@ -12,6 +12,7 @@ export interface CoachReportInput {
   readonly exerciseName: (id: string) => string;
   readonly templateName: (id: string) => string;
   readonly loadLabel: (kg: number) => string;
+  /** Empty for a plain set: only what tells something is written. */
   readonly difficultyLabel: (difficulty: string) => string;
   readonly texts: {
     readonly title: string;
@@ -38,6 +39,8 @@ export function buildCoachReport(input: CoachReportInput): string {
   const program = input.program
     .map(([label, value]) => `<tr><th>${escape(label)}</th><td>${escape(value)}</td></tr>`)
     .join('');
+  // An empty label (a plain "set done") adds nothing in brackets.
+  const note = (label: string) => (label ? ` (${escape(label)})` : '');
   const sessions = [...input.sessions]
     .sort((a, b) => b.date.localeCompare(a.date))
     .map((session) => {
@@ -47,7 +50,7 @@ export function buildCoachReport(input: CoachReportInput): string {
           const rest = rests[index];
           return (
             `<li>${escape(input.exerciseName(set.exerciseId))} — ${escape(input.loadLabel(set.loadKg))} × ${set.reps}` +
-            ` (${escape(set.warmup ? texts.warmup : input.difficultyLabel(set.difficulty))})` +
+            note(set.warmup ? texts.warmup : input.difficultyLabel(set.difficulty)) +
             (rest === undefined ? '' : ` · ${escape(texts.rest(restClock(rest)))}`) +
             '</li>'
           );

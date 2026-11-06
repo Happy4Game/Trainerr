@@ -89,7 +89,8 @@ async function shareWithCoach(): Promise<void> {
     exerciseName: nameOf,
     templateName: (id) => templateLabel(id),
     loadLabel: load,
-    difficultyLabel: (d) => t(`difficulty.${d}`),
+    // Since the single "Set done" button, "Correct" says nothing: only the other feelings show.
+    difficultyLabel: (d) => (d === 'ok' ? '' : t(`difficulty.${d}`)),
     texts: {
       title: t('coach.title'),
       program: t('coach.program'),
