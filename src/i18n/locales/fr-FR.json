@@ -1065,7 +1065,7 @@
     "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android).",
     "keepAwake": "Écran allumé pendant la séance",
     "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances.",
-    "guidedWarmupHelp": "Sinon, un échauffement articulaire guidé de quelques minutes est proposé au début de chaque séance, adapté aux muscles du jour (conseillé, passable à tout moment).",
+    "guidedWarmupHelp": "Sinon, un échauffement articulaire guidé de tout le corps (≈ 5 min) est proposé au début de chaque séance (conseillé, passable à tout moment).",
     "restSound": "Bip à la fin du repos",
     "restSoundHelp": "Trois bips et une vibration quand le repos est fini.",
     "repRange": {
@@ -1114,7 +1114,7 @@
       },
       "warmup": {
         "title": "S'échauffer",
-        "body": "5 à 10 minutes suffisent : cardio léger, mouvements articulaires amples, réveil des muscles du jour, puis des séries légères sur la première machine. Évite les étirements tenus longtemps juste avant. L'appli te guide à chaque début de séance."
+        "body": "5 à 10 minutes suffisent : cardio léger, mouvements articulaires amples de la tête aux chevilles, puis des séries légères sur la première machine. Évite les étirements tenus longtemps juste avant. L'appli te guide à chaque début de séance."
       },
       "benchElbows": {
         "title": "Développé couché : coudes et omoplates",
@@ -1258,8 +1258,8 @@
       "rirRest": "Une seule validation, comme avec un coach"
     },
     "items": {
-      "guidedWarmupSteps": "Au début de chaque séance, un échauffement articulaire guidé de 3 à 5 min, mouvement par mouvement, avec un minuteur qui enchaîne tout seul.",
-      "guidedWarmupMuscles": "Les mouvements sont choisis selon les muscles du jour.",
+      "guidedWarmupSteps": "Au début de chaque séance, un échauffement articulaire guidé d'environ 5 min, mouvement par mouvement, avec un minuteur qui enchaîne tout seul.",
+      "guidedWarmupMuscles": "Il couvre tout le corps, de la tête aux chevilles, quelle que soit la séance.",
       "guidedWarmupSkip": "Conseillé mais jamais obligatoire : « Passer l'échauffement guidé » à tout moment, et « Je préfère m'échauffer seul » pour ne plus le proposer.",
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
       "changelog": "Cette page, pour voir ce qui change à chaque mise à jour.",
@@ -1435,6 +1435,10 @@
   },
   "mobility": {
     "moves": {
+      "neckNods": {
+        "name": "Oui et non de la tête",
+        "how": "Lentement, baisser puis lever le menton, puis tourner la tête à gauche et à droite. Sans à-coup ni grands cercles."
+      },
       "armCircles": {
         "name": "Cercles de bras",
         "how": "Bras tendus sur le côté, petits puis grands cercles, dans les deux sens."
@@ -1490,7 +1494,7 @@
     "why": "Une fois lancé, les mouvements s'enchaînent tout seuls avec un bip. Pas d'étirement tenu longtemps avant la muscu : ça fait perdre de la force. Les séries d'approche de ta première machine finiront de t'échauffer.",
     "review": "Sources. Contenu à faire valider par un coach ou un kiné.",
     "self": "Je préfère m'échauffer seul, sans l'appli",
-    "selfOff": "Sinon, l'appli te guide pendant ≈ {minutes} min d'échauffement articulaire, adapté aux muscles du jour (conseillé, passable à tout moment).",
+    "selfOff": "Sinon, l'appli te guide pendant ≈ {minutes} min d'échauffement articulaire de tout le corps, de la tête aux chevilles (conseillé, passable à tout moment).",
     "selfOn": "L'appli ne propose plus l'échauffement guidé. Pense quand même à t'échauffer."
   },
   "gyms": {

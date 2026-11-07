@@ -21,17 +21,17 @@ const { t } = useI18n();
 const session = useSession();
 const { settings } = useSettings();
 
-const steps = computed(() => guidedWarmup(session.sessionMuscles.value));
+const steps = guidedWarmup();
 const sources = JOINT_WARMUP_SOURCE_IDS.map(sourceById).filter((s) => s !== undefined);
-const minutes = computed(() => warmupMinutes(steps.value));
+const minutes = computed(() => warmupMinutes(steps));
 const index = computed(() =>
-  Math.min(session.active.value?.plan.guidedWarmup?.step ?? 0, steps.value.length - 1),
+  Math.min(session.active.value?.plan.guidedWarmup?.step ?? 0, steps.length - 1),
 );
-const current = computed(() => steps.value[index.value]);
+const current = computed(() => steps[index.value]);
 const illustration = computed(() =>
   current.value ? warmupIllustrationFor(current.value.id) : undefined,
 );
-const isLast = computed(() => index.value === steps.value.length - 1);
+const isLast = computed(() => index.value === steps.length - 1);
 
 // Countdown of a timed step. The end time is absolute: it stays right after the screen was off.
 const endsAt = ref<number>();

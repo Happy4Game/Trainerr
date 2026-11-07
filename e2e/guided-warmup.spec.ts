@@ -31,8 +31,9 @@ test('the joint warm-up comes first, move by move, and is kept after a reload', 
   const warmup = page.getByRole('region', { name: 'Échauffement articulaire' });
   await expect(warmup).toBeVisible();
   await expect(warmup.getByText(/^Mouvement 1 sur \d+$/)).toBeVisible();
-  // Push day: shoulder moves first.
-  await expect(warmup.getByRole('heading', { name: 'Cercles de bras' })).toBeVisible();
+  // The whole body, head to toe: the neck first.
+  await expect(warmup.getByText('Mouvement 1 sur 10')).toBeVisible();
+  await expect(warmup.getByRole('heading', { name: 'Oui et non de la tête' })).toBeVisible();
   // No machine before the warm-up is done or skipped.
   await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toHaveCount(0);
 
@@ -44,6 +45,7 @@ test('the joint warm-up comes first, move by move, and is kept after a reload', 
 
   await warmup.getByRole('button', { name: 'Mouvement suivant' }).click();
   await expect(warmup.getByText(/^Mouvement 2 sur \d+$/)).toBeVisible();
+  await expect(warmup.getByRole('heading', { name: 'Cercles de bras' })).toBeVisible();
 
   // The move reached stays after the app is closed.
   await page.reload();

@@ -28,7 +28,7 @@ import { useSession } from './useSession';
  * Before the session: the session of the day first (what, how long, one big
  * button), then the other ways to train today and my own sessions.
  */
-const props = defineProps<{ template: SessionTemplate }>();
+defineProps<{ template: SessionTemplate }>();
 
 const { t, locale } = useI18n();
 const templateLabel = useTemplateName();
@@ -65,8 +65,8 @@ const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
     ? t('session.readyMade.suggested')
     : undefined;
-/** Length of the guided joint warm-up offered once the session starts. */
-const warmupLength = computed(() => warmupMinutes(guidedWarmup(props.template.muscles)));
+/** Length of the guided whole-body joint warm-up offered once the session starts. */
+const warmupLength = warmupMinutes(guidedWarmup());
 /** "I prefer to warm up on my own": no guided warm-up, kept for the next sessions. */
 const selfWarmup = computed(() => appSettings.value?.guidedWarmup === false);
 /** Same insights as on Today: loads going up, muscles caught up. */
