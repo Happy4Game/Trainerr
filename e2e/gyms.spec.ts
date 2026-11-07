@@ -28,12 +28,9 @@ test('each gym keeps its own favorite machines', async ({ page }) => {
   await expect(page.getByRole('status')).toHaveText('1 exercice');
 });
 
-test('home workout and joint warm-up, without any favorite machine', async ({ page }) => {
+test('home workout, without any favorite machine', async ({ page }) => {
   await skipOnboarding(page);
   await page.getByRole('tab', { name: 'Séance' }).click();
-  await expect(page.getByText(/Échauffement articulaire/)).toBeVisible({ timeout: 20_000 });
-  await page.getByText(/Échauffement articulaire/).click();
-  await expect(page.getByText('Cercles de bras')).toBeVisible();
   await expect(page.getByText(/Cycle 1, semaine 1 sur 5/)).toBeVisible();
   await page.getByRole('button', { name: 'Séance à la maison' }).click();
   await expect(page.getByText('Série 1 sur 3')).toBeVisible();

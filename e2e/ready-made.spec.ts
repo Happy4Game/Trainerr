@@ -64,6 +64,8 @@ test('an exercise skipped too fast can be reopened', async ({ page }) => {
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('tab', { name: 'Séance' }).click();
   await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  // An assertion first: the guided warm-up is skipped before reading the name.
+  await expect(page.locator('section.entry h2')).toBeVisible();
   const first = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
   await page.getByRole('button', { name: 'Passer cet exercice' }).click();
   await expect(page.getByRole('region', { name: first })).toHaveCount(0);
@@ -78,6 +80,8 @@ test('more sets than planned: during the exercise or right after it', async ({ p
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('tab', { name: 'Séance' }).click();
   await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  // An assertion first: the guided warm-up is skipped before reading the name.
+  await expect(page.locator('section.entry h2')).toBeVisible();
   const first = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
 
   await page.getByRole('button', { name: 'Ajouter une série à cet exercice' }).click();

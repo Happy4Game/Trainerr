@@ -67,6 +67,8 @@ export interface Settings {
   readonly machineRepRanges?: Readonly<Record<string, RepRange>>;
   /** Rest really taken shown next to each set (always recorded). Off by default. */
   readonly showRest?: boolean;
+  /** Guided warm-up offered at the start of each session (always skippable). On by default. */
+  readonly guidedWarmup?: boolean;
   /** Beeps at the end of the rest (app open). On by default. */
   readonly restSound?: boolean;
   /** Bar and plates of the gym, for the plate calculator (20 kg bar and usual plates by default). */

@@ -8,13 +8,13 @@ import {
   IonItem,
   IonToggle,
 } from '@ionic/vue';
-import { House, LayoutList, Pencil, Play, Plus, Zap } from 'lucide-vue-next';
+import { Flame, House, LayoutList, Pencil, Play, Plus, Zap } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { estimateMinutes } from '@/domain/sessionPreview';
 import type { SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise } from '@/domain/types';
-import MobilityCard from '@/ui/MobilityCard.vue';
+import { guidedWarmup, warmupMinutes } from '@/domain/guidedWarmup';
 import { useSettings } from '@/ui/useSettings';
 import { useTemplateName } from '@/ui/useTemplateName';
 import SessionPlanList from './SessionPlanList.vue';
@@ -28,7 +28,7 @@ import { useSession } from './useSession';
  * Before the session: the session of the day first (what, how long, one big
  * button), then the other ways to train today and my own sessions.
  */
-defineProps<{ template: SessionTemplate }>();
+const props = defineProps<{ template: SessionTemplate }>();
 
 const { t, locale } = useI18n();
 const templateLabel = useTemplateName();
@@ -65,6 +65,17 @@ const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
     ? t('session.readyMade.suggested')
     : undefined;
+/** The guided warm-up offered once the session starts (unless turned off in the settings). */
+const warmupLength = computed(() =>
+  appSettings.value?.guidedWarmup === false
+    ? undefined
+    : warmupMinutes(
+        guidedWarmup({
+          muscles: props.template.muscles,
+          cardioBefore: appSettings.value?.cardio?.position === 'before',
+        }),
+      ),
+);
 /** Same insights as on Today: loads going up, muscles caught up. */
 const insights = usePlanInsights(preview);
 </script>
@@ -120,6 +131,10 @@ const insights = usePlanInsights(preview);
         swappable
       />
       <UsualLoads :exercises="preview" />
+      <p v-if="warmupLength" class="day-hint warmup-hint">
+        <Flame :size="18" aria-hidden="true" />
+        {{ t('guidedWarmup.offer', { minutes: warmupLength }) }}
+      </p>
       <ion-button
         class="day-start"
         expand="block"
@@ -250,8 +265,6 @@ const insights = usePlanInsights(preview);
       </ion-button>
     </div>
   </section>
-
-  <MobilityCard :muscles="template.muscles" />
 </template>
 
 <style scoped>
@@ -297,6 +310,16 @@ const insights = usePlanInsights(preview);
 .day-hint {
   margin: 0 0 var(--tr-space-3);
   color: var(--tr-text-muted);
+}
+.warmup-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-block: var(--tr-space-3) 0;
+}
+.warmup-hint svg {
+  flex: none;
+  color: var(--ion-color-primary);
 }
 .day-start {
   margin-block-start: var(--tr-space-3);

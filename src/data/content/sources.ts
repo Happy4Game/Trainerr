@@ -124,6 +124,33 @@ export const SOURCES: readonly Source[] = [
     theme: 'health',
   },
   {
+    id: 'fradkin2010',
+    label:
+      'Fradkin, Zazryn & Smoliga, 2010 — l’échauffement améliore la performance : revue et méta-analyse (Journal of Strength and Conditioning Research)',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/19996770/',
+    theme: 'technique',
+  },
+  {
+    id: 'behm2011',
+    label:
+      'Behm & Chaouachi, 2011 — étirements statiques et dynamiques avant l’effort (European Journal of Applied Physiology)',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/21373870/',
+    theme: 'technique',
+  },
+  {
+    id: 'acsm2011',
+    label:
+      'American College of Sports Medicine (Garber et al.), 2011 — quantité et qualité de l’exercice, dont l’échauffement (Medicine & Science in Sports & Exercise)',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/21694556/',
+    theme: 'technique',
+  },
+  {
+    id: 'jeffreysRamp',
+    label: 'Ian Jeffreys — la méthode d’échauffement RAMP (Human Kinetics)',
+    url: 'https://us.humankinetics.com/blogs/strength-conditioning-fitness/the-ramp-system',
+    theme: 'technique',
+  },
+  {
     id: 'acsm2009',
     label:
       'American College of Sports Medicine, 2009 — modèles de progression en musculation (Medicine & Science in Sports & Exercise)',
@@ -156,6 +183,9 @@ export const SOURCES: readonly Source[] = [
     theme: 'models',
   },
 ];
+
+/** The guided warm-up before each session follows these. */
+export const WARMUP_SOURCE_IDS = ['jeffreysRamp', 'acsm2011', 'fradkin2010', 'behm2011'] as const;
 
 /** Exercise order in a session: the ready-made sessions follow these. */
 export const ORDER_SOURCE_IDS = ['acsm2009', 'simao2012', 'nunes2021'] as const;

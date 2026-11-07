@@ -7,6 +7,8 @@ async function doOneSet(page: Page): Promise<string> {
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('tab', { name: 'Séance' }).click();
   await page.getByRole('button', { name: 'Faire cette pré-séance' }).click();
+  // An assertion first: the guided warm-up is skipped before reading the name.
+  await expect(page.locator('section.entry h2')).toBeVisible();
   const first = (await page.locator('section.entry h2').textContent())?.trim() ?? '';
   await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();
   return first;
