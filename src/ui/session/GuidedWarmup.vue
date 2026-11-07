@@ -1,46 +1,32 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
-import { Dumbbell, Flame, RotateCw, Zap } from 'lucide-vue-next';
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { RotateCw } from 'lucide-vue-next';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { sourceById, WARMUP_SOURCE_IDS } from '@/data/content/sources';
-import { guidedWarmup, warmupMinutes, type WarmupPart } from '@/domain/guidedWarmup';
+import { JOINT_WARMUP_SOURCE_IDS, sourceById } from '@/data/content/sources';
+import { guidedWarmup, warmupMinutes } from '@/domain/guidedWarmup';
 import { useSettings } from '@/ui/useSettings';
 import { playRestOver, unlockSound } from './restSound';
 import { useSession } from './useSession';
 
 /**
- * Guided warm-up before the first machine, one step at a time like the
- * session: what to do, how, why, and a countdown on the timed moves.
- * Recommended, never imposed: "Passer l'échauffement" at every step.
+ * Guided joint warm-up before the first machine, one move at a time like the
+ * session: what to do, how, and a countdown. Once started, the moves follow
+ * each other on their own (a beep at each change). Recommended, never
+ * imposed: "Passer l'échauffement guidé" at every step.
  */
 const { t } = useI18n();
 const session = useSession();
 const { settings } = useSettings();
 
-const steps = computed(() =>
-  guidedWarmup({
-    muscles: session.sessionMuscles.value,
-    cardioBefore: session.active.value?.plan.cardio?.position === 'before',
-  }),
-);
-const sources = WARMUP_SOURCE_IDS.map(sourceById).filter((s) => s !== undefined);
+const steps = computed(() => guidedWarmup(session.sessionMuscles.value));
+const sources = JOINT_WARMUP_SOURCE_IDS.map(sourceById).filter((s) => s !== undefined);
 const minutes = computed(() => warmupMinutes(steps.value));
 const index = computed(() =>
   Math.min(session.active.value?.plan.guidedWarmup?.step ?? 0, steps.value.length - 1),
 );
 const current = computed(() => steps.value[index.value]);
 const isLast = computed(() => index.value === steps.value.length - 1);
-
-const PART_ICONS: Record<WarmupPart, typeof Flame> = {
-  raise: Flame,
-  mobilise: RotateCw,
-  activate: Zap,
-  potentiate: Dumbbell,
-};
-/** The mobility moves keep their texts with the other joint moves. */
-const textKey = (id: string, part: WarmupPart) =>
-  part === 'mobilise' ? `mobility.moves.${id}` : `guidedWarmup.moves.${id}`;
 
 // Countdown of a timed step. The end time is absolute: it stays right after the screen was off.
 const endsAt = ref<number>();
@@ -90,6 +76,8 @@ function startTimer(): void {
       timeUp.value = true;
       navigator.vibrate?.([300, 150, 300]);
       if (settings.value?.restSound !== false) playRestOver();
+      // Hands free: the next move starts on its own.
+      if (!isLast.value) void go(1, true);
     }
   }, 250);
 }
@@ -104,12 +92,16 @@ onBeforeUnmount(stopTicker);
 const running = computed(() => endsAt.value !== undefined);
 const started = computed(() => running.value || pausedLeft.value !== undefined);
 
-async function go(delta: -1 | 1): Promise<void> {
+async function go(delta: -1 | 1, autoStart = false): Promise<void> {
   if (delta === 1 && isLast.value) {
     await session.endGuidedWarmup(false);
     return;
   }
   await session.guidedWarmupStep(Math.max(0, index.value + delta));
+  if (autoStart) {
+    await nextTick();
+    startTimer();
+  }
 }
 </script>
 
@@ -133,22 +125,13 @@ async function go(delta: -1 | 1): Promise<void> {
     </header>
 
     <p class="part">
-      <component :is="PART_ICONS[current.part]" :size="18" aria-hidden="true" />
-      {{ t(`guidedWarmup.parts.${current.part}.title`) }}
+      <RotateCw :size="18" aria-hidden="true" />
+      {{ t('guidedWarmup.joints') }}
     </p>
-    <h2 class="name">{{ t(`${textKey(current.id, current.part)}.name`) }}</h2>
-    <p v-if="current.reps" class="target">
-      {{
-        current.perSide
-          ? t('guidedWarmup.repsPerSide', { reps: current.reps })
-          : t('guidedWarmup.reps', { reps: current.reps })
-      }}
-    </p>
-    <p class="how">{{ t(`${textKey(current.id, current.part)}.how`) }}</p>
-    <p class="why">{{ t(`guidedWarmup.parts.${current.part}.why`) }}</p>
+    <h2 class="name">{{ t(`mobility.moves.${current.id}.name`) }}</h2>
+    <p class="how">{{ t(`mobility.moves.${current.id}.how`) }}</p>
 
     <div
-      v-if="current.seconds"
       class="timer"
       role="timer"
       :aria-label="t('guidedWarmup.timerLabel', { time: clock(leftMs) })"
@@ -179,7 +162,7 @@ async function go(delta: -1 | 1): Promise<void> {
       class="next-step"
       expand="block"
       size="large"
-      :fill="current.seconds && !timeUp ? 'outline' : 'solid'"
+      :fill="timeUp || isLast ? 'solid' : 'outline'"
       @click="go(1)"
     >
       {{ isLast ? t('guidedWarmup.finish') : t('guidedWarmup.next') }}
@@ -192,6 +175,7 @@ async function go(delta: -1 | 1): Promise<void> {
         {{ t('guidedWarmup.skip') }}
       </ion-button>
     </div>
+    <p class="why">{{ t('guidedWarmup.why') }}</p>
     <details class="review">
       <summary>{{ t('guidedWarmup.review') }}</summary>
       <ul>
@@ -254,11 +238,6 @@ async function go(delta: -1 | 1): Promise<void> {
   font-size: var(--tr-font-xl);
   font-weight: var(--tr-weight-black);
   line-height: 1.1;
-}
-.target {
-  margin: 0 0 6px;
-  font-size: 1.2rem;
-  font-weight: 800;
 }
 .how {
   margin: 0 0 6px;

@@ -1065,8 +1065,7 @@
     "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android).",
     "keepAwake": "Écran allumé pendant la séance",
     "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances.",
-    "guidedWarmup": "Échauffement guidé en début de séance",
-    "guidedWarmupHelp": "Conseillé : quelques minutes de cardio léger, de mobilité et d'activation adaptées aux muscles du jour. Tu peux toujours le passer d'un appui.",
+    "guidedWarmupHelp": "Sinon, un échauffement articulaire guidé de quelques minutes est proposé au début de chaque séance, adapté aux muscles du jour (conseillé, passable à tout moment).",
     "restSound": "Bip à la fin du repos",
     "restSoundHelp": "Trois bips et une vibration quand le repos est fini.",
     "repRange": {
@@ -1230,7 +1229,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
-      "guidedWarmup": "Échauffement guidé",
+      "guidedWarmup": "Échauffement articulaire guidé",
       "clearerSession": "Séance plus lisible",
       "wholeWeek": "Tous les muscles de la semaine",
       "newLook": "Nouveau look et statistiques",
@@ -1259,9 +1258,9 @@
       "rirRest": "Une seule validation, comme avec un coach"
     },
     "items": {
-      "guidedWarmupSteps": "Au début de chaque séance, un échauffement guidé étape par étape : cardio léger, mobilité, réveil des muscles, avec un minuteur.",
-      "guidedWarmupMuscles": "Il s'adapte aux muscles du jour, et saute le cardio si tu as prévu du cardio avant la muscu.",
-      "guidedWarmupSkip": "Conseillé mais jamais obligatoire : « Passer l'échauffement guidé » à chaque étape, et une case dans Réglages pour ne plus le proposer.",
+      "guidedWarmupSteps": "Au début de chaque séance, un échauffement articulaire guidé de 3 à 5 min, mouvement par mouvement, avec un minuteur qui enchaîne tout seul.",
+      "guidedWarmupMuscles": "Les mouvements sont choisis selon les muscles du jour.",
+      "guidedWarmupSkip": "Conseillé mais jamais obligatoire : « Passer l'échauffement guidé » à tout moment, et « Je préfère m'échauffer seul » pour ne plus le proposer.",
       "feedback": "Un bouton « Envoyer un retour » dans les Réglages pour signaler un bug ou proposer une idée par mail.",
       "changelog": "Cette page, pour voir ce qui change à chaque mise à jour.",
       "scrollTop": "En passant à la machine suivante, l'écran repart tout en haut.",
@@ -1475,78 +1474,24 @@
     }
   },
   "guidedWarmup": {
-    "title": "Échauffement guidé",
+    "title": "Échauffement articulaire",
     "minutes": "≈ {minutes} min",
-    "offer": "Un échauffement guidé de ≈ {minutes} min t'attend au début, adapté aux muscles du jour. Conseillé, mais tu peux le passer.",
-    "stepOf": "Étape {index} sur {total}",
-    "reps": "{reps} reps",
-    "repsPerSide": "{reps} reps par côté",
+    "stepOf": "Mouvement {index} sur {total}",
+    "joints": "Ample et contrôlé, sans forcer",
     "timerLabel": "Temps restant {time}",
     "startTimer": "Lancer le minuteur",
     "pause": "Pause",
     "resume": "Reprendre",
-    "timeUp": "Terminé, passe à la suite !",
-    "next": "Étape suivante",
-    "previous": "Étape précédente",
+    "timeUp": "Terminé !",
+    "next": "Mouvement suivant",
+    "previous": "Mouvement précédent",
     "finish": "Aller à la première machine",
     "skip": "Passer l'échauffement guidé",
-    "review": "Méthode RAMP (Jeffreys) et conseils de l'ACSM. Contenu à faire valider par un coach ou un kiné.",
-    "parts": {
-      "raise": {
-        "title": "Monter en température",
-        "why": "Le cœur et la respiration accélèrent, les muscles chauffent : ils seront plus forts et plus souples."
-      },
-      "mobilise": {
-        "title": "Mobiliser les articulations",
-        "why": "Des mouvements amples et contrôlés, sans forcer. Pas d'étirement tenu longtemps avant la muscu : ça fait perdre de la force."
-      },
-      "activate": {
-        "title": "Réveiller les muscles du jour",
-        "why": "Peu d'effort : il s'agit juste de sentir le muscle travailler avant de le charger."
-      },
-      "potentiate": {
-        "title": "Préparer la première machine",
-        "why": "Des séries légères sur le vrai mouvement finissent de préparer muscles et articulations, sans fatiguer."
-      }
-    },
-    "moves": {
-      "raise": {
-        "name": "Cardio léger",
-        "how": "Vélo, rameur, elliptique ou marche rapide en pente. À la maison : marche sur place en montant les genoux. Tu dois pouvoir parler sans être essoufflé."
-      },
-      "scapularPushUps": {
-        "name": "Pompes scapulaires",
-        "how": "En planche bras tendus (ou genoux au sol), rapprocher puis écarter les omoplates sans plier les coudes."
-      },
-      "proneYRaises": {
-        "name": "Y allongé",
-        "how": "Allongé sur le ventre, bras en Y devant, pouces vers le plafond : lever les bras quelques centimètres en serrant le haut du dos, puis redescendre."
-      },
-      "gluteBridges": {
-        "name": "Pont fessier",
-        "how": "Sur le dos, genoux pliés, pieds à plat : pousser dans les talons pour lever les hanches, serrer les fessiers une seconde en haut."
-      },
-      "lateralLunges": {
-        "name": "Fentes latérales",
-        "how": "Grand pas sur le côté, s'asseoir sur la jambe pliée en gardant l'autre tendue, puis revenir. Descendre seulement jusqu'où c'est confortable."
-      },
-      "deadBugs": {
-        "name": "Dead bug",
-        "how": "Sur le dos, bras vers le plafond, genoux à 90° : allonger un bras et la jambe opposée en gardant le bas du dos collé au sol, puis changer."
-      },
-      "calfRaises": {
-        "name": "Montées sur pointes",
-        "how": "Debout, monter lentement sur la pointe des pieds, tenir une seconde, redescendre sans rebond."
-      },
-      "bicepsTricepsSwings": {
-        "name": "Flexions-extensions de bras",
-        "how": "Bras le long du corps, plier et tendre les coudes en serrant les poings, sans charge, de plus en plus vite."
-      },
-      "approach": {
-        "name": "Séries d'approche",
-        "how": "Sur ta première machine, l'appli te propose des séries légères qui montent vers ta charge de travail. Elles terminent l'échauffement."
-      }
-    }
+    "why": "Une fois lancé, les mouvements s'enchaînent tout seuls avec un bip. Pas d'étirement tenu longtemps avant la muscu : ça fait perdre de la force. Les séries d'approche de ta première machine finiront de t'échauffer.",
+    "review": "Sources. Contenu à faire valider par un coach ou un kiné.",
+    "self": "Je préfère m'échauffer seul, sans l'appli",
+    "selfOff": "Sinon, l'appli te guide pendant ≈ {minutes} min d'échauffement articulaire, adapté aux muscles du jour (conseillé, passable à tout moment).",
+    "selfOn": "L'appli ne propose plus l'échauffement guidé. Pense quand même à t'échauffer."
   },
   "gyms": {
     "title": "Mes salles",

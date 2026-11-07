@@ -1065,8 +1065,7 @@
     "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android).",
     "keepAwake": "Screen on during the session",
     "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions.",
-    "guidedWarmup": "Guided warm-up at the start of each session",
-    "guidedWarmupHelp": "Recommended: a few minutes of easy cardio, mobility and activation fitted to today's muscles. You can always skip it in one tap.",
+    "guidedWarmupHelp": "Otherwise, a few minutes of guided joint warm-up are offered at the start of each session, fitted to today's muscles (recommended, skippable at any time).",
     "restSound": "Beep at the end of the rest",
     "restSoundHelp": "Three beeps and a vibration when the rest is over.",
     "repRange": {
@@ -1230,7 +1229,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
-      "guidedWarmup": "Guided warm-up",
+      "guidedWarmup": "Guided joint warm-up",
       "clearerSession": "A clearer session",
       "wholeWeek": "Every muscle over the week",
       "newLook": "New look and statistics",
@@ -1259,9 +1258,9 @@
       "rirRest": "One tap, like with a coach"
     },
     "items": {
-      "guidedWarmupSteps": "At the start of each session, a step-by-step guided warm-up: easy cardio, mobility, waking up the muscles, with a timer.",
-      "guidedWarmupMuscles": "It fits today's muscles, and skips the cardio if you planned cardio before lifting.",
-      "guidedWarmupSkip": "Recommended but never required: \"Skip the guided warm-up\" at every step, and a switch in Settings to stop offering it.",
+      "guidedWarmupSteps": "At the start of each session, a 3 to 5 min guided joint warm-up, move by move, with a timer that moves on by itself.",
+      "guidedWarmupMuscles": "The moves are picked from today's muscles.",
+      "guidedWarmupSkip": "Recommended but never required: \"Skip the guided warm-up\" at any time, and \"I prefer to warm up on my own\" to stop offering it.",
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
       "changelog": "This page, to see what changes in each update.",
       "scrollTop": "Moving to the next machine brings the screen back to the top.",
@@ -1475,78 +1474,24 @@
     }
   },
   "guidedWarmup": {
-    "title": "Guided warm-up",
+    "title": "Joint warm-up",
     "minutes": "≈ {minutes} min",
-    "offer": "A ≈ {minutes} min guided warm-up awaits at the start, fitted to today's muscles. Recommended, but you can skip it.",
-    "stepOf": "Step {index} of {total}",
-    "reps": "{reps} reps",
-    "repsPerSide": "{reps} reps per side",
+    "stepOf": "Move {index} of {total}",
+    "joints": "Wide and controlled, without forcing",
     "timerLabel": "Time left {time}",
     "startTimer": "Start the timer",
     "pause": "Pause",
     "resume": "Resume",
-    "timeUp": "Done, move on!",
-    "next": "Next step",
-    "previous": "Previous step",
+    "timeUp": "Done!",
+    "next": "Next move",
+    "previous": "Previous move",
     "finish": "Go to the first machine",
     "skip": "Skip the guided warm-up",
-    "review": "RAMP method (Jeffreys) and ACSM advice. Content to be checked by a coach or a physiotherapist.",
-    "parts": {
-      "raise": {
-        "title": "Raise the temperature",
-        "why": "Heart and breathing speed up, muscles warm up: they will be stronger and more supple."
-      },
-      "mobilise": {
-        "title": "Mobilise the joints",
-        "why": "Wide, controlled moves, without forcing. No long-held stretches before lifting: they cost strength."
-      },
-      "activate": {
-        "title": "Wake up today's muscles",
-        "why": "Low effort: just feel the muscle work before loading it."
-      },
-      "potentiate": {
-        "title": "Get ready for the first machine",
-        "why": "Light sets on the real movement finish preparing muscles and joints, without tiring you."
-      }
-    },
-    "moves": {
-      "raise": {
-        "name": "Easy cardio",
-        "how": "Bike, rower, elliptical or brisk incline walk. At home: march on the spot, knees high. You should be able to talk without getting out of breath."
-      },
-      "scapularPushUps": {
-        "name": "Scapular push-ups",
-        "how": "In a straight-arm plank (or on your knees), squeeze then spread the shoulder blades without bending the elbows."
-      },
-      "proneYRaises": {
-        "name": "Prone Y raises",
-        "how": "Lying face down, arms in a Y in front, thumbs up: lift the arms a few centimetres squeezing the upper back, then lower."
-      },
-      "gluteBridges": {
-        "name": "Glute bridges",
-        "how": "On your back, knees bent, feet flat: push through the heels to lift the hips, squeeze the glutes for a second at the top."
-      },
-      "lateralLunges": {
-        "name": "Side lunges",
-        "how": "Big step to the side, sit on the bent leg keeping the other straight, then come back. Only go as low as feels comfortable."
-      },
-      "deadBugs": {
-        "name": "Dead bugs",
-        "how": "On your back, arms to the ceiling, knees at 90°: reach one arm and the opposite leg out keeping the lower back on the floor, then switch."
-      },
-      "calfRaises": {
-        "name": "Calf raises",
-        "how": "Standing, rise slowly onto the toes, hold for a second, lower without bouncing."
-      },
-      "bicepsTricepsSwings": {
-        "name": "Arm curls and extensions",
-        "how": "Arms by your sides, bend and straighten the elbows with fists clenched, no weight, faster and faster."
-      },
-      "approach": {
-        "name": "Approach sets",
-        "how": "On your first machine, the app offers light sets rising towards your work load. They finish the warm-up."
-      }
-    }
+    "why": "Once started, the moves follow each other on their own with a beep. No long-held stretches before lifting: they cost strength. The approach sets of your first machine will finish the warm-up.",
+    "review": "Sources. Content to be checked by a coach or a physiotherapist.",
+    "self": "I prefer to warm up on my own, without the app",
+    "selfOff": "Otherwise, the app guides you through ≈ {minutes} min of joint warm-up, fitted to today's muscles (recommended, skippable at any time).",
+    "selfOn": "The app no longer offers the guided warm-up. Remember to warm up anyway."
   },
   "gyms": {
     "title": "My gyms",

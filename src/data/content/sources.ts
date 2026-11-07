@@ -184,8 +184,11 @@ export const SOURCES: readonly Source[] = [
   },
 ];
 
-/** The guided warm-up before each session follows these. */
+/** The "Warm up" tip follows these. */
 export const WARMUP_SOURCE_IDS = ['jeffreysRamp', 'acsm2011', 'fradkin2010', 'behm2011'] as const;
+
+/** The guided joint warm-up before each session: dynamic moves, no long static stretch. */
+export const JOINT_WARMUP_SOURCE_IDS = ['fradkin2010', 'behm2011'] as const;
 
 /** Exercise order in a session: the ready-made sessions follow these. */
 export const ORDER_SOURCE_IDS = ['acsm2009', 'simao2012', 'nunes2021'] as const;
