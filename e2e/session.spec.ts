@@ -122,6 +122,8 @@ test('a whole workout: warm-up, sets, machine taken, resume after reload, summar
   const card = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Partager ma séance' }).click();
   expect((await card).suggestedFilename()).toMatch(/^trainerr-\d{4}-\d{2}-\d{2}\.png$/);
+  // The guided stretches are offered right after the session.
+  await expect(page.getByRole('link', { name: "S'étirer (≈ 8 min)" })).toBeVisible();
   await page.getByRole('button', { name: 'Fermer' }).click();
 
   // The rotation goes on.

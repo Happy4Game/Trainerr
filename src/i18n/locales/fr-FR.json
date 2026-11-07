@@ -1229,6 +1229,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "guidedStretching": "Étirements guidés à tout moment",
       "guidedWarmup": "Échauffement articulaire guidé",
       "clearerSession": "Séance plus lisible",
       "wholeWeek": "Tous les muscles de la semaine",
@@ -1258,6 +1259,9 @@
       "rirRest": "Une seule validation, comme avec un coach"
     },
     "items": {
+      "guidedStretchingSteps": "8 étirements guidés pour tout le corps (≈ 8 min), un minuteur par étirement et un bip pour changer de côté.",
+      "guidedStretchingAnytime": "À lancer quand tu veux depuis Aujourd'hui, ou depuis l'écran de fin de séance. Rien n'est enregistré.",
+      "guidedStretchingMuscles": "Chaque étirement montre les muscles étirés sur le corps, avec ses sources.",
       "guidedWarmupSteps": "Au début de chaque séance, un échauffement articulaire guidé d'environ 5 min, mouvement par mouvement, avec un minuteur qui enchaîne tout seul.",
       "guidedWarmupMuscles": "Il couvre tout le corps, de la tête aux chevilles, quelle que soit la séance.",
       "guidedWarmupSkip": "Conseillé mais jamais obligatoire : « Passer l'échauffement guidé » à tout moment, et « Je préfère m'échauffer seul » pour ne plus le proposer.",
@@ -1477,25 +1481,86 @@
       }
     }
   },
+  "stretching": {
+    "moves": {
+      "chestWall": {
+        "name": "Pectoraux contre un mur",
+        "how": "Avant-bras contre un mur ou un montant de porte, coude à hauteur d'épaule. Tourne doucement le buste dans l'autre sens jusqu'à sentir la poitrine s'étirer. Puis l'autre bras."
+      },
+      "crossBody": {
+        "name": "Bras croisé devant la poitrine",
+        "how": "Amène un bras tendu devant la poitrine et tiens-le au-dessus du coude avec l'autre main. Garde l'épaule basse. Puis l'autre bras."
+      },
+      "overheadTriceps": {
+        "name": "Triceps derrière la tête",
+        "how": "Lève un bras et plie le coude pour poser la main entre les omoplates. L'autre main pousse doucement le coude vers l'arrière. Puis l'autre bras."
+      },
+      "childPose": {
+        "name": "Posture de l'enfant",
+        "how": "À genoux, fesses vers les talons, bras tendus loin devant, front vers le sol. Respire lentement en laissant le dos s'allonger."
+      },
+      "standingQuad": {
+        "name": "Talon à la fesse",
+        "how": "Debout, une main sur un appui. Attrape la cheville et amène le talon vers la fesse, genoux côte à côte, bassin droit. Puis l'autre jambe."
+      },
+      "seatedHamstring": {
+        "name": "Ischios, jambe tendue",
+        "how": "Assis, une jambe tendue devant, l'autre pliée. Dos droit, penche-toi depuis les hanches vers le pied, sans arrondir le dos. Puis l'autre jambe."
+      },
+      "figureFour": {
+        "name": "Fessier en « 4 »",
+        "how": "Sur le dos, pose une cheville sur le genou opposé. Attrape la cuisse de la jambe d'appui et ramène-la doucement vers la poitrine. Puis l'autre côté."
+      },
+      "wallCalf": {
+        "name": "Mollet contre un mur",
+        "how": "Mains au mur, une jambe tendue loin derrière, talon au sol. Plie la jambe avant et avance le bassin jusqu'à sentir le mollet. Puis l'autre jambe."
+      }
+    }
+  },
   "guidedWarmup": {
     "title": "Échauffement articulaire",
-    "minutes": "≈ {minutes} min",
     "stepOf": "Mouvement {index} sur {total}",
-    "joints": "Ample et contrôlé, sans forcer",
-    "timerLabel": "Temps restant {time}",
-    "startTimer": "Lancer le minuteur",
-    "pause": "Pause",
-    "resume": "Reprendre",
-    "timeUp": "Terminé !",
+    "part": "Ample et contrôlé, sans forcer",
     "next": "Mouvement suivant",
     "previous": "Mouvement précédent",
     "finish": "Aller à la première machine",
     "skip": "Passer l'échauffement guidé",
     "why": "Une fois lancé, les mouvements s'enchaînent tout seuls avec un bip. Pas d'étirement tenu longtemps avant la muscu : ça fait perdre de la force. Les séries d'approche de ta première machine finiront de t'échauffer.",
-    "review": "Sources. Contenu à faire valider par un coach ou un kiné.",
     "self": "Je préfère m'échauffer seul, sans l'appli",
     "selfOff": "Sinon, l'appli te guide pendant ≈ {minutes} min d'échauffement articulaire de tout le corps, de la tête aux chevilles (conseillé, passable à tout moment).",
     "selfOn": "L'appli ne propose plus l'échauffement guidé. Pense quand même à t'échauffer."
+  },
+  "guided": {
+    "minutes": "≈ {minutes} min",
+    "timerLabel": "Temps restant {time}",
+    "startTimer": "Lancer le minuteur",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "timeUp": "Terminé !",
+    "review": "Sources. Contenu à faire valider par un coach ou un kiné.",
+    "muscles": "Muscles étirés : {muscles}",
+    "sides": "{seconds} s d'un côté, puis {seconds} s de l'autre",
+    "sideOne": "Premier côté",
+    "sideTwo": "Bip : change de côté"
+  },
+  "guidedStretching": {
+    "title": "Étirements guidés",
+    "stepOf": "Étirement {index} sur {total}",
+    "part": "Tenu, sans à-coup ni douleur",
+    "next": "Étirement suivant",
+    "previous": "Étirement précédent",
+    "finish": "Terminer les étirements",
+    "skip": "Arrêter les étirements",
+    "why": "Va jusqu'à une tension nette, jamais une douleur, et respire calmement. 60 s par muscle (30 s par côté), comme le conseille l'American College of Sports Medicine. Ça entretient la souplesse, mais ça n'évite pas les courbatures. Rien n'est enregistré.",
+    "intro": "Tout le corps en {count} étirements tenus, ≈ {minutes} min. À faire quand tu veux : après la séance, un jour de repos, le soir. Rien n'est enregistré.",
+    "notBefore": "Pas juste avant la muscu : un étirement tenu longtemps fait perdre de la force pendant un moment. Avant une séance, fais plutôt l'échauffement articulaire.",
+    "list": "Au programme",
+    "start": "Commencer les étirements",
+    "done": "Étirements terminés. Bien joué !",
+    "again": "Recommencer",
+    "back": "Retour",
+    "launch": "S'étirer (≈ {minutes} min)",
+    "card": "Envie de t'étirer ? {count} étirements guidés pour tout le corps, à faire quand tu veux, sans rien enregistrer."
   },
   "gyms": {
     "title": "Mes salles",

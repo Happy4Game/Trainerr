@@ -6,6 +6,8 @@ import { loadSettings } from '@/ui/useSettings';
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/tabs/today' },
   { path: '/onboarding', component: () => import('@/views/OnboardingPage.vue') },
+  // Guided stretches, at any time, outside the tabs: nothing is logged.
+  { path: '/stretching', component: () => import('@/views/StretchingPage.vue') },
   {
     path: '/tabs/',
     component: TabsLayout,

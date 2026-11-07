@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
-import { Share2 } from 'lucide-vue-next';
+import { PersonStanding, Share2 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { drawRecap } from '@/ui/recapImage';
@@ -9,6 +9,8 @@ import { useTemplateName } from '@/ui/useTemplateName';
 import { useUnits } from '@/ui/useUnits';
 import { todayIso } from '@/ui/useWeekPlan';
 import { WHO_WEEKLY_MINUTES } from '@/domain/cardio';
+import { stepsMinutes } from '@/domain/guidedSteps';
+import { guidedStretching } from '@/domain/stretching';
 import { restClock } from '@/domain/restTaken';
 import { useSettings } from '@/ui/useSettings';
 import { useCardio } from './useCardio';
@@ -23,6 +25,7 @@ const templateLabel = useTemplateName();
 const { load: kg } = useUnits();
 const cardio = useCardio();
 const { settings } = useSettings();
+const stretchMinutes = stepsMinutes(guidedStretching());
 /** Where the week stands against the WHO bar, in moderate minutes. */
 const cardioWeek = computed(() =>
   t('cardio.week.short', {
@@ -145,6 +148,11 @@ async function shareSummary(): Promise<void> {
     <ion-button expand="block" fill="outline" :disabled="sharing" @click="shareSummary">
       <Share2 :size="20" aria-hidden="true" class="share-icon" />
       {{ t('session.summary.share') }}
+    </ion-button>
+    <!-- Right after the session, the best moment: nothing is logged. -->
+    <ion-button expand="block" fill="outline" router-link="/stretching">
+      <PersonStanding :size="20" aria-hidden="true" class="share-icon" />
+      {{ t('guidedStretching.launch', { minutes: stretchMinutes }) }}
     </ion-button>
     <ion-button expand="block" size="large" @click="session.closeSummary()">{{
       t('session.summary.close')

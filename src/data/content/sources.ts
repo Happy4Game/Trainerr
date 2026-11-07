@@ -145,6 +145,20 @@ export const SOURCES: readonly Source[] = [
     theme: 'technique',
   },
   {
+    id: 'herbert2022',
+    label:
+      'Herbert, de Noronha & Kamper, 2022 — s’étirer ne réduit pas les courbatures (revue Cochrane)',
+    url: 'https://doi.org/10.1002/14651858.CD004577.pub3',
+    theme: 'technique',
+  },
+  {
+    id: 'afonso2021',
+    label:
+      'Afonso et al., 2021 — étirements et musculation améliorent autant l’amplitude articulaire : revue et méta-analyse (Healthcare)',
+    url: 'https://doi.org/10.3390/healthcare9040427',
+    theme: 'technique',
+  },
+  {
     id: 'jeffreysRamp',
     label: 'Ian Jeffreys — la méthode d’échauffement RAMP (Human Kinetics)',
     url: 'https://us.humankinetics.com/blogs/strength-conditioning-fitness/the-ramp-system',
@@ -189,6 +203,9 @@ export const WARMUP_SOURCE_IDS = ['jeffreysRamp', 'acsm2011', 'fradkin2010', 'be
 
 /** The guided joint warm-up before each session: dynamic moves, no long static stretch. */
 export const JOINT_WARMUP_SOURCE_IDS = ['fradkin2010', 'behm2011'] as const;
+
+/** The guided stretches: 60 s per muscle, flexibility only, not before lifting. */
+export const STRETCHING_SOURCE_IDS = ['acsm2011', 'afonso2021', 'herbert2022', 'behm2011'] as const;
 
 /** Exercise order in a session: the ready-made sessions follow these. */
 export const ORDER_SOURCE_IDS = ['acsm2009', 'simao2012', 'nunes2021'] as const;
