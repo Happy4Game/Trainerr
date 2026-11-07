@@ -19,7 +19,7 @@ export const MOBILITY_MOVES: readonly MobilityMove[] = [
   { id: 'hipCircles', seconds: 40, targets: ['glutes', 'adductors', 'abductors'] },
   { id: 'legSwings', seconds: 40, targets: ['hamstrings', 'quads', 'glutes'] },
   { id: 'bodyweightSquats', seconds: 40, targets: ['quads', 'glutes', 'adductors'] },
-  { id: 'ankleRocks', seconds: 30, targets: ['calves'] },
+  { id: 'ankleCircles', seconds: 30, targets: ['calves'] },
 ];
 
 export const MOBILITY_MIN_SECONDS = 180;

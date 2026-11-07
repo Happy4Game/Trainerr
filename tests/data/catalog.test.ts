@@ -146,6 +146,24 @@ describe('exercise illustrations', () => {
   });
 });
 
+describe('joint warm-up illustrations', () => {
+  it('draw real moves of the warm-up, with the same licence rules', async () => {
+    const { existsSync } = await import('node:fs');
+    const { allWarmupIllustrations } = await import('@/data/catalog/exerciseImages');
+    const { MOBILITY_MOVES } = await import('@/domain/mobility');
+    const moves = new Set(MOBILITY_MOVES.map((m) => m.id));
+    for (const [id, illustration] of Object.entries(allWarmupIllustrations())) {
+      expect(moves.has(id), id).toBe(true);
+      expect(illustration.source).toBe('Everkinetic');
+      for (const image of illustration.images) {
+        expect(image.author).toBe('Everkinetic');
+        expect(image.license).toBe('CC BY-SA 4.0');
+        expect(existsSync(`public/exercise-images/${image.file}`), image.file).toBe(true);
+      }
+    }
+  });
+});
+
 describe('French instructions', () => {
   it('translates every exercise without hand-written cues, one line per step', async () => {
     const { default: french } = await import('@/data/catalog/instructions-fr.json');

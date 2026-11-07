@@ -3,7 +3,9 @@ import { IonButton } from '@ionic/vue';
 import { RotateCw } from 'lucide-vue-next';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { warmupIllustrationFor } from '@/data/catalog/exerciseImages';
 import { JOINT_WARMUP_SOURCE_IDS, sourceById } from '@/data/content/sources';
+import ExerciseIllustration from '@/ui/ExerciseIllustration.vue';
 import { guidedWarmup, warmupMinutes } from '@/domain/guidedWarmup';
 import { useSettings } from '@/ui/useSettings';
 import { playRestOver, unlockSound } from './restSound';
@@ -26,6 +28,9 @@ const index = computed(() =>
   Math.min(session.active.value?.plan.guidedWarmup?.step ?? 0, steps.value.length - 1),
 );
 const current = computed(() => steps.value[index.value]);
+const illustration = computed(() =>
+  current.value ? warmupIllustrationFor(current.value.id) : undefined,
+);
 const isLast = computed(() => index.value === steps.value.length - 1);
 
 // Countdown of a timed step. The end time is absolute: it stays right after the screen was off.
@@ -129,6 +134,13 @@ async function go(delta: -1 | 1, autoStart = false): Promise<void> {
       {{ t('guidedWarmup.joints') }}
     </p>
     <h2 class="name">{{ t(`mobility.moves.${current.id}.name`) }}</h2>
+    <ExerciseIllustration
+      v-if="illustration"
+      :key="current.id"
+      :illustration="illustration"
+      class="move-drawing"
+      :name="t(`mobility.moves.${current.id}.name`)"
+    />
     <p class="how">{{ t(`mobility.moves.${current.id}.how`) }}</p>
 
     <div
@@ -188,6 +200,14 @@ async function go(delta: -1 | 1, autoStart = false): Promise<void> {
 </template>
 
 <style scoped>
+/* Smaller than on an exercise card: the countdown stays on screen. */
+.move-drawing :deep(.frames img) {
+  height: 160px;
+  max-height: 160px;
+}
+.move-drawing {
+  margin-block-end: var(--tr-space-2);
+}
 .guided {
   margin-block: 0 var(--tr-space-4);
   padding: var(--tr-space-4);

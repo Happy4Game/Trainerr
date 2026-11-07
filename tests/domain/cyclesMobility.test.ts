@@ -37,7 +37,7 @@ describe('joint warm-up', () => {
   it('picks shoulder moves for a push day, hip and leg moves for a legs day', () => {
     expect(mobilityRoutine(PUSH_MUSCLES).map((m) => m.id)).toContain('armCircles');
     const legs = mobilityRoutine(LEG_MUSCLES).map((m) => m.id);
-    expect(legs).toEqual(expect.arrayContaining(['hipCircles', 'legSwings', 'ankleRocks']));
+    expect(legs).toEqual(expect.arrayContaining(['hipCircles', 'legSwings', 'ankleCircles']));
     expect(legs).not.toContain('armCircles');
   });
 });

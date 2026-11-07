@@ -1467,9 +1467,9 @@
         "name": "Bodyweight squats",
         "how": "Go down slowly, heels down, come up smoothly."
       },
-      "ankleRocks": {
-        "name": "Ankle rocks",
-        "how": "One foot forward, push the knee over the toes without lifting the heel."
+      "ankleCircles": {
+        "name": "Ankle circles",
+        "how": "Standing on one leg (holding on if needed), toes off the floor: draw big circles with the ankle both ways, then switch feet."
       }
     }
   },

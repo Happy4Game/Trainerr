@@ -1467,9 +1467,9 @@
         "name": "Squats au poids du corps",
         "how": "Descendre lentement, talons au sol, remonter sans à-coup."
       },
-      "ankleRocks": {
-        "name": "Bascules de chevilles",
-        "how": "Un pied devant, avancer le genou au-dessus des orteils sans décoller le talon."
+      "ankleCircles": {
+        "name": "Cercles de chevilles",
+        "how": "Debout sur une jambe (en appui si besoin), pointe du pied levée : tracer de grands cercles avec la cheville dans les deux sens, puis changer de pied."
       }
     }
   },

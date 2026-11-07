@@ -1,4 +1,5 @@
 import images from './exercise-images.json';
+import warmupImages from './warmup-images.json';
 
 export interface ExerciseImage {
   readonly file: string;
@@ -27,4 +28,15 @@ export function illustrationFor(exerciseId: string): ExerciseIllustration | unde
 
 export function allIllustrations(): Readonly<Record<string, ExerciseIllustration>> {
   return illustrations;
+}
+
+const warmupIllustrations = warmupImages as Readonly<Record<string, ExerciseIllustration>>;
+
+/** Licensed drawing of a joint warm-up move (scripts/update-warmup-images.mjs), if any. */
+export function warmupIllustrationFor(moveId: string): ExerciseIllustration | undefined {
+  return warmupIllustrations[moveId];
+}
+
+export function allWarmupIllustrations(): Readonly<Record<string, ExerciseIllustration>> {
+  return warmupIllustrations;
 }
