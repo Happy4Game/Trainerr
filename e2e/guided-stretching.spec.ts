@@ -29,6 +29,9 @@ test('the guided stretches start from Today, change sides and follow each other 
   // At the end, the next stretch starts on its own.
   await page.clock.runFor(30_000);
   await expect(guided.getByText('Étirement 2 sur 8')).toBeVisible();
+  // A freely licensed drawing, credited (Wikimedia Commons).
+  await expect(guided.getByText(/mjchael/)).toBeVisible();
+  await expect(guided.getByText('Muscles étirés : Arrière des épaules, Haut du dos')).toBeVisible();
   await expect(guided.getByRole('button', { name: 'Pause' })).toBeVisible();
 
   await guided.getByRole('button', { name: 'Étirement précédent' }).click();

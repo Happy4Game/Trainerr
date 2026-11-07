@@ -1190,7 +1190,7 @@
       "and": "et",
       "muscleMap": "silhouettes musculaires, licence MIT.",
       "lucide": "icônes, licence ISC.",
-      "images": "illustrations des mouvements (départ et arrivée), redimensionnées et passées en niveaux de gris :",
+      "images": "illustrations des mouvements et des étirements, redimensionnées (et passées en niveaux de gris pour les dessins) :",
       "aiDrawings": "Dessins des machines cardio : faits par une IA (Claude) pour Trainerr, faute de dessin libre chez Everkinetic et wger.de. Pas forcément vérifiés par un spécialiste."
     },
     "sources": {
@@ -1261,7 +1261,7 @@
     "items": {
       "guidedStretchingSteps": "8 étirements guidés pour tout le corps (≈ 8 min), un minuteur par étirement et un bip pour changer de côté.",
       "guidedStretchingAnytime": "À lancer quand tu veux depuis Aujourd'hui, ou depuis l'écran de fin de séance. Rien n'est enregistré.",
-      "guidedStretchingMuscles": "Chaque étirement montre les muscles étirés sur le corps, avec ses sources.",
+      "guidedStretchingMuscles": "Chaque étirement a son dessin (ou une photo) sous licence libre, avec son auteur, les muscles étirés et ses sources.",
       "guidedWarmupSteps": "Au début de chaque séance, un échauffement articulaire guidé d'environ 5 min, mouvement par mouvement, avec un minuteur qui enchaîne tout seul.",
       "guidedWarmupMuscles": "Il couvre tout le corps, de la tête aux chevilles, quelle que soit la séance.",
       "guidedWarmupSkip": "Conseillé mais jamais obligatoire : « Passer l'échauffement guidé » à tout moment, et « Je préfère m'échauffer seul » pour ne plus le proposer.",
@@ -1513,7 +1513,7 @@
       },
       "wallCalf": {
         "name": "Mollet contre un mur",
-        "how": "Mains au mur, une jambe tendue loin derrière, talon au sol. Plie la jambe avant et avance le bassin jusqu'à sentir le mollet. Puis l'autre jambe."
+        "how": "Mains en appui contre un mur ou une barre, une jambe tendue loin derrière, talon au sol. Plie la jambe avant et avance le bassin jusqu'à sentir le mollet. Puis l'autre jambe."
       }
     }
   },

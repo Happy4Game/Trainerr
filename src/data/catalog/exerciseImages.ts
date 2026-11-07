@@ -1,4 +1,5 @@
 import images from './exercise-images.json';
+import stretchingImages from './stretching-images.json';
 import warmupImages from './warmup-images.json';
 
 export interface ExerciseImage {
@@ -39,4 +40,18 @@ export function warmupIllustrationFor(moveId: string): ExerciseIllustration | un
 
 export function allWarmupIllustrations(): Readonly<Record<string, ExerciseIllustration>> {
   return warmupIllustrations;
+}
+
+const stretchingIllustrations = stretchingImages as Readonly<Record<string, ExerciseIllustration>>;
+
+/**
+ * Licensed drawing (or photo, when no drawing exists) of a guided stretch, from
+ * Wikimedia Commons or wger.de, with its author and license. Never AI-made.
+ */
+export function stretchingIllustrationFor(stretchId: string): ExerciseIllustration | undefined {
+  return stretchingIllustrations[stretchId];
+}
+
+export function allStretchingIllustrations(): Readonly<Record<string, ExerciseIllustration>> {
+  return stretchingIllustrations;
 }

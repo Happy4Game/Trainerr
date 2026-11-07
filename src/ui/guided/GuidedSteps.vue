@@ -172,15 +172,15 @@ function go(delta: -1 | 1, auto = false): void {
       class="move-drawing"
       :name="nameOf(current.id)"
     />
-    <!-- No licensed drawing of the stretches: the muscles stretched, on the body map. -->
+    <!-- Without a licensed drawing: the muscles stretched, on the body map. -->
     <div v-else-if="current.muscles && current.muscles.length > 0" class="muscles">
       <MuscleMap :key="current.id" :primary="current.muscles" :secondary="[]" />
-      <p class="muscles-list">
-        {{
-          t('guided.muscles', { muscles: current.muscles.map((m) => t(`muscles.${m}`)).join(', ') })
-        }}
-      </p>
     </div>
+    <p v-if="current.muscles && current.muscles.length > 0" class="muscles-list">
+      {{
+        t('guided.muscles', { muscles: current.muscles.map((m) => t(`muscles.${m}`)).join(', ') })
+      }}
+    </p>
     <p class="how">{{ moveText(current.id, 'how') }}</p>
 
     <div class="timer" role="timer" :aria-label="t('guided.timerLabel', { time: clock(leftMs) })">
@@ -247,7 +247,7 @@ function go(delta: -1 | 1, auto = false): void {
 <style scoped>
 /* The body map, small: the countdown stays on screen. */
 .muscles {
-  margin-block-end: var(--tr-space-2);
+  margin-block-end: 4px;
 }
 .muscles :deep(.body) {
   width: min(40%, 110px);
@@ -256,7 +256,7 @@ function go(delta: -1 | 1, auto = false): void {
   display: none;
 }
 .muscles-list {
-  margin: 4px 0 0;
+  margin: 0 0 var(--tr-space-2);
   text-align: center;
   font-size: 0.85rem;
   color: var(--tr-text-muted);

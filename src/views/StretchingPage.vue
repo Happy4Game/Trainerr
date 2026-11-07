@@ -13,6 +13,7 @@ import {
 import { PersonStanding } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { stretchingIllustrationFor } from '@/data/catalog/exerciseImages';
 import { STRETCHING_SOURCE_IDS, sourceById } from '@/data/content/sources';
 import { stepsMinutes } from '@/domain/guidedSteps';
 import { guidedStretching } from '@/domain/stretching';
@@ -88,6 +89,7 @@ function leave(): void {
         :move-text="moveText"
         :part-icon="PersonStanding"
         :sources="sources"
+        :illustration-for="stretchingIllustrationFor"
         @step="index = $event"
         @finish="phase = 'done'"
         @skip="leave"
