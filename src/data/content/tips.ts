@@ -3,6 +3,8 @@
  * (`tips.<id>.title` / `.body`). A card marked `toSource` must receive a
  * verified source before the app is released.
  */
+import { WARMUP_SOURCE_IDS } from './sources';
+
 export interface Tip {
   readonly id: string;
   readonly theme:
@@ -21,7 +23,12 @@ export interface Tip {
 
 export const TIPS: readonly Tip[] = [
   { id: 'completeReps', theme: 'technique', sourceIds: [], status: 'coachReview' },
-  { id: 'warmup', theme: 'technique', sourceIds: [], status: 'coachReview' },
+  {
+    id: 'warmup',
+    theme: 'technique',
+    sourceIds: WARMUP_SOURCE_IDS,
+    status: 'sourced',
+  },
   { id: 'benchElbows', theme: 'technique', sourceIds: ['barbend', 'cressey'], status: 'sourced' },
   { id: 'repsInReserve', theme: 'effort', sourceIds: [], status: 'toSource' },
   { id: 'progression', theme: 'progression', sourceIds: [], status: 'internal' },

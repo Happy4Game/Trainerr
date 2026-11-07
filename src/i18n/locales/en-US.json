@@ -1065,6 +1065,7 @@
     "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android).",
     "keepAwake": "Screen on during the session",
     "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions.",
+    "guidedWarmupHelp": "Otherwise, a guided whole-body joint warm-up (≈ 5 min) is offered at the start of each session (recommended, skippable at any time).",
     "restSound": "Beep at the end of the rest",
     "restSoundHelp": "Three beeps and a vibration when the rest is over.",
     "repRange": {
@@ -1113,7 +1114,7 @@
       },
       "warmup": {
         "title": "Warm up",
-        "body": "One light set of 12 to 15 reps on the first exercise is enough to prepare muscles and joints. The app suggests it."
+        "body": "5 to 10 minutes are enough: easy cardio, wide joint moves from head to ankles, then light sets on the first machine. Avoid long-held stretches right before. The app guides you at the start of each session."
       },
       "benchElbows": {
         "title": "Bench press: elbows and shoulder blades",
@@ -1228,6 +1229,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "guidedWarmup": "Guided joint warm-up",
       "clearerSession": "A clearer session",
       "wholeWeek": "Every muscle over the week",
       "newLook": "New look and statistics",
@@ -1256,6 +1258,9 @@
       "rirRest": "One tap, like with a coach"
     },
     "items": {
+      "guidedWarmupSteps": "At the start of each session, a guided joint warm-up of about 5 min, move by move, with a timer that moves on by itself.",
+      "guidedWarmupMuscles": "It covers the whole body, head to ankles, whatever the session.",
+      "guidedWarmupSkip": "Recommended but never required: \"Skip the guided warm-up\" at any time, and \"I prefer to warm up on my own\" to stop offering it.",
       "feedback": "A \"Send feedback\" button in Settings to report a bug or suggest an idea by mail.",
       "changelog": "This page, to see what changes in each update.",
       "scrollTop": "Moving to the next machine brings the screen back to the top.",
@@ -1429,10 +1434,11 @@
     "change": "Several cycles on this program: you can try another model, or keep this one if you like it."
   },
   "mobility": {
-    "title": "Joint warm-up (≈ {minutes} min)",
-    "seconds": "{seconds} s",
-    "review": "Content to be validated by a coach or a physiotherapist.",
     "moves": {
+      "neckNods": {
+        "name": "Head nods and turns",
+        "how": "Slowly lower then lift the chin, then turn the head left and right. No jerks or big circles."
+      },
       "armCircles": {
         "name": "Arm circles",
         "how": "Arms out to the side, small then big circles, both ways."
@@ -1465,11 +1471,31 @@
         "name": "Bodyweight squats",
         "how": "Go down slowly, heels down, come up smoothly."
       },
-      "ankleRocks": {
-        "name": "Ankle rocks",
-        "how": "One foot forward, push the knee over the toes without lifting the heel."
+      "ankleCircles": {
+        "name": "Ankle circles",
+        "how": "Standing on one leg (holding on if needed), toes off the floor: draw big circles with the ankle both ways, then switch feet."
       }
     }
+  },
+  "guidedWarmup": {
+    "title": "Joint warm-up",
+    "minutes": "≈ {minutes} min",
+    "stepOf": "Move {index} of {total}",
+    "joints": "Wide and controlled, without forcing",
+    "timerLabel": "Time left {time}",
+    "startTimer": "Start the timer",
+    "pause": "Pause",
+    "resume": "Resume",
+    "timeUp": "Done!",
+    "next": "Next move",
+    "previous": "Previous move",
+    "finish": "Go to the first machine",
+    "skip": "Skip the guided warm-up",
+    "why": "Once started, the moves follow each other on their own with a beep. No long-held stretches before lifting: they cost strength. The approach sets of your first machine will finish the warm-up.",
+    "review": "Sources. Content to be checked by a coach or a physiotherapist.",
+    "self": "I prefer to warm up on my own, without the app",
+    "selfOff": "Otherwise, the app guides you through ≈ {minutes} min of whole-body joint warm-up, head to ankles (recommended, skippable at any time).",
+    "selfOn": "The app no longer offers the guided warm-up. Remember to warm up anyway."
   },
   "gyms": {
     "title": "My gyms",

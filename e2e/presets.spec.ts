@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { skipOnboarding, openCatalog } from './helpers';
+import { openCatalog, skipGuidedWarmupWhenShown, skipOnboarding } from './helpers';
 
 test('ready-made Pull session: order explained, assisted pull-ups used when they are my machine', async ({
   page,
@@ -80,6 +80,7 @@ test('the machines of a ready-made session join my machines in one tap', async (
 test('a beginner is offered the beginner full body first, with realistic loads', async ({
   page,
 }) => {
+  await skipGuidedWarmupWhenShown(page);
   await page.goto('/');
   await expect(page.getByText('Ton objectif ?')).toBeVisible({ timeout: 20_000 });
   const next = () => page.getByRole('button', { name: 'Suivant' }).click();

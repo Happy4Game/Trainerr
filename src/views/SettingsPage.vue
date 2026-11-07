@@ -107,6 +107,17 @@ async function redoQuestionnaire(): Promise<void> {
         </ion-item>
         <ion-item>
           <ion-toggle
+            :checked="settings.guidedWarmup === false"
+            @ion-change="updateSettings({ guidedWarmup: !$event.detail.checked })"
+          >
+            <ion-label class="ion-text-wrap">
+              {{ t('guidedWarmup.self') }}
+              <p>{{ t('settings.guidedWarmupHelp') }}</p>
+            </ion-label>
+          </ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-toggle
             :checked="settings.restSound !== false"
             @ion-change="updateSettings({ restSound: $event.detail.checked })"
           >

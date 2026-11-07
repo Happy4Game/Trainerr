@@ -1,0 +1,23 @@
+{
+  "ankleCircles": {
+    "sourceName": "Ankle Circles",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0270",
+    "images": [
+      {
+        "file": "ek-0270-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0270-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  }
+}

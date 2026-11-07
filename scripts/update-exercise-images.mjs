@@ -8,6 +8,8 @@
 //    les images d'Everkinetic et de wger.de (CC BY-SA), jamais d'image IA.
 //
 // Usage : node scripts/update-exercise-images.mjs (demande rsvg-convert et ImageMagick)
+// Le dossier est vidé : relancer ensuite scripts/update-warmup-images.mjs pour
+// les dessins de l'échauffement articulaire.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

@@ -281,7 +281,7 @@ Une page de fiches courtes, classées par thème, chacune avec sa source ; l'app
 | Thème | Fiche | Source |
 | --- | --- | --- |
 | Technique | La technique passe avant la charge : une rep incomplète ne compte pas | Expérience terrain, à relire par un coach |
-| Technique | S'échauffer : 1 série légère de 12–15 reps sur le premier exercice | Idem |
+| Technique | S'échauffer 5 à 10 min : cardio léger, mobilité, activation, puis séries d'approche ; pas d'étirement statique long juste avant | Jeffreys (RAMP), ACSM 2011, Fradkin 2010, Behm & Chaouachi 2011 |
 | Technique | Développé couché : coudes à 45° du corps, omoplates serrées | [BarBend](https://barbend.com/?p=54412), [Eric Cressey](https://ericcressey.com/5-lose-fat-gain-muscle-get-strong-move-better-62/) |
 | Effort | Finir ses séries avec 1 à 2 reps en réserve, sans aller à l'échec à chaque fois | À sourcer |
 | Progression | Monter la charge quand le haut de la fourchette de reps est atteint | Section Moteur de progression |
@@ -358,7 +358,7 @@ Trente fonctions qui rendent l'appli plus pratique à la salle, toutes livrées 
 | Fonction | Description |
 | --- | --- |
 | Calculateur « combien pour X reps ? » | À partir du 1RM estimé (formule d'Epley inversée), propose la charge pour 8, 10 ou 12 reps, arrondie au palier de la machine |
-| Échauffement articulaire guidé | 3 à 5 min de mobilité avant la séance, choisie selon les muscles du jour ; contenu à faire valider par un coach ou un kiné |
+| Échauffement articulaire guidé | Au début de chaque séance, conseillé et passable à tout moment : environ 5 min de mobilité dynamique de tout le corps, de la tête aux chevilles (10 mouvements de 20 à 30 s, même ordre à chaque séance), un mouvement par écran comme la séance, minuteur à heure de fin absolue qui enchaîne seul les mouvements (bip), mouvement atteint gardé si l'appli est fermée (`plan.guidedWarmup`). Interrupteur « Je préfère m'échauffer seul, sans l'appli » sur l'écran de départ et dans Réglages (`settings.guidedWarmup = false`). Pas d'étirement statique tenu 60 s ou plus (Behm & Chaouachi 2011) ; les séries d'approche de la première machine finissent l'échauffement. Contenu à faire valider par un coach ou un kiné |
 | Mode maison | Séance de remplacement avec haltères ou élastiques, mêmes muscles visés, matériel déclaré dans les Réglages |
 | Graphique dans chaque fiche machine | Historique de l'utilisateur sur cet exercice (1RM estimé, meilleure série) directement dans la fiche |
 | Sauvegarde chiffrée sur son propre cloud | Fichier de sauvegarde chiffré sur le téléphone puis envoyé vers le cloud choisi (ex. Google Drive) ; désactivé par défaut |
