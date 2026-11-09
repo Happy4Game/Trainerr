@@ -1,3 +1,4 @@
+import { stepsMinutes, type GuidedStep } from './guidedSteps';
 import { MOBILITY_MOVES } from './mobility';
 
 /**
@@ -8,10 +9,7 @@ import { MOBILITY_MOVES } from './mobility';
  * approach sets of the first machine then finish the warm-up. Content to be
  * validated by a coach or a physiotherapist.
  */
-export interface WarmupStep {
-  readonly id: string;
-  readonly seconds: number;
-}
+export type WarmupStep = GuidedStep;
 
 /** Every joint move, head to toe, each with its length. */
 export function guidedWarmup(): WarmupStep[] {
@@ -20,5 +18,5 @@ export function guidedWarmup(): WarmupStep[] {
 
 /** Length in minutes, rounded, at least 1. */
 export function warmupMinutes(steps: readonly WarmupStep[]): number {
-  return Math.max(1, Math.round(steps.reduce((total, s) => total + s.seconds, 0) / 60));
+  return stepsMinutes(steps);
 }

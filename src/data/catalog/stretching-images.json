@@ -1,0 +1,54 @@
+{
+  "overheadTriceps": {
+    "sourceName": "Souplesse exercice de bras",
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_de_bras.png",
+    "images": [
+      {
+        "file": "st-overheadTriceps.png",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "author": "Vidralta"
+      }
+    ]
+  },
+  "standingQuad": {
+    "sourceName": "Souplesse exercice sur une jambe",
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_sur_une_jambe.png",
+    "images": [
+      {
+        "file": "st-standingQuad.png",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "author": "Vidralta"
+      }
+    ]
+  },
+  "seatedHamstring": {
+    "sourceName": "Souplesse exercice du renard",
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_du_renard.png",
+    "images": [
+      {
+        "file": "st-seatedHamstring.png",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "author": "Vidralta"
+      }
+    ]
+  },
+  "wallCalf": {
+    "sourceName": "Souplesse exercice du tendon d'Achille",
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_du_tendon_d%27Achille.png",
+    "images": [
+      {
+        "file": "st-wallCalf.png",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "author": "Vidralta"
+      }
+    ]
+  }
+}

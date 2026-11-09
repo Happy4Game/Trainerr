@@ -10,7 +10,11 @@ import {
 } from '@ionic/vue';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { allIllustrations, allWarmupIllustrations } from '@/data/catalog/exerciseImages';
+import {
+  allIllustrations,
+  allStretchingIllustrations,
+  allWarmupIllustrations,
+} from '@/data/catalog/exerciseImages';
 import { SOURCES } from '@/data/content/sources';
 
 interface Library {
@@ -32,6 +36,7 @@ const imageAuthors = computed(() => {
   for (const illustration of [
     ...Object.values(allIllustrations()),
     ...Object.values(allWarmupIllustrations()),
+    ...Object.values(allStretchingIllustrations()),
   ]) {
     for (const image of illustration.images) {
       authors.set(image.author, { license: image.license, licenseUrl: image.licenseUrl });

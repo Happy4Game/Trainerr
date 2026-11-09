@@ -13,7 +13,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { ArrowLeftRight, Check, Settings, TrendingUp } from 'lucide-vue-next';
+import { ArrowLeftRight, Check, PersonStanding, Settings, TrendingUp } from 'lucide-vue-next';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { openAppDatabase } from '@/data/appDatabase';
@@ -21,6 +21,8 @@ import { listBadges, type EarnedBadge } from '@/data/repositories/badgeRepositor
 import { useI18n } from 'vue-i18n';
 import { weeksOnPace } from '@/domain/stats';
 import { estimateMinutes, type LoadChange } from '@/domain/sessionPreview';
+import { stepsMinutes } from '@/domain/guidedSteps';
+import { guidedStretching } from '@/domain/stretching';
 import { usePlanInsights } from '@/ui/session/usePlanInsights';
 import { useLoadLabel } from '@/ui/session/useLoadLabel';
 import AdviceCard from '@/ui/AdviceCard.vue';
@@ -35,6 +37,8 @@ const templateLabel = useTemplateName();
 const session = useSession();
 const { settings, days } = useWeekPlan();
 const { phase, template, active, history, preview } = session;
+const stretchCount = guidedStretching().length;
+const stretchMinutes = stepsMinutes(guidedStretching());
 
 /** The machines of the next session, as small drawings: the session at a glance. */
 const planIds = computed(() =>
@@ -309,6 +313,17 @@ const streak = computed(() =>
           </ion-card-content>
         </ion-card>
 
+        <!-- At any time, outside any session: nothing is logged. -->
+        <ion-card class="stretch-card">
+          <ion-card-content>
+            <p>{{ t('guidedStretching.card', { count: stretchCount }) }}</p>
+            <ion-button expand="block" fill="outline" router-link="/stretching">
+              <PersonStanding :size="20" aria-hidden="true" class="stretch-icon" />
+              {{ t('guidedStretching.launch', { minutes: stretchMinutes }) }}
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+
         <AdviceCard />
       </template>
     </ion-content>
@@ -316,6 +331,12 @@ const streak = computed(() =>
 </template>
 
 <style scoped>
+.stretch-card p {
+  margin-block: 0 var(--tr-space-2);
+}
+.stretch-icon {
+  margin-inline-end: 6px;
+}
 .hero {
   position: relative;
   overflow: hidden;

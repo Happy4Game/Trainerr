@@ -1190,7 +1190,7 @@
       "and": "and",
       "muscleMap": "muscle silhouettes, MIT license.",
       "lucide": "icons, ISC license.",
-      "images": "movement illustrations (start and end), resized and converted to greyscale:",
+      "images": "drawings of the moves and stretches, resized and turned to greyscale:",
       "aiDrawings": "Cardio machine drawings: made by an AI (Claude) for Trainerr, as neither Everkinetic nor wger.de has a free one. Not necessarily checked by a specialist."
     },
     "sources": {
@@ -1229,6 +1229,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "guidedStretching": "Guided stretches at any time",
       "guidedWarmup": "Guided joint warm-up",
       "clearerSession": "A clearer session",
       "wholeWeek": "Every muscle over the week",
@@ -1258,6 +1259,9 @@
       "rirRest": "One tap, like with a coach"
     },
     "items": {
+      "guidedStretchingSteps": "8 guided stretches for the whole body (≈ 8 min), a timer for each stretch and a beep to change sides.",
+      "guidedStretchingAnytime": "Start them whenever you like from Today, or from the end-of-session screen. Nothing is logged.",
+      "guidedStretchingMuscles": "Freely licensed drawings by a single author (Vidralta), credited, and the muscles stretched on the body, with the sources.",
       "guidedWarmupSteps": "At the start of each session, a guided joint warm-up of about 5 min, move by move, with a timer that moves on by itself.",
       "guidedWarmupMuscles": "It covers the whole body, head to ankles, whatever the session.",
       "guidedWarmupSkip": "Recommended but never required: \"Skip the guided warm-up\" at any time, and \"I prefer to warm up on my own\" to stop offering it.",
@@ -1477,25 +1481,86 @@
       }
     }
   },
+  "stretching": {
+    "moves": {
+      "chestWall": {
+        "name": "Chest against a wall",
+        "how": "Forearm against a wall or a door frame, elbow at shoulder height. Slowly turn your chest the other way until you feel it stretch. Then the other arm."
+      },
+      "crossBody": {
+        "name": "Arm across the chest",
+        "how": "Bring one straight arm across your chest and hold it above the elbow with the other hand. Keep the shoulder down. Then the other arm."
+      },
+      "overheadTriceps": {
+        "name": "Triceps behind the head",
+        "how": "Raise one arm and bend the elbow to put the hand between your shoulder blades. The other hand gently pushes the elbow back. Then the other arm."
+      },
+      "childPose": {
+        "name": "Child's pose",
+        "how": "Kneeling, hips towards the heels, arms stretched far ahead, forehead towards the floor. Breathe slowly and let your back lengthen."
+      },
+      "standingQuad": {
+        "name": "Heel to glute",
+        "how": "Standing, one hand on a support. Hold your ankle and bring the heel towards the glute, knees side by side, hips straight. Then the other leg."
+      },
+      "seatedHamstring": {
+        "name": "Hamstrings, straight leg",
+        "how": "Seated, one leg straight ahead, the other bent. Back straight, lean from the hips towards the foot without rounding the back. Then the other leg."
+      },
+      "figureFour": {
+        "name": "Figure-four glute stretch",
+        "how": "On your back, put one ankle on the opposite knee. Hold the thigh of the supporting leg and gently pull it towards your chest. Then the other side."
+      },
+      "wallCalf": {
+        "name": "Calf against a wall",
+        "how": "Hands against a wall or a bar, one leg straight far behind, heel down. Bend the front leg and move the hips forward until you feel the calf. Then the other leg."
+      }
+    }
+  },
   "guidedWarmup": {
     "title": "Joint warm-up",
-    "minutes": "≈ {minutes} min",
     "stepOf": "Move {index} of {total}",
-    "joints": "Wide and controlled, without forcing",
-    "timerLabel": "Time left {time}",
-    "startTimer": "Start the timer",
-    "pause": "Pause",
-    "resume": "Resume",
-    "timeUp": "Done!",
+    "part": "Wide and controlled, without forcing",
     "next": "Next move",
     "previous": "Previous move",
     "finish": "Go to the first machine",
     "skip": "Skip the guided warm-up",
     "why": "Once started, the moves follow each other on their own with a beep. No long-held stretches before lifting: they cost strength. The approach sets of your first machine will finish the warm-up.",
-    "review": "Sources. Content to be checked by a coach or a physiotherapist.",
     "self": "I prefer to warm up on my own, without the app",
     "selfOff": "Otherwise, the app guides you through ≈ {minutes} min of whole-body joint warm-up, head to ankles (recommended, skippable at any time).",
     "selfOn": "The app no longer offers the guided warm-up. Remember to warm up anyway."
+  },
+  "guided": {
+    "minutes": "≈ {minutes} min",
+    "timerLabel": "Time left {time}",
+    "startTimer": "Start the timer",
+    "pause": "Pause",
+    "resume": "Resume",
+    "timeUp": "Done!",
+    "review": "Sources. Content to be checked by a coach or a physiotherapist.",
+    "muscles": "Muscles stretched: {muscles}",
+    "sides": "{seconds} s on one side, then {seconds} s on the other",
+    "sideOne": "First side",
+    "sideTwo": "Beep: change sides"
+  },
+  "guidedStretching": {
+    "title": "Guided stretches",
+    "stepOf": "Stretch {index} of {total}",
+    "part": "Held, no bouncing, no pain",
+    "next": "Next stretch",
+    "previous": "Previous stretch",
+    "finish": "Finish the stretches",
+    "skip": "Stop the stretches",
+    "why": "Go to a clear tension, never pain, and breathe calmly. 60 s per muscle (30 s per side), as the American College of Sports Medicine advises. It keeps you flexible, but it does not prevent soreness. Nothing is logged.",
+    "intro": "The whole body in {count} held stretches, ≈ {minutes} min. Whenever you like: after the session, on a rest day, in the evening. Nothing is logged.",
+    "notBefore": "Not right before lifting: a long-held stretch costs strength for a while. Before a session, do the joint warm-up instead.",
+    "list": "The stretches",
+    "start": "Start the stretches",
+    "done": "Stretches done. Well done!",
+    "again": "Start again",
+    "back": "Back",
+    "launch": "Stretch (≈ {minutes} min)",
+    "card": "Feel like stretching? {count} guided stretches for the whole body, whenever you like, nothing logged."
   },
   "gyms": {
     "title": "My gyms",
