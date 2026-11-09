@@ -10,7 +10,7 @@ import {
 } from '@ionic/vue';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { allIllustrations } from '@/data/catalog/exerciseImages';
+import { allIllustrations, allWarmupIllustrations } from '@/data/catalog/exerciseImages';
 import { SOURCES } from '@/data/content/sources';
 
 interface Library {
@@ -29,7 +29,10 @@ onMounted(async () => {
 
 const imageAuthors = computed(() => {
   const authors = new Map<string, { license: string; licenseUrl: string }>();
-  for (const illustration of Object.values(allIllustrations())) {
+  for (const illustration of [
+    ...Object.values(allIllustrations()),
+    ...Object.values(allWarmupIllustrations()),
+  ]) {
     for (const image of illustration.images) {
       authors.set(image.author, { license: image.license, licenseUrl: image.licenseUrl });
     }

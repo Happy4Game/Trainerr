@@ -547,6 +547,24 @@ async function cardioOfSettings(): Promise<Pick<SessionPlan, 'cardio'>> {
   return cardio ? { cardio } : {};
 }
 
+/** The guided warm-up, offered at the start of every session unless turned off in the settings. */
+async function warmupOffer(): Promise<Pick<SessionPlan, 'guidedWarmup'>> {
+  const { guidedWarmup } = await loadSettings();
+  return guidedWarmup === false ? {} : { guidedWarmup: { step: 0 } };
+}
+
+/** Warm-up offered and neither done nor skipped yet: it comes before the first machine. */
+const guidedWarmupPending = computed(() => {
+  const warmup = active.value?.plan.guidedWarmup;
+  return warmup !== undefined && !warmup.done && !warmup.skipped;
+});
+
+async function setGuidedWarmup(change: { step?: number; done?: boolean; skipped?: boolean }) {
+  const current = active.value?.plan.guidedWarmup;
+  if (!active.value || !current) return;
+  await updatePlan({ ...active.value.plan, guidedWarmup: { ...current, ...change } });
+}
+
 /** Ready-made session: its exercises in order, with their sets, reps and rests. */
 async function startPreset(presetId: string): Promise<void> {
   const preset = presetSession(presetId);
@@ -569,6 +587,7 @@ async function startPreset(presetId: string): Promise<void> {
     queue: startQueue(ids),
     ...(tiredToday.value ? { tired: true } : {}),
     ...(await cardioOfSettings()),
+    ...(await warmupOffer()),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -640,6 +659,7 @@ async function start(
     ...(options.express ? { express: true } : {}),
     ...(tiredToday.value ? { tired: true } : {}),
     ...(await cardioOfSettings()),
+    ...(await warmupOffer()),
   };
   const { db } = await openAppDatabase();
   await startSession(db, {
@@ -1361,6 +1381,12 @@ export function useSession() {
     ),
     saveNote,
     /** The planned cardio skipped today, or put back. */
+    guidedWarmupPending,
+    /** Next or previous step of the guided warm-up, kept if the app is closed. */
+    guidedWarmupStep: (step: number) => setGuidedWarmup({ step }),
+    /** End of the guided warm-up: done to the end, or skipped. */
+    endGuidedWarmup: (skipped: boolean) =>
+      setGuidedWarmup(skipped ? { skipped: true } : { done: true }),
     skipCardio: async (skipped: boolean) => {
       const cardio = active.value?.plan.cardio;
       if (!active.value || !cardio) return;

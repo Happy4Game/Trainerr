@@ -32,6 +32,12 @@ export interface SessionPlan {
   readonly startedAt?: number;
   /** Cardio before or after the weights, chosen before starting; skipped on the day. */
   readonly cardio?: CardioPlan & { readonly skipped?: boolean };
+  /** Guided warm-up offered before the first machine: the step reached, then done or skipped. */
+  readonly guidedWarmup?: {
+    readonly step: number;
+    readonly done?: boolean;
+    readonly skipped?: boolean;
+  };
 }
 
 export interface StoredSet extends SetLog {

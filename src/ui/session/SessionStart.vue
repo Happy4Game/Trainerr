@@ -14,8 +14,8 @@ import { useI18n } from 'vue-i18n';
 import { estimateMinutes } from '@/domain/sessionPreview';
 import type { SessionTemplate } from '@/domain/trainingModels';
 import type { Exercise } from '@/domain/types';
-import MobilityCard from '@/ui/MobilityCard.vue';
-import { useSettings } from '@/ui/useSettings';
+import { guidedWarmup, warmupMinutes } from '@/domain/guidedWarmup';
+import { updateSettings, useSettings } from '@/ui/useSettings';
 import { useTemplateName } from '@/ui/useTemplateName';
 import SessionPlanList from './SessionPlanList.vue';
 import UsualLoads from './UsualLoads.vue';
@@ -65,6 +65,10 @@ const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
     ? t('session.readyMade.suggested')
     : undefined;
+/** Length of the guided whole-body joint warm-up offered once the session starts. */
+const warmupLength = warmupMinutes(guidedWarmup());
+/** "I prefer to warm up on my own": no guided warm-up, kept for the next sessions. */
+const selfWarmup = computed(() => appSettings.value?.guidedWarmup === false);
 /** Same insights as on Today: loads going up, muscles caught up. */
 const insights = usePlanInsights(preview);
 </script>
@@ -129,6 +133,19 @@ const insights = usePlanInsights(preview);
         <Play :size="22" aria-hidden="true" />
         {{ t('session.start') }}
       </ion-button>
+      <ion-item lines="none" class="superset-choice">
+        <ion-toggle
+          :checked="selfWarmup"
+          @ion-change="updateSettings({ guidedWarmup: !$event.detail.checked })"
+        >
+          <span class="toggle-title">{{ t('guidedWarmup.self') }}</span>
+          <span class="toggle-help">{{
+            selfWarmup
+              ? t('guidedWarmup.selfOn')
+              : t('guidedWarmup.selfOff', { minutes: warmupLength })
+          }}</span>
+        </ion-toggle>
+      </ion-item>
       <ion-item lines="none" class="superset-choice">
         <ion-toggle
           :checked="session.tiredToday.value"
@@ -250,8 +267,6 @@ const insights = usePlanInsights(preview);
       </ion-button>
     </div>
   </section>
-
-  <MobilityCard :muscles="template.muscles" />
 </template>
 
 <style scoped>

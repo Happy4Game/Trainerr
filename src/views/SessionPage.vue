@@ -43,6 +43,7 @@ import { restClock, restsTaken } from '@/domain/restTaken';
 import type { DiscomfortResponse, DiscomfortZone } from '@/domain/advice';
 import { useSession } from '@/ui/session/useSession';
 import SessionCardio from '@/ui/cardio/SessionCardio.vue';
+import GuidedWarmup from '@/ui/session/GuidedWarmup.vue';
 import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/useWeekPlan';
 
@@ -491,8 +492,10 @@ async function logWarmup(): Promise<void> {
         <SessionOverview :open="overviewOpen" :exercises="progress" @close="overviewOpen = false" />
 
         <SessionCardio place="top" />
+        <!-- Recommended before the first machine, skippable at every step. -->
+        <GuidedWarmup v-if="session.guidedWarmupPending.value" />
         <section
-          v-if="nextMachine"
+          v-else-if="nextMachine"
           class="next-machine"
           :aria-label="t('session.nextMachine.title')"
         >
