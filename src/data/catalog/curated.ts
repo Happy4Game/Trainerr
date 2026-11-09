@@ -33,7 +33,7 @@ export interface CustomExercise extends CuratedOverride {
 }
 
 /** Bumped whenever this file changes, so that phones re-import the catalog. */
-export const CURATED_VERSION = 4;
+export const CURATED_VERSION = 5;
 
 const FEDB = 'free-exercise-db (adapté)';
 const BENCH = 'BarBend, Eric Cressey';
@@ -202,17 +202,19 @@ export const CURATED: Readonly<Record<string, CuratedOverride>> = {
     cuesSource: 'Suivi avec Claude (octobre 2026), free-exercise-db',
   },
   Seated_Cable_Rows: {
-    nameFr: 'Tirage horizontal assis',
-    machineName: 'Seated Row',
-    aliases: ['seated row', 'rowing assis'],
+    nameFr: 'Tirage horizontal à la poulie',
+    machineName: 'Seated Cable Row',
+    aliases: ['tirage horizontal assis', 'seated row', 'rowing assis', 'poulie basse', 'câble'],
     primaryMuscles: ['upperBack', 'lats'],
     secondaryMuscles: ['biceps', 'rearDelts'],
     cues: [
+      'À la poulie basse : pieds calés, rien contre la poitrine',
       'Dos droit, poitrine sortie, genoux légèrement fléchis',
       'Tirer les coudes vers l’arrière en serrant les omoplates',
       'Revenir lentement, bras tendus, sans arrondir le dos',
     ],
     cuesEn: [
+      'At the low pulley: feet braced, nothing against the chest',
       'Back straight, chest up, knees slightly bent',
       'Pull the elbows back while squeezing the shoulder blades',
       'Return slowly, arms straight, without rounding the back',
@@ -298,16 +300,25 @@ export const CURATED: Readonly<Record<string, CuratedOverride>> = {
     cuesSource: FEDB,
   },
   Leg_Press: {
-    nameFr: 'Presse à cuisses',
-    machineName: 'Leg Press',
-    aliases: ['leg press', 'presse'],
+    nameFr: 'Presse à cuisses inclinée 45°',
+    machineName: '45° Leg Press',
+    aliases: [
+      'presse à cuisses',
+      'leg press',
+      'presse',
+      'presse 45',
+      'presse inclinée',
+      'sled leg press',
+    ],
     kind: 'heavyCompound',
     cues: [
+      'Presque allongé, on pousse un chariot qui monte en diagonale',
       'Pieds à largeur d’épaules au milieu de la plateforme',
       'Descendre sans décoller le bas du dos du dossier',
       'Pousser sans verrouiller les genoux en haut',
     ],
     cuesEn: [
+      'Almost lying down, you push a sled that slides up at an angle',
       'Feet shoulder-width apart in the middle of the platform',
       'Lower without lifting the lower back off the pad',
       'Push without locking the knees at the top',
@@ -514,10 +525,10 @@ export const CURATED: Readonly<Record<string, CuratedOverride>> = {
 /** Machines of the gym missing from free-exercise-db. */
 export const CUSTOM_EXERCISES: Readonly<Record<string, CustomExercise>> = {
   'trainerr:diverging-seated-row': {
-    nameFr: 'Tirage horizontal divergent',
-    nameEn: 'Diverging Seated Row',
-    machineName: 'Diverging Seated Row',
-    aliases: ['diverging row', 'rowing divergent'],
+    nameFr: 'Tirage horizontal à la machine',
+    nameEn: 'Machine Seated Row',
+    machineName: 'Seated Row',
+    aliases: ['seated row', 'diverging row', 'rowing divergent', 'tirage divergent', 'low row'],
     kind: 'machineCompound',
     group: 'pull',
     equipment: 'machine',
@@ -554,6 +565,28 @@ export const CUSTOM_EXERCISES: Readonly<Record<string, CustomExercise>> = {
       'Shoulders aligned with the machine pivot',
       'Raise the elbows to the side up to shoulder height',
       'Lower slowly, without shrugging',
+    ],
+    cuesSource: 'Trainerr, à relire par un coach',
+  },
+  'trainerr:seated-leg-press': {
+    nameFr: 'Presse à cuisses horizontale',
+    nameEn: 'Seated Leg Press',
+    machineName: 'Seated Leg Press',
+    aliases: ['presse horizontale', 'presse assise', 'horizontal leg press'],
+    kind: 'machineCompound',
+    group: 'legs',
+    equipment: 'machine',
+    primaryMuscles: ['quads'],
+    secondaryMuscles: ['glutes', 'hamstrings'],
+    cues: [
+      'Assis, dos contre le dossier : on pousse droit devant soi',
+      'Pieds à largeur d’épaules au milieu de la plateforme',
+      'Descendre sans décoller le bas du dos, pousser sans verrouiller les genoux',
+    ],
+    cuesEn: [
+      'Seated, back against the pad: you push straight ahead',
+      'Feet shoulder-width apart in the middle of the platform',
+      'Lower without lifting the lower back, push without locking the knees',
     ],
     cuesSource: 'Trainerr, à relire par un coach',
   },

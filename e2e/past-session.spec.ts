@@ -22,14 +22,14 @@ test('a session done without the app is added to the history afterwards', async 
   // The catalog page behind has its own "Presse à cuisses" buttons: pick in the sheet.
   await page
     .locator('ion-modal.show-modal')
-    .getByRole('heading', { name: 'Presse à cuisses', exact: true })
+    .getByRole('heading', { name: 'Presse à cuisses inclinée 45°', exact: true })
     .click();
   const set = page.getByRole('group', { name: /Série 1 : Presse à cuisses/ });
   await set.getByRole('spinbutton').first().fill('100');
   await set.getByRole('spinbutton').first().blur();
 
   // The drawing opens the machine card, in the Progress tab.
-  await page.getByRole('link', { name: 'Voir la fiche de Presse à cuisses' }).click();
+  await page.getByRole('link', { name: 'Voir la fiche de Presse à cuisses inclinée 45°' }).click();
   await expect(page).toHaveURL(/\/tabs\/history\/exercise\/Leg_Press$/);
   await page.getByRole('button', { name: 'Progrès' }).click();
   await expect(page.getByRole('group', { name: /Série 1 : Presse à cuisses/ })).toBeVisible();
@@ -37,7 +37,9 @@ test('a session done without the app is added to the history afterwards', async 
   await page.getByRole('button', { name: 'Retour' }).click();
   const exercises = page.getByRole('list', { name: 'Exercices de Haut du corps A' });
   await expect(exercises).toContainText('100 kg × 10');
-  await exercises.getByRole('link', { name: 'Voir la fiche de Presse à cuisses' }).click();
+  await exercises
+    .getByRole('link', { name: 'Voir la fiche de Presse à cuisses inclinée 45°' })
+    .click();
   await expect(page).toHaveURL(/\/tabs\/history\/exercise\/Leg_Press$/);
   await page.getByRole('button', { name: 'Progrès' }).click();
   await expect(
@@ -75,7 +77,9 @@ test('during the workout, each set sits next to the same set last time', async (
   await skipOnboarding(page);
   await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
   await page.getByRole('searchbox').fill('leg press');
-  await page.getByRole('button', { name: 'Ajouter Presse à cuisses à mes machines' }).click();
+  await page
+    .getByRole('button', { name: 'Ajouter Presse à cuisses inclinée 45° à mes machines' })
+    .click();
 
   // Last time, two days ago (an upper body session: legs come next): 30 kg × 10.
   await page.getByRole('tab', { name: 'Progrès' }).click();
@@ -87,7 +91,7 @@ test('during the workout, each set sits next to the same set last time', async (
   await page.getByRole('search').last().getByRole('searchbox').fill('presse');
   await page
     .locator('ion-modal.show-modal')
-    .getByRole('heading', { name: 'Presse à cuisses', exact: true })
+    .getByRole('heading', { name: 'Presse à cuisses inclinée 45°', exact: true })
     .click();
   const set = page.getByRole('group', { name: /Série 1 : Presse à cuisses/ });
   await set.getByRole('spinbutton').first().fill('30');

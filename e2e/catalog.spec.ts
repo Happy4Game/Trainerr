@@ -34,7 +34,9 @@ test('filters by muscle group', async ({ page }) => {
   await openCatalog(page);
   await pickFilter(page, 'Jambes');
   await search(page, 'presse');
-  await expect(page.getByRole('heading', { name: 'Presse à cuisses', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Presse à cuisses inclinée 45°', exact: true }),
+  ).toBeVisible();
   await search(page, 'pec deck');
   await expect(page.getByText('Aucun exercice ne correspond.')).toBeVisible();
 });
@@ -183,7 +185,7 @@ test('exercises can be found by touching a body part', async ({ page }) => {
   ).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Retirer la zone' }).click();
-  await expect(page.getByRole('status')).toHaveText('482 exercices');
+  await expect(page.getByRole('status')).toHaveText('483 exercices');
 });
 
 test('touching a muscle leaves the body part tab, and the normal search forgets it', async ({
@@ -199,7 +201,7 @@ test('touching a muscle leaves the body part tab, and the normal search forgets 
 
   await page.getByRole('button', { name: 'Chercher par zone du corps' }).click();
   await expect(page.getByText('Zone : Biceps')).toHaveCount(0);
-  await expect(page.getByRole('status')).toHaveText('482 exercices');
+  await expect(page.getByRole('status')).toHaveText('483 exercices');
 });
 
 test('a body part tab closes the search by muscle', async ({ page }) => {

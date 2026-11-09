@@ -131,7 +131,7 @@ test('another exercise is added from the session plan, after the others', async 
   await page.getByRole('search').last().getByRole('searchbox').fill('presse');
   await page
     .locator('ion-modal.show-modal')
-    .getByRole('heading', { name: 'Presse à cuisses', exact: true })
+    .getByRole('heading', { name: 'Presse à cuisses inclinée 45°', exact: true })
     .click();
 
   // Last in the plan, with its sets; the current exercise goes on.

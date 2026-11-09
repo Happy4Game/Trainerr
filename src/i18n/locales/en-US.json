@@ -1229,6 +1229,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "machineSplit": "Leg press and row: two machines each",
       "guidedStretching": "Guided stretches at any time",
       "guidedWarmup": "Guided joint warm-up",
       "clearerSession": "A clearer session",
@@ -1259,6 +1260,9 @@
       "rirRest": "One tap, like with a coach"
     },
     "items": {
+      "legPressSplit": "The 45° leg press and the horizontal leg press are now two exercises, each with its own loads.",
+      "rowSplit": "The cable row and the machine row have clearer names, so they are no longer mixed up.",
+      "splitQuestion": "After the update, the app asks which machine your sets were on, and files your history there.",
       "guidedStretchingSteps": "8 guided stretches for the whole body (≈ 8 min), a timer for each stretch and a beep to change sides.",
       "guidedStretchingAnytime": "Start them whenever you like from Today, or from the end-of-session screen. Nothing is logged.",
       "guidedStretchingMuscles": "Freely licensed drawings by a single author (Vidralta), credited, and the muscles stretched on the body, with the sources.",
@@ -2039,5 +2043,21 @@
     "rest": "Rest",
     "none": "No session",
     "openSession": "See {name} of {day}"
+  },
+  "machineSplit": {
+    "title": "One machine becomes two",
+    "question": "Until now, which one were your sets on?",
+    "both": "Both, or I don’t know",
+    "note": "Your history, usual load and settings go to the machine chosen. Loads don’t compare from one machine to the other: each one now has its own tracking.",
+    "legPress": {
+      "intro": "The leg press comes as two machines: 45° incline and horizontal.",
+      "choice0": "Almost lying down, you push a sled that slides up at an angle",
+      "choice1": "Seated, you push straight ahead"
+    },
+    "seatedRow": {
+      "intro": "The seated row comes at the low pulley and on a machine.",
+      "choice0": "Low pulley with a cable, nothing against the chest",
+      "choice1": "Machine with a pad against the chest"
+    }
   }
 }
