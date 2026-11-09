@@ -29,8 +29,6 @@ test('the guided stretches start from Today, change sides and follow each other 
   // At the end, the next stretch starts on its own.
   await page.clock.runFor(30_000);
   await expect(guided.getByText('Étirement 2 sur 8')).toBeVisible();
-  // A freely licensed drawing, credited (Wikimedia Commons).
-  await expect(guided.getByText(/mjchael/)).toBeVisible();
   await expect(guided.getByText('Muscles étirés : Arrière des épaules, Haut du dos')).toBeVisible();
   await expect(guided.getByRole('button', { name: 'Pause' })).toBeVisible();
 
@@ -50,10 +48,17 @@ test('the guided stretches start from Today, change sides and follow each other 
   await expect(page).toHaveURL(/\/tabs\/today$/);
 });
 
-test('the guided stretches stop in one tap', async ({ page }) => {
+test('the guided stretches show a credited drawing and stop in one tap', async ({ page }) => {
   await skipOnboarding(page);
   await page.goto('/stretching');
   await page.getByRole('button', { name: 'Commencer les étirements' }).click();
+  // Third stretch: a freely licensed drawing, credited (one author, Wikimedia Commons).
+  const guided = page.getByRole('region', { name: 'Étirements guidés' });
+  for (const step of [2, 3]) {
+    await guided.getByRole('button', { name: 'Étirement suivant' }).click();
+    await expect(guided.getByText(`Étirement ${step} sur 8`)).toBeVisible();
+  }
+  await expect(guided.getByText(/Vidralta/)).toBeVisible();
   await page.getByRole('button', { name: 'Arrêter les étirements' }).click();
   await expect(page).toHaveURL(/\/tabs\/today$/);
 });

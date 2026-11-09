@@ -1,23 +1,8 @@
 {
-  "crossBody": {
-    "sourceName": "Deltamuskel dehnen",
-    "source": "Wikimedia Commons",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Deltamuskel_dehnen.svg",
-    "kind": "drawing",
-    "images": [
-      {
-        "file": "st-crossBody.png",
-        "license": "CC BY-SA 3.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-        "author": "mjchael"
-      }
-    ]
-  },
   "overheadTriceps": {
     "sourceName": "Souplesse exercice de bras",
     "source": "Wikimedia Commons",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_de_bras.png",
-    "kind": "drawing",
     "images": [
       {
         "file": "st-overheadTriceps.png",
@@ -27,25 +12,10 @@
       }
     ]
   },
-  "childPose": {
-    "sourceName": "Balasana",
-    "source": "Wikimedia Commons",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Balasana_.jpg",
-    "kind": "photo",
-    "images": [
-      {
-        "file": "st-childPose.jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-        "author": "UmaPrykhodko"
-      }
-    ]
-  },
   "standingQuad": {
     "sourceName": "Souplesse exercice sur une jambe",
     "source": "Wikimedia Commons",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_sur_une_jambe.png",
-    "kind": "drawing",
     "images": [
       {
         "file": "st-standingQuad.png",
@@ -59,7 +29,6 @@
     "sourceName": "Souplesse exercice du renard",
     "source": "Wikimedia Commons",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_du_renard.png",
-    "kind": "drawing",
     "images": [
       {
         "file": "st-seatedHamstring.png",
@@ -69,25 +38,10 @@
       }
     ]
   },
-  "figureFour": {
-    "sourceName": "Figure 4 stretch (wger n° 1869)",
-    "source": "wger.de",
-    "sourceUrl": "https://wger.de/exercise/1869/view",
-    "kind": "photo",
-    "images": [
-      {
-        "file": "st-figureFour.jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-        "author": "Davidgj32"
-      }
-    ]
-  },
   "wallCalf": {
     "sourceName": "Souplesse exercice du tendon d'Achille",
     "source": "Wikimedia Commons",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Souplesse_exercice_du_tendon_d%27Achille.png",
-    "kind": "drawing",
     "images": [
       {
         "file": "st-wallCalf.png",

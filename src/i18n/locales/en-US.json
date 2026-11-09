@@ -1190,7 +1190,7 @@
       "and": "and",
       "muscleMap": "muscle silhouettes, MIT license.",
       "lucide": "icons, ISC license.",
-      "images": "drawings of the moves and stretches, resized (and turned to greyscale for the drawings):",
+      "images": "drawings of the moves and stretches, resized and turned to greyscale:",
       "aiDrawings": "Cardio machine drawings: made by an AI (Claude) for Trainerr, as neither Everkinetic nor wger.de has a free one. Not necessarily checked by a specialist."
     },
     "sources": {
@@ -1261,7 +1261,7 @@
     "items": {
       "guidedStretchingSteps": "8 guided stretches for the whole body (≈ 8 min), a timer for each stretch and a beep to change sides.",
       "guidedStretchingAnytime": "Start them whenever you like from Today, or from the end-of-session screen. Nothing is logged.",
-      "guidedStretchingMuscles": "Each stretch has its freely licensed drawing (or a photo), with its author, the muscles stretched and its sources.",
+      "guidedStretchingMuscles": "Freely licensed drawings by a single author (Vidralta), credited, and the muscles stretched on the body, with the sources.",
       "guidedWarmupSteps": "At the start of each session, a guided joint warm-up of about 5 min, move by move, with a timer that moves on by itself.",
       "guidedWarmupMuscles": "It covers the whole body, head to ankles, whatever the session.",
       "guidedWarmupSkip": "Recommended but never required: \"Skip the guided warm-up\" at any time, and \"I prefer to warm up on my own\" to stop offering it.",
