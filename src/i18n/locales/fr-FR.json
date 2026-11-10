@@ -1353,7 +1353,7 @@
       "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier.",
       "warmupRamp": "L'échauffement suit la méthode RAMP : 2 min de cardio léger, puis les articulations et les muscles de ta séance du jour, et tes séries d'approche.",
       "warmupForSession": "Il change avec la séance : épaules, élastique et pompes faciles pour le haut du corps ; balanciers, squats, pont fessier et chevilles pour les jambes. Plus de mouvements au sol à quatre pattes.",
-      "warmupSkipTop": "Le bouton « Passer l'échauffement » est maintenant en haut, toujours visible, pour qui s'échauffe seul."
+      "warmupSkipTop": "Un bouton « Je m'échauffe seul » en haut de chaque mouvement, toujours visible, pour passer l'échauffement guidé d'un geste."
     }
   },
   "data": {
@@ -1528,7 +1528,7 @@
     "next": "Mouvement suivant",
     "previous": "Mouvement précédent",
     "finish": "Aller à la première machine",
-    "skip": "Passer l'échauffement",
+    "skip": "Je m'échauffe seul",
     "why": "Une fois lancé, les mouvements s'enchaînent tout seuls avec un bip. Trois étapes, comme la méthode RAMP : un peu de cardio pour monter en température, puis les articulations et les muscles de ta séance du jour, et enfin les séries d'approche de ta première machine. Pas d'étirement tenu longtemps avant la muscu : ça fait perdre de la force.",
     "self": "Je préfère m'échauffer seul, sans l'appli",
     "selfOff": "Sinon, l'appli te guide pendant ≈ {minutes} min d'échauffement adapté à ta séance : un peu de cardio, puis les articulations et les muscles du jour (conseillé, passable à tout moment).",

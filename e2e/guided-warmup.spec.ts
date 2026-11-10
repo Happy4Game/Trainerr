@@ -8,7 +8,7 @@ async function star(page: Page, search: string, name: string) {
 }
 
 const skipButton = (page: Page) =>
-  page.getByRole('button', { name: "Passer l'échauffement", exact: true });
+  page.getByRole('button', { name: "Je m'échauffe seul", exact: true });
 
 async function startSession(page: Page) {
   await skipOnboarding(page);

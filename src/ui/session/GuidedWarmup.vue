@@ -13,7 +13,7 @@ import { useSession } from './useSession';
  * Guided warm-up before the first machine, one move at a time like the
  * session: light cardio, then the joints and muscles of today's session. The
  * move reached is kept in the session (it stays after the app is closed).
- * Recommended, never imposed: "Passer l'échauffement" at the top, at every step.
+ * Recommended, never imposed: "Je m'échauffe seul" at the top, at every step.
  */
 const { t } = useI18n();
 const session = useSession();

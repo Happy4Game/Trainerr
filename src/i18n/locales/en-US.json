@@ -1353,7 +1353,7 @@
       "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full.",
       "warmupRamp": "The warm-up follows the RAMP method: 2 min of light cardio, then the joints and muscles of today's session, and your approach sets.",
       "warmupForSession": "It changes with the session: shoulders, band and easy push-ups for the upper body; leg swings, squats, glute bridge and ankles for the legs. No more moves on all fours on the floor.",
-      "warmupSkipTop": "The \"Skip the warm-up\" button is now at the top, always in sight, for those who warm up on their own."
+      "warmupSkipTop": "An \"I'll warm up on my own\" button at the top of every move, always in sight, to skip the guided warm-up in one tap."
     }
   },
   "data": {
@@ -1528,7 +1528,7 @@
     "next": "Next move",
     "previous": "Previous move",
     "finish": "Go to the first machine",
-    "skip": "Skip the warm-up",
+    "skip": "I'll warm up on my own",
     "why": "Once started, the moves follow each other on their own with a beep. Three stages, like the RAMP method: a little cardio to raise your temperature, then the joints and muscles of today's session, and finally the approach sets of your first machine. No long-held stretches before lifting: they cost strength.",
     "self": "I prefer to warm up on my own, without the app",
     "selfOff": "Otherwise, the app guides you through ≈ {minutes} min of warm-up made for your session: a little cardio, then today's joints and muscles (recommended, skippable at any time).",

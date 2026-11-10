@@ -8,7 +8,7 @@ import { expect, type Page } from '@playwright/test';
  */
 export async function skipGuidedWarmupWhenShown(page: Page): Promise<void> {
   await page.addLocatorHandler(
-    page.getByRole('button', { name: "Passer l'échauffement", exact: true }),
+    page.getByRole('button', { name: "Je m'échauffe seul", exact: true }),
     async (skip) => {
       await skip.click();
     },
