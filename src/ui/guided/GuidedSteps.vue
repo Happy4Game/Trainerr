@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
+import { SkipForward } from 'lucide-vue-next';
 import type { Component } from 'vue';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -146,10 +147,19 @@ function go(delta: -1 | 1, auto = false): void {
 <template>
   <section v-if="current" class="guided" :aria-label="t(labels.title)">
     <header class="head">
-      <p class="eyebrow">{{ t(labels.title) }} · {{ t('guided.minutes', { minutes }) }}</p>
-      <p class="count">
-        {{ t(labels.stepOf, { index: index + 1, total: steps.length }) }}
-      </p>
+      <div class="title-row">
+        <div>
+          <p class="eyebrow">{{ t(labels.title) }} · {{ t('guided.minutes', { minutes }) }}</p>
+          <p class="count">
+            {{ t(labels.stepOf, { index: index + 1, total: steps.length }) }}
+          </p>
+        </div>
+        <!-- Always in sight, at every step: done on one's own, or not today. -->
+        <ion-button class="skip" fill="outline" size="small" color="medium" @click="emit('skip')">
+          <SkipForward :size="16" aria-hidden="true" />
+          {{ t(labels.skip) }}
+        </ion-button>
+      </div>
       <span class="segments" aria-hidden="true">
         <span
           v-for="(s, i) in steps"
@@ -177,9 +187,7 @@ function go(delta: -1 | 1, auto = false): void {
       <MuscleMap :key="current.id" :primary="current.muscles" :secondary="[]" />
     </div>
     <p v-if="current.muscles && current.muscles.length > 0" class="muscles-list">
-      {{
-        t('guided.muscles', { muscles: current.muscles.map((m) => t(`muscles.${m}`)).join(', ') })
-      }}
+      {{ t(labels.muscles, { muscles: current.muscles.map((m) => t(`muscles.${m}`)).join(', ') }) }}
     </p>
     <p class="how">{{ moveText(current.id, 'how') }}</p>
 
@@ -224,12 +232,9 @@ function go(delta: -1 | 1, auto = false): void {
     >
       {{ isLast ? t(labels.finish) : t(labels.next) }}
     </ion-button>
-    <div class="tools">
-      <ion-button v-if="index > 0" fill="clear" color="medium" @click="go(-1)">
+    <div v-if="index > 0" class="tools">
+      <ion-button fill="clear" color="medium" @click="go(-1)">
         {{ t(labels.previous) }}
-      </ion-button>
-      <ion-button fill="clear" color="medium" @click="emit('skip')">
-        {{ t(labels.skip) }}
       </ion-button>
     </div>
     <p class="why">{{ t(labels.why) }}</p>
@@ -286,6 +291,21 @@ function go(delta: -1 | 1, auto = false): void {
 }
 .head {
   margin-block-end: var(--tr-space-3);
+}
+.title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tr-space-2);
+}
+.skip {
+  flex-shrink: 0;
+  margin: 0;
+  --padding-start: 10px;
+  --padding-end: 12px;
+}
+.skip svg {
+  margin-inline-end: 4px;
 }
 .eyebrow {
   margin: 0;

@@ -20,8 +20,13 @@ const EVERKINETIC_LICENSE = {
 
 // Mouvement de l'échauffement (src/domain/mobility.ts) → exercice Everkinetic
 // montrant le même geste (vérifié à la main, dessin par dessin).
+// Everkinetic dessine aussi les cercles de genoux (0277), pas retenus : le genou
+// plie et tend, il n'est pas fait pour tourner.
 const EVERKINETIC = {
-  ankleCircles: '0270',
+  bandPullApart: '0020', // Back Fly's with Exercise Band
+  easyPushUps: '0077', // Push Ups
+  gluteBridge: '0109', // Bridging
+  ankleCircles: '0270', // Ankle Circles
 };
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');

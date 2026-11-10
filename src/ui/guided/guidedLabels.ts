@@ -8,6 +8,8 @@ export interface GuidedLabels {
   readonly finish: string;
   readonly skip: string;
   readonly why: string;
+  /** "Muscles stretched" or "Muscles woken up" under the body map. */
+  readonly muscles: string;
 }
 
 export const WARMUP_LABELS: GuidedLabels = {
@@ -19,6 +21,7 @@ export const WARMUP_LABELS: GuidedLabels = {
   finish: 'guidedWarmup.finish',
   skip: 'guidedWarmup.skip',
   why: 'guidedWarmup.why',
+  muscles: 'guidedWarmup.muscles',
 };
 
 export const STRETCHING_LABELS: GuidedLabels = {
@@ -30,4 +33,5 @@ export const STRETCHING_LABELS: GuidedLabels = {
   finish: 'guidedStretching.finish',
   skip: 'guidedStretching.skip',
   why: 'guidedStretching.why',
+  muscles: 'guided.muscles',
 };

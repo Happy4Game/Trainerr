@@ -65,8 +65,15 @@ const suggestedBadge = (id: string) =>
   preview.value.length > 0 && readyMade.value?.suggestedIds.includes(id)
     ? t('session.readyMade.suggested')
     : undefined;
-/** Length of the guided whole-body joint warm-up offered once the session starts. */
-const warmupLength = warmupMinutes(guidedWarmup());
+/** Length of the guided warm-up offered once the session starts, made for this session. */
+const warmupLength = computed(() =>
+  warmupMinutes(
+    guidedWarmup({
+      groups: preview.value.map((e) => e.group),
+      cardioBefore: appSettings.value?.cardio?.position === 'before',
+    }),
+  ),
+);
 /** "I prefer to warm up on my own": no guided warm-up, kept for the next sessions. */
 const selfWarmup = computed(() => appSettings.value?.guidedWarmup === false);
 /** Same insights as on Today: loads going up, muscles caught up. */

@@ -1,4 +1,67 @@
 {
+  "bandPullApart": {
+    "sourceName": "Back Fly's with Exercise Band",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0020",
+    "images": [
+      {
+        "file": "ek-0020-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0020-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
+  "easyPushUps": {
+    "sourceName": "Push Ups",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0077",
+    "images": [
+      {
+        "file": "ek-0077-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0077-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
+  "gluteBridge": {
+    "sourceName": "Bridging",
+    "source": "Everkinetic",
+    "sourceUrl": "https://github.com/everkinetic/data/tree/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/src/exercises/0109",
+    "images": [
+      {
+        "file": "ek-0109-1.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      },
+      {
+        "file": "ek-0109-2.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "author": "Everkinetic",
+        "authorUrl": "https://github.com/everkinetic/data"
+      }
+    ]
+  },
   "ankleCircles": {
     "sourceName": "Ankle Circles",
     "source": "Everkinetic",

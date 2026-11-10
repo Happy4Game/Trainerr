@@ -1065,7 +1065,7 @@
     "sessionNotificationHelp": "Exercise, set and rest countdown visible on the lock screen, with an alert when the rest is over (Android).",
     "keepAwake": "Screen on during the session",
     "keepAwakeHelp": "No need to unlock the phone between two sets. The screen turns off as usual outside sessions.",
-    "guidedWarmupHelp": "Otherwise, a guided whole-body joint warm-up (≈ 5 min) is offered at the start of each session (recommended, skippable at any time).",
+    "guidedWarmupHelp": "Otherwise, a guided warm-up made for your session (≈ 4 to 6 min) is offered at the start of each session: a little cardio, then today's joints and muscles (recommended, skippable at any time).",
     "restSound": "Beep at the end of the rest",
     "restSoundHelp": "Three beeps and a vibration when the rest is over.",
     "repRange": {
@@ -1229,6 +1229,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "warmupRamp": "A better warm-up",
       "machineSplit": "Leg press and row: two machines each",
       "guidedStretching": "Guided stretches at any time",
       "guidedWarmup": "Guided joint warm-up",
@@ -1349,7 +1350,10 @@
       "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it.",
       "rirButtons": "No more difficulty choice: a big \"Set done\" button, and a small \"Too light\" button that raises the load from the next set. Otherwise your reps decide, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
       "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length.",
-      "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full."
+      "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full.",
+      "warmupRamp": "The warm-up follows the RAMP method: 2 min of light cardio, then the joints and muscles of today's session, and your approach sets.",
+      "warmupForSession": "It changes with the session: shoulders, band and easy push-ups for the upper body; leg swings, squats, glute bridge and ankles for the legs. No more moves on all fours on the floor.",
+      "warmupSkipTop": "The \"Skip the warm-up\" button is now at the top, always in sight, for those who warm up on their own."
     }
   },
   "data": {
@@ -1443,45 +1447,41 @@
   },
   "mobility": {
     "moves": {
-      "neckNods": {
-        "name": "Head nods and turns",
-        "how": "Slowly lower then lift the chin, then turn the head left and right. No jerks or big circles."
+      "lightCardio": {
+        "name": "Light cardio",
+        "how": "Bike, rower or brisk walk on the treadmill, at an easy pace: you should be able to talk. No free machine? Knee raises on the spot."
       },
       "armCircles": {
         "name": "Arm circles",
-        "how": "Arms out to the side, small then big circles, both ways."
+        "how": "Arms out to the side, small then big circles, forwards then backwards."
       },
-      "wallSlides": {
-        "name": "Wall slides",
-        "how": "Back and arms against the wall, raise and lower the arms keeping contact."
-      },
-      "thoracicRotations": {
-        "name": "Thoracic rotations",
-        "how": "On all fours, one hand behind the head, open the elbow towards the ceiling."
+      "bandPullApart": {
+        "name": "Band pull-aparts",
+        "how": "Band held arms straight in front of you, pull the arms apart squeezing the shoulder blades, then come back slowly. No band: same move without it."
       },
       "wristCircles": {
         "name": "Wrist circles",
         "how": "Hands together, rotate the wrists slowly both ways."
       },
-      "catCow": {
-        "name": "Cat-cow",
-        "how": "On all fours, alternate rounded and arched back while breathing."
-      },
-      "hipCircles": {
-        "name": "Hip circles",
-        "how": "Standing, hands on hips, big circles both ways."
+      "easyPushUps": {
+        "name": "Easy push-ups",
+        "how": "8 to 10 slow push-ups, hands on a bench or knees down so it stays easy. The goal is to wake the chest up, not to get tired."
       },
       "legSwings": {
         "name": "Leg swings",
-        "how": "Holding a support, swing one leg back and forth, then the other."
+        "how": "Holding a support, swing one leg back and forth, higher and higher. At the beep, switch legs."
       },
       "bodyweightSquats": {
         "name": "Bodyweight squats",
-        "how": "Go down slowly, heels down, come up smoothly."
+        "how": "Feet shoulder-width apart, go down slowly as low as you can with heels down, come up smoothly."
+      },
+      "gluteBridge": {
+        "name": "Glute bridge",
+        "how": "Lying on a mat, knees bent: lift the hips squeezing the glutes, hold 1 s at the top, lower slowly."
       },
       "ankleCircles": {
         "name": "Ankle circles",
-        "how": "Standing on one leg (holding on if needed), toes off the floor: draw big circles with the ankle both ways, then switch feet."
+        "how": "Standing on one leg (holding on if needed), toes off the floor: draw big circles with the ankle both ways. At the beep, switch feet."
       }
     }
   },
@@ -1522,17 +1522,18 @@
     }
   },
   "guidedWarmup": {
-    "title": "Joint warm-up",
+    "title": "Warm-up",
     "stepOf": "Move {index} of {total}",
     "part": "Wide and controlled, without forcing",
     "next": "Next move",
     "previous": "Previous move",
     "finish": "Go to the first machine",
-    "skip": "Skip the guided warm-up",
-    "why": "Once started, the moves follow each other on their own with a beep. No long-held stretches before lifting: they cost strength. The approach sets of your first machine will finish the warm-up.",
+    "skip": "Skip the warm-up",
+    "why": "Once started, the moves follow each other on their own with a beep. Three stages, like the RAMP method: a little cardio to raise your temperature, then the joints and muscles of today's session, and finally the approach sets of your first machine. No long-held stretches before lifting: they cost strength.",
     "self": "I prefer to warm up on my own, without the app",
-    "selfOff": "Otherwise, the app guides you through ≈ {minutes} min of whole-body joint warm-up, head to ankles (recommended, skippable at any time).",
-    "selfOn": "The app no longer offers the guided warm-up. Remember to warm up anyway."
+    "selfOff": "Otherwise, the app guides you through ≈ {minutes} min of warm-up made for your session: a little cardio, then today's joints and muscles (recommended, skippable at any time).",
+    "selfOn": "The app no longer offers the guided warm-up. Remember to warm up anyway.",
+    "muscles": "Muscles woken up: {muscles}"
   },
   "guided": {
     "minutes": "≈ {minutes} min",

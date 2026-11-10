@@ -138,6 +138,34 @@ export const SOURCES: readonly Source[] = [
     theme: 'technique',
   },
   {
+    id: 'abad2011',
+    label:
+      'Abad et al., 2011 — cardio léger + séries d’approche : presse à cuisses plus forte qu’avec les séries d’approche seules (Journal of Strength and Conditioning Research)',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/21544000/',
+    theme: 'technique',
+  },
+  {
+    id: 'mccrary2015',
+    label:
+      'McCrary, Ackermann & Halaki, 2015 — échauffement du haut du corps : revue systématique (British Journal of Sports Medicine)',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/25694615/',
+    theme: 'technique',
+  },
+  {
+    id: 'ribeiro2020',
+    label:
+      'Ribeiro et al., 2020 — séries d’approche au squat et au développé couché (International Journal of Environmental Research and Public Health)',
+    url: 'https://www.mdpi.com/1660-4601/17/18/6882',
+    theme: 'technique',
+  },
+  {
+    id: 'ribeiro2021',
+    label:
+      'Ribeiro et al., 2021 — l’échauffement en musculation : revue systématique (Motricidade)',
+    url: 'https://revistas.rcaap.pt/motricidade/article/view/21143',
+    theme: 'technique',
+  },
+  {
     id: 'acsm2011',
     label:
       'American College of Sports Medicine (Garber et al.), 2011 — quantité et qualité de l’exercice, dont l’échauffement (Medicine & Science in Sports & Exercise)',
@@ -201,8 +229,19 @@ export const SOURCES: readonly Source[] = [
 /** The "Warm up" tip follows these. */
 export const WARMUP_SOURCE_IDS = ['jeffreysRamp', 'acsm2011', 'fradkin2010', 'behm2011'] as const;
 
-/** The guided joint warm-up before each session: dynamic moves, no long static stretch. */
-export const JOINT_WARMUP_SOURCE_IDS = ['fradkin2010', 'behm2011'] as const;
+/**
+ * The guided warm-up before each session: RAMP (light cardio, then the joints
+ * and muscles of the session, then the approach sets), no long static stretch.
+ */
+export const JOINT_WARMUP_SOURCE_IDS = [
+  'jeffreysRamp',
+  'abad2011',
+  'mccrary2015',
+  'ribeiro2020',
+  'ribeiro2021',
+  'fradkin2010',
+  'behm2011',
+] as const;
 
 /** The guided stretches: 60 s per muscle, flexibility only, not before lifting. */
 export const STRETCHING_SOURCE_IDS = ['acsm2011', 'afonso2021', 'herbert2022', 'behm2011'] as const;

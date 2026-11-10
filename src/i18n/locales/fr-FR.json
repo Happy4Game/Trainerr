@@ -1065,7 +1065,7 @@
     "sessionNotificationHelp": "Exercice, série et compte à rebours du repos visibles écran verrouillé, avec une alerte à la fin du repos (Android).",
     "keepAwake": "Écran allumé pendant la séance",
     "keepAwakeHelp": "Plus besoin de déverrouiller le téléphone entre deux séries. L'écran s'éteint normalement en dehors des séances.",
-    "guidedWarmupHelp": "Sinon, un échauffement articulaire guidé de tout le corps (≈ 5 min) est proposé au début de chaque séance (conseillé, passable à tout moment).",
+    "guidedWarmupHelp": "Sinon, un échauffement guidé adapté à ta séance (≈ 4 à 6 min) est proposé au début de chaque séance : un peu de cardio, puis les articulations et les muscles du jour (conseillé, passable à tout moment).",
     "restSound": "Bip à la fin du repos",
     "restSoundHelp": "Trois bips et une vibration quand le repos est fini.",
     "repRange": {
@@ -1229,6 +1229,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "warmupRamp": "Un meilleur échauffement",
       "machineSplit": "Presse et tirage : deux machines chacun",
       "guidedStretching": "Étirements guidés à tout moment",
       "guidedWarmup": "Échauffement articulaire guidé",
@@ -1349,7 +1350,10 @@
       "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes.",
       "rirButtons": "Plus de choix de difficulté : un gros bouton « Série faite », et un petit bouton « Trop léger » qui monte la charge dès la série suivante. Sinon ce sont tes reps qui décident, comme le fait un coach (au-dessus de ta fourchette elle monte, en dessous elle baisse). Les reps en réserve restent possibles dans « Préciser la série ».",
       "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale.",
-      "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier."
+      "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier.",
+      "warmupRamp": "L'échauffement suit la méthode RAMP : 2 min de cardio léger, puis les articulations et les muscles de ta séance du jour, et tes séries d'approche.",
+      "warmupForSession": "Il change avec la séance : épaules, élastique et pompes faciles pour le haut du corps ; balanciers, squats, pont fessier et chevilles pour les jambes. Plus de mouvements au sol à quatre pattes.",
+      "warmupSkipTop": "Le bouton « Passer l'échauffement » est maintenant en haut, toujours visible, pour qui s'échauffe seul."
     }
   },
   "data": {
@@ -1443,45 +1447,41 @@
   },
   "mobility": {
     "moves": {
-      "neckNods": {
-        "name": "Oui et non de la tête",
-        "how": "Lentement, baisser puis lever le menton, puis tourner la tête à gauche et à droite. Sans à-coup ni grands cercles."
+      "lightCardio": {
+        "name": "Cardio léger",
+        "how": "Vélo, rameur ou marche rapide sur le tapis, à allure facile : tu dois pouvoir parler. Sans machine libre, monte les genoux sur place."
       },
       "armCircles": {
         "name": "Cercles de bras",
-        "how": "Bras tendus sur le côté, petits puis grands cercles, dans les deux sens."
+        "how": "Bras tendus sur le côté, petits puis grands cercles, vers l'avant puis vers l'arrière."
       },
-      "wallSlides": {
-        "name": "Glissés au mur",
-        "how": "Dos et bras contre le mur, monter et descendre les bras en gardant le contact."
-      },
-      "thoracicRotations": {
-        "name": "Rotations du buste",
-        "how": "À quatre pattes, une main derrière la tête, ouvrir le coude vers le plafond."
+      "bandPullApart": {
+        "name": "Écartés avec élastique",
+        "how": "Élastique tenu bras tendus devant toi, écarte les bras en serrant les omoplates, puis reviens lentement. Sans élastique : même geste à vide."
       },
       "wristCircles": {
         "name": "Cercles des poignets",
-        "how": "Mains jointes, faire tourner les poignets lentement dans les deux sens."
+        "how": "Mains jointes, fais tourner les poignets lentement dans les deux sens."
       },
-      "catCow": {
-        "name": "Chat-vache",
-        "how": "À quatre pattes, alterner dos rond et dos creux en respirant."
-      },
-      "hipCircles": {
-        "name": "Cercles de hanches",
-        "how": "Debout, mains sur les hanches, grands cercles dans les deux sens."
+      "easyPushUps": {
+        "name": "Pompes faciles",
+        "how": "8 à 10 pompes lentes, mains sur un banc ou genoux au sol pour que ce soit facile. Le but est de réveiller les pectoraux, pas de se fatiguer."
       },
       "legSwings": {
         "name": "Balanciers de jambe",
-        "how": "En appui sur un support, balancer une jambe d'avant en arrière, puis l'autre."
+        "how": "En appui sur un support, balance une jambe d'avant en arrière, de plus en plus haut. Au bip, change de jambe."
       },
       "bodyweightSquats": {
         "name": "Squats au poids du corps",
-        "how": "Descendre lentement, talons au sol, remonter sans à-coup."
+        "how": "Pieds largeur d'épaules, descends lentement le plus bas possible talons au sol, remonte sans à-coup."
+      },
+      "gluteBridge": {
+        "name": "Pont fessier",
+        "how": "Allongé sur un tapis, genoux pliés : monte les hanches en serrant les fesses, tiens 1 s en haut, redescends lentement."
       },
       "ankleCircles": {
         "name": "Cercles de chevilles",
-        "how": "Debout sur une jambe (en appui si besoin), pointe du pied levée : tracer de grands cercles avec la cheville dans les deux sens, puis changer de pied."
+        "how": "Debout sur une jambe (en appui si besoin), pointe du pied levée : trace de grands cercles avec la cheville dans les deux sens. Au bip, change de pied."
       }
     }
   },
@@ -1522,17 +1522,18 @@
     }
   },
   "guidedWarmup": {
-    "title": "Échauffement articulaire",
+    "title": "Échauffement",
     "stepOf": "Mouvement {index} sur {total}",
     "part": "Ample et contrôlé, sans forcer",
     "next": "Mouvement suivant",
     "previous": "Mouvement précédent",
     "finish": "Aller à la première machine",
-    "skip": "Passer l'échauffement guidé",
-    "why": "Une fois lancé, les mouvements s'enchaînent tout seuls avec un bip. Pas d'étirement tenu longtemps avant la muscu : ça fait perdre de la force. Les séries d'approche de ta première machine finiront de t'échauffer.",
+    "skip": "Passer l'échauffement",
+    "why": "Une fois lancé, les mouvements s'enchaînent tout seuls avec un bip. Trois étapes, comme la méthode RAMP : un peu de cardio pour monter en température, puis les articulations et les muscles de ta séance du jour, et enfin les séries d'approche de ta première machine. Pas d'étirement tenu longtemps avant la muscu : ça fait perdre de la force.",
     "self": "Je préfère m'échauffer seul, sans l'appli",
-    "selfOff": "Sinon, l'appli te guide pendant ≈ {minutes} min d'échauffement articulaire de tout le corps, de la tête aux chevilles (conseillé, passable à tout moment).",
-    "selfOn": "L'appli ne propose plus l'échauffement guidé. Pense quand même à t'échauffer."
+    "selfOff": "Sinon, l'appli te guide pendant ≈ {minutes} min d'échauffement adapté à ta séance : un peu de cardio, puis les articulations et les muscles du jour (conseillé, passable à tout moment).",
+    "selfOn": "L'appli ne propose plus l'échauffement guidé. Pense quand même à t'échauffer.",
+    "muscles": "Muscles réveillés : {muscles}"
   },
   "guided": {
     "minutes": "≈ {minutes} min",
