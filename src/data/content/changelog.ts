@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'machineSplit',
+    date: '2026-11-09',
+    items: ['legPressSplit', 'rowSplit', 'splitQuestion'],
+  },
+  {
     id: 'guidedStretching',
     date: '2026-11-07',
     items: ['guidedStretchingSteps', 'guidedStretchingAnytime', 'guidedStretchingMuscles'],

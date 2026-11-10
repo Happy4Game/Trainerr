@@ -81,6 +81,8 @@ export interface Settings {
   readonly aiConsent: boolean;
   /** Machines replaced from the session preview: "instead of this one, propose that one". */
   readonly swaps?: Readonly<Record<string, string>>;
+  /** Machines split in two by an update (see machineSplits.ts): the machine chosen for the old sets. */
+  readonly machineSplits?: Readonly<Record<string, string>>;
   /** Sessions with cardio: the machine, minutes and moment kept for the next ones. Without when unset. */
   readonly cardio?: CardioPlan;
   /** Sessions built by the user: a name and exercises in order. */

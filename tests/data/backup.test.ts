@@ -123,8 +123,8 @@ describe('backup', () => {
     const csv = await exportSetsCsv(db);
     expect(csv.split('\n')).toEqual([
       'date,template,exercise_id,exercise,load_kg,reps,difficulty,warmup,slow_tempo,complete_reps,rir,note,rest_seconds',
-      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,10,ok,0,0,1,,,',
-      '2026-10-24,legsB,Leg_Press,Presse à cuisses,107,9.5,hard,0,0,0,,,95',
+      '2026-10-24,legsB,Leg_Press,Presse à cuisses inclinée 45°,107,10,ok,0,0,1,,,',
+      '2026-10-24,legsB,Leg_Press,Presse à cuisses inclinée 45°,107,9.5,hard,0,0,0,,,95',
       '2026-10-24,pushA,Butterfly,Écarté à la machine,52,12,ok,0,0,1,,,',
       '2026-10-24,pushA,Butterfly,Écarté à la machine,52,11,ok,0,0,1,,,',
     ]);

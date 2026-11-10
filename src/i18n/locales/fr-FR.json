@@ -1229,6 +1229,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "machineSplit": "Presse et tirage : deux machines chacun",
       "guidedStretching": "Étirements guidés à tout moment",
       "guidedWarmup": "Échauffement articulaire guidé",
       "clearerSession": "Séance plus lisible",
@@ -1259,6 +1260,9 @@
       "rirRest": "Une seule validation, comme avec un coach"
     },
     "items": {
+      "legPressSplit": "La presse à cuisses inclinée à 45° et la presse horizontale sont maintenant deux exercices, chacun avec ses charges.",
+      "rowSplit": "Le tirage horizontal à la poulie et à la machine sont mieux nommés, pour ne plus les confondre.",
+      "splitQuestion": "Après la mise à jour, l’appli te demande sur quelle machine tu faisais tes séries, et y range ton historique.",
       "guidedStretchingSteps": "8 étirements guidés pour tout le corps (≈ 8 min), un minuteur par étirement et un bip pour changer de côté.",
       "guidedStretchingAnytime": "À lancer quand tu veux depuis Aujourd'hui, ou depuis l'écran de fin de séance. Rien n'est enregistré.",
       "guidedStretchingMuscles": "Des dessins sous licence libre d'un seul auteur (Vidralta), crédités, et les muscles étirés sur le corps, avec les sources.",
@@ -2039,5 +2043,21 @@
     "rest": "Repos",
     "none": "Aucune séance",
     "openSession": "Voir {name} du {day}"
+  },
+  "machineSplit": {
+    "title": "Une machine devient deux",
+    "question": "Jusqu’ici, tes séries étaient sur laquelle ?",
+    "both": "Les deux, ou je ne sais pas",
+    "note": "Ton historique, ta charge habituelle et tes réglages vont sur la machine choisie. Les kilos ne se comparent pas d’une machine à l’autre : chacune a maintenant son propre suivi.",
+    "legPress": {
+      "intro": "La presse à cuisses existe en deux machines : inclinée à 45° et horizontale.",
+      "choice0": "Presque allongé, on pousse un chariot qui monte en diagonale",
+      "choice1": "Assis, on pousse droit devant soi"
+    },
+    "seatedRow": {
+      "intro": "Le tirage horizontal existe à la poulie basse et à la machine.",
+      "choice0": "Poulie basse avec un câble, rien contre la poitrine",
+      "choice1": "Machine avec un coussin contre la poitrine"
+    }
   }
 }

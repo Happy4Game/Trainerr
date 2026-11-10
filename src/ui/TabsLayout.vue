@@ -4,6 +4,7 @@ import { BookOpen, CalendarDays, Dumbbell, Sun, TrendingUp } from 'lucide-vue-ne
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useSession } from '@/ui/session/useSession';
+import MachineSplitPrompt from '@/ui/MachineSplitPrompt.vue';
 import UpdatePanel from '@/ui/UpdatePanel.vue';
 import { useUpdates } from '@/ui/updates';
 
@@ -51,6 +52,7 @@ const tabs = [
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
+    <MachineSplitPrompt />
   </ion-page>
 </template>
 
