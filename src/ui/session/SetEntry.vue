@@ -12,6 +12,7 @@ import {
   Check,
 } from 'lucide-vue-next';
 import { compareWithLastTime } from '@/domain/setComparison';
+import ExerciseHistoryModal from './ExerciseHistoryModal.vue';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
@@ -234,11 +235,22 @@ const RIR_VALUES = [0, 1, 2, 3, 4] as const;
 
 /** Last session next to today, set by set (real load: less help counts as heavier). */
 const lastDate = computed(() => session.lastTimeDate(props.exerciseId));
+/** The session before last time, to see two sessions back (shown when it has work sets). */
+const timeBefore = computed(() => {
+  const before = session.lastTimes(props.exerciseId)[1];
+  return before && before.sets.length > 0 ? before : undefined;
+});
+/** Every past session with work sets on this exercise, newest first. */
+const allTimes = computed(() =>
+  session.lastTimes(props.exerciseId, Infinity).filter((past) => past.sets.length > 0),
+);
+const historyOpen = ref(false);
 const comparison = computed(() => {
   const rows = compareWithLastTime(
     lastTime.value,
     session.workSetsInSession(props.exerciseId),
-    target.value,
+    // Enough rows for every set of the session before last time too.
+    Math.max(target.value, timeBefore.value?.sets.length ?? 0),
   );
   // Trend on the real load, shown sets stay as typed on the machine.
   return rows.map((row) =>
@@ -403,6 +415,10 @@ function listen(): void {
       <thead>
         <tr>
           <th scope="col">{{ t('session.compare.set') }}</th>
+          <th v-if="timeBefore" scope="col" class="older">
+            {{ t('session.compare.timeBefore') }}
+            <small>{{ shortDay(timeBefore.date) }}</small>
+          </th>
           <th scope="col">
             {{ t('session.compare.before') }}
             <small v-if="lastDate">{{ shortDay(lastDate) }}</small>
@@ -418,6 +434,9 @@ function listen(): void {
           :data-testid="`compare-${row.number}`"
         >
           <th scope="row">{{ row.number }}</th>
+          <td v-if="timeBefore" class="older">
+            {{ timeBefore.sets[row.number - 1] ? setText(timeBefore.sets[row.number - 1]!) : '—' }}
+          </td>
           <td>{{ row.before ? setText(row.before) : '—' }}</td>
           <td>
             <template v-if="row.now">
@@ -438,6 +457,23 @@ function listen(): void {
         </tr>
       </tbody>
     </table>
+    <ion-button
+      v-if="allTimes.length > 0"
+      fill="clear"
+      size="small"
+      class="all-history"
+      data-testid="all-history"
+      @click="historyOpen = true"
+    >
+      {{ t('session.history.open', allTimes.length) }} ›
+    </ion-button>
+    <ExerciseHistoryModal
+      :open="historyOpen"
+      :name="name"
+      :sessions="allTimes"
+      :set-text="setText"
+      @close="historyOpen = false"
+    />
 
     <!-- What was done before, and what to do now -->
     <div class="coach" :class="advice" role="note">
@@ -939,6 +975,14 @@ h2 {
 }
 .compare td {
   white-space: nowrap;
+}
+.all-history {
+  margin: -4px 0 8px;
+  --padding-start: 0;
+}
+/* Two sessions back: there for the trend, quieter than last time. */
+.compare td.older {
+  color: var(--ion-color-medium);
 }
 .trend {
   vertical-align: -2px;

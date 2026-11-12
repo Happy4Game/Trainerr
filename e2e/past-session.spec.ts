@@ -105,3 +105,64 @@ test('during the workout, each set sits next to the same set last time', async (
   await expect(table.getByTestId('compare-1')).toContainText('en cours');
   await expect(table.getByTestId('compare-2')).toContainText('—');
 });
+
+test('during the workout, the time before last and the full history are at hand', async ({
+  page,
+}) => {
+  const isoOf = (daysAgo: number) => {
+    const day = new Date(Date.now() - daysAgo * 86_400_000);
+    return `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
+  };
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await page.getByRole('searchbox').fill('leg press');
+  await page
+    .getByRole('button', { name: 'Ajouter Presse à cuisses inclinée 45° à mes machines' })
+    .click();
+
+  // Two upper body sessions with the leg press: 25 kg four days ago, 30 kg two days ago.
+  await page.getByRole('tab', { name: 'Progrès' }).click();
+  const form = page.getByRole('region', { name: "Séance faite sans l'appli" });
+  for (const [daysAgo, loadKg] of [
+    [4, '25'],
+    [2, '30'],
+  ] as const) {
+    await page.getByRole('button', { name: "Ajouter une séance faite sans l'appli" }).click();
+    await form.getByLabel('Date').fill(isoOf(daysAgo));
+    if (daysAgo === 2) {
+      await form.locator('ion-select').click();
+      await page.locator('ion-action-sheet button', { hasText: 'Haut du corps A' }).click();
+    }
+    await form.getByRole('button', { name: 'Créer et remplir' }).click();
+    if (daysAgo === 4) {
+      await page.getByRole('button', { name: 'Ajouter un exercice' }).click();
+      await page.getByRole('search').last().getByRole('searchbox').fill('presse');
+      await page
+        .locator('ion-modal.show-modal')
+        .getByRole('heading', { name: 'Presse à cuisses inclinée 45°', exact: true })
+        .click();
+    }
+    const set = page.getByRole('group', { name: /Série 1 : Presse à cuisses/ });
+    await set.getByRole('spinbutton').first().fill(loadKg);
+    await set.getByRole('spinbutton').first().blur();
+    await page.getByRole('button', { name: 'Retour' }).click();
+  }
+
+  await page.getByRole('tab', { name: 'Séance', exact: true }).click();
+  await page.getByRole('button', { name: 'Commencer la séance' }).click();
+  const table = page.getByRole('table', { name: 'Comparaison avec la dernière fois' });
+  await expect(table.getByRole('columnheader', { name: /Avant-dernière/ })).toBeVisible();
+  // Set 1: the time before last, then last time.
+  await expect(table.getByTestId('compare-1')).toContainText(/25 kg × 10.*30 kg × 10/);
+
+  await page.getByTestId('all-history').click();
+  const sheet = page.locator('ion-modal.show-modal');
+  await expect(sheet.getByText('2 séances faites')).toBeVisible();
+  const sessions = sheet.getByTestId('history-session');
+  await expect(sessions).toHaveCount(2);
+  // Newest first.
+  await expect(sessions.first()).toContainText('30 kg × 10');
+  await expect(sessions.last()).toContainText('25 kg × 10');
+  await sheet.getByRole('button', { name: 'Fermer' }).click();
+  await expect(sheet).toHaveCount(0);
+});
