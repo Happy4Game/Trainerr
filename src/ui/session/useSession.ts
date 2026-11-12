@@ -295,15 +295,30 @@ function workSetsInSession(exerciseId: string): SetLog[] {
   return setsInSession(exerciseId).filter((s) => !s.warmup);
 }
 
-/** Work sets of the last finished session with this exercise ("last time"). */
 /** Day of the last session with this exercise. */
 function lastTimeDate(exerciseId: string): string | undefined {
   return history.value.filter((s) => s.sets.some((set) => set.exerciseId === exerciseId)).at(-1)
     ?.date;
 }
 
+/** Work sets of the last finished session with this exercise ("last time"). */
 function lastTimeSets(exerciseId: string): SetLog[] {
   return (historyFor(exerciseId).at(-1) ?? []).filter((s) => !s.warmup);
+}
+
+/**
+ * The last finished sessions with this exercise, newest first (at most
+ * `count`): their day and their work sets, to see the trend over two times.
+ */
+function lastTimes(exerciseId: string, count = 2): { date: string; sets: SetLog[] }[] {
+  return history.value
+    .filter((s) => s.sets.some((set) => set.exerciseId === exerciseId))
+    .slice(-count)
+    .reverse()
+    .map((s) => ({
+      date: s.date,
+      sets: s.sets.filter((set) => set.exerciseId === exerciseId && !set.warmup),
+    }));
 }
 
 /**
@@ -1336,6 +1351,7 @@ export function useSession() {
     },
     lastTimeSets,
     lastTimeDate,
+    lastTimes,
     previousFor,
     plannedSets,
     setsInSession,

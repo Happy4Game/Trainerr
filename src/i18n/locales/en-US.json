@@ -532,10 +532,17 @@
     "testSetQuestion": "Too light? Could you have done 3 more reps?",
     "seeMovementOf": "See the card of {name}",
     "restTaken": "rest {time}",
+    "history": {
+      "open": "Full history of this exercise ({count} session) | Full history of this exercise ({count} sessions)",
+      "title": "Set history",
+      "count": "{count} session done | {count} sessions done",
+      "close": "Close"
+    },
     "compare": {
       "title": "Compared with last time",
       "set": "Set",
       "before": "Last time",
+      "timeBefore": "Time before",
       "today": "Today",
       "now": "now",
       "trend": {
@@ -1229,6 +1236,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "twoTimesBack": "Workout: the last two times and the full history",
       "machineSplit": "Leg press and row: two machines each",
       "guidedStretching": "Guided stretches at any time",
       "guidedWarmup": "Guided joint warm-up",
@@ -1260,6 +1268,8 @@
       "rirRest": "One tap, like with a coach"
     },
     "items": {
+      "twoTimesBack": "During the workout, the set by set table also shows the time before, in grey, next to last time.",
+      "fullHistory": "Under the table, \"Full history of this exercise\" opens every past session with this exercise, set by set.",
       "legPressSplit": "The 45° leg press and the horizontal leg press are now two exercises, each with its own loads.",
       "rowSplit": "The cable row and the machine row have clearer names, so they are no longer mixed up.",
       "splitQuestion": "After the update, the app asks which machine your sets were on, and files your history there.",

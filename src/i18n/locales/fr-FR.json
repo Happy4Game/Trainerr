@@ -532,10 +532,17 @@
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
     "seeMovementOf": "Voir la fiche de {name}",
     "restTaken": "repos {time}",
+    "history": {
+      "open": "Tout l'historique de cet exercice ({count} séance) | Tout l'historique de cet exercice ({count} séances)",
+      "title": "Historique des séries",
+      "count": "{count} séance faite | {count} séances faites",
+      "close": "Fermer"
+    },
     "compare": {
       "title": "Comparaison avec la dernière fois",
       "set": "Série",
       "before": "Dernière fois",
+      "timeBefore": "Avant-dernière",
       "today": "Aujourd'hui",
       "now": "en cours",
       "trend": {
@@ -1229,6 +1236,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "twoTimesBack": "Séance : les deux dernières fois et tout l'historique",
       "machineSplit": "Presse et tirage : deux machines chacun",
       "guidedStretching": "Étirements guidés à tout moment",
       "guidedWarmup": "Échauffement articulaire guidé",
@@ -1260,6 +1268,8 @@
       "rirRest": "Une seule validation, comme avec un coach"
     },
     "items": {
+      "twoTimesBack": "Pendant la séance, le tableau série par série montre aussi l'avant-dernière fois, en gris, à côté de la dernière fois.",
+      "fullHistory": "Sous le tableau, « Tout l'historique de cet exercice » ouvre toutes tes séances passées avec cet exercice, série par série.",
       "legPressSplit": "La presse à cuisses inclinée à 45° et la presse horizontale sont maintenant deux exercices, chacun avec ses charges.",
       "rowSplit": "Le tirage horizontal à la poulie et à la machine sont mieux nommés, pour ne plus les confondre.",
       "splitQuestion": "Après la mise à jour, l’appli te demande sur quelle machine tu faisais tes séries, et y range ton historique.",
