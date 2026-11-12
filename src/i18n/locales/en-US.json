@@ -120,6 +120,9 @@
     "clearSearch": "Clear the search"
   },
   "exercise": {
+    "history": {
+      "title": "Session history"
+    },
     "notFound": "Exercise not found.",
     "favorite": {
       "add": "Add to my machines",
@@ -1245,6 +1248,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "historyOnCard": "The history on the machine card",
       "busyReorder": "A taken machine moves in the list",
       "notInShapeVisible": "“Not in shape” keeps all your sets",
       "ownWarmup": "Your warm-up set no longer counts as a set",
@@ -1281,6 +1285,7 @@
       "autoFinish": "Session closed by itself"
     },
     "items": {
+      "historyOnCard": "On a machine card, your last 3 sessions with it, set by set, and \"Full history\" to see the others.",
       "busyReorder": "Taken machine: in “See the session plan”, its arrows work like for the other exercises. Once moved, it becomes a normal exercise at its new place, without asking again if it is free.",
       "busyInOrder": "The list shows the taken machine right after the current exercise, where the app really offers it again, and no longer at the end.",
       "tiredReminder": "“Not in shape” now keeps all your sets: it only stops the load from going up, and a reminder says so during the session.",

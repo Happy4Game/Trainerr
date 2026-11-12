@@ -165,4 +165,11 @@ test('during the workout, the time before last and the full history are at hand'
   await expect(sessions.last()).toContainText('25 kg × 10');
   await sheet.getByRole('button', { name: 'Fermer' }).click();
   await expect(sheet).toHaveCount(0);
+
+  // The same history on the machine card.
+  await page.getByRole('link', { name: 'Voir la fiche de Presse à cuisses inclinée 45°' }).click();
+  const card = page.getByTestId('exercise-history');
+  await expect(card.getByText('Historique des séances')).toBeVisible();
+  await expect(card.getByTestId('history-session')).toHaveCount(2);
+  await expect(card.getByTestId('history-session').first()).toContainText('30 kg × 10');
 });
