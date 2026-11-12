@@ -120,6 +120,9 @@
     "clearSearch": "Effacer la recherche"
   },
   "exercise": {
+    "history": {
+      "title": "Historique des séances"
+    },
     "notFound": "Exercice introuvable.",
     "favorite": {
       "add": "Ajouter à mes machines",
@@ -1236,6 +1239,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "historyOnCard": "L'historique sur la fiche machine",
       "twoTimesBack": "Séance : les deux dernières fois et tout l'historique",
       "machineSplit": "Presse et tirage : deux machines chacun",
       "guidedStretching": "Étirements guidés à tout moment",
@@ -1268,6 +1272,7 @@
       "rirRest": "Une seule validation, comme avec un coach"
     },
     "items": {
+      "historyOnCard": "Sur la fiche d'une machine, tes 3 dernières séances avec elle, série par série, et « Tout l'historique » pour voir les autres.",
       "twoTimesBack": "Pendant la séance, le tableau série par série montre aussi l'avant-dernière fois, en gris, à côté de la dernière fois.",
       "fullHistory": "Sous le tableau, « Tout l'historique de cet exercice » ouvre toutes tes séances passées avec cet exercice, série par série.",
       "legPressSplit": "La presse à cuisses inclinée à 45° et la presse horizontale sont maintenant deux exercices, chacun avec ses charges.",

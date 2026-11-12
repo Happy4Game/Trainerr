@@ -120,6 +120,9 @@
     "clearSearch": "Clear the search"
   },
   "exercise": {
+    "history": {
+      "title": "Session history"
+    },
     "notFound": "Exercise not found.",
     "favorite": {
       "add": "Add to my machines",
@@ -1236,6 +1239,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "historyOnCard": "The history on the machine card",
       "twoTimesBack": "Workout: the last two times and the full history",
       "machineSplit": "Leg press and row: two machines each",
       "guidedStretching": "Guided stretches at any time",
@@ -1268,6 +1272,7 @@
       "rirRest": "One tap, like with a coach"
     },
     "items": {
+      "historyOnCard": "On a machine card, your last 3 sessions with it, set by set, and \"Full history\" to see the others.",
       "twoTimesBack": "During the workout, the set by set table also shows the time before, in grey, next to last time.",
       "fullHistory": "Under the table, \"Full history of this exercise\" opens every past session with this exercise, set by set.",
       "legPressSplit": "The 45° leg press and the horizontal leg press are now two exercises, each with its own loads.",
