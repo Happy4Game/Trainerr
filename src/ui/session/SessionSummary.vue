@@ -12,6 +12,7 @@ import { WHO_WEEKLY_MINUTES } from '@/domain/cardio';
 import { stepsMinutes } from '@/domain/guidedSteps';
 import { guidedStretching } from '@/domain/stretching';
 import { restClock } from '@/domain/restTaken';
+import { AUTO_FINISH_MINUTES } from '@/domain/autoFinish';
 import { useSettings } from '@/ui/useSettings';
 import { useCardio } from './useCardio';
 import { useSession, type SessionSummary } from './useSession';
@@ -102,6 +103,9 @@ async function shareSummary(): Promise<void> {
     </p>
     <p v-if="summary.minutes !== undefined" class="note-line">
       ⏱️ {{ t('session.summary.minutes', { minutes: n(summary.minutes) }) }}
+    </p>
+    <p v-if="summary.autoFinished" class="note-line">
+      ⏱️ {{ t('session.summary.autoFinished', { minutes: n(AUTO_FINISH_MINUTES) }) }}
     </p>
     <p v-if="settings?.showRest && summary.averageRest !== undefined" class="note-line">
       ⏸️ {{ t('session.summary.averageRest', { time: restClock(summary.averageRest) }) }}

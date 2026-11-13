@@ -364,7 +364,8 @@
       "minutes": "Session done in {minutes} min.",
       "share": "Share my session",
       "shareGain": "+{percent}% volume since last time",
-      "averageRest": "Average rest between two sets: {time}."
+      "averageRest": "Average rest between two sets: {time}.",
+      "autoFinished": "Session closed automatically after {minutes} min without any action. Its length stops at your last action."
     },
     "note": "Workout note",
     "notePlaceholder": "E.g. slept badly, crowded gym",
@@ -572,7 +573,8 @@
       "fine": "No, it's fine",
       "light": "Too light"
     },
-    "howWasIt": "How was it?"
+    "howWasIt": "How was it?",
+    "autoFinishAt": "If you do nothing else, the session will close by itself at {time}."
   },
   "availability": {
     "day": "Day",
@@ -1265,7 +1267,8 @@
       "drawingsAndRest": "More drawings, rest really taken",
       "photosAndReminders": "Photos, slots and reminders",
       "failureAndRest": "Gentler failure, rest shown first",
-      "rirRest": "One tap, like with a coach"
+      "rirRest": "One tap, like with a coach",
+      "autoFinish": "Session closed by itself"
     },
     "items": {
       "twoTimesBack": "During the workout, the set by set table also shows the time before, in grey, next to last time.",
@@ -1359,7 +1362,9 @@
       "machineSwitch": "Changing machine: one menu, two clear choices (\"Taken, I'll come back\" or \"Replace for the whole session\"). Nothing changes until you pick, and the menu closes as soon as you leave it.",
       "rirButtons": "No more difficulty choice: a big \"Set done\" button, and a small \"Too light\" button that raises the load from the next set. Otherwise your reps decide, as a coach does (above your range it goes up, below it goes down). Reps in reserve can still be added in \"Add details\".",
       "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length.",
-      "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full."
+      "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full.",
+      "autoFinish": "Once the last set of the last exercise is done, the session closes by itself after 10 minutes without any action, just like the “Finish” button. It also works with the app closed: a notification lets you know.",
+      "autoFinishCardio": "If cardio is planned after the weights, its minutes are waited for on top of the 10 minutes."
     }
   },
   "data": {
@@ -1877,7 +1882,7 @@
     "title": "Session in progress · {name}",
     "set": "{name} · set {current}/{total} · {load}",
     "resting": "Rest · then: {next}",
-    "finished": "All done: finish the session in the app.",
+    "finished": "All done: finish the session in the app, or it closes by itself after {minutes} min without any action.",
     "restOver": "Rest over",
     "channel": "Session in progress",
     "restChannel": "End of rest"
@@ -2069,5 +2074,10 @@
       "choice0": "Low pulley with a cable, nothing against the chest",
       "choice1": "Machine with a pad against the chest"
     }
+  },
+  "autoFinish": {
+    "title": "Session closed",
+    "body": "{name}: nothing new for {minutes} min after your last set, the session is saved. Tap to see the summary.",
+    "channel": "Session closed automatically"
   }
 }

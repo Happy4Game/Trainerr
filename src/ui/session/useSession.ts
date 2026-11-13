@@ -2,6 +2,8 @@ import { sessionMinutes, volumeGainPercent, workload } from '@/domain/sessionPre
 import { computed, ref, watch } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import { restoredRest, saveRest } from './restClock';
+import { savedActivity, saveActivity } from './activityClock';
+import { autoFinishAt, lastActivity } from '@/domain/autoFinish';
 import type { SqlDatabase } from '@/data/sqlite/database';
 import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
@@ -136,6 +138,34 @@ watch(restEndsAt, (endsAt) => {
   if (endsAt === undefined) restStartedAt.value = undefined;
   saveRest(active.value?.id, endsAt, restStartedAt.value);
 });
+/**
+ * Last action of the user in the session in progress, for the automatic
+ * closing (see autoFinish.ts). Any change of the session counts: set, note,
+ * exercise added or moved… Reloaded from the phone, it keeps its real time.
+ */
+const lastActivityAt = ref<number>();
+function touch(at: number = Date.now()): void {
+  lastActivityAt.value = at;
+  saveActivity(active.value?.id, at);
+}
+watch(
+  active,
+  (now) => {
+    if (!now) {
+      lastActivityAt.value = undefined;
+      saveActivity(undefined, 0);
+    } else if (phase.value === 'loading') {
+      // Read again from the database (launch, gym changed…): not an action.
+      lastActivityAt.value = lastActivity(
+        savedActivity(now.id),
+        now.sets.map((s) => s.doneAt),
+        now.plan.startedAt,
+      );
+    } else touch();
+  },
+  // Synchronous: the reload is told apart from an action by the phase at that moment.
+  { flush: 'sync' },
+);
 /** Record just beaten, for the celebration on the screen (cleared at the next set). */
 const recordBeaten = ref<{ exerciseId: string; loadKg: number; reps: number }>();
 /** What the end-of-session screen shows. */
@@ -145,6 +175,8 @@ export interface SessionSummary {
   sets: number;
   workloadKg: number;
   carryOver: readonly string[];
+  /** Closed by itself, ten minutes after the last action. */
+  autoFinished?: boolean;
   records: readonly NewRecord[];
   backToLevel: readonly string[];
   badges: readonly BadgeCode[];
@@ -422,6 +454,21 @@ function plannedSets(exerciseId: string): number {
 }
 
 const step = computed(() => (active.value ? nextStep(active.value.plan.queue) : undefined));
+/** When the session closes by itself: ten minutes without news once all is done. */
+const autoFinishDeadline = computed(() => {
+  const session = active.value;
+  if (!session) return undefined;
+  const cardio = session.plan.cardio;
+  const cardioWaiting =
+    cardio?.position === 'after' &&
+    !cardio.skipped &&
+    useCardio().ofSession(session.id).length === 0;
+  return autoFinishAt({
+    allDone: step.value?.kind === 'finished',
+    lastActivityAt: lastActivityAt.value,
+    ...(cardioWaiting ? { cardioAfterMinutes: cardio.minutes } : {}),
+  });
+});
 
 /** Exercises whose warm-up the user skipped in this session. */
 const warmupSkipped = ref<string[]>([]);
@@ -1148,7 +1195,11 @@ async function goBack(): Promise<void> {
   restEndsAt.value = undefined;
 }
 
-async function finish(): Promise<void> {
+/**
+ * Closes the session. `auto`: closed by itself after ten minutes without news
+ * (see autoFinish.ts); its length then stops at the last action, not now.
+ */
+async function finish(options: { auto?: boolean; endedAt?: number } = {}): Promise<void> {
   if (!active.value) return;
   const { db } = await openAppDatabase();
   const work = active.value.sets.filter((s) => !s.warmup);
@@ -1206,7 +1257,7 @@ async function finish(): Promise<void> {
     );
     const workloadKg = workload(real.sets);
     const previous = realHistory.value.filter((s) => s.templateId === finished.templateId).at(-1);
-    const minutes = sessionMinutes(active.value.plan.startedAt, Date.now());
+    const minutes = sessionMinutes(active.value.plan.startedAt, options.endedAt ?? Date.now());
     const volumeGain = previous && volumeGainPercent(workload(previous.sets), workloadKg);
     const rest = averageRest(finished.sets);
     summary.value = {
@@ -1218,6 +1269,7 @@ async function finish(): Promise<void> {
       ...(cardioMinutes > 0 ? { cardioMinutes } : {}),
       ...(rest !== undefined ? { averageRest: rest } : {}),
       carryOver,
+      ...(options.auto ? { autoFinished: true } : {}),
       records,
       backToLevel,
       badges,
@@ -1337,6 +1389,9 @@ export function useSession() {
     },
     restEndsAt,
     restStartedAt,
+    lastActivityAt,
+    autoFinishDeadline,
+    touch,
     summary,
     favoriteExercises: computed(() => favorites.value.map((e) => e.exercise)),
     crowded: computed(() => (active.value ? isCrowded(active.value.plan.queue) : false)),
