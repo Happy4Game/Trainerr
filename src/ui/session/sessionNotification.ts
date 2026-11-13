@@ -11,6 +11,8 @@ interface SessionNotificationPlugin {
     title: string;
     body: string;
     restEndsAt?: number;
+    /** Android removes the notification by itself at this time (automatic closing). */
+    timeoutAt?: number;
     channelName: string;
   }): Promise<{ shown?: boolean } | undefined>;
   hide(): Promise<void>;
@@ -21,7 +23,10 @@ const SessionNotification = registerPlugin<SessionNotificationPlugin>('SessionNo
 
 /** Kept apart from the reminder ids, which are rescheduled as a whole. */
 export const REST_END_NOTIFICATION_ID = 2_000_000_001;
+/** "Session closed", shown when it closes by itself with the app in the background. */
+export const AUTO_FINISH_NOTIFICATION_ID = 2_000_000_002;
 const REST_END_CHANNEL = 'rest-end';
+const AUTO_FINISH_CHANNEL = 'auto-finish';
 
 const available = () => Capacitor.getPlatform() === 'android';
 
@@ -45,6 +50,7 @@ export async function showSessionNotification(content: {
   title: string;
   body: string;
   restEndsAt?: number;
+  timeoutAt?: number;
   channelName: string;
 }): Promise<void> {
   if (!available()) return;
@@ -136,6 +142,52 @@ export async function cancelRestEnd(): Promise<void> {
   if (!available()) return;
   try {
     await LocalNotifications.cancel({ notifications: [{ id: REST_END_NOTIFICATION_ID }] });
+  } catch {
+    // Nothing scheduled.
+  }
+}
+
+/**
+ * The app left in the background with everything done: the system shows
+ * "session closed" at the right time, even if Android has stopped the app.
+ * The session itself is saved as done the next time the app is opened.
+ */
+export async function scheduleAutoFinish(
+  at: number,
+  text: { title: string; body: string; channelName: string },
+): Promise<void> {
+  if (!available()) return;
+  try {
+    await LocalNotifications.createChannel({
+      id: AUTO_FINISH_CHANNEL,
+      name: text.channelName,
+      importance: 3,
+      visibility: 1,
+    });
+    await cancelAutoFinish();
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: AUTO_FINISH_NOTIFICATION_ID,
+          title: text.title,
+          body: text.body,
+          channelId: AUTO_FINISH_CHANNEL,
+          smallIcon: 'ic_stat_trainerr',
+          autoCancel: true,
+          schedule: { at: new Date(at), allowWhileIdle: true },
+          extra: { route: '/tabs/session' },
+        },
+      ],
+    });
+  } catch {
+    // Closed anyway the next time the app is opened.
+  }
+}
+
+export async function cancelAutoFinish(): Promise<void> {
+  if (!available()) return;
+  try {
+    await LocalNotifications.cancel({ notifications: [{ id: AUTO_FINISH_NOTIFICATION_ID }] });
   } catch {
     // Nothing scheduled.
   }

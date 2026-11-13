@@ -192,6 +192,14 @@ const cardLink = (id: string) => `/tabs/session/exercise/${encodeURIComponent(id
 const { load: kg } = useUnits();
 
 /** Minutes since the start, refreshed every 30 s: "where am I in my hour?". */
+/** Time of the automatic closing, shown on the "all done" card. */
+const autoFinishTime = computed(() => {
+  const at = session.autoFinishDeadline.value;
+  return at === undefined
+    ? undefined
+    : new Intl.DateTimeFormat(locale.value, { hour: '2-digit', minute: '2-digit' }).format(at);
+});
+
 const now = ref(Date.now());
 const clock = setInterval(() => (now.value = Date.now()), 30_000);
 onUnmounted(() => clearInterval(clock));
@@ -616,6 +624,9 @@ async function logWarmup(): Promise<void> {
             <p>{{ t('session.allDone') }}</p>
             <p v-if="step.carryOver.length > 0">
               {{ t('session.carryOver', { names: step.carryOver.map(nameOf).join(', ') }) }}
+            </p>
+            <p v-if="autoFinishTime" class="muted">
+              {{ t('session.autoFinishAt', { time: autoFinishTime }) }}
             </p>
           </ion-card-content>
         </ion-card>

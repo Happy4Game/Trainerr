@@ -12,6 +12,7 @@ import {
   showSessionNotification,
 } from './sessionNotification';
 import { useSession } from './useSession';
+import { AUTO_FINISH_MINUTES } from '@/domain/autoFinish';
 
 /**
  * Keeps the Android notification of the session up to date: what to do now,
@@ -48,7 +49,14 @@ export function useSessionNotification(): void {
     if (!active || !step) return undefined;
     const title = t('sessionNotification.title', { name: templateLabel(active.templateId) });
     const restEndsAt = session.restEndsAt.value;
-    if (step.kind === 'finished') return { title, body: t('sessionNotification.finished') };
+    if (step.kind === 'finished') {
+      const closesAt = session.autoFinishDeadline.value;
+      return {
+        title,
+        body: t('sessionNotification.finished', { minutes: AUTO_FINISH_MINUTES }),
+        ...(closesAt !== undefined ? { timeoutAt: closesAt } : {}),
+      };
+    }
     if (step.kind === 'askIfFree') {
       return { title, body: t('session.isFree', { name: nameOf(step.exerciseId) }) };
     }

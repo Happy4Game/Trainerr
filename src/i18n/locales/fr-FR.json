@@ -364,7 +364,8 @@
       "minutes": "Séance bouclée en {minutes} min.",
       "share": "Partager ma séance",
       "shareGain": "+{percent} % de volume depuis la dernière fois",
-      "averageRest": "Repos moyen entre deux séries : {time}."
+      "averageRest": "Repos moyen entre deux séries : {time}.",
+      "autoFinished": "Séance clôturée automatiquement après {minutes} min sans action. Sa durée s'arrête à ta dernière action."
     },
     "note": "Note de séance",
     "notePlaceholder": "Ex. mal dormi, salle bondée",
@@ -572,7 +573,8 @@
       "fine": "Non, ça va",
       "light": "Trop léger"
     },
-    "howWasIt": "Comment c'était ?"
+    "howWasIt": "Comment c'était ?",
+    "autoFinishAt": "Sans nouvelle action de ta part, la séance se clôturera toute seule à {time}."
   },
   "availability": {
     "day": "Jour",
@@ -1265,7 +1267,8 @@
       "drawingsAndRest": "Plus de dessins, repos réellement pris",
       "photosAndReminders": "Photos, créneaux et rappels",
       "failureAndRest": "Échec moins punitif, repos visible",
-      "rirRest": "Une seule validation, comme avec un coach"
+      "rirRest": "Une seule validation, comme avec un coach",
+      "autoFinish": "Séance clôturée toute seule"
     },
     "items": {
       "twoTimesBack": "Pendant la séance, le tableau série par série montre aussi l'avant-dernière fois, en gris, à côté de la dernière fois.",
@@ -1359,7 +1362,9 @@
       "machineSwitch": "Changer de machine : un seul menu, deux choix clairs (« Occupée, j'y reviens » ou « Remplacer pour toute la séance »). Rien ne change tant que tu n'as rien choisi, et le menu se ferme dès que tu l'abandonnes.",
       "rirButtons": "Plus de choix de difficulté : un gros bouton « Série faite », et un petit bouton « Trop léger » qui monte la charge dès la série suivante. Sinon ce sont tes reps qui décident, comme le fait un coach (au-dessus de ta fourchette elle monte, en dessous elle baisse). Les reps en réserve restent possibles dans « Préciser la série ».",
       "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale.",
-      "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier."
+      "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier.",
+      "autoFinish": "Une fois la dernière série du dernier exercice faite, la séance se clôture toute seule après 10 minutes sans action, comme avec le bouton « Terminer ». Ça marche aussi appli fermée : une notification te prévient.",
+      "autoFinishCardio": "Si un cardio est prévu après la muscu, ses minutes sont attendues en plus des 10 minutes."
     }
   },
   "data": {
@@ -1877,7 +1882,7 @@
     "title": "Séance en cours · {name}",
     "set": "{name} · série {current}/{total} · {load}",
     "resting": "Repos · ensuite : {next}",
-    "finished": "Tout est fait : termine la séance dans l'appli.",
+    "finished": "Tout est fait : termine la séance dans l'appli, sinon elle se clôture seule après {minutes} min sans action.",
     "restOver": "Repos terminé",
     "channel": "Séance en cours",
     "restChannel": "Fin du repos"
@@ -2069,5 +2074,10 @@
       "choice0": "Poulie basse avec un câble, rien contre la poitrine",
       "choice1": "Machine avec un coussin contre la poitrine"
     }
+  },
+  "autoFinish": {
+    "title": "Séance clôturée",
+    "body": "{name} : rien de nouveau depuis {minutes} min après ta dernière série, la séance est enregistrée. Touche pour voir le récap.",
+    "channel": "Séance clôturée automatiquement"
   }
 }

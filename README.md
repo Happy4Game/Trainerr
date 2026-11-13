@@ -55,6 +55,7 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 - **Catalogue de 480 exercices** avec dessins du mouvement (un appui sur un dessin ouvre la fiche, partout dans l'appli), muscles travaillés, consignes en français, **recherche par zone du corps** et ta charge sur chaque machine.
 - **Statistiques** : régularité, évolution de la force (1RM estimé), séries par muscle, records.
+- **Séance clôturée toute seule** : une fois la dernière série du dernier exercice faite, la séance se clôture d'elle-même après **10 minutes sans aucune action** (série, note, exercice ajouté…), exactement comme avec « Terminer la séance » ; l'heure de clôture s'affiche sur la carte « Tous les exercices sont faits ». Appli en arrière-plan ou fermée par Android : une notification « Séance clôturée » arrive à l'heure prévue, et la séance est enregistrée dès la réouverture, avec une durée qui s'arrête à ta dernière action. Un cardio prévu après la muscu est attendu en plus.
 - **Récap de fin de séance** : volume gagné depuis la dernière fois, durée, records, et une image à partager.
 - **Historique modifiable**, avec trophées sur les records. Téléphone oublié ? **Ajoute après coup une séance faite sans l'appli** : elle compte dans les stats et le cycle.
 - **Navigation en 5 onglets** : Aujourd'hui, Séance, Planning, Catalogue et Progrès (séances passées, stats et corps).

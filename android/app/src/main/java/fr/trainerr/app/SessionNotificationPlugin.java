@@ -58,6 +58,11 @@ public class SessionNotificationPlugin extends Plugin {
             builder.setShowWhen(false);
         }
 
+        // Everything done: the session closes by itself at this time, the notification goes with it.
+        long timeoutAt = call.getData().optLong("timeoutAt", 0);
+        long timeoutAfter = timeoutAt - System.currentTimeMillis();
+        if (timeoutAt > 0 && timeoutAfter > 0) builder.setTimeoutAfter(timeoutAfter);
+
         try {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build());
             call.resolve();

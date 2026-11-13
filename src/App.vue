@@ -4,8 +4,11 @@ import { onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { onNotificationTap, refreshNotifications } from '@/ui/notifications';
 import { checkWhenDue } from '@/ui/updates';
+import { useAutoFinish } from '@/ui/session/useAutoFinish';
 
 const router = useRouter();
+// A session left open once everything is done closes by itself after 10 min.
+useAutoFinish();
 
 // Android only, if kept on in the settings. Android keeps the app in memory:
 // coming back to it is not a new launch, so the check also runs then.
