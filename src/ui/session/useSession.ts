@@ -470,15 +470,30 @@ const autoFinishDeadline = computed(() => {
   });
 });
 
-/** Exercises whose warm-up the user skipped in this session. */
-const warmupSkipped = ref<string[]>([]);
+/** Warm-up sets of an exercise passed by the user, kept with the session. */
+function warmupSkipsOf(exerciseId: string): number | 'all' {
+  return active.value?.plan.warmupSkips?.[exerciseId] ?? 0;
+}
+
+/**
+ * Passes the proposed warm-up of an exercise: only the set shown (the ramp
+ * goes on with the next one), or the whole warm-up of that machine.
+ */
+async function skipWarmup(exerciseId: string, scope: 'set' | 'all'): Promise<void> {
+  const plan = active.value?.plan;
+  if (!plan) return;
+  const current = warmupSkipsOf(exerciseId);
+  const next = scope === 'all' || current === 'all' ? 'all' : current + 1;
+  await updatePlan({ ...plan, warmupSkips: { ...plan.warmupSkips, [exerciseId]: next } });
+}
 
 /** Next warm-up set to do before the first work set, with its place in the ramp. */
 const warmup = computed(() => {
   const s = step.value;
   if (s?.kind !== 'exercise' || !active.value) return undefined;
   if (workSetsInSession(s.exerciseId).length > 0) return undefined;
-  if (warmupSkipped.value.includes(s.exerciseId)) return undefined;
+  const skipped = warmupSkipsOf(s.exerciseId);
+  if (skipped === 'all') return undefined;
   const entry = entryOf(s.exerciseId);
   const proposal = proposalFor(s.exerciseId);
   // No warm-up set with a help machine (lighter means more help), nor before a
@@ -494,8 +509,10 @@ const warmup = computed(() => {
     // First exercise: nothing logged yet, or only its own warm-up sets.
     isFirst: active.value.sets.every((set) => set.exerciseId === s.exerciseId && set.warmup),
   });
-  const next = ramp[done];
-  return next ? { ...next, index: done + 1, total: ramp.length } : undefined;
+  // Sets done and sets passed both move along the ramp.
+  const reached = done + skipped;
+  const next = ramp[reached];
+  return next ? { ...next, index: reached + 1, total: ramp.length } : undefined;
 });
 
 async function load(): Promise<void> {
@@ -1425,9 +1442,7 @@ export function useSession() {
     recordFor,
     lastSetBeatRecord,
     recordBeaten,
-    skipWarmup: (exerciseId: string) => {
-      warmupSkipped.value = [...warmupSkipped.value, exerciseId];
-    },
+    skipWarmup,
     restEndsAt,
     restStartedAt,
     lastActivityAt,

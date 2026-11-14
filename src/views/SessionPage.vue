@@ -562,10 +562,21 @@ async function logWarmup(): Promise<void> {
                 <ion-button size="small" @click="logWarmup">{{
                   t('session.warmupDone')
                 }}</ion-button>
+                <!-- Only this set: the ramp goes on with the next, lighter to heavier. -->
+                <ion-button
+                  v-if="warmup.index < warmup.total"
+                  size="small"
+                  fill="outline"
+                  color="medium"
+                  @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId, 'set')"
+                >
+                  {{ t('session.warmupSkipSet') }}
+                </ion-button>
                 <ion-button
                   size="small"
-                  fill="clear"
-                  @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId)"
+                  fill="outline"
+                  color="medium"
+                  @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId, 'all')"
                 >
                   {{ t('session.warmupSkip') }}
                 </ion-button>

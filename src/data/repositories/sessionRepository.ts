@@ -26,8 +26,13 @@ export interface SessionPlan {
   readonly supersets?: readonly (readonly [string, string])[];
   /** Short 20–30 min version of the session of the day. */
   readonly express?: boolean;
-  /** "Not in shape today": one set less, no load increase. */
+  /** "Not in shape today": all the sets, no load increase. */
   readonly tired?: boolean;
+  /**
+   * Proposed warm-up sets passed, by exercise: how many of its ramp, or
+   * `'all'` when the whole warm-up of that machine was passed.
+   */
+  readonly warmupSkips?: Readonly<Record<string, number | 'all'>>;
   /** When the session started (ms since 1970), for its length in the summary. */
   readonly startedAt?: number;
   /** Cardio before or after the weights, chosen before starting; skipped on the day. */

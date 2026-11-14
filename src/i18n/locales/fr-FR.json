@@ -580,7 +580,8 @@
     "ownWarmup": {
       "log": "C'était une série d'échauffement",
       "help": "Une série d'échauffement est gardée dans ta séance, mais elle ne compte pas dans tes séries prévues ni dans tes progrès."
-    }
+    },
+    "warmupSkipSet": "Passer cette série"
   },
   "availability": {
     "day": "Jour",
@@ -1376,7 +1377,8 @@
       "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale.",
       "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier.",
       "autoFinish": "Une fois la dernière série du dernier exercice faite, la séance se clôture toute seule après 10 minutes sans action, comme avec le bouton « Terminer ». Ça marche aussi appli fermée : une notification te prévient.",
-      "autoFinishCardio": "Si un cardio est prévu après la muscu, ses minutes sont attendues en plus des 10 minutes."
+      "autoFinishCardio": "Si un cardio est prévu après la muscu, ses minutes sont attendues en plus des 10 minutes.",
+      "ownWarmupSkip": "Échauffement proposé par l'appli : « Passer cette série » saute seulement la série affichée, « Passer l'échauffement » saute tout l'échauffement de la machine, même après avoir fermé l'appli."
     }
   },
   "data": {

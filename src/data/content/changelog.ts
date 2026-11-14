@@ -20,7 +20,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     id: 'ownWarmup',
     date: '2026-11-14',
-    items: ['ownWarmupLog', 'ownWarmupFix'],
+    items: ['ownWarmupLog', 'ownWarmupFix', 'ownWarmupSkip'],
   },
   {
     id: 'autoFinish',

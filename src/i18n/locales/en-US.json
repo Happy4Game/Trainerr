@@ -580,7 +580,8 @@
     "ownWarmup": {
       "log": "That was a warm-up set",
       "help": "A warm-up set is kept in your session, but it counts neither among your planned sets nor in your progress."
-    }
+    },
+    "warmupSkipSet": "Skip this set"
   },
   "availability": {
     "day": "Day",
@@ -1376,7 +1377,8 @@
       "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length.",
       "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full.",
       "autoFinish": "Once the last set of the last exercise is done, the session closes by itself after 10 minutes without any action, just like the “Finish” button. It also works with the app closed: a notification lets you know.",
-      "autoFinishCardio": "If cardio is planned after the weights, its minutes are waited for on top of the 10 minutes."
+      "autoFinishCardio": "If cardio is planned after the weights, its minutes are waited for on top of the 10 minutes.",
+      "ownWarmupSkip": "Warm-up proposed by the app: “Skip this set” skips only the set shown, “Skip the warm-up” skips the whole warm-up of the machine, even after closing the app."
     }
   },
   "data": {
