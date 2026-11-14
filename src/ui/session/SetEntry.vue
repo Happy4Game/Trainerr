@@ -55,6 +55,8 @@ const thumbnail = computed(() => {
 });
 const steps = computed(() => (entry.value ? session.stepsOf(entry.value) : []));
 const done = computed(() => session.workSetsInSession(props.exerciseId).length);
+/** "Not in shape today": one set less per exercise, no load increase. */
+const tired = computed(() => session.active.value?.plan.tired === true);
 /** Before the first work set, unless the app's own warm-up card is shown. */
 const ownWarmup = computed(() => done.value === 0 && !session.warmup.value);
 /** Warm-up sets already done on this machine: after one, the fields go back to the work set. */
@@ -378,6 +380,13 @@ function listen(): void {
       </ion-chip>
     </div>
 
+    <!-- "Not in shape" chosen at the start: said again here, where the sets are counted. -->
+    <div v-if="tired" class="tired-note" data-testid="tired-note">
+      <p>{{ t('session.tired.reminder') }}</p>
+      <ion-button size="small" fill="outline" @click="session.backInShape()">
+        {{ t('session.tired.better') }}
+      </ion-button>
+    </div>
     <div class="set-number">
       <strong>{{
         t('session.setNumber', { current: Math.min(done + 1, target), total: target })
@@ -845,6 +854,16 @@ h2 {
   font-weight: var(--tr-weight-black);
   letter-spacing: -0.01em;
   line-height: 1.15;
+}
+.tired-note {
+  margin-block: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--ion-color-light);
+  font-size: 0.9rem;
+}
+.tired-note p {
+  margin: 0 0 4px;
 }
 .set-number {
   display: flex;

@@ -518,7 +518,9 @@
     },
     "tired": {
       "toggle": "Not in shape today",
-      "help": "One set less per exercise and no load increase: you still train, without wearing yourself out."
+      "help": "One set less per exercise and no load increase: you still train, without wearing yourself out.",
+      "reminder": "Not in shape today: one set less per exercise and no load increase.",
+      "better": "I feel better: normal session"
     },
     "usualLoads": {
       "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
@@ -1242,6 +1244,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "notInShapeVisible": "“Not in shape” shows during the session",
       "ownWarmup": "Your warm-up set no longer counts as a set",
       "twoTimesBack": "Workout: the last two times and the full history",
       "machineSplit": "Leg press and row: two machines each",
@@ -1276,6 +1279,8 @@
       "autoFinish": "Session closed by itself"
     },
     "items": {
+      "tiredReminder": "During the session, a reminder says that “Not in shape” takes one set off each exercise: no more surprise when the app moves to the next machine.",
+      "tiredBetter": "Feeling better? “I feel better” gives the set back to the exercises left and lets the load go up again.",
       "ownWarmupLog": "Before your first set on a machine, the “That was a warm-up set” button keeps it in your session without counting it: you no longer move to the next machine one set too early.",
       "ownWarmupFix": "Already saved as a real set? Fix it with “Warm-up set”, in the current session or in the history.",
       "twoTimesBack": "During the workout, the set by set table also shows the time before, in grey, next to last time.",

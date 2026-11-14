@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'notInShapeVisible',
+    date: '2026-11-14',
+    items: ['tiredReminder', 'tiredBetter'],
+  },
+  {
     id: 'ownWarmup',
     date: '2026-11-14',
     items: ['ownWarmupLog', 'ownWarmupFix'],

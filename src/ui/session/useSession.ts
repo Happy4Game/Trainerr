@@ -1008,6 +1008,23 @@ async function extraSet(exerciseId: string): Promise<void> {
   });
 }
 
+/**
+ * "Not in shape" undone during the session: loads may go up again, and the
+ * exercises not done yet get back the set taken off (unless a light week of
+ * the cycle already takes it off).
+ */
+async function backInShape(): Promise<void> {
+  const plan = active.value?.plan;
+  if (!plan?.tired) return;
+  const { tired: _tired, ...rest } = plan;
+  const exercises = cycle.value.light
+    ? plan.exercises
+    : plan.exercises.map((e) =>
+        plan.queue.done.includes(e.exerciseId) ? e : { ...e, sets: Math.min(MAX_SETS, e.sets + 1) },
+      );
+  await updatePlan({ ...rest, exercises });
+}
+
 /** Exercise added by hand, with the usual number of sets. */
 async function addExerciseTo(
   place: typeof addExercise | typeof appendExercise,
@@ -1467,6 +1484,7 @@ export function useSession() {
     editHistory,
     addPastSession,
     extraSet,
+    backInShape,
     replacements,
     neglected,
     swappedFrom,
