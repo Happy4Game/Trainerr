@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { skipOnboarding } from './helpers';
 
-test('today shows the whole next session, and a lighter one when not in shape', async ({
+test('today shows the whole next session, with all its sets when not in shape', async ({
   page,
 }) => {
   await skipOnboarding(page);
@@ -16,15 +16,15 @@ test('today shows the whole next session, and a lighter one when not in shape', 
   await expect(hero.getByText('Développé épaules machine', { exact: true })).toBeVisible();
   await expect(hero.getByText('6 séries')).toBeVisible();
 
-  await hero.getByRole('button', { name: 'Pas en forme ? Alléger la séance' }).click();
-  await expect(hero.getByText('4 séries')).toBeVisible();
-  await expect(hero.getByRole('button', { name: /Séance allégée/ })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  // Not in shape: all the sets, only no load increase.
+  await hero.getByRole('button', { name: 'Pas en forme ? Pas de hausse de charge' }).click();
+  await expect(hero.getByText('6 séries')).toBeVisible();
+  await expect(
+    hero.getByRole('button', { name: /Pas en forme : toutes tes séries/ }),
+  ).toHaveAttribute('aria-pressed', 'true');
 
   await hero.getByRole('button', { name: 'Commencer' }).click();
-  await expect(page.getByText('Série 1 sur 2')).toBeVisible();
+  await expect(page.getByText('Série 1 sur 3')).toBeVisible();
 
   // Once done, today says so, and another session is an extra.
   await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();

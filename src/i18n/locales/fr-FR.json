@@ -29,8 +29,8 @@
       "up": "+{delta}",
       "first": "1re fois"
     },
-    "tiredOff": "Pas en forme ? Alléger la séance",
-    "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges",
+    "tiredOff": "Pas en forme ? Pas de hausse de charge",
+    "tiredOn": "✓ Pas en forme : toutes tes séries, sans hausse de charge",
     "doneToday": "✓ Séance du jour faite, bravo ! La prochaine :",
     "goExtra": "Faire une séance en plus",
     "heroLabel": "Séance du jour",
@@ -518,9 +518,9 @@
     },
     "tired": {
       "toggle": "Pas en forme aujourd'hui",
-      "help": "Une série de moins par exercice et pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser.",
-      "reminder": "Pas en forme aujourd'hui : une série de moins par exercice et pas de hausse de charge.",
-      "better": "Je me sens mieux : séance normale"
+      "help": "Toutes tes séries, mais pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser.",
+      "reminder": "Pas en forme aujourd'hui : pas de hausse de charge, mais toutes tes séries.",
+      "better": "Je me sens mieux : la charge peut monter"
     },
     "usualLoads": {
       "intro": "Tu connais déjà ta charge sur cette machine ? Note-la : la séance partira de là au lieu d'une série test. | Tu connais déjà tes charges sur ces {count} machines ? Note-les : la séance partira de là au lieu de séries test.",
@@ -1244,7 +1244,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
-      "notInShapeVisible": "« Pas en forme » se voit pendant la séance",
+      "notInShapeVisible": "« Pas en forme » garde toutes tes séries",
       "ownWarmup": "Ta série d'échauffement ne compte plus comme une série",
       "twoTimesBack": "Séance : les deux dernières fois et tout l'historique",
       "machineSplit": "Presse et tirage : deux machines chacun",
@@ -1279,8 +1279,8 @@
       "autoFinish": "Séance clôturée toute seule"
     },
     "items": {
-      "tiredReminder": "Pendant la séance, un rappel indique que « Pas en forme » retire une série par exercice : plus de surprise quand l'appli passe à la machine suivante.",
-      "tiredBetter": "Ça va mieux ? « Je me sens mieux » rend la série retirée aux exercices restants et laisse la charge remonter.",
+      "tiredReminder": "« Pas en forme » garde maintenant toutes tes séries : il bloque seulement la hausse de charge, et un rappel le dit pendant la séance.",
+      "tiredBetter": "Ça va mieux ? « Je me sens mieux » laisse la charge remonter.",
       "ownWarmupLog": "Avant ta première série sur une machine, le bouton « C'était une série d'échauffement » la garde dans ta séance sans la compter : tu ne passes plus à la machine suivante une série trop tôt.",
       "ownWarmupFix": "Déjà notée comme une vraie série ? Corrige-la avec « Série d'échauffement », dans la séance en cours ou dans l'historique.",
       "twoTimesBack": "Pendant la séance, le tableau série par série montre aussi l'avant-dernière fois, en gris, à côté de la dernière fois.",

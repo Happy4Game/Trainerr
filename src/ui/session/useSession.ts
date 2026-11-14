@@ -438,12 +438,12 @@ function noHigherThanLastTime(exerciseId: string, loadKg: number): number {
 }
 
 /**
- * "Not in shape today", chosen before starting: one set less per exercise and
- * no load increase. Training anyway, without digging a hole.
+ * "Not in shape today", chosen before starting: all the planned sets, but no
+ * load increase. Training anyway, without digging a hole.
  */
 const tiredToday = ref(false);
-/** Lighter today: a light week of the cycle, or the user said so. */
-const lighter = () => cycle.value.light || tiredToday.value;
+/** One set less per exercise: a light week of the cycle only. */
+const lighter = () => cycle.value.light;
 
 function plannedSets(exerciseId: string): number {
   return (
@@ -1008,21 +1008,12 @@ async function extraSet(exerciseId: string): Promise<void> {
   });
 }
 
-/**
- * "Not in shape" undone during the session: loads may go up again, and the
- * exercises not done yet get back the set taken off (unless a light week of
- * the cycle already takes it off).
- */
+/** "Not in shape" undone during the session: loads may go up again. */
 async function backInShape(): Promise<void> {
   const plan = active.value?.plan;
   if (!plan?.tired) return;
   const { tired: _tired, ...rest } = plan;
-  const exercises = cycle.value.light
-    ? plan.exercises
-    : plan.exercises.map((e) =>
-        plan.queue.done.includes(e.exerciseId) ? e : { ...e, sets: Math.min(MAX_SETS, e.sets + 1) },
-      );
-  await updatePlan({ ...rest, exercises });
+  await updatePlan(rest);
 }
 
 /** Exercise added by hand, with the usual number of sets. */
