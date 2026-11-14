@@ -348,6 +348,20 @@ describe('editing the history', () => {
     expect(session?.sets[2]).not.toHaveProperty('note');
   });
 
+  it('marks a set as a warm-up afterwards, and back, only when asked', async () => {
+    const { first } = await doneSession('2026-10-20');
+    await updateSet(db, first.id, { loadKg: 18, reps: 10, difficulty: 'ok', warmup: true });
+    let [session] = await listDoneSessions(db);
+    expect(session?.sets[0]).toMatchObject({ warmup: true });
+    expect(session?.sets[1]).not.toHaveProperty('warmup');
+    await updateSet(db, first.id, { loadKg: 18, reps: 10, difficulty: 'ok' });
+    [session] = await listDoneSessions(db);
+    expect(session?.sets[0]).toMatchObject({ warmup: true });
+    await updateSet(db, first.id, { loadKg: 18, reps: 10, difficulty: 'ok', warmup: false });
+    [session] = await listDoneSessions(db);
+    expect(session?.sets[0]).not.toHaveProperty('warmup');
+  });
+
   it('adds a forgotten set and removes an extra one, keeping the order', async () => {
     const { id, first } = await doneSession('2026-10-20');
     await deleteSet(db, first.id);

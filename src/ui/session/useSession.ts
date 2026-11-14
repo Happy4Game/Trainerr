@@ -826,27 +826,60 @@ async function undoLastSet(): Promise<void> {
   restEndsAt.value = undefined;
 }
 
-/** Correction of a set validated too fast: load, reps or feeling. */
+/**
+ * Correction of a set validated too fast: load, reps, feeling, or a set that
+ * was in fact a warm-up (or the other way round).
+ */
 async function editSessionSet(
   setId: string,
   values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'> & {
     readonly rir?: number | undefined;
     readonly note?: string | undefined;
+    readonly warmup?: boolean | undefined;
   },
 ): Promise<void> {
-  if (!active.value) return;
+  const before = active.value?.sets.find((s) => s.id === setId);
+  if (!active.value || !before) return;
   const { db } = await openAppDatabase();
   await updateSet(db, setId, values);
   active.value = {
     ...active.value,
     sets: active.value.sets.map((s) => {
       if (s.id !== setId) return s;
-      const { rir: _rir, note: _note, ...rest } = { ...s, ...values };
+      const { rir: _rir, note: _note, warmup: _warmup, ...rest } = { ...s, ...values };
       const rir = 'rir' in values ? values.rir : s.rir;
       const note = 'note' in values ? values.note?.trim() : s.note;
-      return { ...rest, ...(rir !== undefined ? { rir } : {}), ...(note ? { note } : {}) };
+      const warmup = values.warmup ?? s.warmup;
+      return {
+        ...rest,
+        ...(rir !== undefined ? { rir } : {}),
+        ...(note ? { note } : {}),
+        ...(warmup ? { warmup: true } : {}),
+      };
     }),
   };
+  if (values.warmup !== undefined && values.warmup !== !!before.warmup) {
+    await recountWorkSets(before.exerciseId);
+  }
+}
+
+/**
+ * After a set changed between warm-up and work: the exercise reopens if it now
+ * lacks work sets, or ends if it now has them all.
+ */
+async function recountWorkSets(exerciseId: string): Promise<void> {
+  if (!active.value) return;
+  const queue = active.value.plan.queue;
+  const done = workSetsInSession(exerciseId).length;
+  const target = plannedSets(exerciseId);
+  if (queue.done.includes(exerciseId) && done < target) {
+    await updatePlan({
+      ...active.value.plan,
+      queue: startNow({ ...queue, done: queue.done.filter((id) => id !== exerciseId) }, exerciseId),
+    });
+  } else if (queue.pending.includes(exerciseId) && done >= target) {
+    await updatePlan({ ...active.value.plan, queue: completeExercise(queue, exerciseId) });
+  }
 }
 
 /** A set logged by mistake: removed; its exercise reopens if it now lacks sets. */

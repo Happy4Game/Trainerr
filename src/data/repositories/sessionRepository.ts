@@ -126,6 +126,8 @@ export async function updateSet(
   values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'> & {
     readonly rir?: number | undefined;
     readonly note?: string | undefined;
+    /** Marked afterwards as a warm-up set, or back to a work set. */
+    readonly warmup?: boolean | undefined;
   },
 ): Promise<void> {
   await db.run('UPDATE set_log SET load_kg = ?, reps = ?, difficulty = ? WHERE id = ?', [
@@ -138,6 +140,8 @@ export async function updateSet(
     await db.run('UPDATE set_log SET rir = ? WHERE id = ?', [values.rir ?? null, setId]);
   if ('note' in values)
     await db.run('UPDATE set_log SET note = ? WHERE id = ?', [values.note?.trim() || null, setId]);
+  if (values.warmup !== undefined)
+    await db.run('UPDATE set_log SET warmup = ? WHERE id = ?', [values.warmup ? 1 : 0, setId]);
 }
 
 export async function setSessionDate(db: SqlDatabase, sessionId: string, date: IsoDate) {

@@ -574,7 +574,11 @@
       "light": "Too light"
     },
     "howWasIt": "How was it?",
-    "autoFinishAt": "If you do nothing else, the session will close by itself at {time}."
+    "autoFinishAt": "If you do nothing else, the session will close by itself at {time}.",
+    "ownWarmup": {
+      "log": "That was a warm-up set",
+      "help": "A warm-up set is kept in your session, but it counts neither among your planned sets nor in your progress."
+    }
   },
   "availability": {
     "day": "Day",
@@ -1238,6 +1242,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "ownWarmup": "Your warm-up set no longer counts as a set",
       "twoTimesBack": "Workout: the last two times and the full history",
       "machineSplit": "Leg press and row: two machines each",
       "guidedStretching": "Guided stretches at any time",
@@ -1271,6 +1276,8 @@
       "autoFinish": "Session closed by itself"
     },
     "items": {
+      "ownWarmupLog": "Before your first set on a machine, the “That was a warm-up set” button keeps it in your session without counting it: you no longer move to the next machine one set too early.",
+      "ownWarmupFix": "Already saved as a real set? Fix it with “Warm-up set”, in the current session or in the history.",
       "twoTimesBack": "During the workout, the set by set table also shows the time before, in grey, next to last time.",
       "fullHistory": "Under the table, \"Full history of this exercise\" opens every past session with this exercise, set by set.",
       "legPressSplit": "The 45° leg press and the horizontal leg press are now two exercises, each with its own loads.",
@@ -1710,7 +1717,8 @@
     "deleteYes": "Yes, delete the session",
     "moveMachine": "Change machine",
     "moveMachineNamed": "These sets were on another machine than {name}",
-    "emptyHint": "Add the exercises you did. A session left empty is not kept."
+    "emptyHint": "Add the exercises you did. A session left empty is not kept.",
+    "warmupSet": "Warm-up set: {name}"
   },
   "myLoad": {
     "title": "My load",
@@ -1737,7 +1745,9 @@
     },
     "typeHint": "Type the exact value (47.5 kg, 8.5 reps) or adjust with − and +.",
     "invalid": "Check the load and the reps: a load of 0 or more, at least half a rep.",
-    "load": "Load ({unit})"
+    "load": "Load ({unit})",
+    "warmup": "Warm-up set",
+    "warmupHint": "Counts neither among the planned sets, nor in records, nor in progress."
   },
   "customSession": {
     "mine": "My sessions",

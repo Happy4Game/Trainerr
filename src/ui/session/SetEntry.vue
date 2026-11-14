@@ -10,6 +10,7 @@ import {
   TrendingDown,
   TrendingUp,
   Check,
+  Flame,
 } from 'lucide-vue-next';
 import { compareWithLastTime } from '@/domain/setComparison';
 import ExerciseHistoryModal from './ExerciseHistoryModal.vue';
@@ -54,6 +55,14 @@ const thumbnail = computed(() => {
 });
 const steps = computed(() => (entry.value ? session.stepsOf(entry.value) : []));
 const done = computed(() => session.workSetsInSession(props.exerciseId).length);
+/** Before the first work set, unless the app's own warm-up card is shown. */
+const ownWarmup = computed(() => done.value === 0 && !session.warmup.value);
+/** Warm-up sets already done on this machine: after one, the fields go back to the work set. */
+const warmupsDone = computed(
+  () =>
+    (session.active.value?.sets ?? []).filter((s) => s.exerciseId === props.exerciseId && s.warmup)
+      .length,
+);
 /** Before the first set: the very close machines, one tap away (same main muscle, same kind). */
 const closeOnes = computed(() =>
   done.value === 0 ? session.replacements(props.exerciseId).slice(0, 3) : [],
@@ -76,7 +85,7 @@ const listening = ref(false);
 
 // Pre-filled with the proposal: the user only corrects what changed.
 watch(
-  [() => props.exerciseId, done, proposal],
+  [() => props.exerciseId, done, warmupsDone, proposal],
   () => {
     if (!proposal.value) return;
     load.value = proposal.value.loadKg;
@@ -296,6 +305,22 @@ async function validate(difficulty: Difficulty = heard.value ?? 'ok'): Promise<v
   });
   // A record: a happier buzz.
   if (session.lastSetBeatRecord.value) navigator.vibrate?.([60, 40, 60, 40, 160]);
+}
+
+/**
+ * A warm-up set done on the work machine itself, at the load and reps shown:
+ * kept in the session, but it neither counts as a planned set nor moves the
+ * load, the records or the progress charts.
+ */
+async function logOwnWarmup(): Promise<void> {
+  navigator.vibrate?.(35);
+  await session.logSet({
+    exerciseId: props.exerciseId,
+    loadKg: load.value,
+    reps: reps.value,
+    difficulty: 'easy',
+    warmup: true,
+  });
 }
 
 function listen(): void {
@@ -644,6 +669,20 @@ function listen(): void {
         {{ t('session.validate.light') }}
       </ion-button>
     </div>
+    <!-- A warm-up of one's own on the work machine: saved, but not one of the planned sets.
+         Hidden while the app proposes its own warm-up set, which has its card above. -->
+    <ion-button
+      v-if="ownWarmup"
+      class="warmup-button"
+      expand="block"
+      fill="clear"
+      color="medium"
+      @click="logOwnWarmup"
+    >
+      <Flame :size="18" aria-hidden="true" class="icon" />
+      {{ t('session.ownWarmup.log') }}
+    </ion-button>
+    <p v-if="ownWarmup && learning" class="help">{{ t('session.ownWarmup.help') }}</p>
     <p v-if="restPreview" class="rest-line" data-testid="rest-preview">
       {{ t('session.reserve.rest', { time: clock(restPreview) }) }}
     </p>

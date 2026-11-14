@@ -574,7 +574,11 @@
       "light": "Trop léger"
     },
     "howWasIt": "Comment c'était ?",
-    "autoFinishAt": "Sans nouvelle action de ta part, la séance se clôturera toute seule à {time}."
+    "autoFinishAt": "Sans nouvelle action de ta part, la séance se clôturera toute seule à {time}.",
+    "ownWarmup": {
+      "log": "C'était une série d'échauffement",
+      "help": "Une série d'échauffement est gardée dans ta séance, mais elle ne compte pas dans tes séries prévues ni dans tes progrès."
+    }
   },
   "availability": {
     "day": "Jour",
@@ -1238,6 +1242,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "ownWarmup": "Ta série d'échauffement ne compte plus comme une série",
       "twoTimesBack": "Séance : les deux dernières fois et tout l'historique",
       "machineSplit": "Presse et tirage : deux machines chacun",
       "guidedStretching": "Étirements guidés à tout moment",
@@ -1271,6 +1276,8 @@
       "autoFinish": "Séance clôturée toute seule"
     },
     "items": {
+      "ownWarmupLog": "Avant ta première série sur une machine, le bouton « C'était une série d'échauffement » la garde dans ta séance sans la compter : tu ne passes plus à la machine suivante une série trop tôt.",
+      "ownWarmupFix": "Déjà notée comme une vraie série ? Corrige-la avec « Série d'échauffement », dans la séance en cours ou dans l'historique.",
       "twoTimesBack": "Pendant la séance, le tableau série par série montre aussi l'avant-dernière fois, en gris, à côté de la dernière fois.",
       "fullHistory": "Sous le tableau, « Tout l'historique de cet exercice » ouvre toutes tes séances passées avec cet exercice, série par série.",
       "legPressSplit": "La presse à cuisses inclinée à 45° et la presse horizontale sont maintenant deux exercices, chacun avec ses charges.",
@@ -1710,7 +1717,8 @@
     "deleteYes": "Oui, supprimer la séance",
     "moveMachine": "Changer de machine",
     "moveMachineNamed": "Ces séries étaient sur une autre machine que {name}",
-    "emptyHint": "Ajoute les exercices que tu as faits. Une séance laissée vide n'est pas gardée."
+    "emptyHint": "Ajoute les exercices que tu as faits. Une séance laissée vide n'est pas gardée.",
+    "warmupSet": "Série d'échauffement : {name}"
   },
   "myLoad": {
     "title": "Ma charge",
@@ -1737,7 +1745,9 @@
     },
     "typeHint": "Tape la valeur exacte (47,5 kg, 8,5 reps) ou ajuste avec − et +.",
     "invalid": "Vérifie la charge et les reps : une charge de 0 ou plus, au moins une demi-rep.",
-    "load": "Charge ({unit})"
+    "load": "Charge ({unit})",
+    "warmup": "Série d'échauffement",
+    "warmupHint": "Ne compte ni dans les séries prévues, ni dans les records, ni dans les progrès."
   },
   "customSession": {
     "mine": "Mes séances",
