@@ -29,8 +29,8 @@
       "up": "+{delta}",
       "first": "1re fois"
     },
-    "tiredOff": "Pas en forme ? Alléger la séance",
-    "tiredOn": "✓ Séance allégée : une série de moins, mêmes charges",
+    "tiredOff": "Pas en forme ? Pas de hausse de charge",
+    "tiredOn": "✓ Pas en forme : toutes tes séries, sans hausse de charge",
     "doneToday": "✓ Séance du jour faite, bravo ! La prochaine :",
     "goExtra": "Faire une séance en plus",
     "heroLabel": "Séance du jour",
@@ -518,7 +518,9 @@
     },
     "tired": {
       "toggle": "Pas en forme aujourd'hui",
-      "help": "Une série de moins par exercice et pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser."
+      "help": "Toutes tes séries, mais pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser.",
+      "reminder": "Pas en forme aujourd'hui : pas de hausse de charge, mais toutes tes séries.",
+      "better": "Je me sens mieux : la charge peut monter"
     },
     "usualLoads": {
       "intro": "Tu connais déjà ta charge sur cette machine ? Note-la : la séance partira de là au lieu d'une série test. | Tu connais déjà tes charges sur ces {count} machines ? Note-les : la séance partira de là au lieu de séries test.",
@@ -574,7 +576,12 @@
       "light": "Trop léger"
     },
     "howWasIt": "Comment c'était ?",
-    "autoFinishAt": "Sans nouvelle action de ta part, la séance se clôturera toute seule à {time}."
+    "autoFinishAt": "Sans nouvelle action de ta part, la séance se clôturera toute seule à {time}.",
+    "ownWarmup": {
+      "log": "C'était une série d'échauffement",
+      "help": "Une série d'échauffement est gardée dans ta séance, mais elle ne compte pas dans tes séries prévues ni dans tes progrès."
+    },
+    "warmupSkipSet": "Passer cette série"
   },
   "availability": {
     "day": "Jour",
@@ -1238,6 +1245,8 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "notInShapeVisible": "« Pas en forme » garde toutes tes séries",
+      "ownWarmup": "Ta série d'échauffement ne compte plus comme une série",
       "twoTimesBack": "Séance : les deux dernières fois et tout l'historique",
       "machineSplit": "Presse et tirage : deux machines chacun",
       "guidedStretching": "Étirements guidés à tout moment",
@@ -1271,6 +1280,10 @@
       "autoFinish": "Séance clôturée toute seule"
     },
     "items": {
+      "tiredReminder": "« Pas en forme » garde maintenant toutes tes séries : il bloque seulement la hausse de charge, et un rappel le dit pendant la séance.",
+      "tiredBetter": "Ça va mieux ? « Je me sens mieux » laisse la charge remonter.",
+      "ownWarmupLog": "Avant ta première série sur une machine, le bouton « C'était une série d'échauffement » la garde dans ta séance sans la compter : tu ne passes plus à la machine suivante une série trop tôt.",
+      "ownWarmupFix": "Déjà notée comme une vraie série ? Corrige-la avec « Série d'échauffement », dans la séance en cours ou dans l'historique.",
       "twoTimesBack": "Pendant la séance, le tableau série par série montre aussi l'avant-dernière fois, en gris, à côté de la dernière fois.",
       "fullHistory": "Sous le tableau, « Tout l'historique de cet exercice » ouvre toutes tes séances passées avec cet exercice, série par série.",
       "legPressSplit": "La presse à cuisses inclinée à 45° et la presse horizontale sont maintenant deux exercices, chacun avec ses charges.",
@@ -1364,7 +1377,8 @@
       "fixedRest": "Le repos ne dépend que de l'exercice (plus long sur les gros mouvements). Il s'affiche sous le bouton, et le chrono orange montre sa durée totale.",
       "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier.",
       "autoFinish": "Une fois la dernière série du dernier exercice faite, la séance se clôture toute seule après 10 minutes sans action, comme avec le bouton « Terminer ». Ça marche aussi appli fermée : une notification te prévient.",
-      "autoFinishCardio": "Si un cardio est prévu après la muscu, ses minutes sont attendues en plus des 10 minutes."
+      "autoFinishCardio": "Si un cardio est prévu après la muscu, ses minutes sont attendues en plus des 10 minutes.",
+      "ownWarmupSkip": "Échauffement proposé par l'appli : « Passer cette série » saute seulement la série affichée, « Passer l'échauffement » saute tout l'échauffement de la machine, même après avoir fermé l'appli."
     }
   },
   "data": {
@@ -1710,7 +1724,8 @@
     "deleteYes": "Oui, supprimer la séance",
     "moveMachine": "Changer de machine",
     "moveMachineNamed": "Ces séries étaient sur une autre machine que {name}",
-    "emptyHint": "Ajoute les exercices que tu as faits. Une séance laissée vide n'est pas gardée."
+    "emptyHint": "Ajoute les exercices que tu as faits. Une séance laissée vide n'est pas gardée.",
+    "warmupSet": "Série d'échauffement : {name}"
   },
   "myLoad": {
     "title": "Ma charge",
@@ -1737,7 +1752,9 @@
     },
     "typeHint": "Tape la valeur exacte (47,5 kg, 8,5 reps) ou ajuste avec − et +.",
     "invalid": "Vérifie la charge et les reps : une charge de 0 ou plus, au moins une demi-rep.",
-    "load": "Charge ({unit})"
+    "load": "Charge ({unit})",
+    "warmup": "Série d'échauffement",
+    "warmupHint": "Ne compte ni dans les séries prévues, ni dans les records, ni dans les progrès."
   },
   "customSession": {
     "mine": "Mes séances",

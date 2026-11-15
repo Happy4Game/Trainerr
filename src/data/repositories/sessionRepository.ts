@@ -26,8 +26,13 @@ export interface SessionPlan {
   readonly supersets?: readonly (readonly [string, string])[];
   /** Short 20–30 min version of the session of the day. */
   readonly express?: boolean;
-  /** "Not in shape today": one set less, no load increase. */
+  /** "Not in shape today": all the sets, no load increase. */
   readonly tired?: boolean;
+  /**
+   * Proposed warm-up sets passed, by exercise: how many of its ramp, or
+   * `'all'` when the whole warm-up of that machine was passed.
+   */
+  readonly warmupSkips?: Readonly<Record<string, number | 'all'>>;
   /** When the session started (ms since 1970), for its length in the summary. */
   readonly startedAt?: number;
   /** Cardio before or after the weights, chosen before starting; skipped on the day. */
@@ -126,6 +131,8 @@ export async function updateSet(
   values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'> & {
     readonly rir?: number | undefined;
     readonly note?: string | undefined;
+    /** Marked afterwards as a warm-up set, or back to a work set. */
+    readonly warmup?: boolean | undefined;
   },
 ): Promise<void> {
   await db.run('UPDATE set_log SET load_kg = ?, reps = ?, difficulty = ? WHERE id = ?', [
@@ -138,6 +145,8 @@ export async function updateSet(
     await db.run('UPDATE set_log SET rir = ? WHERE id = ?', [values.rir ?? null, setId]);
   if ('note' in values)
     await db.run('UPDATE set_log SET note = ? WHERE id = ?', [values.note?.trim() || null, setId]);
+  if (values.warmup !== undefined)
+    await db.run('UPDATE set_log SET warmup = ? WHERE id = ?', [values.warmup ? 1 : 0, setId]);
 }
 
 export async function setSessionDate(db: SqlDatabase, sessionId: string, date: IsoDate) {

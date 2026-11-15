@@ -29,8 +29,8 @@
       "up": "+{delta}",
       "first": "First time"
     },
-    "tiredOff": "Not in shape? Make it lighter",
-    "tiredOn": "✓ Lighter session: one set less, same loads",
+    "tiredOff": "Not in shape? No load increase",
+    "tiredOn": "✓ Not in shape: all your sets, no load increase",
     "doneToday": "✓ Today's session done, well done! Next one:",
     "goExtra": "Do an extra session",
     "heroLabel": "Today's session",
@@ -518,7 +518,9 @@
     },
     "tired": {
       "toggle": "Not in shape today",
-      "help": "One set less per exercise and no load increase: you still train, without wearing yourself out."
+      "help": "All your sets, but no load increase: you still train, without wearing yourself out.",
+      "reminder": "Not in shape today: no load increase, but all your sets.",
+      "better": "I feel better: the load can go up"
     },
     "usualLoads": {
       "intro": "Already know your load on this machine? Note it: the session starts from it instead of a test set. | Already know your loads on these {count} machines? Note them: the session starts from them instead of test sets.",
@@ -574,7 +576,12 @@
       "light": "Too light"
     },
     "howWasIt": "How was it?",
-    "autoFinishAt": "If you do nothing else, the session will close by itself at {time}."
+    "autoFinishAt": "If you do nothing else, the session will close by itself at {time}.",
+    "ownWarmup": {
+      "log": "That was a warm-up set",
+      "help": "A warm-up set is kept in your session, but it counts neither among your planned sets nor in your progress."
+    },
+    "warmupSkipSet": "Skip this set"
   },
   "availability": {
     "day": "Day",
@@ -1238,6 +1245,8 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "notInShapeVisible": "“Not in shape” keeps all your sets",
+      "ownWarmup": "Your warm-up set no longer counts as a set",
       "twoTimesBack": "Workout: the last two times and the full history",
       "machineSplit": "Leg press and row: two machines each",
       "guidedStretching": "Guided stretches at any time",
@@ -1271,6 +1280,10 @@
       "autoFinish": "Session closed by itself"
     },
     "items": {
+      "tiredReminder": "“Not in shape” now keeps all your sets: it only stops the load from going up, and a reminder says so during the session.",
+      "tiredBetter": "Feeling better? “I feel better” lets the load go up again.",
+      "ownWarmupLog": "Before your first set on a machine, the “That was a warm-up set” button keeps it in your session without counting it: you no longer move to the next machine one set too early.",
+      "ownWarmupFix": "Already saved as a real set? Fix it with “Warm-up set”, in the current session or in the history.",
       "twoTimesBack": "During the workout, the set by set table also shows the time before, in grey, next to last time.",
       "fullHistory": "Under the table, \"Full history of this exercise\" opens every past session with this exercise, set by set.",
       "legPressSplit": "The 45° leg press and the horizontal leg press are now two exercises, each with its own loads.",
@@ -1364,7 +1377,8 @@
       "fixedRest": "The rest depends on the exercise only (longer on big movements). It shows under the button, and the orange timer shows its full length.",
       "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full.",
       "autoFinish": "Once the last set of the last exercise is done, the session closes by itself after 10 minutes without any action, just like the “Finish” button. It also works with the app closed: a notification lets you know.",
-      "autoFinishCardio": "If cardio is planned after the weights, its minutes are waited for on top of the 10 minutes."
+      "autoFinishCardio": "If cardio is planned after the weights, its minutes are waited for on top of the 10 minutes.",
+      "ownWarmupSkip": "Warm-up proposed by the app: “Skip this set” skips only the set shown, “Skip the warm-up” skips the whole warm-up of the machine, even after closing the app."
     }
   },
   "data": {
@@ -1710,7 +1724,8 @@
     "deleteYes": "Yes, delete the session",
     "moveMachine": "Change machine",
     "moveMachineNamed": "These sets were on another machine than {name}",
-    "emptyHint": "Add the exercises you did. A session left empty is not kept."
+    "emptyHint": "Add the exercises you did. A session left empty is not kept.",
+    "warmupSet": "Warm-up set: {name}"
   },
   "myLoad": {
     "title": "My load",
@@ -1737,7 +1752,9 @@
     },
     "typeHint": "Type the exact value (47.5 kg, 8.5 reps) or adjust with − and +.",
     "invalid": "Check the load and the reps: a load of 0 or more, at least half a rep.",
-    "load": "Load ({unit})"
+    "load": "Load ({unit})",
+    "warmup": "Warm-up set",
+    "warmupHint": "Counts neither among the planned sets, nor in records, nor in progress."
   },
   "customSession": {
     "mine": "My sessions",

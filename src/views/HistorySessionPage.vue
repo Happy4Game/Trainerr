@@ -16,6 +16,7 @@ import {
   IonSelect,
   IonSelectOption,
   IonTextarea,
+  IonToggle,
   IonTitle,
   IonToolbar,
   onIonViewDidLeave,
@@ -126,6 +127,9 @@ async function moveGroup(toId: string): Promise<void> {
 }
 const confirmingDelete = ref(false);
 
+/** Number of a work set among the work sets of its exercise: warm-ups are not counted. */
+const workNumber = (sets: readonly StoredSet[], index: number) =>
+  sets.slice(0, index + 1).filter((s) => !s.warmup).length;
 const number = (value: unknown) => Number(String(value ?? '').replace(',', '.'));
 
 async function change(
@@ -219,10 +223,15 @@ async function remove() {
               class="set"
               role="group"
               :aria-label="
-                t('historyEdit.set', { number: index + 1, name: nameOf(group.exerciseId) })
+                set.warmup
+                  ? t('historyEdit.warmupSet', { name: nameOf(group.exerciseId) })
+                  : t('historyEdit.set', {
+                      number: workNumber(group.sets, index),
+                      name: nameOf(group.exerciseId),
+                    })
               "
             >
-              <span class="number">{{ set.warmup ? t('session.warmupShort') : index + 1 }}</span>
+              <span class="number">{{ set.warmup ? '' : workNumber(group.sets, index) }}</span>
               <ion-input
                 type="number"
                 inputmode="decimal"
@@ -265,6 +274,17 @@ async function remove() {
               >
                 <Trash2 :size="20" aria-hidden="true" />
               </ion-button>
+              <ion-toggle
+                class="warmup-toggle"
+                :checked="!!set.warmup"
+                @ion-change="
+                  session.editHistory((db) =>
+                    updateSet(db, set.id, { ...set, warmup: $event.detail.checked }),
+                  )
+                "
+              >
+                {{ t('setEdit.warmup') }}
+              </ion-toggle>
               <p v-if="extraOf(set).length > 0 || set.note" class="set-extra">
                 <span>{{ extraOf(set).join(' · ') }}</span>
                 <span v-if="extraOf(set).length > 0 && set.note"> · </span>
@@ -426,6 +446,10 @@ async function remove() {
 .empty-hint {
   margin-block: var(--tr-space-4);
   color: var(--tr-text-muted);
+}
+.warmup-toggle {
+  grid-column: 2 / -1;
+  font-size: 0.875rem;
 }
 .set-extra {
   grid-column: 1 / -1;

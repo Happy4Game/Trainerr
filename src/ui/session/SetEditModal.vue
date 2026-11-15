@@ -28,7 +28,7 @@ import ExercisePicker from '@/ui/ExercisePicker.vue';
 /**
  * Correction of a set already validated during the session: the load and the
  * reps typed exactly (47,5 kg, 8,5 reps) or by steps, how it went, the reps in
- * reserve and the note.
+ * reserve, the note, and whether it was a warm-up set.
  */
 const props = defineProps<{ set?: StoredSet | undefined; name: string }>();
 const emit = defineEmits<{ close: [] }>();
@@ -45,6 +45,8 @@ const reps = ref(0);
 const difficulty = ref<Difficulty>('ok');
 const rir = ref<number>();
 const note = ref('');
+/** A warm-up set does not count among the planned sets. */
+const warmup = ref(false);
 /** What is typed in the fields, kept as text while typing. */
 const loadText = ref('');
 const repsText = ref('');
@@ -83,6 +85,7 @@ watch(
     difficulty.value = set.difficulty;
     rir.value = set.rir;
     note.value = set.note ?? '';
+    warmup.value = !!set.warmup;
     invalid.value = false;
     confirmingDelete.value = false;
   },
@@ -120,6 +123,7 @@ async function save(): Promise<void> {
     difficulty: difficulty.value,
     rir: rir.value,
     note: note.value,
+    warmup: warmup.value,
   });
   emit('close');
 }
@@ -220,6 +224,14 @@ async function remove(): Promise<void> {
         :label="t('session.setNote.label')"
         :placeholder="t('session.setNote.placeholder')"
       />
+      <ion-toggle
+        class="warmup-toggle"
+        :checked="warmup"
+        @ion-change="warmup = $event.detail.checked"
+      >
+        {{ t('setEdit.warmup') }}
+      </ion-toggle>
+      <p class="hint">{{ t('setEdit.warmupHint') }}</p>
       <p v-if="invalid" class="invalid" role="alert">{{ t('setEdit.invalid') }}</p>
       <ion-button expand="block" size="large" class="save" @click="save">
         {{ t('setEdit.save') }}
@@ -315,6 +327,10 @@ async function remove(): Promise<void> {
 }
 .note {
   margin-block-start: 12px;
+}
+.warmup-toggle {
+  margin-block-start: 16px;
+  width: 100%;
 }
 .invalid {
   color: var(--ion-color-danger);

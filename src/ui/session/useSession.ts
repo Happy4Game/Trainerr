@@ -438,12 +438,12 @@ function noHigherThanLastTime(exerciseId: string, loadKg: number): number {
 }
 
 /**
- * "Not in shape today", chosen before starting: one set less per exercise and
- * no load increase. Training anyway, without digging a hole.
+ * "Not in shape today", chosen before starting: all the planned sets, but no
+ * load increase. Training anyway, without digging a hole.
  */
 const tiredToday = ref(false);
-/** Lighter today: a light week of the cycle, or the user said so. */
-const lighter = () => cycle.value.light || tiredToday.value;
+/** One set less per exercise: a light week of the cycle only. */
+const lighter = () => cycle.value.light;
 
 function plannedSets(exerciseId: string): number {
   return (
@@ -470,15 +470,30 @@ const autoFinishDeadline = computed(() => {
   });
 });
 
-/** Exercises whose warm-up the user skipped in this session. */
-const warmupSkipped = ref<string[]>([]);
+/** Warm-up sets of an exercise passed by the user, kept with the session. */
+function warmupSkipsOf(exerciseId: string): number | 'all' {
+  return active.value?.plan.warmupSkips?.[exerciseId] ?? 0;
+}
+
+/**
+ * Passes the proposed warm-up of an exercise: only the set shown (the ramp
+ * goes on with the next one), or the whole warm-up of that machine.
+ */
+async function skipWarmup(exerciseId: string, scope: 'set' | 'all'): Promise<void> {
+  const plan = active.value?.plan;
+  if (!plan) return;
+  const current = warmupSkipsOf(exerciseId);
+  const next = scope === 'all' || current === 'all' ? 'all' : current + 1;
+  await updatePlan({ ...plan, warmupSkips: { ...plan.warmupSkips, [exerciseId]: next } });
+}
 
 /** Next warm-up set to do before the first work set, with its place in the ramp. */
 const warmup = computed(() => {
   const s = step.value;
   if (s?.kind !== 'exercise' || !active.value) return undefined;
   if (workSetsInSession(s.exerciseId).length > 0) return undefined;
-  if (warmupSkipped.value.includes(s.exerciseId)) return undefined;
+  const skipped = warmupSkipsOf(s.exerciseId);
+  if (skipped === 'all') return undefined;
   const entry = entryOf(s.exerciseId);
   const proposal = proposalFor(s.exerciseId);
   // No warm-up set with a help machine (lighter means more help), nor before a
@@ -494,8 +509,10 @@ const warmup = computed(() => {
     // First exercise: nothing logged yet, or only its own warm-up sets.
     isFirst: active.value.sets.every((set) => set.exerciseId === s.exerciseId && set.warmup),
   });
-  const next = ramp[done];
-  return next ? { ...next, index: done + 1, total: ramp.length } : undefined;
+  // Sets done and sets passed both move along the ramp.
+  const reached = done + skipped;
+  const next = ramp[reached];
+  return next ? { ...next, index: reached + 1, total: ramp.length } : undefined;
 });
 
 async function load(): Promise<void> {
@@ -826,27 +843,60 @@ async function undoLastSet(): Promise<void> {
   restEndsAt.value = undefined;
 }
 
-/** Correction of a set validated too fast: load, reps or feeling. */
+/**
+ * Correction of a set validated too fast: load, reps, feeling, or a set that
+ * was in fact a warm-up (or the other way round).
+ */
 async function editSessionSet(
   setId: string,
   values: Pick<SetLog, 'loadKg' | 'reps' | 'difficulty'> & {
     readonly rir?: number | undefined;
     readonly note?: string | undefined;
+    readonly warmup?: boolean | undefined;
   },
 ): Promise<void> {
-  if (!active.value) return;
+  const before = active.value?.sets.find((s) => s.id === setId);
+  if (!active.value || !before) return;
   const { db } = await openAppDatabase();
   await updateSet(db, setId, values);
   active.value = {
     ...active.value,
     sets: active.value.sets.map((s) => {
       if (s.id !== setId) return s;
-      const { rir: _rir, note: _note, ...rest } = { ...s, ...values };
+      const { rir: _rir, note: _note, warmup: _warmup, ...rest } = { ...s, ...values };
       const rir = 'rir' in values ? values.rir : s.rir;
       const note = 'note' in values ? values.note?.trim() : s.note;
-      return { ...rest, ...(rir !== undefined ? { rir } : {}), ...(note ? { note } : {}) };
+      const warmup = values.warmup ?? s.warmup;
+      return {
+        ...rest,
+        ...(rir !== undefined ? { rir } : {}),
+        ...(note ? { note } : {}),
+        ...(warmup ? { warmup: true } : {}),
+      };
     }),
   };
+  if (values.warmup !== undefined && values.warmup !== !!before.warmup) {
+    await recountWorkSets(before.exerciseId);
+  }
+}
+
+/**
+ * After a set changed between warm-up and work: the exercise reopens if it now
+ * lacks work sets, or ends if it now has them all.
+ */
+async function recountWorkSets(exerciseId: string): Promise<void> {
+  if (!active.value) return;
+  const queue = active.value.plan.queue;
+  const done = workSetsInSession(exerciseId).length;
+  const target = plannedSets(exerciseId);
+  if (queue.done.includes(exerciseId) && done < target) {
+    await updatePlan({
+      ...active.value.plan,
+      queue: startNow({ ...queue, done: queue.done.filter((id) => id !== exerciseId) }, exerciseId),
+    });
+  } else if (queue.pending.includes(exerciseId) && done >= target) {
+    await updatePlan({ ...active.value.plan, queue: completeExercise(queue, exerciseId) });
+  }
 }
 
 /** A set logged by mistake: removed; its exercise reopens if it now lacks sets. */
@@ -973,6 +1023,14 @@ async function extraSet(exerciseId: string): Promise<void> {
     exercises: withExtraSet(plan.exercises, exerciseId, plannedSets(exerciseId)),
     queue,
   });
+}
+
+/** "Not in shape" undone during the session: loads may go up again. */
+async function backInShape(): Promise<void> {
+  const plan = active.value?.plan;
+  if (!plan?.tired) return;
+  const { tired: _tired, ...rest } = plan;
+  await updatePlan(rest);
 }
 
 /** Exercise added by hand, with the usual number of sets. */
@@ -1384,9 +1442,7 @@ export function useSession() {
     recordFor,
     lastSetBeatRecord,
     recordBeaten,
-    skipWarmup: (exerciseId: string) => {
-      warmupSkipped.value = [...warmupSkipped.value, exerciseId];
-    },
+    skipWarmup,
     restEndsAt,
     restStartedAt,
     lastActivityAt,
@@ -1434,6 +1490,7 @@ export function useSession() {
     editHistory,
     addPastSession,
     extraSet,
+    backInShape,
     replacements,
     neglected,
     swappedFrom,
