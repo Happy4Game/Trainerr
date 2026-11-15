@@ -91,7 +91,7 @@ import { averageRest } from '@/domain/restTaken';
 import {
   afterMovingSets,
   applySwaps,
-  movePending,
+  moveUpcoming,
   removeFromQueue,
   replaceInQueue,
   replacementsFor,
@@ -1145,12 +1145,12 @@ async function replaceExercise(fromId: string, toId: string): Promise<void> {
   await updatePlan({ ...plan, exercises, queue, ...(supersets ? { supersets } : {}) });
 }
 
-/** One place earlier or later among the exercises to come. */
+/** One place earlier or later among the exercises to come, a taken machine too. */
 async function moveExercise(exerciseId: string, delta: -1 | 1): Promise<void> {
   if (!active.value) return;
   await updatePlan({
     ...active.value.plan,
-    queue: movePending(active.value.plan.queue, exerciseId, delta),
+    queue: moveUpcoming(active.value.plan.queue, exerciseId, delta),
   });
 }
 

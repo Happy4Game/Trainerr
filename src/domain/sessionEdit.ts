@@ -84,6 +84,60 @@ export function movePending(
   return { ...queue, pending };
 }
 
+/**
+ * The exercises to come, in the order the session will really offer them: the
+ * current one, then the taken machines (asked again right after it), then the
+ * others.
+ */
+export function upcomingOrder(queue: ExerciseQueue): string[] {
+  const waiting = queue.waiting.map((w) => w.exerciseId);
+  const [current, ...rest] = queue.pending;
+  return [...new Set([...(current === undefined ? [] : [current]), ...waiting, ...rest])];
+}
+
+/** The current exercise stays first: the others move around it. */
+export function canMoveUpcoming(queue: ExerciseQueue, exerciseId: string, delta: -1 | 1): boolean {
+  const order = upcomingOrder(queue);
+  const first = queue.pending.length > 0 ? 1 : 0;
+  const index = order.indexOf(exerciseId);
+  return index >= first && index + delta >= first && index + delta < order.length;
+}
+
+/**
+ * One place earlier or later among the exercises to come, taken machines
+ * included. A taken machine moved by hand, or passed over by another exercise,
+ * becomes a normal exercise at its new place: no more "Is it free?" question.
+ * Two taken machines swapped stay taken.
+ */
+export function moveUpcoming(
+  queue: ExerciseQueue,
+  exerciseId: string,
+  delta: -1 | 1,
+): ExerciseQueue {
+  if (!canMoveUpcoming(queue, exerciseId, delta)) return queue;
+  const order = upcomingOrder(queue);
+  const index = order.indexOf(exerciseId);
+  const other = order[index + delta] as string;
+  const isWaiting = (id: string) => queue.waiting.some((w) => w.exerciseId === id);
+  if (isWaiting(exerciseId) && isWaiting(other)) {
+    const swap = (id: string) => (id === exerciseId ? other : id === other ? exerciseId : id);
+    const byId = new Map(queue.waiting.map((w) => [w.exerciseId, w]));
+    const waiting = queue.waiting.map((w) => byId.get(swap(w.exerciseId)) ?? w);
+    return { ...queue, waiting };
+  }
+  order[index] = other;
+  order[index + delta] = exerciseId;
+  const stillWaiting = queue.waiting.filter(
+    (w) => w.exerciseId !== exerciseId && w.exerciseId !== other,
+  );
+  const waitingIds = new Set(stillWaiting.map((w) => w.exerciseId));
+  return {
+    ...queue,
+    pending: order.filter((id) => !waitingIds.has(id)),
+    waiting: stillWaiting,
+  };
+}
+
 /** Removes an exercise not started yet from the rest of the session. */
 export function removeFromQueue(queue: ExerciseQueue, exerciseId: string): ExerciseQueue {
   return {

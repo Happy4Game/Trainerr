@@ -1245,6 +1245,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "busyReorder": "A taken machine moves in the list",
       "notInShapeVisible": "“Not in shape” keeps all your sets",
       "ownWarmup": "Your warm-up set no longer counts as a set",
       "twoTimesBack": "Workout: the last two times and the full history",
@@ -1280,6 +1281,8 @@
       "autoFinish": "Session closed by itself"
     },
     "items": {
+      "busyReorder": "Taken machine: in “See the session plan”, its arrows work like for the other exercises. Once moved, it becomes a normal exercise at its new place, without asking again if it is free.",
+      "busyInOrder": "The list shows the taken machine right after the current exercise, where the app really offers it again, and no longer at the end.",
       "tiredReminder": "“Not in shape” now keeps all your sets: it only stops the load from going up, and a reminder says so during the session.",
       "tiredBetter": "Feeling better? “I feel better” lets the load go up again.",
       "ownWarmupLog": "Before your first set on a machine, the “That was a warm-up set” button keeps it in your session without counting it: you no longer move to the next machine one set too early.",
