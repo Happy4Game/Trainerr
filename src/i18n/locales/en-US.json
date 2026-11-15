@@ -922,13 +922,15 @@
       "privacy": "Your photos stay in the app, on your phone: nothing is sent online. They are also in your backup, keep that file to yourself.",
       "take": "Take a photo",
       "import": "Import",
-      "tip": "To compare well: same light, same place, same pose (front, side or back), ideally in the morning.",
+      "tip": "To compare well: same light, same place, same pose, ideally in the morning before eating.",
       "pose": "Pose",
       "poses": {
         "all": "All",
         "front": "Front",
         "side": "Side",
-        "back": "Back"
+        "back": "Back",
+        "frontBiceps": "Front biceps",
+        "backBiceps": "Back biceps"
       },
       "adding": "Adding the photos…",
       "empty": "No photo yet. Take one in front of the mirror or import those from your gallery.",
@@ -942,7 +944,13 @@
       "delete": "Delete this photo",
       "deleteConfirm": "Yes, delete for good",
       "link": "My gallery ({count} photo) | My gallery ({count} photos)",
-      "linkEmpty": "Open my gallery"
+      "linkEmpty": "Open my gallery",
+      "inPhone": "Also show my photos in the phone's Photos app",
+      "inPhoneHelp": "A copy of each photo goes to the “Trainerr” album of the gallery. Turned off, the copies are removed and your photos are only in Trainerr.",
+      "inPhoneOn": "Your photos are in the app and a copy is in the “Trainerr” album of your gallery. Trainerr sends nothing online, but a backup app (Google Photos…) may sync them.",
+      "copied": "{count} photo copied to the Trainerr album. | {count} photos copied to the Trainerr album.",
+      "removed": "The copies were removed from the gallery.",
+      "left": "{count} copy could not be removed (made before a reinstall): delete it in the Photos app. | {count} copies could not be removed (made before a reinstall): delete them in the Photos app."
     },
     "camera": {
       "title": "Take a photo",
@@ -958,9 +966,11 @@
       "keep": "Keep this photo",
       "useCameraApp": "Open the phone's camera app",
       "howTo": {
-        "front": "From the front, arms by your sides, phone at navel height.",
-        "side": "From the side, arms by your sides, always the same side.",
-        "back": "From the back: put the phone down and set the timer to 10 s."
+        "front": "From the front, feet hip-width apart, arms relaxed by your sides, eyes straight. Phone at navel height.",
+        "side": "From the side, always the same side, arms by your sides, belly neither pulled in nor pushed out.",
+        "back": "From the back, as from the front, arms relaxed. Put the phone down and set the timer to 10 s.",
+        "frontBiceps": "From the front, arms raised to shoulder height, elbows bent, fists closed: squeeze the biceps and the abs.",
+        "backBiceps": "From the back, arms raised as from the front, shoulder blades spread to open the back. Timer at 10 s."
       },
       "problems": {
         "unsupported": "This phone can't use the camera inside the app.",
@@ -968,7 +978,10 @@
         "missing": "No camera found.",
         "busy": "The camera is already used by another app.",
         "other": "The camera couldn't start."
-      }
+      },
+      "outline": "Pose outline",
+      "opening": "Opening the camera…",
+      "openingHint": "If Android asks, allow the camera. Meanwhile, here is the pose."
     },
     "names": {
       "arm": "Arm",
@@ -1277,7 +1290,8 @@
       "photosAndReminders": "Photos, slots and reminders",
       "failureAndRest": "Gentler failure, rest shown first",
       "rirRest": "One tap, like with a coach",
-      "autoFinish": "Session closed by itself"
+      "autoFinish": "Session closed by itself",
+      "photoPoses": "Photos: guided poses and gallery"
     },
     "items": {
       "tiredReminder": "“Not in shape” now keeps all your sets: it only stops the load from going up, and a reminder says so during the session.",
@@ -1378,7 +1392,10 @@
       "calendar": "Planning: a calendar of all your sessions. In the month view, each session's name is written in its day's box; in the week view, each day looks like \"Your week\". Tap a session to open it in full.",
       "autoFinish": "Once the last set of the last exercise is done, the session closes by itself after 10 minutes without any action, just like the “Finish” button. It also works with the app closed: a notification lets you know.",
       "autoFinishCardio": "If cardio is planned after the weights, its minutes are waited for on top of the 10 minutes.",
-      "ownWarmupSkip": "Warm-up proposed by the app: “Skip this set” skips only the set shown, “Skip the warm-up” skips the whole warm-up of the machine, even after closing the app."
+      "ownWarmupSkip": "Warm-up proposed by the app: “Skip this set” skips only the set shown, “Skip the warm-up” skips the whole warm-up of the machine, even after closing the app.",
+      "cameraLoading": "While the camera opens, a tidy screen shows the pose to take, instead of a black or grey frame.",
+      "poseGuides": "Five poses to hold (front, side, back, front biceps, back biceps), each with its outline over the camera and how to stand.",
+      "photosInGallery": "On Android 10 and later, you choose whether your photos also show in the phone's Photos app (Trainerr album). Off by default."
     }
   },
   "data": {

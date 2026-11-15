@@ -12,6 +12,7 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(AppUpdaterPlugin.class);
         registerPlugin(FileSharePlugin.class);
         registerPlugin(HealthWeightPlugin.class);
+        registerPlugin(PhotoGalleryPlugin.class);
         super.onCreate(savedInstanceState);
     }
 }

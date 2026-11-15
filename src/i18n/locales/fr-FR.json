@@ -922,13 +922,15 @@
       "privacy": "Tes photos restent dans l'appli, sur ton téléphone : rien n'est envoyé sur internet. Elles sont aussi dans ta sauvegarde, garde ce fichier pour toi.",
       "take": "Prendre une photo",
       "import": "Importer",
-      "tip": "Pour bien comparer : même lumière, même endroit, même pose (face, profil ou dos), idéalement le matin.",
+      "tip": "Pour bien comparer : même lumière, même endroit, même pose, idéalement le matin à jeun.",
       "pose": "Pose",
       "poses": {
         "all": "Toutes",
         "front": "Face",
         "side": "Profil",
-        "back": "Dos"
+        "back": "Dos",
+        "frontBiceps": "Biceps face",
+        "backBiceps": "Biceps dos"
       },
       "adding": "Ajout des photos…",
       "empty": "Aucune photo pour l'instant. Prends-en une devant le miroir ou importe celles de ta galerie.",
@@ -942,7 +944,13 @@
       "delete": "Supprimer cette photo",
       "deleteConfirm": "Oui, supprimer définitivement",
       "link": "Ma galerie ({count} photo) | Ma galerie ({count} photos)",
-      "linkEmpty": "Ouvrir ma galerie"
+      "linkEmpty": "Ouvrir ma galerie",
+      "inPhone": "Voir aussi mes photos dans l'appli Photos du téléphone",
+      "inPhoneHelp": "Une copie de chaque photo va dans l'album « Trainerr » de la galerie. Désactivé, les copies sont retirées et tes photos ne sont que dans Trainerr.",
+      "inPhoneOn": "Tes photos sont dans l'appli et une copie est dans l'album « Trainerr » de ta galerie. Rien n'est envoyé sur internet par Trainerr, mais une appli de sauvegarde (Google Photos…) peut les synchroniser.",
+      "copied": "{count} photo copiée dans l'album Trainerr. | {count} photos copiées dans l'album Trainerr.",
+      "removed": "Les copies ont été retirées de la galerie.",
+      "left": "{count} copie n'a pas pu être retirée (faite avant une réinstallation) : supprime-la dans l'appli Photos. | {count} copies n'ont pas pu être retirées (faites avant une réinstallation) : supprime-les dans l'appli Photos."
     },
     "camera": {
       "title": "Prendre une photo",
@@ -958,9 +966,11 @@
       "keep": "Garder cette photo",
       "useCameraApp": "Ouvrir l'appareil photo du téléphone",
       "howTo": {
-        "front": "De face, bras le long du corps, téléphone à hauteur du nombril.",
-        "side": "De profil, bras le long du corps, toujours du même côté.",
-        "back": "De dos : pose le téléphone et mets le retardateur à 10 s."
+        "front": "De face, pieds écartés largeur des hanches, bras relâchés le long du corps, regard droit. Téléphone à hauteur du nombril.",
+        "side": "De profil, toujours du même côté, bras le long du corps, ventre ni rentré ni gonflé.",
+        "back": "De dos, comme de face, bras relâchés. Pose le téléphone et mets le retardateur à 10 s.",
+        "frontBiceps": "De face, bras levés à hauteur des épaules, coudes pliés, poings serrés : contracte les biceps et le ventre.",
+        "backBiceps": "De dos, bras levés comme de face, omoplates écartées pour ouvrir le dos. Retardateur à 10 s."
       },
       "problems": {
         "unsupported": "Ce téléphone ne permet pas d'utiliser la caméra dans l'appli.",
@@ -968,7 +978,10 @@
         "missing": "Aucune caméra trouvée.",
         "busy": "La caméra est déjà utilisée par une autre appli.",
         "other": "La caméra n'a pas pu démarrer."
-      }
+      },
+      "outline": "Silhouette de la pose",
+      "opening": "Ouverture de la caméra…",
+      "openingHint": "Si Android le demande, autorise la caméra. En attendant, voici la pose."
     },
     "names": {
       "arm": "Bras",
@@ -1277,7 +1290,8 @@
       "photosAndReminders": "Photos, créneaux et rappels",
       "failureAndRest": "Échec moins punitif, repos visible",
       "rirRest": "Une seule validation, comme avec un coach",
-      "autoFinish": "Séance clôturée toute seule"
+      "autoFinish": "Séance clôturée toute seule",
+      "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
       "tiredReminder": "« Pas en forme » garde maintenant toutes tes séries : il bloque seulement la hausse de charge, et un rappel le dit pendant la séance.",
@@ -1378,7 +1392,10 @@
       "calendar": "Planning : un calendrier de toutes tes séances. En vue mois, le nom de chaque séance est écrit dans la case de son jour ; en vue semaine, chaque jour est présenté comme « Ta semaine ». Un appui sur une séance l'ouvre en entier.",
       "autoFinish": "Une fois la dernière série du dernier exercice faite, la séance se clôture toute seule après 10 minutes sans action, comme avec le bouton « Terminer ». Ça marche aussi appli fermée : une notification te prévient.",
       "autoFinishCardio": "Si un cardio est prévu après la muscu, ses minutes sont attendues en plus des 10 minutes.",
-      "ownWarmupSkip": "Échauffement proposé par l'appli : « Passer cette série » saute seulement la série affichée, « Passer l'échauffement » saute tout l'échauffement de la machine, même après avoir fermé l'appli."
+      "ownWarmupSkip": "Échauffement proposé par l'appli : « Passer cette série » saute seulement la série affichée, « Passer l'échauffement » saute tout l'échauffement de la machine, même après avoir fermé l'appli.",
+      "cameraLoading": "Pendant que la caméra s'ouvre, un écran soigné montre la pose à prendre, au lieu d'un cadre noir ou gris.",
+      "poseGuides": "Cinq poses à tenir (face, profil, dos, biceps de face, biceps de dos), chacune avec sa silhouette sur la caméra et comment se placer.",
+      "photosInGallery": "Sur Android 10 et plus, tu choisis si tes photos apparaissent aussi dans l'appli Photos du téléphone (album Trainerr). Désactivé par défaut."
     }
   },
   "data": {

@@ -256,6 +256,7 @@ async function remove(): Promise<void> {
 }
 .poses {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-block-end: 16px;
 }

@@ -5,15 +5,14 @@ import {
   IonContent,
   IonHeader,
   IonModal,
-  IonSegment,
-  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from '@ionic/vue';
-import { Layers, SwitchCamera, Timer } from 'lucide-vue-next';
+import { Camera, Layers, PersonStanding, SwitchCamera, Timer } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { PHOTO_POSES, type PhotoPose } from '@/domain/photos';
+import { PHOTO_POSES, POSE_SHAPE, type PhotoPose } from '@/domain/photos';
+import PoseGuide from '@/ui/body/PoseGuide.vue';
 import {
   cameraCount,
   cameraProblem,
@@ -29,9 +28,16 @@ import {
 import { readPhoto, shrinkToJpeg } from '@/ui/photo';
 
 /**
- * Body photo taken inside the app: the pose chosen above the camera preview,
- * the front or back camera, a self-timer, and the last photo of the same pose
- * shown faintly over the preview to stand at the same place.
+ * Body photo taken inside the app: the pose chosen above the camera preview
+ * (each with a small drawing and how to hold it), the front or back camera, a
+ * self-timer, the outline of the pose over the preview, and the last photo of
+ * the same pose shown faintly to stand at the same place.
+ *
+ * While the camera starts (Android may first ask for the permission), the
+ * frame shows the pose's outline and "Opening the camera…" instead of a black
+ * box. The video stays hidden until its first image plays: without a `poster`,
+ * Android's WebView paints its own grey placeholder with a play icon
+ * (WebChromeClient.getDefaultVideoPoster), so the video gets an empty one.
  */
 const props = defineProps<{
   open: boolean;
@@ -48,6 +54,7 @@ const pose = ref<PhotoPose>('front');
 const facing = ref<Facing>('user');
 const timer = ref<TimerStep>(0);
 const overlay = ref(true);
+const outline = ref(true);
 const cameras = ref(1);
 const problem = ref<CameraProblem>();
 const ready = ref(false);
@@ -56,6 +63,9 @@ const shot = ref<string>();
 const video = ref<HTMLVideoElement>();
 let stream: MediaStream | undefined;
 let ticking: ReturnType<typeof setInterval> | undefined;
+
+/** Transparent 1 × 1 GIF: no grey placeholder from the WebView before the first image. */
+const EMPTY_POSTER = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
 const ghost = computed(() => (overlay.value ? props.lastOfPose[pose.value] : undefined));
 
@@ -73,11 +83,15 @@ async function start(): Promise<void> {
       video.value.srcObject = stream;
       await video.value.play().catch(() => undefined);
     }
-    ready.value = true;
     cameras.value = await cameraCount();
   } catch (error) {
     problem.value = cameraProblem(error);
   }
+}
+
+/** First image on screen: the loading frame fades out. */
+function playing(): void {
+  if (stream) ready.value = true;
 }
 
 function stop(): void {
@@ -159,26 +173,45 @@ onBeforeUnmount(stop);
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <ion-segment
-        :value="pose"
-        :aria-label="t('body.gallery.pose')"
-        @ion-change="pose = ($event.detail.value as PhotoPose) ?? 'front'"
-      >
-        <ion-segment-button v-for="p in PHOTO_POSES" :key="p" :value="p">
+      <div class="poses" role="group" :aria-label="t('body.gallery.pose')">
+        <button
+          v-for="p in PHOTO_POSES"
+          :key="p"
+          type="button"
+          class="pose"
+          :class="{ chosen: p === pose }"
+          :aria-pressed="p === pose"
+          @click="pose = p"
+        >
+          <span class="pose-drawing">
+            <PoseGuide :shape="POSE_SHAPE[p]" />
+          </span>
           {{ t(`body.gallery.poses.${p}`) }}
-        </ion-segment-button>
-      </ion-segment>
+        </button>
+      </div>
       <p class="hint">{{ t(`body.camera.howTo.${pose}`) }}</p>
 
       <div class="frame">
         <video
           ref="video"
-          :class="{ mirrored: facing === 'user' }"
+          :class="{ mirrored: facing === 'user', live: ready }"
           playsinline
           muted
+          :poster="EMPTY_POSTER"
           :aria-label="t('body.camera.live')"
+          @playing="playing"
         />
         <img v-if="ghost && ready && !shot" class="ghost" :src="ghost" alt="" />
+        <div v-if="outline && !shot && !problem" class="outline" :class="{ waiting: !ready }">
+          <PoseGuide :shape="POSE_SHAPE[pose]" overlay />
+        </div>
+        <Transition name="fade">
+          <div v-if="!ready && !problem && !shot" class="loading" role="status">
+            <span class="loading-icon"><Camera :size="28" aria-hidden="true" /></span>
+            <p class="loading-title">{{ t('body.camera.opening') }}</p>
+            <p class="loading-sub">{{ t('body.camera.openingHint') }}</p>
+          </div>
+        </Transition>
         <span v-if="countdown > 0" class="countdown" role="timer" aria-live="assertive">
           {{ countdown }}
         </span>
@@ -225,16 +258,58 @@ onBeforeUnmount(stop);
           <span class="timer">{{ timer > 0 ? `${timer} s` : t('body.camera.timerOff') }}</span>
         </button>
       </div>
-      <label v-if="!shot && lastOfPose[pose]" class="overlay">
-        <input v-model="overlay" type="checkbox" />
-        <Layers :size="18" aria-hidden="true" />
-        {{ t('body.camera.overlay') }}
-      </label>
+      <div v-if="!shot" class="toggles">
+        <label class="toggle">
+          <input v-model="outline" type="checkbox" />
+          <PersonStanding :size="18" aria-hidden="true" />
+          {{ t('body.camera.outline') }}
+        </label>
+        <label v-if="lastOfPose[pose]" class="toggle">
+          <input v-model="overlay" type="checkbox" />
+          <Layers :size="18" aria-hidden="true" />
+          {{ t('body.camera.overlay') }}
+        </label>
+      </div>
     </ion-content>
   </ion-modal>
 </template>
 
 <style scoped>
+.poses {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-inline: -16px;
+  padding: 2px 16px 4px;
+  scrollbar-width: none;
+}
+.pose {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 72px;
+  padding: 8px 10px;
+  border: 2px solid transparent;
+  border-radius: var(--tr-radius-m);
+  background: var(--tr-surface-2);
+  color: var(--tr-text-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.pose.chosen {
+  border-color: var(--ion-color-primary);
+  color: var(--ion-text-color);
+}
+.pose-drawing {
+  width: 36px;
+  height: 48px;
+}
+.pose.chosen .pose-drawing {
+  color: var(--ion-color-primary);
+}
 .hint {
   margin-block: 8px;
   color: var(--tr-text-muted);
@@ -248,7 +323,7 @@ onBeforeUnmount(stop);
   margin-inline: auto;
   aspect-ratio: 3 / 4;
   border-radius: var(--tr-radius-m);
-  background: #000;
+  background: radial-gradient(circle at 50% 35%, #2a3340, #0d1117 75%);
 }
 .frame video,
 .frame .shot,
@@ -259,8 +334,73 @@ onBeforeUnmount(stop);
   height: 100%;
   object-fit: cover;
 }
+.frame video {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.frame video.live {
+  opacity: 1;
+}
 .mirrored {
   transform: scaleX(-1);
+}
+.outline {
+  position: absolute;
+  inset: 6% 8% 3%;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.outline.waiting {
+  opacity: 0.45;
+}
+.loading {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 48px 16px 20px;
+  background: linear-gradient(transparent, rgb(0 0 0 / 70%));
+  color: #fff;
+  text-align: center;
+}
+.loading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-block-end: 6px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 12%);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.loading-title {
+  margin: 0;
+  font-weight: 700;
+}
+.loading-sub {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+@keyframes pulse {
+  50% {
+    transform: scale(1.08);
+    background: rgb(255 255 255 / 22%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-icon {
+    animation: none;
+  }
+}
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-leave-to {
+  opacity: 0;
 }
 .ghost {
   opacity: 0.35;
@@ -346,12 +486,17 @@ onBeforeUnmount(stop);
   gap: 12px;
   margin-block-start: 16px;
 }
-.overlay {
+.toggles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 16px;
+  margin-block-start: 8px;
+}
+.toggle {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   min-height: 44px;
-  margin-block-start: 8px;
 }
 </style>

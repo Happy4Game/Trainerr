@@ -17,7 +17,7 @@ test('body photos: imported, dated, sorted by pose and compared, on the phone on
   await expect(page.getByRole('note')).toContainText("rien n'est envoyé sur internet");
 
   // Imported as front photos: the pose chosen above applies to new photos.
-  await page.locator('ion-segment-button', { hasText: 'Face' }).click();
+  await page.locator('ion-segment-button', { hasText: /^Face$/ }).click();
   await page.getByLabel('Importer').setInputFiles([photo('a.png'), photo('b.png')]);
   // The month sections only: the before / after photos open too.
   const thumbs = page
@@ -50,7 +50,7 @@ test('body photos: each one opens on the whole screen, and two are compared in d
   await skipOnboarding(page);
   await openBody(page);
   await page.getByRole('link', { name: 'Ouvrir ma galerie' }).click();
-  await page.locator('ion-segment-button', { hasText: 'Face' }).click();
+  await page.locator('ion-segment-button', { hasText: /^Face$/ }).click();
   await page.getByLabel('Importer').setInputFiles([photo('a.png'), photo('b.png'), photo('c.png')]);
   // The month sections only: the before / after photos open too.
   const thumbs = page
