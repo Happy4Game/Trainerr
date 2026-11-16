@@ -28,6 +28,7 @@ import { instructionsFor } from '@/data/catalog/instructions';
 import { useSession } from '@/ui/session/useSession';
 import ComebackCard from '@/ui/ComebackCard.vue';
 import ExerciseProgress from '@/ui/ExerciseProgress.vue';
+import ExerciseHistoryCard from '@/ui/ExerciseHistoryCard.vue';
 import { readPhoto } from '@/ui/photo';
 import LoadStepsEditor from '@/ui/LoadStepsEditor.vue';
 import MachineRepRange from '@/ui/MachineRepRange.vue';
@@ -304,6 +305,8 @@ const muscleList = (muscles: readonly MuscleId[]) =>
         </ion-card>
 
         <ExerciseProgress :exercise-id="exercise.id" :name="title" :steps="stepsForComeback" />
+
+        <ExerciseHistoryCard :exercise-id="exercise.id" :name="title" />
 
         <ComebackCard
           :exercise-id="exercise.id"
