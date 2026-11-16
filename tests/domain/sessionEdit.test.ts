@@ -3,10 +3,13 @@ import { startQueue } from '@/domain/busyMachine';
 import {
   afterMovingSets,
   applySwaps,
+  canMoveUpcoming,
   movePending,
+  moveUpcoming,
   removeFromQueue,
   replaceInQueue,
   replacementsFor,
+  upcomingOrder,
   withoutSet,
 } from '@/domain/sessionEdit';
 import type { Exercise } from '@/domain/types';
@@ -131,5 +134,48 @@ describe('machines replaced from the preview', () => {
   it('ignores a replacement missing from the catalog', () => {
     const session = applySwaps([chestPress], { chestPress: 'gone' }, lookup);
     expect(session.map((e) => e.id)).toEqual(['chestPress']);
+  });
+});
+
+describe('reordering with a taken machine', () => {
+  // "a" is in progress, "b" was taken and "c" comes after.
+  const queue = { pending: ['a', 'c', 'd'], waiting: [{ exerciseId: 'b', since: 0 }], done: [] };
+
+  it('lists the taken machine right after the current exercise', () => {
+    expect(upcomingOrder(queue)).toEqual(['a', 'b', 'c', 'd']);
+  });
+
+  it('moves the taken machine later: it becomes a normal exercise', () => {
+    const moved = moveUpcoming(queue, 'b', 1);
+    expect(moved.pending).toEqual(['a', 'c', 'b', 'd']);
+    expect(moved.waiting).toEqual([]);
+    expect(upcomingOrder(moved)).toEqual(['a', 'c', 'b', 'd']);
+  });
+
+  it('moves an exercise before the taken machine', () => {
+    const moved = moveUpcoming(queue, 'c', -1);
+    expect(upcomingOrder(moved)).toEqual(['a', 'c', 'b', 'd']);
+    expect(moved.waiting).toEqual([]);
+  });
+
+  it('never moves anything before the current exercise', () => {
+    expect(canMoveUpcoming(queue, 'b', -1)).toBe(false);
+    expect(canMoveUpcoming(queue, 'a', 1)).toBe(false);
+    expect(canMoveUpcoming(queue, 'd', 1)).toBe(false);
+    expect(moveUpcoming(queue, 'b', -1)).toBe(queue);
+  });
+
+  it('swaps two taken machines and keeps them taken', () => {
+    const two = { ...queue, waiting: [...queue.waiting, { exerciseId: 'e', since: 0 }] };
+    const moved = moveUpcoming(two, 'e', -1);
+    expect(moved.waiting.map((w) => w.exerciseId)).toEqual(['e', 'b']);
+    expect(moved.pending).toEqual(two.pending);
+  });
+
+  it('keeps the other taken machine taken when one moves past an exercise', () => {
+    const two = { ...queue, waiting: [...queue.waiting, { exerciseId: 'e', since: 0 }] };
+    const moved = moveUpcoming(two, 'e', 1);
+    expect(upcomingOrder(moved)).toEqual(['a', 'b', 'c', 'e', 'd']);
+    expect(moved.waiting.map((w) => w.exerciseId)).toEqual(['b']);
   });
 });

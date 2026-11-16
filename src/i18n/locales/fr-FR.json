@@ -1245,6 +1245,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "busyReorder": "Une machine occupée se déplace dans la liste",
       "notInShapeVisible": "« Pas en forme » garde toutes tes séries",
       "ownWarmup": "Ta série d'échauffement ne compte plus comme une série",
       "twoTimesBack": "Séance : les deux dernières fois et tout l'historique",
@@ -1280,6 +1281,8 @@
       "autoFinish": "Séance clôturée toute seule"
     },
     "items": {
+      "busyReorder": "Machine occupée : dans « Voir le programme de la séance », ses flèches marchent comme pour les autres exercices. Déplacée, elle devient un exercice normal à sa nouvelle place, sans te redemander si elle est libre.",
+      "busyInOrder": "La liste montre la machine occupée juste après l'exercice en cours, là où l'appli te la repropose vraiment, et plus à la fin.",
       "tiredReminder": "« Pas en forme » garde maintenant toutes tes séries : il bloque seulement la hausse de charge, et un rappel le dit pendant la séance.",
       "tiredBetter": "Ça va mieux ? « Je me sens mieux » laisse la charge remonter.",
       "ownWarmupLog": "Avant ta première série sur une machine, le bouton « C'était une série d'échauffement » la garde dans ta séance sans la compter : tu ne passes plus à la machine suivante une série trop tôt.",

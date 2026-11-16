@@ -21,6 +21,7 @@ import { ArrowLeftRight, Pencil } from 'lucide-vue-next';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useI18n } from 'vue-i18n';
 import { crowdedFallback } from '@/domain/busyMachine';
+import { upcomingOrder } from '@/domain/sessionEdit';
 import type { CatalogExercise } from '@/data/catalog/catalog';
 import type { Exercise, SetLog } from '@/domain/types';
 import PlateCalculator from '@/ui/session/PlateCalculator.vue';
@@ -74,9 +75,8 @@ const progress = computed(() => {
   const queue = active.value?.plan.queue;
   if (!queue) return [];
   const current = step.value?.kind === 'exercise' ? step.value.exerciseId : undefined;
-  const ids = [
-    ...new Set([...queue.done, ...queue.pending, ...queue.waiting.map((w) => w.exerciseId)]),
-  ];
+  // Taken machines right after the current one: that is when the session asks again.
+  const ids = [...new Set([...queue.done, ...upcomingOrder(queue)])];
   return ids.map((id) => ({
     id,
     name: nameOf(id),

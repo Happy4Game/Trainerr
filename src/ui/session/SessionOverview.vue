@@ -12,6 +12,7 @@ import { ArrowDown, ArrowUp, Check, Minus, Plus, X } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
+import { canMoveUpcoming } from '@/domain/sessionEdit';
 import ExercisePicker from '@/ui/ExercisePicker.vue';
 import { useLoadLabel } from './useLoadLabel';
 import { useSession } from './useSession';
@@ -38,11 +39,10 @@ const setsLine = (id: string) =>
     total: session.plannedSets(id),
   });
 
-const pending = () => session.active.value?.plan.queue.pending ?? [];
+// A taken machine ("Occupée, j'y reviens") moves like the others.
 const canMove = (id: string, delta: -1 | 1) => {
-  const index = pending().indexOf(id);
-  // The first one is the current exercise: the others move around it.
-  return index > 0 && index + delta > 0 && index + delta < pending().length;
+  const queue = session.active.value?.plan.queue;
+  return !!queue && canMoveUpcoming(queue, id, delta);
 };
 
 async function doNow(id: string): Promise<void> {
