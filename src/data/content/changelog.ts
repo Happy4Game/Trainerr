@@ -14,8 +14,13 @@ export interface ChangelogEntry {
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     id: 'photoPoses',
-    date: '2026-11-15',
+    date: '2026-11-16',
     items: ['cameraLoading', 'poseGuides', 'photosInGallery'],
+  },
+  {
+    id: 'busyReorder',
+    date: '2026-11-15',
+    items: ['busyReorder', 'busyInOrder'],
   },
   {
     id: 'notInShapeVisible',

@@ -131,3 +131,36 @@ test('switching machine is at hand: next to the name after a set, and on the nex
     page.locator('ion-card.replace').getByRole('radio', { name: /Remplacer/ }),
   ).toHaveAttribute('aria-checked', 'true');
 });
+
+test('a taken machine can be moved in the list like the others', async ({ page }) => {
+  await skipOnboarding(page);
+  await expect(page.getByRole('status')).toHaveText(/\d+ exercices/, { timeout: 20_000 });
+  await star(page, 'shoulder press', 'Développé épaules machine');
+  await star(page, 'pec deck', 'Écarté à la machine');
+  await star(page, 'pushdown', 'Extension triceps à la poulie');
+
+  await page.getByRole('tab', { name: 'Séance' }).click();
+  await page.getByRole('button', { name: 'Commencer la séance' }).click();
+  await expect(page.getByRole('region', { name: 'Développé épaules machine' })).toBeVisible();
+
+  // The shoulder press is taken: the pec fly in the meantime.
+  await page.getByRole('button', { name: 'Machine occupée' }).click();
+  const sheet = page.locator('ion-card.replace');
+  await sheet.getByRole('button', { name: 'Faire Écarté à la machine en attendant' }).click();
+  await expect(page.getByRole('region', { name: 'Écarté à la machine' })).toBeVisible();
+
+  // In the list, the taken machine comes right after the current one, and moves.
+  await page.getByRole('button', { name: 'Voir le programme de la séance' }).click();
+  const rows = page.locator('ion-modal li');
+  await expect(rows.nth(1)).toContainText('Développé épaules machine');
+  await expect(
+    page.getByRole('button', { name: 'Faire plus tôt : Développé épaules machine' }),
+  ).toBeDisabled();
+  await page.getByRole('button', { name: 'Faire plus tard : Développé épaules machine' }).click();
+  await expect(rows.nth(1)).not.toContainText('Développé épaules machine');
+  await expect(rows.nth(2)).toContainText('Développé épaules machine');
+  // And it can come back up.
+  await expect(
+    page.getByRole('button', { name: 'Faire plus tôt : Développé épaules machine' }),
+  ).toBeEnabled();
+});
