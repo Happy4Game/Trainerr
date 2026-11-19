@@ -120,6 +120,9 @@
     "clearSearch": "Effacer la recherche"
   },
   "exercise": {
+    "history": {
+      "title": "Historique des séances"
+    },
     "notFound": "Exercice introuvable.",
     "favorite": {
       "add": "Ajouter à mes machines",
@@ -1258,6 +1261,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "historyOnCard": "L'historique sur la fiche machine",
       "busyReorder": "Une machine occupée se déplace dans la liste",
       "notInShapeVisible": "« Pas en forme » garde toutes tes séries",
       "ownWarmup": "Ta série d'échauffement ne compte plus comme une série",
@@ -1295,6 +1299,7 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
+      "historyOnCard": "Sur la fiche d'une machine, tes 3 dernières séances avec elle, série par série, et « Tout l'historique » pour voir les autres.",
       "busyReorder": "Machine occupée : dans « Voir le programme de la séance », ses flèches marchent comme pour les autres exercices. Déplacée, elle devient un exercice normal à sa nouvelle place, sans te redemander si elle est libre.",
       "busyInOrder": "La liste montre la machine occupée juste après l'exercice en cours, là où l'appli te la repropose vraiment, et plus à la fin.",
       "tiredReminder": "« Pas en forme » garde maintenant toutes tes séries : il bloque seulement la hausse de charge, et un rappel le dit pendant la séance.",
