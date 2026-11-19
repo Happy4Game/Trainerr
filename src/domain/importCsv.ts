@@ -1,3 +1,4 @@
+import { AppError } from './appError';
 import { normalizeForSearch } from './catalogSearch';
 import type { IsoDate } from './types';
 
@@ -95,8 +96,7 @@ export interface ImportedWeighing {
 export function parseWeightsCsv(text: string): ImportedWeighing[] {
   const [header, ...rows] = parseCsv(text);
   const h = (header ?? []).map((c) => c.trim().toLowerCase());
-  if (detectFormat(h) !== 'weights')
-    throw new Error('Format de fichier non reconnu (date, weight_kg).');
+  if (detectFormat(h) !== 'weights') throw new AppError('csvUnknownWeights');
   const date = dateColumn(h);
   const weight = weightColumn(h);
   const factor = /\b(lb|lbs|pounds?)\b/.test(h[weight] ?? '') ? LB_TO_KG : 1;
@@ -136,8 +136,7 @@ export interface ImportedLoad {
  */
 export function parseLoadsCsv(text: string): ImportedLoad[] {
   const [header, ...rows] = parseCsv(text);
-  if (!header || detectFormat(header) !== 'loads')
-    throw new Error('Format de fichier non reconnu (exercise, load_kg, reps).');
+  if (!header || detectFormat(header) !== 'loads') throw new AppError('csvUnknownLoads');
   const column = (name: string) => header.findIndex((c) => c.trim().toLowerCase() === name);
   const [name, load, reps, date] = ['exercise', 'load_kg', 'reps', 'date'].map(column);
   const loads = new Map<string, ImportedLoad>();
@@ -172,10 +171,9 @@ export function parseWorkoutCsv(
 ): { format: CsvFormat; sessions: ImportedSession[] } {
   const [header, ...rows] = parseCsv(text);
   const format = header ? detectFormat(header) : undefined;
-  if (format === 'loads') throw new Error('Ce fichier contient des charges, pas des séances.');
-  if (format === 'weights') throw new Error('Ce fichier contient des pesées, pas des séances.');
-  if (!header || !format)
-    throw new Error('Format de fichier non reconnu (Strong, Hevy ou Trainerr).');
+  if (format === 'loads') throw new AppError('csvHasLoads');
+  if (format === 'weights') throw new AppError('csvHasWeights');
+  if (!header || !format) throw new AppError('csvUnknownWorkouts');
   const column = (name: string) => header.findIndex((c) => c.trim().toLowerCase() === name);
 
   const get = {

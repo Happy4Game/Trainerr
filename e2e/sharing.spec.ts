@@ -38,3 +38,14 @@ test('a readable report for a coach and a monthly recap image', async ({ page })
   expect(html).toContain('<h1>Mon programme d&#39;entraînement</h1>');
   expect(html).toContain('Haut / Bas');
 });
+
+test('a file that is not a backup gets a clear message, not a technical one', async ({ page }) => {
+  await skipOnboarding(page);
+  await page.goto('/tabs/settings');
+  await page.locator('input[type=file][accept="application/json,.json"]').setInputFiles({
+    name: 'notes.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from('pas du JSON'),
+  });
+  await expect(page.getByRole('alert')).toHaveText("Ce fichier n'est pas une sauvegarde Trainerr.");
+});

@@ -85,7 +85,9 @@ describe('backup', () => {
   });
 
   it('refuses a file that is not a Trainerr backup, without touching the data', async () => {
-    await expect(importBackup(db, { app: 'other' } as never)).rejects.toThrow(/pas une sauvegarde/);
+    await expect(importBackup(db, { app: 'other' } as never)).rejects.toMatchObject({
+      code: 'notABackup',
+    });
     const backup = await exportBackup(db);
     const broken = {
       ...backup,

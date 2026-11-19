@@ -1,3 +1,4 @@
+import { AppError } from '@/domain/appError';
 import { restsBefore } from '@/domain/restTaken';
 import type { SqlDatabase, SqlValue } from '../sqlite/database';
 import { latestSchemaVersion } from '../sqlite/migrations';
@@ -56,17 +57,15 @@ export async function deleteAllUserData(db: SqlDatabase): Promise<void> {
  * leaves the phone data untouched.
  */
 export async function importBackup(db: SqlDatabase, backup: Backup): Promise<void> {
-  if (backup.app !== 'trainerr') throw new Error('Ce fichier n’est pas une sauvegarde Trainerr.');
-  if (backup.schemaVersion > latestSchemaVersion) {
-    throw new Error(
-      'Cette sauvegarde vient d’une version plus récente de l’appli : mets-la à jour.',
-    );
+  if (typeof backup !== 'object' || backup === null || backup.app !== 'trainerr') {
+    throw new AppError('notABackup');
   }
+  if (backup.schemaVersion > latestSchemaVersion) throw new AppError('backupTooNew');
   const statements = deleteStatements();
   for (const table of USER_TABLES) {
     for (const row of backup.tables[table] ?? []) {
       const columns = Object.keys(row);
-      if (!columns.every((c) => /^\w+$/.test(c))) throw new Error('Sauvegarde invalide.');
+      if (!columns.every((c) => /^\w+$/.test(c))) throw new AppError('invalidBackup');
       statements.push(
         `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${columns.map((c) => q(row[c])).join(', ')});`,
       );

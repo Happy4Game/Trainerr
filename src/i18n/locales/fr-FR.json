@@ -1261,6 +1261,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "reliableBackups": "Sauvegardes fiables",
       "historyOnCard": "L'historique sur la fiche machine",
       "busyReorder": "Une machine occupée se déplace dans la liste",
       "notInShapeVisible": "« Pas en forme » garde toutes tes séries",
@@ -1299,6 +1300,8 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
+      "encryptedBackupFix": "La sauvegarde chiffrée marche à nouveau avec des photos et un long historique. Avant, elle échouait sans rien dire dès que tes données dépassaient environ 150 Ko.",
+      "errorsTranslated": "Un message clair s'affiche quand une sauvegarde ou un import ne marche pas, en français comme en anglais.",
       "historyOnCard": "Sur la fiche d'une machine, tes 3 dernières séances avec elle, série par série, et « Tout l'historique » pour voir les autres.",
       "busyReorder": "Machine occupée : dans « Voir le programme de la séance », ses flèches marchent comme pour les autres exercices. Déplacée, elle devient un exercice normal à sa nouvelle place, sans te redemander si elle est libre.",
       "busyInOrder": "La liste montre la machine occupée juste après l'exercice en cours, là où l'appli te la repropose vraiment, et plus à la fin.",
@@ -2121,5 +2124,17 @@
     "title": "Séance clôturée",
     "body": "{name} : rien de nouveau depuis {minutes} min après ta dernière série, la séance est enregistrée. Touche pour voir le récap.",
     "channel": "Séance clôturée automatiquement"
+  },
+  "errors": {
+    "notABackup": "Ce fichier n'est pas une sauvegarde Trainerr.",
+    "backupTooNew": "Cette sauvegarde vient d'une version plus récente de l'appli : mets l'appli à jour, puis réessaie.",
+    "invalidBackup": "Cette sauvegarde est abîmée : rien n'a été changé sur ton téléphone.",
+    "wrongPassword": "Mot de passe incorrect, ou fichier abîmé.",
+    "csvHasLoads": "Ce fichier contient des charges, pas des séances.",
+    "csvHasWeights": "Ce fichier contient des pesées, pas des séances.",
+    "csvUnknownWorkouts": "Format de fichier non reconnu (Strong, Hevy ou Trainerr).",
+    "csvUnknownLoads": "Format de fichier non reconnu (exercise, load_kg, reps).",
+    "csvUnknownWeights": "Format de fichier non reconnu (date, weight_kg).",
+    "unexpected": "Ça n'a pas marché. Réessaie ; si ça recommence, envoie-nous un retour depuis les Réglages."
   }
 }

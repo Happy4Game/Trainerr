@@ -11,7 +11,7 @@ describe('encrypted backup', () => {
 
   it('refuses a wrong password', async () => {
     const file = await encryptText('secret', 'bon');
-    await expect(decryptText(file, 'mauvais')).rejects.toThrow(/Mot de passe incorrect/);
+    await expect(decryptText(file, 'mauvais')).rejects.toMatchObject({ code: 'wrongPassword' });
   });
 
   it('uses a new salt and IV for every file', async () => {
@@ -19,5 +19,20 @@ describe('encrypted backup', () => {
     const b = await encryptText('x', 'p');
     expect(a.salt).not.toBe(b.salt);
     expect(a.iv).not.toBe(b.iv);
+  });
+
+  // Before: String.fromCharCode(...bytes) threw "Maximum call stack size
+  // exceeded" past ~100 000 bytes, that is a backup with a single photo.
+  it('encrypts a large backup (5 MB, photos included)', async () => {
+    const big = 'données '.repeat(650_000);
+    const file = await encryptText(big, 'mot de passe solide');
+    expect(await decryptText(file, 'mot de passe solide')).toBe(big);
+  });
+
+  it('calls a damaged file a wrong password, never a technical error', async () => {
+    const file = await encryptText('x', 'p');
+    await expect(decryptText({ ...file, salt: '%%%' }, 'p')).rejects.toMatchObject({
+      code: 'wrongPassword',
+    });
   });
 });
