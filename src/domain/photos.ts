@@ -5,8 +5,28 @@ import type { IsoDate } from './types';
  * Body photos, to see the change over time. The same pose, light and place
  * each time make the comparison fair; the pose is kept with each photo.
  */
-export type PhotoPose = 'front' | 'side' | 'back';
-export const PHOTO_POSES: readonly PhotoPose[] = ['front', 'side', 'back'];
+export type PhotoPose = 'front' | 'side' | 'back' | 'frontBiceps' | 'backBiceps';
+export const PHOTO_POSES: readonly PhotoPose[] = [
+  'front',
+  'side',
+  'back',
+  'frontBiceps',
+  'backBiceps',
+];
+
+/**
+ * Outline drawn over the camera to stand the same way each time. Relaxed poses
+ * show the body as it is; the double biceps (front and back, as in
+ * bodybuilding contests) show the arms and the back working.
+ */
+export type PoseShape = 'standing' | 'side' | 'biceps';
+export const POSE_SHAPE: Readonly<Record<PhotoPose, PoseShape>> = {
+  front: 'standing',
+  side: 'side',
+  back: 'standing',
+  frontBiceps: 'biceps',
+  backBiceps: 'biceps',
+};
 
 export interface DatedPhoto {
   readonly id: string;

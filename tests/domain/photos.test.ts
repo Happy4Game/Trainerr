@@ -4,8 +4,10 @@ import {
   importedPhotoDate,
   lastPhotoOfPose,
   photoComparison,
+  PHOTO_POSES,
   photosOfPose,
   photoTimeline,
+  POSE_SHAPE,
   samePoseComparison,
   weightAround,
   type DatedPhoto,
@@ -117,5 +119,13 @@ describe('camera overlay', () => {
     expect(weightAround(weighings, '2026-10-27')).toBe(80);
     expect(weightAround(weighings, '2026-09-04')).toBe(82);
     expect(weightAround(weighings, '2026-09-20')).toBeUndefined();
+  });
+});
+
+describe('poses to hold', () => {
+  it('draws an outline for every pose, the back like the front', () => {
+    for (const pose of PHOTO_POSES) expect(POSE_SHAPE[pose]).toBeDefined();
+    expect(POSE_SHAPE.back).toBe(POSE_SHAPE.front);
+    expect(POSE_SHAPE.backBiceps).toBe('biceps');
   });
 });

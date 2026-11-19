@@ -18,6 +18,11 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
     items: ['encryptedBackupFix', 'errorsTranslated'],
   },
   {
+    id: 'photoPoses',
+    date: '2026-11-19',
+    items: ['cameraLoading', 'poseGuides', 'photosInGallery'],
+  },
+  {
     id: 'historyOnCard',
     date: '2026-11-16',
     items: ['historyOnCard'],
