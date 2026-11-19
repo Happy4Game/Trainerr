@@ -30,7 +30,8 @@ import NextSessionChooser from '@/ui/NextSessionChooser.vue';
 import { rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings } from '@/ui/useSettings';
-import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
+import { useWeekPlan } from '@/ui/useWeekPlan';
 import { weekOverview } from '@/domain/weekOverview';
 
 const { t, locale } = useI18n();

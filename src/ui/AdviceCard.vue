@@ -13,7 +13,7 @@ import { ApiError, createApi } from '@/data/remote/api';
 import { weekSummary } from '@/domain/weekSummary';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings, useSettings } from '@/ui/useSettings';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 const { t, locale } = useI18n();
 const { settings } = useSettings();

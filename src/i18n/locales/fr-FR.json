@@ -1261,6 +1261,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "newDay": "Un nouveau jour à minuit",
       "reliableBackups": "Sauvegardes fiables",
       "historyOnCard": "L'historique sur la fiche machine",
       "busyReorder": "Une machine occupée se déplace dans la liste",
@@ -1300,6 +1301,7 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
+      "newDay": "Appli restée ouverte la nuit : à minuit, « Aujourd'hui », la séance du jour et ton poids du jour passent au nouveau jour, sans avoir à fermer l'appli.",
       "encryptedBackupFix": "La sauvegarde chiffrée marche à nouveau avec des photos et un long historique. Avant, elle échouait sans rien dire dès que tes données dépassaient environ 150 Ko.",
       "errorsTranslated": "Un message clair s'affiche quand une sauvegarde ou un import ne marche pas, en français comme en anglais.",
       "historyOnCard": "Sur la fiche d'une machine, tes 3 dernières séances avec elle, série par série, et « Tout l'historique » pour voir les autres.",

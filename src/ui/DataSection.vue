@@ -26,7 +26,7 @@ import { useSession } from '@/ui/session/useSession';
 import { shareOrDownload } from '@/ui/shareFile';
 import { useSettings } from '@/ui/useSettings';
 import { useUnits } from '@/ui/useUnits';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 const { t, locale } = useI18n();
 const templateLabel = useTemplateName();

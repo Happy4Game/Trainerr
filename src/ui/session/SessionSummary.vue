@@ -7,7 +7,7 @@ import { drawRecap } from '@/ui/recapImage';
 import { shareOrDownload } from '@/ui/shareFile';
 import { useTemplateName } from '@/ui/useTemplateName';
 import { useUnits } from '@/ui/useUnits';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 import { WHO_WEEKLY_MINUTES } from '@/domain/cardio';
 import { stepsMinutes } from '@/domain/guidedSteps';
 import { guidedStretching } from '@/domain/stretching';

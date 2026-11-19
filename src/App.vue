@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import { onNotificationTap, refreshNotifications } from '@/ui/notifications';
 import { checkWhenDue } from '@/ui/updates';
 import { useAutoFinish } from '@/ui/session/useAutoFinish';
+import { keepTodayUpToDate } from '@/ui/today';
 
 const router = useRouter();
 // A session left open once everything is done closes by itself after 10 min.
@@ -27,7 +28,12 @@ onMounted(() => {
   void onNotificationTap((route) => void router.push(route));
   document.addEventListener('visibilitychange', onVisible);
 });
-onUnmounted(() => document.removeEventListener('visibilitychange', onVisible));
+// Today's date follows midnight, even when the app stays open overnight.
+const stopToday = keepTodayUpToDate();
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onVisible);
+  stopToday();
+});
 </script>
 
 <template>

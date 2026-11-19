@@ -46,7 +46,7 @@ import { useSession } from '@/ui/session/useSession';
 import SessionCardio from '@/ui/cardio/SessionCardio.vue';
 import GuidedWarmup from '@/ui/session/GuidedWarmup.vue';
 import { syncStats } from '@/ui/friends';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 const { t, n, locale } = useI18n();
 const rirText = useRirText();

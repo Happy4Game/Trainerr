@@ -24,7 +24,7 @@ import { proteinTargetGrams } from '@/domain/tracking';
 import CameraCapture from '@/ui/body/CameraCapture.vue';
 import PhotoViewer from '@/ui/body/PhotoViewer.vue';
 import { useBodyMeasurements } from '@/ui/body/useBodyMeasurements';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 import { useUnits } from '@/ui/useUnits';
 import { useSession } from '@/ui/session/useSession';
 import { useRouter } from 'vue-router';

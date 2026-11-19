@@ -10,6 +10,7 @@ import { dueTemplate, planFromToday } from '@/domain/planning';
 import { rotationFor } from '@/domain/trainingModels';
 import { TIPS } from '@/data/content/tips';
 import { i18n } from '@/i18n';
+import { todayIso } from '@/ui/today';
 import {
   AUTO_FINISH_NOTIFICATION_ID,
   REST_END_NOTIFICATION_ID,
@@ -23,11 +24,6 @@ export async function askNotificationPermission(): Promise<boolean> {
   } catch {
     return false;
   }
-}
-
-function today(): string {
-  const now = new Date();
-  return new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
 }
 
 /** Where a tap on each kind of notification leads. */
@@ -65,7 +61,7 @@ export async function rescheduleNotifications(settings: Settings): Promise<void>
     const body = await listMeasurements(db);
     const last = done.at(-1);
     const rotation = rotationFor(settings.model);
-    const date = today();
+    const date = todayIso();
     const monday = startOfWeek(date);
     const rotationDone = [...done]
       .reverse()
