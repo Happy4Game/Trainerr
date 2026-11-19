@@ -15,6 +15,17 @@ function fromDayNumber(dayNumber: number): IsoDate {
   return new Date(dayNumber * DAY_MS).toISOString().slice(0, 10);
 }
 
+/**
+ * The calendar day of `date` on the phone (its time zone), as YYYY-MM-DD.
+ * `toISOString()` alone gives the day in UTC: in France, the day before
+ * until 1 or 2 a.m.
+ */
+export function localIsoDate(date: Date): IsoDate {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
 export function addDays(date: IsoDate, days: number): IsoDate {
   return fromDayNumber(toDayNumber(date) + days);
 }

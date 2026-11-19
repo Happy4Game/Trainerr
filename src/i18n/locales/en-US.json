@@ -1261,6 +1261,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "newDay": "A new day at midnight",
       "reliableBackups": "Reliable backups",
       "historyOnCard": "The history on the machine card",
       "busyReorder": "A taken machine moves in the list",
@@ -1300,6 +1301,7 @@
       "photoPoses": "Photos: guided poses and gallery"
     },
     "items": {
+      "newDay": "App left open overnight: at midnight, Today, the day's session and today's weight move to the new day, without closing the app.",
       "encryptedBackupFix": "The encrypted backup works again with photos and a long history. Before, it failed silently once your data went past about 150 KB.",
       "errorsTranslated": "A clear message shows when a backup or an import fails, in English as in French.",
       "historyOnCard": "On a machine card, your last 3 sessions with it, set by set, and \"Full history\" to see the others.",

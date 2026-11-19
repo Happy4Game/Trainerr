@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { openAppDatabase } from '@/data/appDatabase';
 import { restoredRest, saveRest } from './restClock';
 import { savedActivity, saveActivity } from './activityClock';
+import { todayIso } from '@/ui/today';
 import { autoFinishAt, lastActivity } from '@/domain/autoFinish';
 import type { SqlDatabase } from '@/data/sqlite/database';
 import type { CatalogExercise } from '@/data/catalog/catalog';
@@ -196,11 +197,8 @@ const summary = ref<SessionSummary>();
 
 const { entries, state: catalogState, toggleFavorite } = useCatalog();
 
-function today(): string {
-  const now = new Date();
-  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60_000);
-  return local.toISOString().slice(0, 10);
-}
+/** Reactive: the computeds below follow the day change (src/ui/today.ts). */
+const today = todayIso;
 
 const byId = computed(() => new Map(entries.value.map((e) => [e.exercise.id, e])));
 const favorites = computed(() => entries.value.filter((e) => e.favorite));

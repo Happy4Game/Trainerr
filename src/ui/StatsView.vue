@@ -48,7 +48,7 @@ import TrendChart from '@/ui/charts/TrendChart.vue';
 import { drawRecap } from '@/ui/recapImage';
 import { shareOrDownload } from '@/ui/shareFile';
 import { useSession } from '@/ui/session/useSession';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 import { useSettings } from '@/ui/useSettings';
 import { useUnits } from '@/ui/useUnits';
 

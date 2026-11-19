@@ -7,7 +7,7 @@ import {
   updateCardio,
 } from '@/data/repositories/cardioRepository';
 import { weeklyCardio, type CardioEntry, type DatedCardio } from '@/domain/cardio';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 /** Every cardio entry, read once per launch and shared by the screens. */
 const logs = ref<DatedCardio[]>([]);

@@ -3,12 +3,8 @@ import { addDays, startOfWeek } from '@/domain/dates';
 import { planFromToday, planWeek } from '@/domain/planning';
 import { needsFrequencyNote, rotationFor } from '@/domain/trainingModels';
 import { useSession } from '@/ui/session/useSession';
+import { todayIso } from '@/ui/today';
 import { useSettings } from '@/ui/useSettings';
-
-export function todayIso(): string {
-  const now = new Date();
-  return new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
-}
 
 /** The generated week, from the availability and the last session done. */
 export function useWeekPlan() {

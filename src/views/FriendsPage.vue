@@ -24,7 +24,7 @@ import { syncStats } from '@/ui/friends';
 import { useSession } from '@/ui/session/useSession';
 import { useSettings } from '@/ui/useSettings';
 import { useUnits } from '@/ui/useUnits';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 const { t, locale } = useI18n();
 const { settings, updateSettings } = useSettings();

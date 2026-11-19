@@ -14,7 +14,7 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { PHOTO_POSES, type PhotoPose } from '@/domain/photos';
 import { useBodyMeasurements, type BodyPhoto } from '@/ui/body/useBodyMeasurements';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 /**
  * A body photo on the whole screen, from anywhere a photo is shown: swipe or

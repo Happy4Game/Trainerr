@@ -3,6 +3,7 @@ import {
   addDays,
   daysBetween,
   isoWeekday,
+  localIsoDate,
   minutesToTime,
   startOfWeek,
   timeToMinutes,
@@ -35,5 +36,13 @@ describe('calendar dates', () => {
     expect(timeToMinutes('21:30')).toBe(1290);
     expect(minutesToTime(1290)).toBe('21:30');
     expect(minutesToTime(65)).toBe('01:05');
+  });
+});
+
+describe('local calendar day', () => {
+  it('is the day on the phone, not in UTC', () => {
+    // 00:30 on 20 Nov. on the phone: still the 19th in UTC from France.
+    expect(localIsoDate(new Date(2026, 10, 20, 0, 30))).toBe('2026-11-20');
+    expect(localIsoDate(new Date(2026, 0, 5, 23, 59))).toBe('2026-01-05');
   });
 });

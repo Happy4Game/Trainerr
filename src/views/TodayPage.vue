@@ -29,7 +29,8 @@ import AdviceCard from '@/ui/AdviceCard.vue';
 import UsualLoads from '@/ui/session/UsualLoads.vue';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useSession } from '@/ui/session/useSession';
-import { todayIso, useWeekPlan } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
+import { useWeekPlan } from '@/ui/useWeekPlan';
 
 const { t, locale } = useI18n();
 const router = useRouter();

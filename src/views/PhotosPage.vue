@@ -35,7 +35,7 @@ import {
 import { readPhoto } from '@/ui/photo';
 import { useSettings } from '@/ui/useSettings';
 import { useSession } from '@/ui/session/useSession';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 import { useRouter } from 'vue-router';
 
 /**

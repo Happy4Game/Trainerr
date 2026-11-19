@@ -7,7 +7,7 @@ import { rotationFor } from '@/domain/trainingModels';
 import { useSession } from '@/ui/session/useSession';
 import { useSettings } from '@/ui/useSettings';
 import { useTemplateName } from '@/ui/useTemplateName';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 /**
  * A session done without the app (phone forgotten, another gym…), added

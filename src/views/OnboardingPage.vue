@@ -32,7 +32,7 @@ import { useTemplateName } from '@/ui/useTemplateName';
 import { askNotificationPermission, rescheduleNotifications } from '@/ui/notifications';
 import { useSession } from '@/ui/session/useSession';
 import { updateSettings } from '@/ui/useSettings';
-import { todayIso } from '@/ui/useWeekPlan';
+import { todayIso } from '@/ui/today';
 
 const { t, n } = useI18n();
 const templateLabel = useTemplateName();

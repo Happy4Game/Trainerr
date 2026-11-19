@@ -1,4 +1,4 @@
-import { daysBetween } from './dates';
+import { daysBetween, localIsoDate } from './dates';
 import type { IsoDate } from './types';
 
 /**
@@ -106,8 +106,7 @@ export function photoComparison<P extends DatedPhoto>(
  */
 export function importedPhotoDate(lastModified: number, today: IsoDate): IsoDate {
   if (!Number.isFinite(lastModified) || lastModified <= 0) return today;
-  const d = new Date(lastModified);
-  const local = new Date(d.getTime() - d.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
+  const local = localIsoDate(new Date(lastModified));
   return local > today ? today : local;
 }
 
