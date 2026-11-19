@@ -5,8 +5,12 @@
     <!-- Health Connect 1.1.0 asks for Android 8; the app checks the version before using it. -->
     <uses-sdk tools:overrideLibrary="androidx.health.connect.client" />
 
+    <!-- Google backup: off by default, the user turns it on in the settings
+         (TrainerrBackupAgent.java). fullBackupOnly keeps Auto Backup, through the agent. -->
     <application
         android:allowBackup="true"
+        android:backupAgent=".TrainerrBackupAgent"
+        android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"

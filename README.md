@@ -66,7 +66,7 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 ### Pour tous
 
-- **Hors ligne d'abord** : base SQLite sur le téléphone, aucune donnée envoyée sans action de ta part (RGPD).
+- **Hors ligne d'abord** : base SQLite sur le téléphone, aucune donnée envoyée sans action de ta part (RGPD). Même la sauvegarde automatique d'Android dans Google Drive est **coupée par défaut** : elle s'active dans Réglages, Mes données, « Sauvegarde Google » (un agent de sauvegarde, `TrainerrBackupAgent.java`, lit ce choix ; le transfert direct d'un téléphone à l'autre reste possible).
 - **Français et anglais**, kilos ou livres, thème clair et sombre, grandes zones tactiles.
 - Export (via le menu Partager d'Android), import (Strong, Hevy, tes séances, tes charges ou tes pesées en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
 - **Mises à jour intégrées** sur Android : l'appli trouve toute seule la nouvelle version (au démarrage et quand tu y reviens) et l'installe avec ton accord ([docs/mises-a-jour.md](docs/mises-a-jour.md)). La page **Nouveautés** des Réglages dit ce qui change à chaque version.

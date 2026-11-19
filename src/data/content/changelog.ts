@@ -13,6 +13,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    id: 'googleBackupOptIn',
+    date: '2026-11-19',
+    items: ['googleBackupOff', 'googleBackupOld'],
+  },
+  {
     id: 'newDay',
     date: '2026-11-19',
     items: ['newDay'],

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Only the folders the app shares through its FileProvider, never the whole storage
+     (developer.android.com/privacy-and-security/risks/file-providers). -->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path name="my_images" path="." />
-    <cache-path name="my_cache_images" path="." />
+    <!-- "Take a photo" (camera app): Capacitor's BridgeWebChromeClient writes the
+         picture in getExternalFilesDir(DIRECTORY_PICTURES). -->
+    <external-files-path name="camera_photos" path="Pictures/" />
+    <!-- Update APK (AppUpdaterPlugin) and shared exports (FileSharePlugin). -->
+    <cache-path name="updates" path="updates/" />
+    <cache-path name="exports" path="exports/" />
 </paths>

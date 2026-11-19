@@ -75,6 +75,8 @@ export interface Settings {
   readonly barbell?: PlateConfig;
   /** Android 10+: a copy of each body photo in the phone's Photos app (Trainerr album). Off by default. */
   readonly photosInGallery?: boolean;
+  /** Android: the automatic Google backup of the app's data to the user's Drive. Off by default. */
+  readonly cloudBackup?: boolean;
   /** Screen kept on during a session. On by default. */
   readonly keepAwake?: boolean;
   /** Android notification during a session (rest countdown, end-of-rest alert). On by default. */

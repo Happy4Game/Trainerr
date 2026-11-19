@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTemplateName } from '@/ui/useTemplateName';
-import { IonButton, IonInput, IonItem, IonLabel, IonListHeader } from '@ionic/vue';
-import { ref } from 'vue';
+import { IonButton, IonInput, IonItem, IonLabel, IonListHeader, IonToggle } from '@ionic/vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { openAppDatabase } from '@/data/appDatabase';
 import {
@@ -20,6 +20,7 @@ import {
   type EncryptedFile,
 } from '@/data/crypto/backupCrypto';
 import { AppError } from '@/domain/appError';
+import { applyCloudBackup, cloudBackupAvailable } from '@/ui/cloudBackup';
 import { errorText } from '@/ui/errorText';
 import ImportCsv from '@/ui/ImportCsv.vue';
 import { useSession } from '@/ui/session/useSession';
@@ -38,7 +39,14 @@ const password = ref('');
 const pending = ref<EncryptedFile>();
 const unlockPassword = ref('');
 const session = useSession();
-const { settings } = useSettings();
+const { settings, updateSettings } = useSettings();
+/** Google backup (Android only): off by default. */
+const cloudBackup = computed(() => settings.value?.cloudBackup === true);
+async function setCloudBackup(on: boolean): Promise<void> {
+  if (on === cloudBackup.value) return;
+  await updateSettings({ cloudBackup: on });
+  await applyCloudBackup(on);
+}
 const { load } = useUnits();
 
 async function backupText(): Promise<string> {
@@ -219,6 +227,18 @@ async function deleteAll(): Promise<void> {
       </ion-button>
     </template>
 
+    <template v-if="cloudBackupAvailable()">
+      <h3 class="sub">{{ t('data.cloudTitle') }}</h3>
+      <ion-toggle
+        class="cloud"
+        :checked="cloudBackup"
+        @ion-change="setCloudBackup($event.detail.checked)"
+      >
+        {{ t('data.cloudToggle') }}
+      </ion-toggle>
+      <p class="hint">{{ t(cloudBackup ? 'data.cloudOn' : 'data.cloudOff') }}</p>
+    </template>
+
     <h3 class="sub">{{ t('coach.section') }}</h3>
     <ion-button expand="block" fill="outline" @click="shareWithCoach">
       {{ t('coach.share') }}
@@ -254,6 +274,9 @@ async function deleteAll(): Promise<void> {
 .actions {
   padding-inline: 16px;
   padding-block-end: 24px;
+}
+.cloud {
+  width: 100%;
 }
 .hint {
   font-size: 0.85rem;

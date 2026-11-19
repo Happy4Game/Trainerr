@@ -6,6 +6,7 @@ import { onNotificationTap, refreshNotifications } from '@/ui/notifications';
 import { checkWhenDue } from '@/ui/updates';
 import { useAutoFinish } from '@/ui/session/useAutoFinish';
 import { keepTodayUpToDate } from '@/ui/today';
+import { syncCloudBackup } from '@/ui/cloudBackup';
 
 const router = useRouter();
 // A session left open once everything is done closes by itself after 10 min.
@@ -23,6 +24,8 @@ const onVisible = () => {
   plan();
 };
 onMounted(() => {
+  // Google backup: off unless the user turned it on (TrainerrBackupAgent.java).
+  void syncCloudBackup();
   check();
   plan();
   void onNotificationTap((route) => void router.push(route));

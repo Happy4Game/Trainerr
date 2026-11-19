@@ -1261,6 +1261,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "googleBackupOptIn": "Nothing in Google Drive without your consent",
       "newDay": "A new day at midnight",
       "reliableBackups": "Reliable backups",
       "historyOnCard": "The history on the machine card",
@@ -1301,6 +1302,8 @@
       "photoPoses": "Photos: guided poses and gallery"
     },
     "items": {
+      "googleBackupOff": "Android's automatic copy to Google Drive is now off by default. Turn it on in Settings, My data, \"Google backup\".",
+      "googleBackupOld": "A copy already in your Drive is not erased by the app: you can delete it in your phone's Google settings.",
       "newDay": "App left open overnight: at midnight, Today, the day's session and today's weight move to the new day, without closing the app.",
       "encryptedBackupFix": "The encrypted backup works again with photos and a long history. Before, it failed silently once your data went past about 150 KB.",
       "errorsTranslated": "A clear message shows when a backup or an import fails, in English as in French.",
@@ -1428,7 +1431,11 @@
     "exportEncrypted": "Export an encrypted backup",
     "passwordTooShort": "The password must have at least 8 characters.",
     "encryptedFile": "This backup is encrypted: enter its password.",
-    "unlock": "Decrypt and restore"
+    "unlock": "Decrypt and restore",
+    "cloudTitle": "Google backup",
+    "cloudToggle": "Copy my data to my Google Drive",
+    "cloudOff": "Off: nothing goes to your Google Drive. When you change phones, use a backup (encrypted, ideally), or Android's direct phone-to-phone transfer, which still works.",
+    "cloudOn": "On: Android copies your data (sessions, weight, measurements, photos) to your Google Drive about once a day, and puts it back on a new phone. It only goes to your Google account."
   },
   "discomfort": {
     "open": "Something hurts",

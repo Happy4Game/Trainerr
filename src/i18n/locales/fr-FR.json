@@ -1261,6 +1261,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "googleBackupOptIn": "Rien dans Google Drive sans ton accord",
       "newDay": "Un nouveau jour à minuit",
       "reliableBackups": "Sauvegardes fiables",
       "historyOnCard": "L'historique sur la fiche machine",
@@ -1301,6 +1302,8 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
+      "googleBackupOff": "La copie automatique d'Android dans Google Drive est maintenant coupée par défaut. Tu peux l'activer dans Réglages, Mes données, « Sauvegarde Google ».",
+      "googleBackupOld": "La copie déjà présente dans ton Drive n'est pas effacée par l'appli : tu peux la supprimer dans les réglages Google de ton téléphone.",
       "newDay": "Appli restée ouverte la nuit : à minuit, « Aujourd'hui », la séance du jour et ton poids du jour passent au nouveau jour, sans avoir à fermer l'appli.",
       "encryptedBackupFix": "La sauvegarde chiffrée marche à nouveau avec des photos et un long historique. Avant, elle échouait sans rien dire dès que tes données dépassaient environ 150 Ko.",
       "errorsTranslated": "Un message clair s'affiche quand une sauvegarde ou un import ne marche pas, en français comme en anglais.",
@@ -1428,7 +1431,11 @@
     "exportEncrypted": "Exporter une sauvegarde chiffrée",
     "passwordTooShort": "Le mot de passe doit faire au moins 8 caractères.",
     "encryptedFile": "Cette sauvegarde est chiffrée : entre son mot de passe.",
-    "unlock": "Déchiffrer et restaurer"
+    "unlock": "Déchiffrer et restaurer",
+    "cloudTitle": "Sauvegarde Google",
+    "cloudToggle": "Copier mes données dans mon Google Drive",
+    "cloudOff": "Coupée : rien ne part dans ton Google Drive. Si tu changes de téléphone, utilise une sauvegarde (de préférence chiffrée), ou le transfert direct d'Android d'un téléphone à l'autre, qui reste possible.",
+    "cloudOn": "Activée : Android copie tes données (séances, poids, mensurations, photos) dans ton Google Drive environ une fois par jour, et les remet en place sur un nouveau téléphone. Elles ne vont que dans ton compte Google."
   },
   "discomfort": {
     "open": "Ça tire",
