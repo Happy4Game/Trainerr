@@ -8,6 +8,7 @@ import {
   type BodyMeasurement,
 } from '@/data/repositories/bodyRepository';
 import type { PhotoPose } from '@/domain/photos';
+import { copyToGallery, removeFromGallery } from '@/ui/body/phoneGallery';
 import type { IsoDate } from '@/domain/types';
 
 /** A measurement that holds a body photo. */
@@ -32,6 +33,7 @@ async function add(input: Omit<BodyMeasurement, 'id'>): Promise<BodyMeasurement>
   const { db } = await openAppDatabase();
   const saved = await addMeasurement(db, input);
   measurements.value = [...measurements.value, saved].sort(byDate);
+  if (saved.photo) void copyToGallery({ ...saved, photo: saved.photo });
   return saved;
 }
 
@@ -40,6 +42,7 @@ async function remove(id: string): Promise<BodyMeasurement | undefined> {
   const { db } = await openAppDatabase();
   await deleteMeasurement(db, id);
   measurements.value = measurements.value.filter((m) => m.id !== id);
+  if (removed?.photo) void removeFromGallery(id);
   return removed;
 }
 
@@ -56,6 +59,8 @@ async function changePhoto(
       return { ...rest, date: change.date, ...(change.pose ? { pose: change.pose } : {}) };
     })
     .sort(byDate);
+  const changed = measurements.value.find((m) => m.id === id);
+  if (changed?.photo) void copyToGallery({ ...changed, photo: changed.photo });
 }
 
 const photos = computed(() => measurements.value.filter((m): m is BodyPhoto => !!m.photo));

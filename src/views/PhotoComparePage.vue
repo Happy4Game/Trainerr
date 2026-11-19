@@ -162,6 +162,7 @@ function compareWith(photo: BodyPhoto): void {
       <template v-else>
         <ion-segment
           :value="pose"
+          scrollable
           :aria-label="t('body.gallery.pose')"
           @ion-change="changePose($event.detail.value as PhotoPose | 'all')"
         >

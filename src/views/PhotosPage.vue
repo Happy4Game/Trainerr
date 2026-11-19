@@ -9,6 +9,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/vue';
 import { Camera, Columns2, ImagePlus } from 'lucide-vue-next';
@@ -26,7 +27,13 @@ import {
 import CameraCapture from '@/ui/body/CameraCapture.vue';
 import PhotoViewer from '@/ui/body/PhotoViewer.vue';
 import { useBodyMeasurements, type BodyPhoto } from '@/ui/body/useBodyMeasurements';
+import {
+  copyAllToGallery,
+  phoneGalleryAvailable,
+  removeAllFromGallery,
+} from '@/ui/body/phoneGallery';
 import { readPhoto } from '@/ui/photo';
+import { useSettings } from '@/ui/useSettings';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso } from '@/ui/useWeekPlan';
 import { useRouter } from 'vue-router';
@@ -49,7 +56,36 @@ const opened = ref<string>();
 const camera = ref(false);
 const router = useRouter();
 
-onMounted(body.reload);
+const { settings, updateSettings } = useSettings();
+/** Android 10+ only: the option is not shown elsewhere. */
+const galleryOption = ref(false);
+const inPhone = computed(() => galleryOption.value && settings.value?.photosInGallery === true);
+const galleryBusy = ref(false);
+const galleryNote = ref<string>();
+
+onMounted(async () => {
+  await body.reload();
+  galleryOption.value = await phoneGalleryAvailable();
+});
+
+/** On: every photo gets its copy in the Trainerr album. Off: the copies leave. */
+async function setInPhone(on: boolean): Promise<void> {
+  if (on === inPhone.value) return;
+  galleryBusy.value = true;
+  galleryNote.value = undefined;
+  try {
+    await updateSettings({ photosInGallery: on });
+    if (on) {
+      const copied = await copyAllToGallery(photos.value);
+      galleryNote.value = t('body.gallery.copied', copied);
+    } else {
+      const left = await removeAllFromGallery();
+      galleryNote.value = left > 0 ? t('body.gallery.left', left) : t('body.gallery.removed');
+    }
+  } finally {
+    galleryBusy.value = false;
+  }
+}
 
 const sessionDates = computed(() => session.history.value.map((s) => s.date));
 const shown = computed(() =>
@@ -123,7 +159,22 @@ function compare(photo?: Photo): void {
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <p class="privacy" role="note">{{ t('body.gallery.privacy') }}</p>
+      <p class="privacy" role="note">
+        {{ t(inPhone ? 'body.gallery.inPhoneOn' : 'body.gallery.privacy') }}
+      </p>
+      <div v-if="galleryOption" class="in-phone">
+        <ion-toggle
+          :checked="inPhone"
+          :disabled="galleryBusy"
+          @ion-change="setInPhone($event.detail.checked)"
+        >
+          <span class="in-phone-label">
+            {{ t('body.gallery.inPhone') }}
+            <span class="in-phone-help">{{ t('body.gallery.inPhoneHelp') }}</span>
+          </span>
+        </ion-toggle>
+        <p v-if="galleryNote" class="in-phone-note" role="status">{{ galleryNote }}</p>
+      </div>
 
       <div class="add">
         <button type="button" class="add-button primary" :disabled="busy" @click="camera = true">
@@ -140,6 +191,7 @@ function compare(photo?: Photo): void {
 
       <ion-segment
         :value="pose"
+        scrollable
         :aria-label="t('body.gallery.pose')"
         @ion-change="pose = $event.detail.value as PhotoPose | 'all'"
       >
@@ -222,6 +274,25 @@ function compare(photo?: Photo): void {
   border-radius: var(--tr-radius-m);
   background: var(--tr-surface-2);
   font-size: 0.9rem;
+}
+.in-phone {
+  margin-block-end: 12px;
+}
+.in-phone ion-toggle {
+  width: 100%;
+}
+.in-phone-label {
+  display: block;
+  white-space: normal;
+  font-weight: 600;
+}
+.in-phone-help,
+.in-phone-note {
+  display: block;
+  margin: 4px 0 0;
+  color: var(--tr-text-muted);
+  font-size: 0.85rem;
+  font-weight: 400;
 }
 .add {
   display: flex;

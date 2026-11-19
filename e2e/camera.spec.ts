@@ -12,8 +12,18 @@ test('body photo taken inside the app: pose above, camera switch, count kept up 
   await page.getByRole('button', { name: 'Prendre une photo' }).click();
   const modal = page.locator('ion-modal.camera');
   await expect(modal.getByLabel('Aperçu de la caméra')).toBeVisible();
-  await modal.locator('ion-segment-button', { hasText: 'Dos' }).click();
+  // The loading frame leaves once the first image plays.
+  await expect(modal.getByText('Ouverture de la caméra…')).toBeHidden();
+  // Poses to hold, each with how to stand.
+  await modal.getByRole('button', { name: 'Biceps face', exact: true }).click();
+  await expect(modal.getByText('contracte les biceps')).toBeVisible();
+  await modal.getByRole('button', { name: 'Dos', exact: true }).click();
+  await expect(modal.getByRole('button', { name: 'Dos', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
   await expect(modal.getByText('mets le retardateur à 10 s')).toBeVisible();
+  await expect(modal.getByLabel('Silhouette de la pose')).toBeChecked();
 
   // Self-timer: off, 3 s, 10 s, off.
   const timer = modal.getByRole('button', { name: /^Retardateur/ });
@@ -33,7 +43,7 @@ test('body photo taken inside the app: pose above, camera switch, count kept up 
   const gallery = page.getByRole('link', { name: 'Ma galerie (1 photo)' });
   await expect(gallery).toBeVisible();
   await gallery.click();
-  await page.locator('ion-segment-button', { hasText: 'Dos' }).click();
+  await page.locator('ion-segment-button', { hasText: /^Dos$/ }).click();
   await page.getByRole('button', { name: /^Voir la photo du / }).click();
   await page.getByRole('button', { name: 'Supprimer cette photo' }).click();
   await page.getByRole('button', { name: 'Oui, supprimer définitivement' }).click();
