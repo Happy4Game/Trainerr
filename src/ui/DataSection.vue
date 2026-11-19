@@ -19,6 +19,8 @@ import {
   isEncryptedFile,
   type EncryptedFile,
 } from '@/data/crypto/backupCrypto';
+import { AppError } from '@/domain/appError';
+import { errorText } from '@/ui/errorText';
 import ImportCsv from '@/ui/ImportCsv.vue';
 import { useSession } from '@/ui/session/useSession';
 import { shareOrDownload } from '@/ui/shareFile';
@@ -55,10 +57,19 @@ async function exportEncrypted(): Promise<void> {
     message.value = t('data.passwordTooShort');
     return;
   }
-  const file = await encryptText(await backupText(), password.value);
-  password.value = '';
-  const content = new Blob([JSON.stringify(file)], { type: 'application/json' });
-  await shareOrDownload(`trainerr-${todayIso()}.chiffre.json`, content, t('data.exportEncrypted'));
+  try {
+    const file = await encryptText(await backupText(), password.value);
+    password.value = '';
+    message.value = '';
+    const content = new Blob([JSON.stringify(file)], { type: 'application/json' });
+    await shareOrDownload(
+      `trainerr-${todayIso()}.chiffre.json`,
+      content,
+      t('data.exportEncrypted'),
+    );
+  } catch (error) {
+    message.value = errorText(error);
+  }
 }
 
 async function exportCsv(): Promise<void> {
@@ -109,8 +120,17 @@ async function shareWithCoach(): Promise<void> {
   );
 }
 
+/** A file that is not JSON at all (a photo, a CSV…) is not a backup. */
+function parseJson(text: string): unknown {
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    throw new AppError('notABackup');
+  }
+}
+
 async function restore(text: string): Promise<void> {
-  const backup = JSON.parse(text) as Backup;
+  const backup = parseJson(text) as Backup;
   const { db } = await openAppDatabase();
   await importBackup(db, backup);
   window.location.reload();
@@ -120,14 +140,14 @@ async function onFile(event: Event): Promise<void> {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (!file) return;
   try {
-    const content = JSON.parse(await file.text()) as unknown;
+    const content = parseJson(await file.text());
     if (isEncryptedFile(content)) {
       pending.value = content;
       return;
     }
     await restore(JSON.stringify(content));
   } catch (error) {
-    message.value = error instanceof Error ? error.message : String(error);
+    message.value = errorText(error);
   }
 }
 
@@ -136,7 +156,7 @@ async function unlock(): Promise<void> {
   try {
     await restore(await decryptText(pending.value, unlockPassword.value));
   } catch (error) {
-    message.value = error instanceof Error ? error.message : String(error);
+    message.value = errorText(error);
   }
 }
 

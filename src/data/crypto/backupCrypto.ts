@@ -3,6 +3,8 @@
  * AES-GCM 256-bit key; salt and IV are random for each file. Uses the
  * standard Web Crypto API, available in the app and in secure browser pages.
  */
+import { AppError } from '@/domain/appError';
+
 export interface EncryptedFile {
   readonly app: 'trainerr';
   readonly encrypted: true;
@@ -15,7 +17,19 @@ export interface EncryptedFile {
 
 export const PBKDF2_ITERATIONS = 250_000;
 
-const toBase64 = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes));
+/**
+ * Bytes → base64, a slice at a time: `String.fromCharCode(...bytes)` on the
+ * whole file passes one argument per byte, and JavaScript engines refuse a
+ * call with too many arguments (about 100 000: a backup with one photo).
+ */
+const CHUNK = 0x8000;
+function toBase64(bytes: Uint8Array): string {
+  let binary = '';
+  for (let start = 0; start < bytes.length; start += CHUNK) {
+    binary += String.fromCharCode(...bytes.subarray(start, start + CHUNK));
+  }
+  return btoa(binary);
+}
 const fromBase64 = (text: string) => Uint8Array.from(atob(text), (c) => c.charCodeAt(0));
 
 export function encryptionAvailable(): boolean {
@@ -60,8 +74,8 @@ export async function encryptText(text: string, password: string): Promise<Encry
 }
 
 export async function decryptText(file: EncryptedFile, password: string): Promise<string> {
-  const key = await keyFrom(password, fromBase64(file.salt), file.iterations);
   try {
+    const key = await keyFrom(password, fromBase64(file.salt), file.iterations);
     const data = await crypto.subtle.decrypt(
       { name: 'AES-GCM', iv: fromBase64(file.iv) as BufferSource },
       key,
@@ -69,7 +83,7 @@ export async function decryptText(file: EncryptedFile, password: string): Promis
     );
     return new TextDecoder().decode(data);
   } catch {
-    throw new Error('Mot de passe incorrect ou fichier abîmé.');
+    throw new AppError('wrongPassword');
   }
 }
 

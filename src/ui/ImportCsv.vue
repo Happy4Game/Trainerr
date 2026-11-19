@@ -18,6 +18,7 @@ import {
   type ImportedWeighing,
 } from '@/domain/importCsv';
 import { addMeasurement } from '@/data/repositories/bodyRepository';
+import { errorText } from '@/ui/errorText';
 import NextSessionChooser from '@/ui/NextSessionChooser.vue';
 import { useSession } from '@/ui/session/useSession';
 import { useCatalog } from '@/ui/useCatalog';
@@ -98,7 +99,7 @@ function parse(): void {
     );
     message.value = '';
   } catch (error) {
-    message.value = error instanceof Error ? error.message : String(error);
+    message.value = errorText(error);
     parsed.value = [];
     loads.value = [];
     weighings.value = [];

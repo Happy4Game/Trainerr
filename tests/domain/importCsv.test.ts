@@ -67,7 +67,9 @@ describe('import from other apps', () => {
   });
 
   it('refuses an unknown file', () => {
-    expect(() => parseWorkoutCsv('foo,bar\n1,2')).toThrow(/non reconnu/);
+    expect(() => parseWorkoutCsv('foo,bar\n1,2')).toThrow(
+      expect.objectContaining({ code: 'csvUnknownWorkouts' }),
+    );
   });
 
   it('reads the usual date formats', () => {
@@ -103,7 +105,7 @@ Tirage vertical,47.5,8,2026-10-22`;
     expect(detectFormat(['date', 'template', 'exercise_id', 'exercise', 'load_kg', 'reps'])).toBe(
       'trainerr',
     );
-    expect(() => parseWorkoutCsv(LOADS)).toThrow(/charges/);
+    expect(() => parseWorkoutCsv(LOADS)).toThrow(expect.objectContaining({ code: 'csvHasLoads' }));
   });
 
   it('one load per exercise, the last line wins, the date is optional', () => {
@@ -115,7 +117,9 @@ Tirage vertical,47.5,8,2026-10-22`;
   });
 
   it('refuses a file without loads', () => {
-    expect(() => parseLoadsCsv('foo,bar\n1,2')).toThrow(/non reconnu/);
+    expect(() => parseLoadsCsv('foo,bar\n1,2')).toThrow(
+      expect.objectContaining({ code: 'csvUnknownLoads' }),
+    );
   });
 });
 
