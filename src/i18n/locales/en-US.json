@@ -1263,6 +1263,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "smoothMotion": "A smoother app",
       "warmupRest": "Warm-up: the rest starts too",
       "newDay": "A new day at midnight",
       "reliableBackups": "Reliable backups",
@@ -1304,6 +1305,11 @@
       "photoPoses": "Photos: guided poses and gallery"
     },
     "items": {
+      "tabFade": "Switching tabs fades in, and the pill of the chosen tab stretches smoothly.",
+      "segmentSlide": "In Progress, the Catalog and the Photos, the content slides in from the side of the choice.",
+      "sessionSteps": "During a session, each step comes in smoothly, a logged set fades in and a moved machine slides into place.",
+      "foldOpen": "Folded sections slide open, and cards sink a little under the finger.",
+      "reducedMotion": "Nothing slows down logging, and it all stays off when animations are removed in the phone settings.",
       "newDay": "App left open overnight: at midnight, Today, the day's session and today's weight move to the new day, without closing the app.",
       "encryptedBackupFix": "The encrypted backup works again with photos and a long history. Before, it failed silently once your data went past about 150 KB.",
       "errorsTranslated": "A clear message shows when a backup or an import fails, in English as in French.",

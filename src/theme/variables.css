@@ -477,6 +477,24 @@ ion-tabs ion-router-outlet > .ion-page {
   animation: tr-from-left var(--tr-duration) var(--tr-ease-out);
 }
 
+/*
+ * Listes (<TransitionGroup name="tr-list">) : une ligne ajoutée arrive en
+ * fondu, les autres glissent à leur nouvelle place au lieu de sauter
+ * (technique FLIP de Vue). Une ligne retirée part tout de suite.
+ */
+.tr-list-enter-active {
+  transition:
+    opacity var(--tr-duration) var(--tr-ease-out),
+    transform var(--tr-duration) var(--tr-ease-out);
+}
+.tr-list-enter-from {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+.tr-list-move {
+  transition: transform var(--tr-duration) var(--tr-ease-out);
+}
+
 /* Carte ou ligne cliquable : elle s'enfonce un peu sous le doigt, comme un bouton. */
 .tr-pressable {
   transition: transform var(--tr-duration-fast) var(--tr-ease-out);

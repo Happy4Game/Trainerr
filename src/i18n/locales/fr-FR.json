@@ -1263,6 +1263,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "smoothMotion": "Une appli plus fluide",
       "warmupRest": "Échauffement : le repos se lance aussi",
       "newDay": "Un nouveau jour à minuit",
       "reliableBackups": "Sauvegardes fiables",
@@ -1304,6 +1305,11 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
+      "tabFade": "Changer d'onglet se fait en fondu, et la pastille de l'onglet choisi s'étire en douceur.",
+      "segmentSlide": "Dans Progrès, le Catalogue et les Photos, le contenu glisse depuis le côté du choix.",
+      "sessionSteps": "En séance, chaque étape arrive en douceur, une série validée apparaît en fondu et une machine déplacée glisse à sa place.",
+      "foldOpen": "Les blocs repliables s'ouvrent en glissant, et les cartes s'enfoncent un peu sous le doigt.",
+      "reducedMotion": "Rien ne ralentit la saisie, et tout reste coupé si les animations sont supprimées dans les réglages du téléphone.",
       "newDay": "Appli restée ouverte la nuit : à minuit, « Aujourd'hui », la séance du jour et ton poids du jour passent au nouveau jour, sans avoir à fermer l'appli.",
       "encryptedBackupFix": "La sauvegarde chiffrée marche à nouveau avec des photos et un long historique. Avant, elle échouait sans rien dire dès que tes données dépassaient environ 150 Ko.",
       "errorsTranslated": "Un message clair s'affiche quand une sauvegarde ou un import ne marche pas, en français comme en anglais.",
