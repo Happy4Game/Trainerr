@@ -57,6 +57,8 @@ const steps = computed(() => (entry.value ? session.stepsOf(entry.value) : []));
 const done = computed(() => session.workSetsInSession(props.exerciseId).length);
 /** "Not in shape today": one set less per exercise, no load increase. */
 const tired = computed(() => session.active.value?.plan.tired === true);
+/** Lighter week of the cycle: one set less per exercise, said here where the sets are counted. */
+const lightWeek = computed(() => session.cycle.value.light);
 /** Before the first work set, even when the app proposes its own warm-up set above. */
 const ownWarmup = computed(() => done.value === 0);
 /** Warm-up sets already done on this machine: after one, the fields go back to the work set. */
@@ -389,6 +391,9 @@ function listen(): void {
         {{ t('session.tired.better') }}
       </ion-button>
     </div>
+    <p v-if="lightWeek" class="tired-note" data-testid="light-week-note">
+      {{ t('session.lightWeek', session.cycle.value) }}
+    </p>
     <div class="set-number">
       <strong>{{
         t('session.setNumber', { current: Math.min(done + 1, target), total: target })

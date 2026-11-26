@@ -519,6 +519,7 @@
       "presetsHelp": "Push, Pull, Jambes… prêtes, à copier.",
       "homeHelp": "Avec le matériel que tu as chez toi."
     },
+    "lightWeek": "Semaine allégée (cycle {cycle}, semaine {week} sur 5) : une série de moins par machine pour récupérer. Rien à voir avec « Pas en forme ».",
     "tired": {
       "toggle": "Pas en forme aujourd'hui",
       "help": "Toutes tes séries, mais pas de hausse de charge : tu t'entraînes quand même, sans t'épuiser.",
@@ -1312,6 +1313,7 @@
       "tiredReminder": "« Pas en forme » garde maintenant toutes tes séries : il bloque seulement la hausse de charge, et un rappel le dit pendant la séance.",
       "tiredBetter": "Ça va mieux ? « Je me sens mieux » laisse la charge remonter.",
       "warmupRest": "Après une série d'échauffement, le minuteur de repos se lance comme après une série normale.",
+      "lightWeekReminder": "Semaine allégée du cycle : un rappel dans la séance explique pourquoi il y a une série de moins par machine.",
       "ownWarmupAlways": "Le bouton « C'était une série d'échauffement » est là avant ta première série sur chaque machine, même quand l'appli propose son propre échauffement : tu notes ta charge et tes reps comme d'habitude, sans que la série compte.",
       "ownWarmupLog": "Avant ta première série sur une machine, le bouton « C'était une série d'échauffement » la garde dans ta séance sans la compter : tu ne passes plus à la machine suivante une série trop tôt.",
       "ownWarmupFix": "Déjà notée comme une vraie série ? Corrige-la avec « Série d'échauffement », dans la séance en cours ou dans l'historique.",

@@ -15,7 +15,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
   {
     id: 'warmupRest',
     date: '2026-11-26',
-    items: ['warmupRest', 'ownWarmupAlways'],
+    items: ['warmupRest', 'ownWarmupAlways', 'lightWeekReminder'],
   },
   {
     id: 'newDay',
