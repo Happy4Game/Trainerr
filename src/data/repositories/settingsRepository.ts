@@ -71,6 +71,8 @@ export interface Settings {
   readonly guidedWarmup?: boolean;
   /** Beeps at the end of the rest (app open). On by default. */
   readonly restSound?: boolean;
+  /** Purely visual extras: mascot with a trophy, waves, confetti. On by default. */
+  readonly decorations?: boolean;
   /** Bar and plates of the gym, for the plate calculator (20 kg bar and usual plates by default). */
   readonly barbell?: PlateConfig;
   /** Android 10+: a copy of each body photo in the phone's Photos app (Trainerr album). Off by default. */

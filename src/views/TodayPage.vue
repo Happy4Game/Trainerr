@@ -30,6 +30,8 @@ import UsualLoads from '@/ui/session/UsualLoads.vue';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { useSession } from '@/ui/session/useSession';
 import { todayIso } from '@/ui/today';
+import MascotTip from '@/ui/decor/MascotTip.vue';
+import WaveBand from '@/ui/decor/WaveBand.vue';
 import { useWeekPlan } from '@/ui/useWeekPlan';
 
 const { t, locale } = useI18n();
@@ -159,6 +161,7 @@ const streak = computed(() =>
       <p v-if="phase === 'loading'" role="status">{{ t('catalog.loading') }}</p>
       <template v-else>
         <section class="hero" :aria-label="t('today.heroLabel')">
+          <WaveBand class="hero-waves" />
           <p class="eyebrow">
             {{
               active
@@ -274,6 +277,7 @@ const streak = computed(() =>
             {{ t('today.otherChoice') }}
           </ion-button>
         </section>
+        <MascotTip />
 
         <ion-card v-if="settings">
           <ion-card-header>
@@ -348,6 +352,7 @@ const streak = computed(() =>
   color: var(--tr-hero-text);
   box-shadow: var(--tr-shadow-2);
   animation: tr-rise var(--tr-duration-slow) var(--tr-ease-out);
+  isolation: isolate;
 }
 /* Halo discret en haut à droite : du relief sans image. */
 .hero::after {

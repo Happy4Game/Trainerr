@@ -1102,6 +1102,8 @@
     "guidedWarmupHelp": "Sinon, un échauffement articulaire guidé de tout le corps (≈ 5 min) est proposé au début de chaque séance (conseillé, passable à tout moment).",
     "restSound": "Bip à la fin du repos",
     "restSoundHelp": "Trois bips et une vibration quand le repos est fini.",
+    "decorations": "Mascotte et animations décoratives",
+    "decorationsHelp": "La mascotte qui te félicite et te donne des conseils, les vagues et les confettis. Coupées aussi si le téléphone demande moins d'animations.",
     "repRange": {
       "own": "Ma propre fourchette de reps",
       "auto": "Désactivé : l'appli adapte la fourchette à chaque exercice ({heavy} reps sur les gros mouvements, {machine} sur machine, {isolation} en isolation). Activé : la même pour tous.",
@@ -1225,7 +1227,8 @@
       "muscleMap": "silhouettes musculaires, licence MIT.",
       "lucide": "icônes, licence ISC.",
       "images": "illustrations des mouvements et des étirements, redimensionnées et passées en niveaux de gris :",
-      "aiDrawings": "Dessins des machines cardio : faits par une IA (Claude) pour Trainerr, faute de dessin libre chez Everkinetic et wger.de. Pas forcément vérifiés par un spécialiste."
+      "aiDrawings": "Dessins des machines cardio : faits par une IA (Claude) pour Trainerr, faute de dessin libre chez Everkinetic et wger.de. Pas forcément vérifiés par un spécialiste.",
+      "mascot": "Mascotte : dessinée par une IA (Claude) pour Trainerr."
     },
     "sources": {
       "title": "Sources scientifiques",
@@ -1263,6 +1266,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "mascot": "Une mascotte et un décor vivant",
       "smoothMotion": "Une appli plus fluide",
       "warmupRest": "Échauffement : le repos se lance aussi",
       "newDay": "Un nouveau jour à minuit",
@@ -1305,6 +1309,11 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
+      "mascotCheers": "Une mascotte traverse l'écran avec un trophée quand tu finis une séance ou bats un record, avec des confettis en fin de séance.",
+      "mascotTalks": "Pendant le repos, elle t'encourage. Sur Aujourd'hui, elle te donne un conseil du jour, repris des fiches « Bien débuter ».",
+      "waves": "Des vagues ondulent sur la carte du jour, et l'eau baisse dans le minuteur de repos, qui passe au vert les 5 dernières secondes.",
+      "liveNumbers": "La charge et les reps défilent quand tu les changes, et « Série faite » confirme ton appui.",
+      "decorationsSetting": "Tout ce décor se coupe dans les Réglages.",
       "tabFade": "Changer d'onglet se fait en fondu, et la pastille de l'onglet choisi s'étire en douceur.",
       "segmentSlide": "Dans Progrès, le Catalogue et les Photos, le contenu glisse depuis le côté du choix.",
       "sessionSteps": "En séance, chaque étape arrive en douceur, une série validée apparaît en fondu et une machine déplacée glisse à sa place.",
@@ -2150,5 +2159,21 @@
     "csvUnknownLoads": "Format de fichier non reconnu (exercise, load_kg, reps).",
     "csvUnknownWeights": "Format de fichier non reconnu (date, weight_kg).",
     "unexpected": "Ça n'a pas marché. Réessaie ; si ça recommence, envoie-nous un retour depuis les Réglages."
+  },
+  "decor": {
+    "bravo": "Tu l'as fait, bravo à toi !",
+    "record": "Quel record, chapeau !",
+    "tipOfTheDay": "Conseil du jour : {tip}",
+    "readTip": "Lire le conseil",
+    "anotherTip": "Un autre",
+    "coach": {
+      "setsLeft": "Encore {count} série ici, tu gères ! | Encore {count} séries ici, tu gères !",
+      "lastSet": "Dernière série de la séance, donne tout !",
+      "lastMachine": "Dernière machine, tu y es presque !",
+      "record": "Record battu, quelle série !",
+      "rest0": "Bien joué ! Profite du repos pour souffler.",
+      "rest1": "Une gorgée d'eau et on repart.",
+      "rest2": "Machine suivante bientôt, continue comme ça !"
+    }
   }
 }

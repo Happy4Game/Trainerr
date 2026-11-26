@@ -48,6 +48,9 @@ import GuidedWarmup from '@/ui/session/GuidedWarmup.vue';
 import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/today';
 import { leaveAtOnce, riseIn } from '@/ui/motion';
+import { celebrate } from '@/ui/decor/celebrate';
+import { coachLine } from '@/ui/decor/mascotLines';
+import MascotSays from '@/ui/decor/MascotSays.vue';
 
 const { t, n, locale } = useI18n();
 const rirText = useRirText();
@@ -286,6 +289,39 @@ const lastLogged = computed(() => {
   const last = loggedSets.value.at(-1);
   return last && !last.warmup ? last : undefined;
 });
+/** During the rest, the mascot cheers: sets left here, last machine, a record… */
+const coachMessage = computed(() => {
+  const last = lastLogged.value;
+  if (!last) return undefined;
+  const line = coachLine({
+    recordBeaten: Boolean(session.lastSetBeatRecord.value),
+    setsLeftHere: Math.max(
+      0,
+      session.plannedSets(last.exerciseId) - session.workSetsInSession(last.exerciseId).length,
+    ),
+    machinesLeft: progress.value.filter((e) => e.status !== 'done' && e.id !== last.exerciseId)
+      .length,
+    setsDone: loggedSets.value.length,
+  });
+  if (line.key === 'setsLeft') return t('decor.coach.setsLeft', line.count);
+  if (line.key === 'rest') return t(`decor.coach.rest${line.variant}`);
+  return t(`decor.coach.${line.key}`);
+});
+// The mascot crosses the screen with a trophy: a record beaten, a session done.
+watch(
+  () => {
+    const record = session.recordBeaten.value;
+    return session.lastSetBeatRecord.value && record
+      ? `${record.exerciseId}-${record.loadKg}-${record.reps}`
+      : undefined;
+  },
+  (record) => {
+    if (record) celebrate('record');
+  },
+);
+watch(phase, (now, before) => {
+  if (now === 'finished' && before === 'active') celebrate('session');
+});
 
 async function logWarmup(): Promise<void> {
   const id = currentId.value;
@@ -346,6 +382,7 @@ async function logWarmup(): Promise<void> {
           @done="session.endRest()"
           @adjust="session.adjustRest($event)"
         />
+        <MascotSays v-if="restEndsAt && coachMessage" :message="coachMessage" />
         <!-- During the rest, the timer and the next set come first: the rest folds away. -->
         <details v-if="restEndsAt && (lastLogged || previousExercise)" class="rest-more">
           <summary>

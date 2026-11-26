@@ -129,6 +129,17 @@ async function redoQuestionnaire(): Promise<void> {
         </ion-item>
         <ion-item>
           <ion-toggle
+            :checked="settings.decorations !== false"
+            @ion-change="updateSettings({ decorations: $event.detail.checked })"
+          >
+            <ion-label class="ion-text-wrap">
+              {{ t('settings.decorations') }}
+              <p>{{ t('settings.decorationsHelp') }}</p>
+            </ion-label>
+          </ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-toggle
             :checked="settings.keepAwake !== false"
             @ion-change="updateSettings({ keepAwake: $event.detail.checked })"
           >

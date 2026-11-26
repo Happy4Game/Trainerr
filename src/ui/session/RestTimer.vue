@@ -4,6 +4,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from '@/ui/useSettings';
 import { playRestOver } from './restSound';
+import WaveBand from '@/ui/decor/WaveBand.vue';
 
 const props = defineProps<{ endsAt: number; startedAt?: number | undefined }>();
 const emit = defineEmits<{ done: []; adjust: [seconds: number] }>();
@@ -33,6 +34,8 @@ const totalLabel = computed(() => clock(Math.round(total.value / 1000)));
 const RADIUS = 54;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const dash = computed(() => CIRCUMFERENCE * (remainingMs.value / total.value));
+/** The last 5 seconds: the card turns green and the dial beats, readable at a glance. */
+const ending = computed(() => remaining.value > 0 && remaining.value <= 5);
 
 onMounted(() => {
   timer = setInterval(() => {
@@ -49,7 +52,14 @@ onBeforeUnmount(() => clearInterval(timer));
 </script>
 
 <template>
-  <div class="rest" role="timer" :aria-label="t('session.rest.label', { time: label })">
+  <div
+    class="rest"
+    :class="{ ending }"
+    role="timer"
+    :aria-label="t('session.rest.label', { time: label })"
+  >
+    <!-- The water goes down with the time left. -->
+    <WaveBand :level="remainingMs / total" />
     <div class="dial">
       <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
         <circle class="track" cx="60" cy="60" :r="RADIUS" />
@@ -97,6 +107,34 @@ onBeforeUnmount(() => clearInterval(timer));
   color: var(--tr-hero-text);
   box-shadow: var(--tr-shadow-2);
   animation: tr-pop var(--tr-duration-slow) var(--tr-ease-spring);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+/* Green layer above the orange, shown in the last seconds (a gradient cannot fade). */
+.rest::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--tr-hero-go);
+  opacity: 0;
+  transition: opacity var(--tr-duration-slow) ease;
+}
+.rest.ending::before {
+  opacity: 1;
+}
+.rest.ending .dial {
+  animation: tr-beat 1s ease-in-out infinite;
+}
+@keyframes tr-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.06);
+  }
 }
 .dial {
   position: relative;
