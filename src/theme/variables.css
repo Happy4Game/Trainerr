@@ -446,22 +446,27 @@ ion-toggle {
  * Seul l'écran qui arrive est animé : l'ancien disparaît tout de suite, rien
  * ne bloque un appui pendant l'animation.
  */
+/*
+ * Ionic hides the screen left at once: starting from fully transparent made
+ * a dark flash between the two. The new screen starts half visible, so the
+ * change reads as one movement, not as a blink.
+ */
 @keyframes tr-fade-through {
   from {
-    opacity: 0;
-    transform: scale(0.98);
+    opacity: 0.45;
+    transform: scale(0.985);
   }
 }
 @keyframes tr-from-right {
   from {
-    opacity: 0;
-    transform: translateX(24px);
+    opacity: 0.35;
+    transform: translateX(20px);
   }
 }
 @keyframes tr-from-left {
   from {
-    opacity: 0;
-    transform: translateX(-24px);
+    opacity: 0.35;
+    transform: translateX(-20px);
   }
 }
 /*

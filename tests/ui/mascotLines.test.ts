@@ -50,7 +50,7 @@ describe('celebrations', () => {
     const last = celebrationFor('record', 2, () => 0.99);
     expect(last).toMatchObject({
       pose: 'cheer',
-      entrance: 'drop',
+      entrance: 'pop',
       line: 'decor.celebrations.record.2',
     });
     expect(celebrationFor('session', 3, () => 0.5).confetti).toBe(true);

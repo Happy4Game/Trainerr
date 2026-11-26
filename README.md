@@ -68,7 +68,7 @@ et ajuste la suite à chaque série. Tout reste sur ton téléphone.
 
 - **Hors ligne d'abord** : base SQLite sur le téléphone, aucune donnée envoyée sans action de ta part (RGPD).
 - **Français et anglais**, kilos ou livres, thème clair et sombre, grandes zones tactiles.
-- **Une appli vivante** : transitions douces entre les écrans, chiffres qui défilent, minuteur qui passe au vert à la fin du repos, et une **mascotte** qui t'encourage pendant le repos, te donne le conseil du jour et traverse l'écran avec un trophée quand tu finis une séance ou bats un record. Tout le décor se coupe dans les Réglages, et rien ne bouge si le téléphone demande moins d'animations.
+- **Une appli vivante** : transitions douces entre les écrans, chiffres qui défilent, minuteur qui passe au vert à la fin du repos, et une **mascotte** qui t'encourage pendant le repos, te donne le conseil du jour et vient te féliciter avec un trophée quand tu finis une séance ou bats un record. Tout le décor se coupe dans les Réglages, et rien ne bouge si le téléphone demande moins d'animations.
 - Export (via le menu Partager d'Android), import (Strong, Hevy, tes séances, tes charges ou tes pesées en CSV : [docs/import.md](docs/import.md)), sauvegarde chiffrée et suppression complète en un bouton.
 - **Mises à jour intégrées** sur Android : l'appli trouve toute seule la nouvelle version (au démarrage et quand tu y reviens) et l'installe avec ton accord ([docs/mises-a-jour.md](docs/mises-a-jour.md)). La page **Nouveautés** des Réglages dit ce qui change à chaque version.
 - **Envoyer un retour** depuis les Réglages : ça ouvre ton appli mail avec un message prérempli (version de l'appli, téléphone, langue). Rien n'est envoyé sans toi.

@@ -22,7 +22,7 @@ export function riseIn(element: Element | null | undefined): void {
   if (!element || prefersReducedMotion() || typeof element.animate !== 'function') return;
   element.animate(
     [
-      { opacity: 0, transform: 'translateY(12px)' },
+      { opacity: 0.35, transform: 'translateY(12px)' },
       { opacity: 1, transform: 'none' },
     ],
     { duration: 250, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' },

@@ -1309,7 +1309,7 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
-      "mascotCheers": "Une mascotte traverse l'écran avec un trophée quand tu finis une séance ou bats un record, avec des confettis en fin de séance.",
+      "mascotCheers": "Une mascotte vient te féliciter quand tu finis une séance, bats un record, lances ta 1re série ou passes la moitié de la séance, avec des confettis en fin de séance. Elle sort de derrière la barre du bas, sans jamais la cacher.",
       "mascotTalks": "Pendant le repos, elle t'encourage. Sur Aujourd'hui, elle te donne un conseil du jour, repris des fiches « Bien débuter ».",
       "waves": "Des vagues ondulent sur la carte du jour, et l'eau baisse dans le minuteur de repos, qui passe au vert les 5 dernières secondes.",
       "liveNumbers": "La charge et les reps défilent quand tu les changes, et « Série faite » confirme ton appui.",

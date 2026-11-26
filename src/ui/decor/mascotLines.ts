@@ -2,8 +2,8 @@ import { TIPS } from '@/data/content/tips';
 
 export type MascotPose = 'trophy' | 'wave' | 'flex' | 'cheer' | 'lift' | 'sleep';
 
-/** How the mascot comes on screen: across, up from the bottom, down from the top, hopping. */
-export type MascotEntrance = 'walk' | 'peek' | 'drop' | 'hop';
+/** How the mascot comes on screen, always close to where it stops: a few steps, up from behind the tab bar, springing out of the ground, a jump from behind the bar. */
+export type MascotEntrance = 'walk' | 'peek' | 'pop' | 'hop';
 
 /** What is celebrated, from the biggest to the smallest moment. */
 export type CelebrationKind =
@@ -20,10 +20,10 @@ interface CelebrationStyle {
 /** Each moment has its poses, entrances and lines: the mascot rarely does the same twice. */
 export const CELEBRATIONS: Readonly<Record<CelebrationKind, CelebrationStyle>> = {
   session: { poses: ['trophy'], entrances: ['walk'], lines: 3, confetti: true },
-  record: { poses: ['trophy', 'cheer'], entrances: ['hop', 'drop'], lines: 3, confetti: false },
+  record: { poses: ['trophy', 'cheer'], entrances: ['hop', 'pop'], lines: 3, confetti: false },
   firstSet: { poses: ['flex', 'lift'], entrances: ['peek', 'hop'], lines: 3, confetti: false },
-  halfway: { poses: ['cheer', 'flex'], entrances: ['peek', 'drop'], lines: 3, confetti: false },
-  stretching: { poses: ['cheer', 'wave'], entrances: ['drop', 'walk'], lines: 2, confetti: false },
+  halfway: { poses: ['cheer', 'flex'], entrances: ['peek', 'pop'], lines: 3, confetti: false },
+  stretching: { poses: ['cheer', 'wave'], entrances: ['pop', 'walk'], lines: 2, confetti: false },
   weighIn: { poses: ['wave', 'flex'], entrances: ['peek'], lines: 2, confetti: false },
   photo: { poses: ['flex', 'cheer'], entrances: ['peek', 'hop'], lines: 2, confetti: false },
 };

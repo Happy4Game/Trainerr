@@ -1309,7 +1309,7 @@
       "photoPoses": "Photos: guided poses and gallery"
     },
     "items": {
-      "mascotCheers": "A mascot crosses the screen with a trophy when you finish a session or beat a record, with confetti at the end of a session.",
+      "mascotCheers": "A mascot comes to cheer you when you finish a session, beat a record, start your first set or pass the halfway mark, with confetti at the end of a session. It comes from behind the bottom bar, never over it.",
       "mascotTalks": "During the rest it cheers you on. On Today it gives a tip of the day, taken from the “Getting started” cards.",
       "waves": "Waves roll on the card of the day, and the water goes down in the rest timer, which turns green in the last 5 seconds.",
       "liveNumbers": "The load and reps roll when you change them, and “Set done” confirms your tap.",
