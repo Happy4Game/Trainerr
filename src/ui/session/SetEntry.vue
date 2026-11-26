@@ -57,8 +57,10 @@ const steps = computed(() => (entry.value ? session.stepsOf(entry.value) : []));
 const done = computed(() => session.workSetsInSession(props.exerciseId).length);
 /** "Not in shape today": one set less per exercise, no load increase. */
 const tired = computed(() => session.active.value?.plan.tired === true);
-/** Before the first work set, unless the app's own warm-up card is shown. */
-const ownWarmup = computed(() => done.value === 0 && !session.warmup.value);
+/** Lighter week of the cycle: one set less per exercise, said here where the sets are counted. */
+const lightWeek = computed(() => session.cycle.value.light);
+/** Before the first work set, even when the app proposes its own warm-up set above. */
+const ownWarmup = computed(() => done.value === 0);
 /** Warm-up sets already done on this machine: after one, the fields go back to the work set. */
 const warmupsDone = computed(
   () =>
@@ -311,11 +313,13 @@ async function validate(difficulty: Difficulty = heard.value ?? 'ok'): Promise<v
 
 /**
  * A warm-up set done on the work machine itself, at the load and reps shown:
- * kept in the session, but it neither counts as a planned set nor moves the
- * load, the records or the progress charts.
+ * kept in the session and followed by the usual rest, but it neither counts as
+ * a planned set nor moves the load, the records or the progress charts.
  */
 async function logOwnWarmup(): Promise<void> {
   navigator.vibrate?.(35);
+  // This tap allows the beep at the end of the rest.
+  unlockSound();
   await session.logSet({
     exerciseId: props.exerciseId,
     loadKg: load.value,
@@ -387,6 +391,9 @@ function listen(): void {
         {{ t('session.tired.better') }}
       </ion-button>
     </div>
+    <p v-if="lightWeek" class="tired-note" data-testid="light-week-note">
+      {{ t('session.lightWeek', session.cycle.value) }}
+    </p>
     <div class="set-number">
       <strong>{{
         t('session.setNumber', { current: Math.min(done + 1, target), total: target })
@@ -678,8 +685,8 @@ function listen(): void {
         {{ t('session.validate.light') }}
       </ion-button>
     </div>
-    <!-- A warm-up of one's own on the work machine: saved, but not one of the planned sets.
-         Hidden while the app proposes its own warm-up set, which has its card above. -->
+    <!-- A warm-up of one's own on the work machine, at the load and reps typed: saved and
+         followed by the rest, but not one of the planned sets. -->
     <ion-button
       v-if="ownWarmup"
       class="warmup-button"

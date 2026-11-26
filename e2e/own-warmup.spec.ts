@@ -13,9 +13,11 @@ test('a warm-up set done on the work machine does not count among its sets', asy
   const total = (await page.getByText(/^Série 1 sur \d+$/).textContent())?.match(/\d+$/)?.[0];
 
   await page.getByRole('button', { name: "C'était une série d'échauffement" }).click();
-  // Still the first set to do, on the same machine.
+  // Still the first set to do, on the same machine, after the usual rest.
   await expect(page.getByText(`Série 1 sur ${total}`)).toBeVisible();
   await expect(page.getByText(/· échauffement/)).toBeVisible();
+  await expect(page.getByRole('timer')).toBeVisible();
+  await expect(page.getByText(/Échauffement enregistré/)).toBeVisible();
 
   // Once a work set is done, the button goes away: warm-ups come first.
   await page.getByRole('button', { name: /^(Série faite|Non, ça va)$/ }).click();

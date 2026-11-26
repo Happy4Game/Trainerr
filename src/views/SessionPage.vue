@@ -132,8 +132,9 @@ watch(
   async (now, before) => {
     if (now <= before) return;
     const last = active.value?.sets.at(-1);
-    if (last && !last.warmup) {
-      savedMessage.value = t('session.saved', {
+    if (last) {
+      // A warm-up set says so: the tap visibly did something, and it is not a work set.
+      savedMessage.value = t(last.warmup ? 'session.savedWarmup' : 'session.saved', {
         set: `${nameOf(last.exerciseId)} — ${loadOf(last.exerciseId, last.loadKg)} × ${n(last.reps)}`,
       });
     }
