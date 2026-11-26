@@ -23,6 +23,7 @@ import type { MuscleId } from '@/domain/muscles';
 import BodyPicker from '@/ui/muscleMap/BodyPicker.vue';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useSwapDirection } from '@/ui/useSwapDirection';
 import type { CatalogEntry } from '@/data/repositories/catalogRepository';
 import { illustrationFor } from '@/data/catalog/exerciseImages';
 import { isPopular } from '@/data/catalog/curated';
@@ -73,6 +74,8 @@ const loadText = (entry: CatalogEntry) => {
 
 const query = ref('');
 const filter = ref<Filter>('all');
+/** Each family of machines slides in from the side of its tab. */
+const { swap, settle } = useSwapDirection(filter, FILTERS);
 const shown = ref(PAGE_SIZE);
 watch([query, filter], () => (shown.value = PAGE_SIZE));
 
@@ -205,7 +208,7 @@ function onFilter(value: unknown): void {
       <p v-else-if="state.kind === 'error'" class="ion-padding" role="alert">
         {{ t('catalog.error', { message: state.message }) }}
       </p>
-      <template v-else-if="filter === 'cardio'">
+      <div v-else-if="filter === 'cardio'" :class="swap" @animationend.self="settle">
         <p class="ion-padding-horizontal count">{{ t('cardio.catalogIntro') }}</p>
         <ion-list>
           <ion-item
@@ -223,8 +226,8 @@ function onFilter(value: unknown): void {
             </ion-label>
           </ion-item>
         </ion-list>
-      </template>
-      <template v-else>
+      </div>
+      <div v-else :key="filter" :class="swap" @animationend.self="settle">
         <section v-if="showBody" class="body-search" :aria-label="t('catalog.body.title')">
           <p class="body-help">{{ t('catalog.body.help') }}</p>
           <BodyPicker :selected="zoneMuscles" @pick="pickZone" />
@@ -309,7 +312,7 @@ function onFilter(value: unknown): void {
             {{ t('catalog.showMore') }}
           </ion-button>
         </div>
-      </template>
+      </div>
       <LoadNoteModal
         :exercise-id="noting?.id"
         :name="noting?.name ?? ''"

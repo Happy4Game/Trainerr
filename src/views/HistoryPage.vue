@@ -23,6 +23,7 @@ import { useSession } from '@/ui/session/useSession';
 import { useUnits } from '@/ui/useUnits';
 import StatsView from '@/ui/StatsView.vue';
 import BodyView from '@/ui/BodyView.vue';
+import { useSwapDirection } from '@/ui/useSwapDirection';
 import { useBodyMeasurements } from '@/ui/body/useBodyMeasurements';
 
 /**
@@ -33,6 +34,8 @@ import { useBodyMeasurements } from '@/ui/body/useBodyMeasurements';
 const VIEWS = ['sessions', 'stats', 'body'] as const;
 type View = (typeof VIEWS)[number];
 const view = ref<View>('sessions');
+/** Sessions, stats, body: the new view slides in from its side. */
+const { swap, settle } = useSwapDirection(view, VIEWS);
 
 const route = useRoute();
 const body = useBodyMeasurements();
@@ -127,87 +130,89 @@ const workSets = (sets: readonly LoggedSet[]) => sets.filter((set) => !set.warmu
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <StatsView v-if="view === 'stats'" />
-      <BodyView v-if="view === 'body'" />
-      <AddPastSession v-if="view === 'sessions'" />
-      <EmptyState
-        v-if="view === 'sessions' && sessions.length === 0"
-        :icon="CalendarCheck"
-        :title="t('emptyStates.history')"
-        :text="t('history.empty')"
-        :action="t('emptyStates.start')"
-        to="/tabs/session"
-      />
-      <template v-else-if="view === 'sessions'">
-        <section v-for="month in months" :key="month.key" class="month">
-          <h2>
-            <span class="month-name">{{ month.title }}</span>
-            <span class="month-count">{{ t('history.sessions', month.sessions.length) }}</span>
-          </h2>
-          <ul class="sessions">
-            <li v-for="s in month.sessions" :key="s.id">
-              <router-link
-                :to="`/tabs/history/${s.id}`"
-                class="card"
-                :aria-label="
-                  t('history.edit', {
-                    session: `${templateLabel(s.templateId)} · ${dateLabel(s.date)}`,
-                  })
-                "
-              >
-                <div class="head">
-                  <div class="date" aria-hidden="true">
-                    <span class="weekday">{{ formatDate(s.date, { weekday: 'short' }) }}</span>
-                    <span class="number">{{ formatDate(s.date, { day: 'numeric' }) }}</span>
+      <div :key="view" :class="swap" @animationend.self="settle">
+        <StatsView v-if="view === 'stats'" />
+        <BodyView v-if="view === 'body'" />
+        <AddPastSession v-if="view === 'sessions'" />
+        <EmptyState
+          v-if="view === 'sessions' && sessions.length === 0"
+          :icon="CalendarCheck"
+          :title="t('emptyStates.history')"
+          :text="t('history.empty')"
+          :action="t('emptyStates.start')"
+          to="/tabs/session"
+        />
+        <template v-else-if="view === 'sessions'">
+          <section v-for="month in months" :key="month.key" class="month">
+            <h2>
+              <span class="month-name">{{ month.title }}</span>
+              <span class="month-count">{{ t('history.sessions', month.sessions.length) }}</span>
+            </h2>
+            <ul class="sessions">
+              <li v-for="s in month.sessions" :key="s.id">
+                <router-link
+                  :to="`/tabs/history/${s.id}`"
+                  class="card tr-pressable"
+                  :aria-label="
+                    t('history.edit', {
+                      session: `${templateLabel(s.templateId)} · ${dateLabel(s.date)}`,
+                    })
+                  "
+                >
+                  <div class="head">
+                    <div class="date" aria-hidden="true">
+                      <span class="weekday">{{ formatDate(s.date, { weekday: 'short' }) }}</span>
+                      <span class="number">{{ formatDate(s.date, { day: 'numeric' }) }}</span>
+                    </div>
+                    <div class="title">
+                      <h3>{{ templateLabel(s.templateId) }}</h3>
+                      <p class="figures">
+                        {{
+                          [
+                            t('customSession.exercises', exercises(s.sets).length),
+                            t('history.sets', workSets(s.sets)),
+                            t('history.lifted', { load: load(Math.round(sessionWorkload(s))) }),
+                          ].join(' · ')
+                        }}
+                      </p>
+                    </div>
+                    <ChevronRight :size="20" class="chevron" aria-hidden="true" />
                   </div>
-                  <div class="title">
-                    <h3>{{ templateLabel(s.templateId) }}</h3>
-                    <p class="figures">
-                      {{
-                        [
-                          t('customSession.exercises', exercises(s.sets).length),
-                          t('history.sets', workSets(s.sets)),
-                          t('history.lifted', { load: load(Math.round(sessionWorkload(s))) }),
-                        ].join(' · ')
-                      }}
-                    </p>
-                  </div>
-                  <ChevronRight :size="20" class="chevron" aria-hidden="true" />
-                </div>
-              </router-link>
-              <ul
-                class="exercises"
-                :aria-label="t('history.exercisesOf', { session: templateLabel(s.templateId) })"
-              >
-                <li v-for="e in exercises(s.sets)" :key="e.id">
-                  <span class="exercise-name">
-                    <router-link
-                      v-if="thumbnailOf(e.id)"
-                      :to="cardLink(e.id)"
-                      class="thumb"
-                      :aria-label="t('session.seeMovementOf', { name: e.name })"
-                    >
-                      <img :src="thumbnailOf(e.id)" alt="" />
-                    </router-link>
-                    {{ e.name }}
-                    <span
-                      v-if="isRecord(s.id, e.id)"
-                      class="record"
-                      role="img"
-                      :aria-label="t('history.record')"
-                      >🏆</span
-                    >
-                  </span>
-                  <span class="chips">
-                    <span v-for="(set, i) in e.sets" :key="i" class="chip">{{ set }}</span>
-                  </span>
-                </li>
-              </ul>
-              <p v-if="s.note" class="note">« {{ s.note }} »</p>
-            </li>
-          </ul>
-        </section>
-      </template>
+                </router-link>
+                <ul
+                  class="exercises"
+                  :aria-label="t('history.exercisesOf', { session: templateLabel(s.templateId) })"
+                >
+                  <li v-for="e in exercises(s.sets)" :key="e.id">
+                    <span class="exercise-name">
+                      <router-link
+                        v-if="thumbnailOf(e.id)"
+                        :to="cardLink(e.id)"
+                        class="thumb"
+                        :aria-label="t('session.seeMovementOf', { name: e.name })"
+                      >
+                        <img :src="thumbnailOf(e.id)" alt="" />
+                      </router-link>
+                      {{ e.name }}
+                      <span
+                        v-if="isRecord(s.id, e.id)"
+                        class="record"
+                        role="img"
+                        :aria-label="t('history.record')"
+                        >🏆</span
+                      >
+                    </span>
+                    <span class="chips">
+                      <span v-for="(set, i) in e.sets" :key="i" class="chip">{{ set }}</span>
+                    </span>
+                  </li>
+                </ul>
+                <p v-if="s.note" class="note">« {{ s.note }} »</p>
+              </li>
+            </ul>
+          </section>
+        </template>
+      </div>
     </ion-content>
   </ion-page>
 </template>

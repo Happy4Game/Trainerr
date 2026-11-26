@@ -15,6 +15,7 @@ import {
 import { Camera, Columns2, ImagePlus } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useSwapDirection } from '@/ui/useSwapDirection';
 import {
   importedPhotoDate,
   lastPhotoOfPose,
@@ -51,6 +52,8 @@ const session = useSession();
 const body = useBodyMeasurements();
 const photos = body.photos;
 const pose = ref<PhotoPose | 'all'>('all');
+/** The photos of another pose slide in from the side of its tab. */
+const { swap, settle } = useSwapDirection(pose, ['all', ...PHOTO_POSES]);
 const busy = ref(false);
 const opened = ref<string>();
 const camera = ref(false);
@@ -205,54 +208,60 @@ function compare(photo?: Photo): void {
       <p v-else-if="photos.length === 0" class="empty">{{ t('body.gallery.empty') }}</p>
       <p v-else-if="shown.length === 0" class="empty">{{ t('body.gallery.emptyPose') }}</p>
 
-      <section v-if="comparison" class="compare-card" :aria-label="t('body.gallery.compareTitle')">
-        <h2>{{ t('body.gallery.compareTitle') }}</h2>
-        <p class="hint">
-          {{
-            t('body.gallery.between', {
-              weeks: t('body.gallery.weeks', comparison.weeks),
-              sessions: t('body.gallery.sessions', comparison.sessions),
-            })
-          }}
-        </p>
-        <div class="compare">
-          <figure v-for="p in [comparison.before, comparison.after]" :key="p.id">
-            <button
-              type="button"
-              class="photo-button"
-              :aria-label="t('body.gallery.openNamed', { date: shortDate(p.date) })"
-              @click="opened = p.id"
-            >
-              <img :src="p.photo" :alt="t('body.photo.alt', { date: shortDate(p.date) })" />
-            </button>
-            <figcaption>{{ shortDate(p.date) }}</figcaption>
-          </figure>
-        </div>
-        <ion-button expand="block" fill="outline" class="compare-more" @click="compare()">
-          <Columns2 :size="20" aria-hidden="true" class="icon" />
-          {{ t('body.compare.open') }}
-        </ion-button>
-      </section>
+      <div :key="pose" :class="swap" @animationend.self="settle">
+        <section
+          v-if="comparison"
+          class="compare-card"
+          :aria-label="t('body.gallery.compareTitle')"
+        >
+          <h2>{{ t('body.gallery.compareTitle') }}</h2>
+          <p class="hint">
+            {{
+              t('body.gallery.between', {
+                weeks: t('body.gallery.weeks', comparison.weeks),
+                sessions: t('body.gallery.sessions', comparison.sessions),
+              })
+            }}
+          </p>
+          <div class="compare">
+            <figure v-for="p in [comparison.before, comparison.after]" :key="p.id">
+              <button
+                type="button"
+                class="photo-button"
+                :aria-label="t('body.gallery.openNamed', { date: shortDate(p.date) })"
+                @click="opened = p.id"
+              >
+                <img :src="p.photo" :alt="t('body.photo.alt', { date: shortDate(p.date) })" />
+              </button>
+              <figcaption>{{ shortDate(p.date) }}</figcaption>
+            </figure>
+          </div>
+          <ion-button expand="block" fill="outline" class="compare-more" @click="compare()">
+            <Columns2 :size="20" aria-hidden="true" class="icon" />
+            {{ t('body.compare.open') }}
+          </ion-button>
+        </section>
 
-      <section v-for="m in months" :key="m.month" class="month" :aria-label="monthName(m.month)">
-        <h2>{{ monthName(m.month) }}</h2>
-        <div class="grid">
-          <button
-            v-for="item in m.photos"
-            :key="item.photo.id"
-            type="button"
-            class="thumb"
-            :aria-label="t('body.gallery.openNamed', { date: shortDate(item.photo.date) })"
-            @click="opened = item.photo.id"
-          >
-            <img :src="item.photo.photo" alt="" />
-            <span class="caption">
-              {{ shortDate(item.photo.date) }}
-              <span class="sub">{{ t('body.gallery.sessions', item.sessions) }}</span>
-            </span>
-          </button>
-        </div>
-      </section>
+        <section v-for="m in months" :key="m.month" class="month" :aria-label="monthName(m.month)">
+          <h2>{{ monthName(m.month) }}</h2>
+          <div class="grid">
+            <button
+              v-for="item in m.photos"
+              :key="item.photo.id"
+              type="button"
+              class="thumb"
+              :aria-label="t('body.gallery.openNamed', { date: shortDate(item.photo.date) })"
+              @click="opened = item.photo.id"
+            >
+              <img :src="item.photo.photo" alt="" />
+              <span class="caption">
+                {{ shortDate(item.photo.date) }}
+                <span class="sub">{{ t('body.gallery.sessions', item.sessions) }}</span>
+              </span>
+            </button>
+          </div>
+        </section>
+      </div>
 
       <CameraCapture
         :open="camera"

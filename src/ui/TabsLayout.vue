@@ -95,10 +95,28 @@ ion-tab-button ion-label {
   height: 30px;
   margin-block-end: 2px;
   border-radius: 999px;
-  transition: background-color 0.2s;
+  isolation: isolate;
 }
-.tab-selected .icon-pill {
+/*
+ * Pastille de l'onglet actif : elle s'étire depuis le centre (Material 3,
+ * « active indicator » de la barre de navigation), au lieu d'apparaître net.
+ */
+.icon-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
   background: rgba(var(--ion-color-primary-rgb), 0.14);
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition:
+    transform var(--tr-duration) var(--tr-ease-out),
+    opacity var(--tr-duration-fast) linear;
+}
+.tab-selected .icon-pill::before {
+  opacity: 1;
+  transform: none;
 }
 .dot {
   position: absolute;

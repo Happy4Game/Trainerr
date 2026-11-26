@@ -13,7 +13,7 @@ const thumbnail = computed(() => {
 </script>
 
 <template>
-  <router-link :to="to" class="row">
+  <router-link :to="to" class="row tr-pressable">
     <span class="thumb" aria-hidden="true">
       <img v-if="thumbnail" :src="thumbnail" alt="" loading="lazy" />
     </span>

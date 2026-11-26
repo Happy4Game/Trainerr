@@ -435,6 +435,75 @@ ion-toggle {
   }
 }
 
+/*
+ * Transitions entre écrans (Material 3, « transition patterns ») :
+ * - onglet : « fade through », l'écran arrive en fondu en grossissant à peine ;
+ * - sélecteur (Séances / Stats / Corps…) : « shared axis » horizontal, le
+ *   contenu glisse depuis le côté du choix.
+ * Seul l'écran qui arrive est animé : l'ancien disparaît tout de suite, rien
+ * ne bloque un appui pendant l'animation.
+ */
+@keyframes tr-fade-through {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+@keyframes tr-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+@keyframes tr-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+/*
+ * Ionic cache un onglet quitté avec .ion-page-hidden (display: none). Un
+ * élément qui réapparaît relance son animation CSS : l'onglet choisi, ou
+ * l'écran retrouvé après un retour, arrive donc en fondu, sans JavaScript.
+ * Quand une fiche s'ouvre, l'animation d'Ionic (Web Animations) passe devant.
+ */
+ion-tabs ion-router-outlet > .ion-page {
+  animation: tr-fade-through 210ms var(--tr-ease-out);
+}
+.tr-from-right {
+  animation: tr-from-right var(--tr-duration) var(--tr-ease-out);
+}
+.tr-from-left {
+  animation: tr-from-left var(--tr-duration) var(--tr-ease-out);
+}
+
+/* Carte ou ligne cliquable : elle s'enfonce un peu sous le doigt, comme un bouton. */
+.tr-pressable {
+  transition: transform var(--tr-duration-fast) var(--tr-ease-out);
+}
+.tr-pressable:active {
+  transform: scale(0.98);
+}
+
+/*
+ * Blocs repliables (<details>) : ils s'ouvrent en glissant. Navigateurs
+ * récents seulement (::details-content, interpolate-size : Chrome 131) ;
+ * ailleurs ils s'ouvrent d'un coup, comme avant.
+ */
+:root {
+  interpolate-size: allow-keywords;
+}
+details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size var(--tr-duration) var(--tr-ease-out),
+    content-visibility var(--tr-duration) allow-discrete;
+}
+details[open]::details-content {
+  block-size: auto;
+}
+
 /* Animations réduites si le téléphone le demande (WCAG 2.3.3). */
 @media (prefers-reduced-motion: reduce) {
   *,
