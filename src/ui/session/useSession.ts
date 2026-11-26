@@ -760,7 +760,12 @@ async function logSet(set: SetLog): Promise<void> {
   const beaten = beatsRecord({ ...set, loadKg: realLoad }, recordFor(set.exerciseId));
   const stored = await addSet(db, active.value.id, { ...set, doneAt: Date.now() });
   active.value = { ...active.value, sets: [...active.value.sets, stored] };
-  if (set.warmup) return;
+  // A warm-up set rests like a work set, but it is not one of the planned sets:
+  // it neither moves the load, the records nor the count of sets done.
+  if (set.warmup) {
+    startRest(set.exerciseId);
+    return;
+  }
   recordBeaten.value = beaten
     ? { exerciseId: set.exerciseId, loadKg: realLoad, reps: set.reps }
     : recordBeaten.value?.exerciseId === set.exerciseId
@@ -790,9 +795,15 @@ async function logSet(set: SetLog): Promise<void> {
   if (superset.next) queue = startNow(queue, superset.next);
   if (queue !== active.value.plan.queue) await updatePlan({ ...active.value.plan, queue });
   // Rest of the exercise, the same whatever the feeling: longer on big movements.
+  if (superset.rest) startRest(set.exerciseId);
+  else restStartedAt.value = restEndsAt.value = undefined;
+}
+
+/** Starts the usual rest of this exercise, from now. */
+function startRest(exerciseId: string): void {
   const now = Date.now();
-  restStartedAt.value = superset.rest ? now : undefined;
-  restEndsAt.value = superset.rest ? now + usualRest(set.exerciseId) * 1000 : undefined;
+  restStartedAt.value = now;
+  restEndsAt.value = now + usualRest(exerciseId) * 1000;
 }
 
 /** Rest of an exercise in the session: set on its plan line, or by kind of exercise. */

@@ -535,6 +535,7 @@
       "take": "Do {name} instead"
     },
     "saved": "✓ Set saved: {set}",
+    "savedWarmup": "✓ Warm-up saved (not counted in your sets): {set}",
     "testSetQuestion": "Too light? Could you have done 3 more reps?",
     "seeMovementOf": "See the card of {name}",
     "restTaken": "rest {time}",
@@ -1261,6 +1262,7 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "warmupRest": "Warm-up: the rest starts too",
       "newDay": "A new day at midnight",
       "reliableBackups": "Reliable backups",
       "historyOnCard": "The history on the machine card",
@@ -1309,6 +1311,8 @@
       "busyInOrder": "The list shows the taken machine right after the current exercise, where the app really offers it again, and no longer at the end.",
       "tiredReminder": "“Not in shape” now keeps all your sets: it only stops the load from going up, and a reminder says so during the session.",
       "tiredBetter": "Feeling better? “I feel better” lets the load go up again.",
+      "warmupRest": "After a warm-up set, the rest timer starts as after a normal set.",
+      "ownWarmupAlways": "The “That was a warm-up set” button is there before your first set on every machine, even when the app proposes its own warm-up: enter your load and reps as usual, the set is not counted.",
       "ownWarmupLog": "Before your first set on a machine, the “That was a warm-up set” button keeps it in your session without counting it: you no longer move to the next machine one set too early.",
       "ownWarmupFix": "Already saved as a real set? Fix it with “Warm-up set”, in the current session or in the history.",
       "twoTimesBack": "During the workout, the set by set table also shows the time before, in grey, next to last time.",

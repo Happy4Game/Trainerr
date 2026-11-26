@@ -535,6 +535,7 @@
       "take": "Faire {name} à la place"
     },
     "saved": "✓ Série enregistrée : {set}",
+    "savedWarmup": "✓ Échauffement enregistré (ne compte pas dans tes séries) : {set}",
     "testSetQuestion": "Trop léger ? Tu aurais pu faire 3 reps de plus ?",
     "seeMovementOf": "Voir la fiche de {name}",
     "restTaken": "repos {time}",
@@ -1261,6 +1262,7 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "warmupRest": "Échauffement : le repos se lance aussi",
       "newDay": "Un nouveau jour à minuit",
       "reliableBackups": "Sauvegardes fiables",
       "historyOnCard": "L'historique sur la fiche machine",
@@ -1309,6 +1311,8 @@
       "busyInOrder": "La liste montre la machine occupée juste après l'exercice en cours, là où l'appli te la repropose vraiment, et plus à la fin.",
       "tiredReminder": "« Pas en forme » garde maintenant toutes tes séries : il bloque seulement la hausse de charge, et un rappel le dit pendant la séance.",
       "tiredBetter": "Ça va mieux ? « Je me sens mieux » laisse la charge remonter.",
+      "warmupRest": "Après une série d'échauffement, le minuteur de repos se lance comme après une série normale.",
+      "ownWarmupAlways": "Le bouton « C'était une série d'échauffement » est là avant ta première série sur chaque machine, même quand l'appli propose son propre échauffement : tu notes ta charge et tes reps comme d'habitude, sans que la série compte.",
       "ownWarmupLog": "Avant ta première série sur une machine, le bouton « C'était une série d'échauffement » la garde dans ta séance sans la compter : tu ne passes plus à la machine suivante une série trop tôt.",
       "ownWarmupFix": "Déjà notée comme une vraie série ? Corrige-la avec « Série d'échauffement », dans la séance en cours ou dans l'historique.",
       "twoTimesBack": "Pendant la séance, le tableau série par série montre aussi l'avant-dernière fois, en gris, à côté de la dernière fois.",
