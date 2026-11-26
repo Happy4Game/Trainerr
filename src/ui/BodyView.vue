@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { celebrate } from '@/ui/decor/celebrate';
 import {
   IonButton,
   IonCard,
@@ -73,6 +74,7 @@ async function save(): Promise<void> {
     ...(weightKg !== undefined ? { weightKg } : {}),
     measurements: measured,
   });
+  celebrate('weighIn');
   weight.value = arm.value = waist.value = '';
   date.value = todayIso();
   // Assisted pull-ups and dips use the latest weight.
@@ -144,6 +146,7 @@ const entries = computed(() => [...measurements.value].reverse().filter((m) => !
 const camera = ref(false);
 async function onPhoto(photo: string, pose: PhotoPose): Promise<void> {
   await body.add({ date: todayIso(), measurements: {}, photo, pose });
+  celebrate('photo');
 }
 
 async function remove(id: string): Promise<void> {

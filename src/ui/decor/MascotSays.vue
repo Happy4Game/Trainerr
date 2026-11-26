@@ -2,19 +2,20 @@
 import { useSettings } from '@/ui/useSettings';
 import { decorationsOn } from './celebrate';
 import MascotFigure from './MascotFigure.vue';
+import type { MascotPose } from './mascotLines';
 
 /**
  * The mascot, small, next to a speech bubble: a tip, an encouragement. The
  * bubble pops each time its text changes. With the decorations off, only the
  * bubble's content stays, as a plain note.
  */
-defineProps<{ message: string }>();
+withDefaults(defineProps<{ message: string; pose?: MascotPose }>(), { pose: 'wave' });
 const { settings } = useSettings();
 </script>
 
 <template>
   <div class="says" :class="{ plain: !decorationsOn(settings) }" role="note">
-    <MascotFigure v-if="decorationsOn(settings)" pose="wave" class="mascot" />
+    <MascotFigure v-if="decorationsOn(settings)" :pose="pose" class="mascot" />
     <div :key="message" class="bubble">
       <p class="message">{{ message }}</p>
       <slot />

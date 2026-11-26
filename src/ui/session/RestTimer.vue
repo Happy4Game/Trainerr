@@ -109,7 +109,7 @@ onBeforeUnmount(() => clearInterval(timer));
   animation: tr-pop var(--tr-duration-slow) var(--tr-ease-spring);
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: clip;
 }
 /* Green layer above the orange, shown in the last seconds (a gradient cannot fade). */
 .rest::before {

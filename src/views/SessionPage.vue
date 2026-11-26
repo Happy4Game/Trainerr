@@ -322,6 +322,17 @@ watch(
 watch(phase, (now, before) => {
   if (now === 'finished' && before === 'active') celebrate('session');
 });
+// Smaller moments, so that the mascot does not only show at the end.
+const workSetCount = computed(() => loggedSets.value.filter((set) => !set.warmup).length);
+watch(workSetCount, (now, before) => {
+  if (before === 0 && now === 1) celebrate('firstSet');
+});
+const machinesDone = computed(() => progress.value.filter((e) => e.status === 'done').length);
+watch(machinesDone, (now, before) => {
+  const total = progress.value.length;
+  const half = Math.ceil(total / 2);
+  if (total >= 4 && before < half && now === half) celebrate('halfway');
+});
 
 async function logWarmup(): Promise<void> {
   const id = currentId.value;

@@ -2161,8 +2161,6 @@
     "unexpected": "Ça n'a pas marché. Réessaie ; si ça recommence, envoie-nous un retour depuis les Réglages."
   },
   "decor": {
-    "bravo": "Tu l'as fait, bravo à toi !",
-    "record": "Quel record, chapeau !",
     "tipOfTheDay": "Conseil du jour : {tip}",
     "readTip": "Lire le conseil",
     "anotherTip": "Un autre",
@@ -2173,7 +2171,48 @@
       "record": "Record battu, quelle série !",
       "rest0": "Bien joué ! Profite du repos pour souffler.",
       "rest1": "Une gorgée d'eau et on repart.",
-      "rest2": "Machine suivante bientôt, continue comme ça !"
+      "rest2": "Machine suivante bientôt, continue comme ça !",
+      "rest3": "Respire, relâche les épaules.",
+      "rest4": "Chaque série compte, tu avances !",
+      "rest5": "Concentre-toi sur la prochaine série."
+    },
+    "celebrations": {
+      "session": {
+        "0": "Tu l'as fait, bravo à toi !",
+        "1": "Séance bouclée, quel boulot !",
+        "2": "Encore une de faite, chapeau !"
+      },
+      "record": {
+        "0": "Quel record, chapeau !",
+        "1": "Tu repousses tes limites !",
+        "2": "Plus fort que la dernière fois !"
+      },
+      "firstSet": {
+        "0": "C'est parti !",
+        "1": "Première série dans la poche !",
+        "2": "Bien lancé, continue !"
+      },
+      "halfway": {
+        "0": "À mi-chemin, tiens bon !",
+        "1": "La moitié est faite, bravo !",
+        "2": "Plus que la moitié, tu gères !"
+      },
+      "stretching": {
+        "0": "Bien étiré, ton corps te dit merci !",
+        "1": "Étirements faits, bravo !"
+      },
+      "weighIn": {
+        "0": "Noté ! Le suivi paie sur la durée.",
+        "1": "C'est enregistré, bien joué !"
+      },
+      "photo": {
+        "0": "Belle photo, tu verras la différence !",
+        "1": "Photo rangée, on compare dans un mois !"
+      }
+    },
+    "today": {
+      "restDay": "Jour de repos : tes muscles grandissent maintenant.",
+      "done": "Séance faite aujourd'hui, bravo !"
     }
   }
 }

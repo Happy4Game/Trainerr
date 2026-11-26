@@ -119,7 +119,7 @@ L'appli s'utilise à la salle, d'une main, entre deux séries :
 
 - **Licence du projet** : Trainerr est sous [PolyForm Noncommercial 1.0.0](LICENSE.md) (pas d'usage commercial, forks compris). En proposant une contribution, tu acceptes qu'elle soit publiée sous cette licence, et que l'auteur du projet puisse aussi l'accorder sous d'autres conditions (par exemple une licence commerciale).
 - **Code embarqué** : uniquement MIT, ISC, BSD, Apache 2.0 ou domaine public. Pas de GPL ni d'AGPL dans l'appli. Le build échoue si une dépendance sort de cette liste, et la page Crédits est générée automatiquement.
-- **Images** : jamais d'image sans licence connue, ni d'image générée par IA. Chaque image a son auteur et sa licence notés (voir `scripts/update-exercise-images.mjs`) ; une image CC BY-SA modifiée reste sous CC BY-SA et ses modifications sont signalées.
+- **Images** : jamais d'image sans licence connue, ni d'image générée par IA. Deux exceptions décidées par l'auteur, signalées dans l'appli et dans les Crédits : les dessins des machines cardio (aucun dessin libre n'existe) et la mascotte (pur décor, elle ne montre jamais un mouvement à imiter). Chaque image a son auteur et sa licence notés (voir `scripts/update-exercise-images.mjs`) ; une image CC BY-SA modifiée reste sous CC BY-SA et ses modifications sont signalées.
 - **Données personnelles et de santé** (séances, gênes, mensurations) : elles restent sur le téléphone. Rien n'est envoyé sans une action explicite de l'utilisateur, et l'export comme la suppression complète doivent continuer à fonctionner.
 
 ## 10. Avant d'ouvrir la pull request

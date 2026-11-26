@@ -16,6 +16,7 @@ import { Camera, Columns2, ImagePlus } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useSwapDirection } from '@/ui/useSwapDirection';
+import { celebrate } from '@/ui/decor/celebrate';
 import {
   importedPhotoDate,
   lastPhotoOfPose,
@@ -141,6 +142,7 @@ async function importFiles(event: Event): Promise<void> {
 
 async function taken(photo: string, takenPose: PhotoPose): Promise<void> {
   await body.add({ date: todayIso(), measurements: {}, photo, pose: takenPose });
+  celebrate('photo');
 }
 
 function compare(photo?: Photo): void {

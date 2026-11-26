@@ -6,7 +6,6 @@ import { useI18n } from 'vue-i18n';
 import { useSession } from '@/ui/session/useSession';
 import MachineSplitPrompt from '@/ui/MachineSplitPrompt.vue';
 import UpdatePanel from '@/ui/UpdatePanel.vue';
-import CelebrationLayer from '@/ui/decor/CelebrationLayer.vue';
 import { useUpdates } from '@/ui/updates';
 
 const { t } = useI18n();
@@ -54,7 +53,6 @@ const tabs = [
       </ion-tab-bar>
     </ion-tabs>
     <MachineSplitPrompt />
-    <CelebrationLayer />
   </ion-page>
 </template>
 

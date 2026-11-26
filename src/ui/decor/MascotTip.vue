@@ -6,14 +6,26 @@ import { todayIso } from '@/ui/today';
 import { tipOfTheDay } from './mascotLines';
 import MascotSays from './MascotSays.vue';
 
-/** On Today: the mascot gives the tip of the day; "Un autre" gives the next one. */
+/**
+ * On Today: the mascot gives the tip of the day ("Un autre" gives the next
+ * one), in a mood that follows the day: asleep on a rest day, holding its
+ * trophy once the session is done, waving otherwise.
+ */
+const props = defineProps<{ day: 'restDay' | 'done' | 'training' }>();
 const { t } = useI18n();
+const pose = computed(() =>
+  props.day === 'restDay' ? 'sleep' : props.day === 'done' ? 'trophy' : 'wave',
+);
+const message = computed(() => {
+  const advice = t('decor.tipOfTheDay', { tip: t(`tips.items.${tip.value}.title`) });
+  return props.day === 'training' ? advice : `${t(`decor.today.${props.day}`)} ${advice}`;
+});
 const offset = ref(0);
 const tip = computed(() => tipOfTheDay(todayIso(), offset.value));
 </script>
 
 <template>
-  <MascotSays :message="t('decor.tipOfTheDay', { tip: t(`tips.items.${tip}.title`) })">
+  <MascotSays :message="message" :pose="pose">
     <div class="actions">
       <ion-button size="small" fill="clear" router-link="/tabs/settings/tips">
         {{ t('decor.readTip') }}

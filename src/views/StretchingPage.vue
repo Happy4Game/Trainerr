@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { celebrate } from '@/ui/decor/celebrate';
 import {
   IonBackButton,
   IonButton,
@@ -33,6 +34,11 @@ const minutes = stepsMinutes(steps);
 const sources = STRETCHING_SOURCE_IDS.map(sourceById).filter((s) => s !== undefined);
 
 const phase = ref<'intro' | 'running' | 'done'>('intro');
+/** All stretches held: the mascot comes to say well done. */
+function finished(): void {
+  phase.value = 'done';
+  celebrate('stretching');
+}
 const index = ref(0);
 
 function start(): void {
@@ -91,7 +97,7 @@ function leave(): void {
         :sources="sources"
         :illustration-for="stretchingIllustrationFor"
         @step="index = $event"
-        @finish="phase = 'done'"
+        @finish="finished"
         @skip="leave"
       />
 

@@ -2161,8 +2161,6 @@
     "unexpected": "That didn't work. Try again; if it happens again, send us feedback from Settings."
   },
   "decor": {
-    "bravo": "You did it, well done!",
-    "record": "What a record, hats off!",
     "tipOfTheDay": "Tip of the day: {tip}",
     "readTip": "Read the tip",
     "anotherTip": "Another one",
@@ -2173,7 +2171,48 @@
       "record": "Record beaten, what a set!",
       "rest0": "Nice work! Use the rest to catch your breath.",
       "rest1": "A sip of water and off we go.",
-      "rest2": "Next machine soon, keep it up!"
+      "rest2": "Next machine soon, keep it up!",
+      "rest3": "Breathe, relax your shoulders.",
+      "rest4": "Every set counts, you're moving forward!",
+      "rest5": "Focus on the next set."
+    },
+    "celebrations": {
+      "session": {
+        "0": "You did it, well done!",
+        "1": "Session wrapped up, great work!",
+        "2": "Another one done, hats off!"
+      },
+      "record": {
+        "0": "What a record, hats off!",
+        "1": "You're pushing your limits!",
+        "2": "Stronger than last time!"
+      },
+      "firstSet": {
+        "0": "Here we go!",
+        "1": "First set in the bag!",
+        "2": "Great start, keep going!"
+      },
+      "halfway": {
+        "0": "Halfway there, hang in!",
+        "1": "Half done, well done!",
+        "2": "Over halfway, you've got this!"
+      },
+      "stretching": {
+        "0": "Well stretched, your body thanks you!",
+        "1": "Stretches done, well done!"
+      },
+      "weighIn": {
+        "0": "Saved! Tracking pays off over time.",
+        "1": "Recorded, nice one!"
+      },
+      "photo": {
+        "0": "Nice photo, you'll see the difference!",
+        "1": "Photo filed, compare in a month!"
+      }
+    },
+    "today": {
+      "restDay": "Rest day: your muscles are growing now.",
+      "done": "Session done today, well done!"
     }
   }
 }

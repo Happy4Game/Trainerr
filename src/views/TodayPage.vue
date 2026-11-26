@@ -277,7 +277,9 @@ const streak = computed(() =>
             {{ t('today.otherChoice') }}
           </ion-button>
         </section>
-        <MascotTip />
+        <MascotTip
+          :day="doneToday ? 'done' : !active && !today?.session ? 'restDay' : 'training'"
+        />
 
         <ion-card v-if="settings">
           <ion-card-header>
@@ -344,7 +346,7 @@ const streak = computed(() =>
 }
 .hero {
   position: relative;
-  overflow: hidden;
+  overflow: clip;
   margin-block-end: var(--tr-space-4);
   padding: var(--tr-space-5);
   border-radius: var(--tr-radius-l);

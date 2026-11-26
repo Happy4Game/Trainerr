@@ -7,7 +7,7 @@ import { decorationsOn } from './celebrate';
  * Two waves rolling at different speeds at the bottom of a card, purely for
  * the look. With `level` (0 to 1) the water fills that share of the card:
  * the rest timer empties it as the time runs out. The parent needs
- * `position: relative; isolation: isolate; overflow: hidden`.
+ * `position: relative; isolation: isolate; overflow: clip` (clip: never scrollable).
  */
 const props = defineProps<{ level?: number }>();
 const { settings } = useSettings();
@@ -45,6 +45,8 @@ const WAVE = 'M0 10 Q25 0 50 10 T100 10 T150 10 T200 10 V40 H0 Z';
   bottom: 0;
   z-index: -1;
   height: 56px;
+  /* clip, not hidden: the double-width waves must never make the card scrollable. */
+  overflow: clip;
   pointer-events: none;
   color: currentcolor;
 }
