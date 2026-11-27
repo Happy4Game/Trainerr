@@ -37,6 +37,7 @@ import { useUnits } from '@/ui/useUnits';
 import { useSettings } from '@/ui/useSettings';
 import { DEFAULT_PLATE_CONFIG, platesFor } from '@/domain/plates';
 import { DEFAULT_BODY_WEIGHT_KG } from '@/domain/assisted';
+import { confirmPress, rollIn } from '@/ui/motion';
 
 const props = defineProps<{ exerciseId: string }>();
 const emit = defineEmits<{ busy: []; replace: []; plates: [loadKg: number] }>();
@@ -79,6 +80,17 @@ const target = computed(() => session.plannedSets(props.exerciseId));
 
 const load = ref(0);
 const reps = ref(0);
+/** The figures roll like a counter when they change (up from below, down from above). */
+const loadOutput = ref<HTMLElement>();
+const repsOutput = ref<HTMLElement>();
+watch(load, (now, before) => {
+  if (now !== before) void nextTick(() => rollIn(loadOutput.value, now > before ? 1 : -1));
+});
+watch(reps, (now, before) => {
+  if (now !== before) void nextTick(() => rollIn(repsOutput.value, now > before ? 1 : -1));
+});
+/** "Série faite" gives a little under the finger, with a green ring: the set counted. */
+const doneButton = ref<{ $el: HTMLElement }>();
 const incomplete = ref(false);
 const slowTempo = ref(false);
 /** Optional: reps left in the tank (0 to 4+), and a free note on the set. */
@@ -295,6 +307,7 @@ const clock = (seconds: number) =>
 async function validate(difficulty: Difficulty = heard.value ?? 'ok'): Promise<void> {
   // A short buzz: the set is saved, no need to look at the screen.
   navigator.vibrate?.(35);
+  confirmPress(doneButton.value?.$el);
   // This tap allows the beep at the end of the rest.
   unlockSound();
   await session.logSet({
@@ -590,7 +603,7 @@ function listen(): void {
         :aria-label="t('session.typeLoadNamed', { load: kg(load) })"
         @click="startTyping"
       >
-        <output class="value" data-testid="load">
+        <output ref="loadOutput" class="value" data-testid="load">
           <template v-if="bodyweight && load === 0">{{ t('session.bodyweight.short') }}</template>
           <template v-else
             >{{ n(toDisplay(load)) }}<span class="unit">&nbsp;{{ symbol }}</span></template
@@ -650,7 +663,7 @@ function listen(): void {
       >
         <Minus :size="26" aria-hidden="true" />
       </ion-button>
-      <output class="value" data-testid="reps">{{ n(reps) }}</output>
+      <output ref="repsOutput" class="value" data-testid="reps">{{ n(reps) }}</output>
       <ion-button
         class="step-button"
         fill="clear"
@@ -676,7 +689,7 @@ function listen(): void {
       </ion-button>
     </div>
     <div v-else class="done-row">
-      <ion-button class="done-button" size="large" @click="validate()">
+      <ion-button ref="doneButton" class="done-button" size="large" @click="validate()">
         <Check :size="26" aria-hidden="true" class="icon" />
         {{ t('session.validate.done') }}
       </ion-button>
@@ -991,6 +1004,8 @@ h2 {
   font-weight: 700;
 }
 .done-button {
+  /* Same corners as the button, for the green ring of confirmPress. */
+  border-radius: var(--tr-radius-s);
   min-height: 64px;
   margin: 0;
   font-size: 1.15rem;
@@ -1204,6 +1219,7 @@ h2 {
   color: var(--ion-text-color);
 }
 .value {
+  display: inline-block;
   min-width: 0;
   font-size: 2.4rem;
   line-height: 1.1;

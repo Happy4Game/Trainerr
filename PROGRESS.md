@@ -262,6 +262,13 @@ User stories du pratiquant : [docs/user-stories.md](docs/user-stories.md).
 - Questionnaire, écran des séances : « Quel type de séances ? » avec « Laisse l'appli choisir » (règle `recommendModel`) ou un des 7 programmes, chacun expliqué (`modelInfo.*`), avec les séances prévues et la fréquence par muscle calculée (`frequencyPerMuscle`). Avertissement si un muscle n'est travaillé qu'une fois par semaine.
 - Sources : Ramos-Campo et al. 2024 (split ou full body, même résultat à volume égal), Schoenfeld 2019 et 2016 (fréquence). Fiche Conseils « Full body ou séances séparées ? ». Description du programme aussi sous le choix dans Planning.
 
+## Appli plus vivante (26 nov. 2026)
+
+- **Transitions** : onglets en fondu (Material 3 « fade through »), sélecteurs qui glissent du côté du choix (« shared axis »), étapes de séance qui montent en fondu, listes animées (TransitionGroup), blocs repliables qui glissent, cartes qui s'enfoncent sous le doigt.
+- **Retours visuels** : charge et reps qui défilent, « Série faite » qui confirme, minuteur qui passe au vert et pulse les 5 dernières secondes.
+- **Mascotte** (`src/ui/decor/`, dessin SVG fait par une IA, signalé dans les Crédits) : 6 poses (trophée, salut, biceps, saut de joie, haltère, sommeil), 4 entrées courtes (quelques pas, surgit de derrière la barre d'onglets, jaillit du sol, saute de derrière la barre), mouvements naturels (anticipation, écrasement à l'atterrissage, courbes d'accélération), jamais par-dessus la barre, 7 moments (fin de séance, record, 1re série, mi-séance, étirements, pesée, photo), encouragements pendant le repos, conseil du jour sur Aujourd'hui (fiches sourcées seulement). Vagues sur la carte du jour et dans le minuteur, confettis en fin de séance.
+- **Règles** : seul ce qui arrive est animé (un appui n'attend jamais), rien ne bloque l'écran, tout est coupé par le réglage « Mascotte et animations décoratives » ou si le téléphone demande moins d'animations (WCAG 2.3.3).
+
 ## Reste à faire (fonctions du cahier des charges)
 
 - Fonctions complémentaires : widget, montre.

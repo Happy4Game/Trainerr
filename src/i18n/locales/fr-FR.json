@@ -1102,6 +1102,8 @@
     "guidedWarmupHelp": "Sinon, un échauffement articulaire guidé de tout le corps (≈ 5 min) est proposé au début de chaque séance (conseillé, passable à tout moment).",
     "restSound": "Bip à la fin du repos",
     "restSoundHelp": "Trois bips et une vibration quand le repos est fini.",
+    "decorations": "Mascotte et animations décoratives",
+    "decorationsHelp": "La mascotte qui te félicite et te donne des conseils, les vagues et les confettis. Coupées aussi si le téléphone demande moins d'animations.",
     "repRange": {
       "own": "Ma propre fourchette de reps",
       "auto": "Désactivé : l'appli adapte la fourchette à chaque exercice ({heavy} reps sur les gros mouvements, {machine} sur machine, {isolation} en isolation). Activé : la même pour tous.",
@@ -1225,7 +1227,8 @@
       "muscleMap": "silhouettes musculaires, licence MIT.",
       "lucide": "icônes, licence ISC.",
       "images": "illustrations des mouvements et des étirements, redimensionnées et passées en niveaux de gris :",
-      "aiDrawings": "Dessins des machines cardio : faits par une IA (Claude) pour Trainerr, faute de dessin libre chez Everkinetic et wger.de. Pas forcément vérifiés par un spécialiste."
+      "aiDrawings": "Dessins des machines cardio : faits par une IA (Claude) pour Trainerr, faute de dessin libre chez Everkinetic et wger.de. Pas forcément vérifiés par un spécialiste.",
+      "mascot": "Mascotte : dessinée par une IA (Claude) pour Trainerr."
     },
     "sources": {
       "title": "Sources scientifiques",
@@ -1263,6 +1266,8 @@
     "title": "Nouveautés",
     "help": "Ce qui a changé à chaque mise à jour",
     "titles": {
+      "mascot": "Une mascotte et un décor vivant",
+      "smoothMotion": "Une appli plus fluide",
       "warmupRest": "Échauffement : le repos se lance aussi",
       "newDay": "Un nouveau jour à minuit",
       "reliableBackups": "Sauvegardes fiables",
@@ -1304,6 +1309,16 @@
       "photoPoses": "Photos : poses guidées et galerie"
     },
     "items": {
+      "mascotCheers": "Une mascotte vient te féliciter quand tu finis une séance, bats un record, lances ta 1re série ou passes la moitié de la séance, avec des confettis en fin de séance. Elle sort de derrière la barre du bas, sans jamais la cacher.",
+      "mascotTalks": "Pendant le repos, elle t'encourage. Sur Aujourd'hui, elle te donne un conseil du jour, repris des fiches « Bien débuter ».",
+      "waves": "Des vagues ondulent sur la carte du jour, et l'eau baisse dans le minuteur de repos, qui passe au vert les 5 dernières secondes.",
+      "liveNumbers": "La charge et les reps défilent quand tu les changes, et « Série faite » confirme ton appui.",
+      "decorationsSetting": "Tout ce décor se coupe dans les Réglages.",
+      "tabFade": "Changer d'onglet se fait en fondu, et la pastille de l'onglet choisi s'étire en douceur.",
+      "segmentSlide": "Dans Progrès, le Catalogue et les Photos, le contenu glisse depuis le côté du choix.",
+      "sessionSteps": "En séance, chaque étape arrive en douceur, une série validée apparaît en fondu et une machine déplacée glisse à sa place.",
+      "foldOpen": "Les blocs repliables s'ouvrent en glissant, et les cartes s'enfoncent un peu sous le doigt.",
+      "reducedMotion": "Rien ne ralentit la saisie, et tout reste coupé si les animations sont supprimées dans les réglages du téléphone.",
       "newDay": "Appli restée ouverte la nuit : à minuit, « Aujourd'hui », la séance du jour et ton poids du jour passent au nouveau jour, sans avoir à fermer l'appli.",
       "encryptedBackupFix": "La sauvegarde chiffrée marche à nouveau avec des photos et un long historique. Avant, elle échouait sans rien dire dès que tes données dépassaient environ 150 Ko.",
       "errorsTranslated": "Un message clair s'affiche quand une sauvegarde ou un import ne marche pas, en français comme en anglais.",
@@ -2144,5 +2159,60 @@
     "csvUnknownLoads": "Format de fichier non reconnu (exercise, load_kg, reps).",
     "csvUnknownWeights": "Format de fichier non reconnu (date, weight_kg).",
     "unexpected": "Ça n'a pas marché. Réessaie ; si ça recommence, envoie-nous un retour depuis les Réglages."
+  },
+  "decor": {
+    "tipOfTheDay": "Conseil du jour : {tip}",
+    "readTip": "Lire le conseil",
+    "anotherTip": "Un autre",
+    "coach": {
+      "setsLeft": "Encore {count} série ici, tu gères ! | Encore {count} séries ici, tu gères !",
+      "lastSet": "Dernière série de la séance, donne tout !",
+      "lastMachine": "Dernière machine, tu y es presque !",
+      "record": "Record battu, quelle série !",
+      "rest0": "Bien joué ! Profite du repos pour souffler.",
+      "rest1": "Une gorgée d'eau et on repart.",
+      "rest2": "Machine suivante bientôt, continue comme ça !",
+      "rest3": "Respire, relâche les épaules.",
+      "rest4": "Chaque série compte, tu avances !",
+      "rest5": "Concentre-toi sur la prochaine série."
+    },
+    "celebrations": {
+      "session": {
+        "0": "Tu l'as fait, bravo à toi !",
+        "1": "Séance bouclée, quel boulot !",
+        "2": "Encore une de faite, chapeau !"
+      },
+      "record": {
+        "0": "Quel record, chapeau !",
+        "1": "Tu repousses tes limites !",
+        "2": "Plus fort que la dernière fois !"
+      },
+      "firstSet": {
+        "0": "C'est parti !",
+        "1": "Première série dans la poche !",
+        "2": "Bien lancé, continue !"
+      },
+      "halfway": {
+        "0": "À mi-chemin, tiens bon !",
+        "1": "La moitié est faite, bravo !",
+        "2": "Plus que la moitié, tu gères !"
+      },
+      "stretching": {
+        "0": "Bien étiré, ton corps te dit merci !",
+        "1": "Étirements faits, bravo !"
+      },
+      "weighIn": {
+        "0": "Noté ! Le suivi paie sur la durée.",
+        "1": "C'est enregistré, bien joué !"
+      },
+      "photo": {
+        "0": "Belle photo, tu verras la différence !",
+        "1": "Photo rangée, on compare dans un mois !"
+      }
+    },
+    "today": {
+      "restDay": "Jour de repos : tes muscles grandissent maintenant.",
+      "done": "Séance faite aujourd'hui, bravo !"
+    }
   }
 }

@@ -1102,6 +1102,8 @@
     "guidedWarmupHelp": "Otherwise, a guided whole-body joint warm-up (≈ 5 min) is offered at the start of each session (recommended, skippable at any time).",
     "restSound": "Beep at the end of the rest",
     "restSoundHelp": "Three beeps and a vibration when the rest is over.",
+    "decorations": "Mascot and decorative animations",
+    "decorationsHelp": "The mascot that cheers you on and gives tips, the waves and the confetti. Also off when the phone asks for less motion.",
     "repRange": {
       "own": "My own rep range",
       "auto": "Off: the app fits the range to each exercise ({heavy} reps on big lifts, {machine} on machines, {isolation} on isolation). On: the same for all.",
@@ -1225,7 +1227,8 @@
       "muscleMap": "muscle silhouettes, MIT license.",
       "lucide": "icons, ISC license.",
       "images": "drawings of the moves and stretches, resized and turned to greyscale:",
-      "aiDrawings": "Cardio machine drawings: made by an AI (Claude) for Trainerr, as neither Everkinetic nor wger.de has a free one. Not necessarily checked by a specialist."
+      "aiDrawings": "Cardio machine drawings: made by an AI (Claude) for Trainerr, as neither Everkinetic nor wger.de has a free one. Not necessarily checked by a specialist.",
+      "mascot": "Mascot: drawn by an AI (Claude) for Trainerr."
     },
     "sources": {
       "title": "Scientific sources",
@@ -1263,6 +1266,8 @@
     "title": "What's new",
     "help": "What changed in each update",
     "titles": {
+      "mascot": "A mascot and a lively look",
+      "smoothMotion": "A smoother app",
       "warmupRest": "Warm-up: the rest starts too",
       "newDay": "A new day at midnight",
       "reliableBackups": "Reliable backups",
@@ -1304,6 +1309,16 @@
       "photoPoses": "Photos: guided poses and gallery"
     },
     "items": {
+      "mascotCheers": "A mascot comes to cheer you when you finish a session, beat a record, start your first set or pass the halfway mark, with confetti at the end of a session. It comes from behind the bottom bar, never over it.",
+      "mascotTalks": "During the rest it cheers you on. On Today it gives a tip of the day, taken from the “Getting started” cards.",
+      "waves": "Waves roll on the card of the day, and the water goes down in the rest timer, which turns green in the last 5 seconds.",
+      "liveNumbers": "The load and reps roll when you change them, and “Set done” confirms your tap.",
+      "decorationsSetting": "All of this can be turned off in the Settings.",
+      "tabFade": "Switching tabs fades in, and the pill of the chosen tab stretches smoothly.",
+      "segmentSlide": "In Progress, the Catalog and the Photos, the content slides in from the side of the choice.",
+      "sessionSteps": "During a session, each step comes in smoothly, a logged set fades in and a moved machine slides into place.",
+      "foldOpen": "Folded sections slide open, and cards sink a little under the finger.",
+      "reducedMotion": "Nothing slows down logging, and it all stays off when animations are removed in the phone settings.",
       "newDay": "App left open overnight: at midnight, Today, the day's session and today's weight move to the new day, without closing the app.",
       "encryptedBackupFix": "The encrypted backup works again with photos and a long history. Before, it failed silently once your data went past about 150 KB.",
       "errorsTranslated": "A clear message shows when a backup or an import fails, in English as in French.",
@@ -2144,5 +2159,60 @@
     "csvUnknownLoads": "File format not recognised (exercise, load_kg, reps).",
     "csvUnknownWeights": "File format not recognised (date, weight_kg).",
     "unexpected": "That didn't work. Try again; if it happens again, send us feedback from Settings."
+  },
+  "decor": {
+    "tipOfTheDay": "Tip of the day: {tip}",
+    "readTip": "Read the tip",
+    "anotherTip": "Another one",
+    "coach": {
+      "setsLeft": "{count} more set here, you've got this! | {count} more sets here, you've got this!",
+      "lastSet": "Last set of the session, give it all!",
+      "lastMachine": "Last machine, almost there!",
+      "record": "Record beaten, what a set!",
+      "rest0": "Nice work! Use the rest to catch your breath.",
+      "rest1": "A sip of water and off we go.",
+      "rest2": "Next machine soon, keep it up!",
+      "rest3": "Breathe, relax your shoulders.",
+      "rest4": "Every set counts, you're moving forward!",
+      "rest5": "Focus on the next set."
+    },
+    "celebrations": {
+      "session": {
+        "0": "You did it, well done!",
+        "1": "Session wrapped up, great work!",
+        "2": "Another one done, hats off!"
+      },
+      "record": {
+        "0": "What a record, hats off!",
+        "1": "You're pushing your limits!",
+        "2": "Stronger than last time!"
+      },
+      "firstSet": {
+        "0": "Here we go!",
+        "1": "First set in the bag!",
+        "2": "Great start, keep going!"
+      },
+      "halfway": {
+        "0": "Halfway there, hang in!",
+        "1": "Half done, well done!",
+        "2": "Over halfway, you've got this!"
+      },
+      "stretching": {
+        "0": "Well stretched, your body thanks you!",
+        "1": "Stretches done, well done!"
+      },
+      "weighIn": {
+        "0": "Saved! Tracking pays off over time.",
+        "1": "Recorded, nice one!"
+      },
+      "photo": {
+        "0": "Nice photo, you'll see the difference!",
+        "1": "Photo filed, compare in a month!"
+      }
+    },
+    "today": {
+      "restDay": "Rest day: your muscles are growing now.",
+      "done": "Session done today, well done!"
+    }
   }
 }

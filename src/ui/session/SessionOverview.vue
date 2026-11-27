@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { leaveAtOnce } from '@/ui/motion';
 import {
   IonButton,
   IonButtons,
@@ -79,7 +80,7 @@ const inSession = () => props.exercises.filter((e) => e.status !== 'done').map((
       <ion-button expand="block" fill="outline" class="add" @click="picking = true">
         {{ t('session.addExercise') }}
       </ion-button>
-      <ol class="overview">
+      <TransitionGroup tag="ol" class="overview" name="tr-list" @leave="leaveAtOnce">
         <li
           v-for="(e, index) in exercises"
           :key="e.id"
@@ -185,7 +186,7 @@ const inSession = () => props.exercises.filter((e) => e.status !== 'done').map((
             </template>
           </span>
         </li>
-      </ol>
+      </TransitionGroup>
       <ExercisePicker
         :open="picking"
         :title="t('session.addExercise')"

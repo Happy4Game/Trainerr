@@ -85,6 +85,7 @@ const spdx = (license: string) =>
           </ul>
         </li>
         <li>{{ t('credits.data.aiDrawings') }}</li>
+        <li>{{ t('credits.data.mascot') }}</li>
         <li>
           <a href="https://github.com/abdofallah/MuscleMapJS" target="_blank" rel="noopener"
             >MuscleMapJS</a

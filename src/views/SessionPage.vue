@@ -47,6 +47,10 @@ import SessionCardio from '@/ui/cardio/SessionCardio.vue';
 import GuidedWarmup from '@/ui/session/GuidedWarmup.vue';
 import { syncStats } from '@/ui/friends';
 import { todayIso } from '@/ui/today';
+import { leaveAtOnce, riseIn } from '@/ui/motion';
+import { celebrate } from '@/ui/decor/celebrate';
+import { coachLine } from '@/ui/decor/mascotLines';
+import MascotSays from '@/ui/decor/MascotSays.vue';
 
 const { t, n, locale } = useI18n();
 const rirText = useRirText();
@@ -123,6 +127,20 @@ watch(screen, async (now, before) => {
   if (!now || !before || now === before) return;
   await nextTick();
   void content.value?.$el.scrollToTop(300);
+});
+/** What the step area shows: when it changes, the new step rises in. */
+const stepScreen = ref<HTMLElement>();
+const stepKey = computed(() => {
+  if (session.guidedWarmupPending.value) return 'warmup';
+  if (nextMachine.value) return `next:${nextMachine.value.id}`;
+  const s = step.value;
+  if (!s) return '';
+  return 'exerciseId' in s ? `${s.kind}:${s.exerciseId}` : s.kind;
+});
+watch(stepKey, async (now, before) => {
+  if (!before || now === before) return;
+  await nextTick();
+  riseIn(stepScreen.value);
 });
 // A set just saved: back to the top, where the rest timer starts, with a
 // short confirmation, so the tap visibly did something.
@@ -271,6 +289,50 @@ const lastLogged = computed(() => {
   const last = loggedSets.value.at(-1);
   return last && !last.warmup ? last : undefined;
 });
+/** During the rest, the mascot cheers: sets left here, last machine, a record… */
+const coachMessage = computed(() => {
+  const last = lastLogged.value;
+  if (!last) return undefined;
+  const line = coachLine({
+    recordBeaten: Boolean(session.lastSetBeatRecord.value),
+    setsLeftHere: Math.max(
+      0,
+      session.plannedSets(last.exerciseId) - session.workSetsInSession(last.exerciseId).length,
+    ),
+    machinesLeft: progress.value.filter((e) => e.status !== 'done' && e.id !== last.exerciseId)
+      .length,
+    setsDone: loggedSets.value.length,
+  });
+  if (line.key === 'setsLeft') return t('decor.coach.setsLeft', line.count);
+  if (line.key === 'rest') return t(`decor.coach.rest${line.variant}`);
+  return t(`decor.coach.${line.key}`);
+});
+// The mascot crosses the screen with a trophy: a record beaten, a session done.
+watch(
+  () => {
+    const record = session.recordBeaten.value;
+    return session.lastSetBeatRecord.value && record
+      ? `${record.exerciseId}-${record.loadKg}-${record.reps}`
+      : undefined;
+  },
+  (record) => {
+    if (record) celebrate('record');
+  },
+);
+watch(phase, (now, before) => {
+  if (now === 'finished' && before === 'active') celebrate('session');
+});
+// Smaller moments, so that the mascot does not only show at the end.
+const workSetCount = computed(() => loggedSets.value.filter((set) => !set.warmup).length);
+watch(workSetCount, (now, before) => {
+  if (before === 0 && now === 1) celebrate('firstSet');
+});
+const machinesDone = computed(() => progress.value.filter((e) => e.status === 'done').length);
+watch(machinesDone, (now, before) => {
+  const total = progress.value.length;
+  const half = Math.ceil(total / 2);
+  if (total >= 4 && before < half && now === half) celebrate('halfway');
+});
 
 async function logWarmup(): Promise<void> {
   const id = currentId.value;
@@ -331,6 +393,7 @@ async function logWarmup(): Promise<void> {
           @done="session.endRest()"
           @adjust="session.adjustRest($event)"
         />
+        <MascotSays v-if="restEndsAt && coachMessage" :message="coachMessage" />
         <!-- During the rest, the timer and the next set come first: the rest folds away. -->
         <details v-if="restEndsAt && (lastLogged || previousExercise)" class="rest-more">
           <summary>
@@ -501,147 +564,150 @@ async function logWarmup(): Promise<void> {
         <SessionOverview :open="overviewOpen" :exercises="progress" @close="overviewOpen = false" />
 
         <SessionCardio place="top" />
-        <!-- Recommended before the first machine, skippable at every step. -->
-        <GuidedWarmup v-if="session.guidedWarmupPending.value" />
-        <section
-          v-else-if="nextMachine"
-          class="next-machine"
-          :aria-label="t('session.nextMachine.title')"
-        >
-          <p v-if="nextMachine.finished" class="finished" role="status">
-            ✓ {{ t('session.nextMachine.finished', { name: nameOf(nextMachine.finished) }) }}
-          </p>
-          <p class="label">{{ t('session.nextMachine.title') }}</p>
-          <router-link
-            v-if="nextMachine.thumbnail"
-            :to="cardLink(nextMachine.id)"
-            class="thumb-link"
-            :aria-label="t('session.seeMovementOf', { name: nameOf(nextMachine.id) })"
+        <!-- Each new step (next machine, sets, machine free?, end) rises in. -->
+        <div ref="stepScreen">
+          <!-- Recommended before the first machine, skippable at every step. -->
+          <GuidedWarmup v-if="session.guidedWarmupPending.value" />
+          <section
+            v-else-if="nextMachine"
+            class="next-machine"
+            :aria-label="t('session.nextMachine.title')"
           >
-            <img :src="nextMachine.thumbnail" alt="" class="next-thumb" />
-          </router-link>
-          <h2>{{ nameOf(nextMachine.id) }}</h2>
-          <p class="plan-line">
-            {{ t('session.nextMachine.plan', nextMachine.sets) }}
-            <template v-if="nextMachine.loadKg !== undefined">
-              · {{ kg(nextMachine.loadKg) }}
-            </template>
-          </p>
-          <ion-button expand="block" size="large" @click="arrivedAt = nextMachine.id">
-            {{ t('session.nextMachine.go') }}
-          </ion-button>
-          <ion-button expand="block" fill="clear" :router-link="cardLink(nextMachine.id)">
-            {{ t('session.seeMovement') }}
-          </ion-button>
-          <div class="next-tools">
-            <ion-button fill="outline" color="medium" @click="openReplace(nextMachine.id)">
-              <ArrowLeftRight :size="18" aria-hidden="true" class="icon" />
-              {{ t('session.replaceCard.open') }}
+            <p v-if="nextMachine.finished" class="finished" role="status">
+              ✓ {{ t('session.nextMachine.finished', { name: nameOf(nextMachine.finished) }) }}
+            </p>
+            <p class="label">{{ t('session.nextMachine.title') }}</p>
+            <router-link
+              v-if="nextMachine.thumbnail"
+              :to="cardLink(nextMachine.id)"
+              class="thumb-link"
+              :aria-label="t('session.seeMovementOf', { name: nameOf(nextMachine.id) })"
+            >
+              <img :src="nextMachine.thumbnail" alt="" class="next-thumb" />
+            </router-link>
+            <h2>{{ nameOf(nextMachine.id) }}</h2>
+            <p class="plan-line">
+              {{ t('session.nextMachine.plan', nextMachine.sets) }}
+              <template v-if="nextMachine.loadKg !== undefined">
+                · {{ kg(nextMachine.loadKg) }}
+              </template>
+            </p>
+            <ion-button expand="block" size="large" @click="arrivedAt = nextMachine.id">
+              {{ t('session.nextMachine.go') }}
             </ion-button>
-            <ion-button fill="outline" color="medium" @click="onBusy(nextMachine.id)">
-              {{ t('session.busy') }}
+            <ion-button expand="block" fill="clear" :router-link="cardLink(nextMachine.id)">
+              {{ t('session.seeMovement') }}
             </ion-button>
-          </div>
-        </section>
+            <div class="next-tools">
+              <ion-button fill="outline" color="medium" @click="openReplace(nextMachine.id)">
+                <ArrowLeftRight :size="18" aria-hidden="true" class="icon" />
+                {{ t('session.replaceCard.open') }}
+              </ion-button>
+              <ion-button fill="outline" color="medium" @click="onBusy(nextMachine.id)">
+                {{ t('session.busy') }}
+              </ion-button>
+            </div>
+          </section>
 
-        <template v-else-if="step?.kind === 'exercise'">
-          <ion-card v-if="warmup" class="warmup">
+          <template v-else-if="step?.kind === 'exercise'">
+            <ion-card v-if="warmup" class="warmup">
+              <ion-card-content>
+                <p>
+                  {{
+                    warmup.total > 1
+                      ? t('session.warmupStep', {
+                          index: warmup.index,
+                          total: warmup.total,
+                          load: kg(warmup.loadKg),
+                          reps: warmup.reps,
+                        })
+                      : t('session.warmup', { load: kg(warmup.loadKg), reps: warmup.reps })
+                  }}
+                </p>
+                <div class="warmup-actions">
+                  <ion-button size="small" @click="logWarmup">{{
+                    t('session.warmupDone')
+                  }}</ion-button>
+                  <!-- Only this set: the ramp goes on with the next, lighter to heavier. -->
+                  <ion-button
+                    v-if="warmup.index < warmup.total"
+                    size="small"
+                    fill="outline"
+                    color="medium"
+                    @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId, 'set')"
+                  >
+                    {{ t('session.warmupSkipSet') }}
+                  </ion-button>
+                  <ion-button
+                    size="small"
+                    fill="outline"
+                    color="medium"
+                    @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId, 'all')"
+                  >
+                    {{ t('session.warmupSkip') }}
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+            <SetEntry
+              :exercise-id="step.exerciseId"
+              @busy="onBusy()"
+              @replace="openReplace(step.exerciseId)"
+              @plates="platesLoad = $event"
+            />
+            <ion-button fill="outline" color="warning" @click="reportingDiscomfort = true">
+              {{ t('discomfort.open') }}
+            </ion-button>
+            <ion-button fill="clear" color="medium" @click="session.skipExercise(step.exerciseId)">
+              {{ t('session.skip') }}
+            </ion-button>
+          </template>
+
+          <ion-card v-else-if="step?.kind === 'askIfFree'">
+            <ion-card-header>
+              <ion-card-title>{{
+                t('session.isFree', { name: nameOf(step.exerciseId) })
+              }}</ion-card-title>
+            </ion-card-header>
             <ion-card-content>
-              <p>
-                {{
-                  warmup.total > 1
-                    ? t('session.warmupStep', {
-                        index: warmup.index,
-                        total: warmup.total,
-                        load: kg(warmup.loadKg),
-                        reps: warmup.reps,
-                      })
-                    : t('session.warmup', { load: kg(warmup.loadKg), reps: warmup.reps })
-                }}
-              </p>
-              <div class="warmup-actions">
-                <ion-button size="small" @click="logWarmup">{{
-                  t('session.warmupDone')
-                }}</ion-button>
-                <!-- Only this set: the ramp goes on with the next, lighter to heavier. -->
-                <ion-button
-                  v-if="warmup.index < warmup.total"
-                  size="small"
-                  fill="outline"
-                  color="medium"
-                  @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId, 'set')"
-                >
-                  {{ t('session.warmupSkipSet') }}
-                </ion-button>
-                <ion-button
-                  size="small"
-                  fill="outline"
-                  color="medium"
-                  @click="step?.kind === 'exercise' && session.skipWarmup(step.exerciseId, 'all')"
-                >
-                  {{ t('session.warmupSkip') }}
-                </ion-button>
-              </div>
+              <router-link
+                :to="cardLink(step.exerciseId)"
+                class="free-machine"
+                :aria-label="t('session.seeMovementOf', { name: nameOf(step.exerciseId) })"
+              >
+                <img
+                  v-if="thumbnailOf(step.exerciseId)"
+                  :src="thumbnailOf(step.exerciseId)"
+                  alt=""
+                  class="alt-thumb"
+                />
+                <span>{{ t('session.seeMovement') }}</span>
+              </router-link>
+              <ion-button expand="block" @click="session.machineFree(step.exerciseId)">
+                {{ t('session.free') }}
+              </ion-button>
+              <ion-button
+                expand="block"
+                fill="outline"
+                @click="session.machineStillBusy(step.exerciseId)"
+              >
+                {{ t('session.stillBusy') }}
+              </ion-button>
             </ion-card-content>
           </ion-card>
-          <SetEntry
-            :exercise-id="step.exerciseId"
-            @busy="onBusy()"
-            @replace="openReplace(step.exerciseId)"
-            @plates="platesLoad = $event"
-          />
-          <ion-button fill="outline" color="warning" @click="reportingDiscomfort = true">
-            {{ t('discomfort.open') }}
-          </ion-button>
-          <ion-button fill="clear" color="medium" @click="session.skipExercise(step.exerciseId)">
-            {{ t('session.skip') }}
-          </ion-button>
-        </template>
 
-        <ion-card v-else-if="step?.kind === 'askIfFree'">
-          <ion-card-header>
-            <ion-card-title>{{
-              t('session.isFree', { name: nameOf(step.exerciseId) })
-            }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <router-link
-              :to="cardLink(step.exerciseId)"
-              class="free-machine"
-              :aria-label="t('session.seeMovementOf', { name: nameOf(step.exerciseId) })"
-            >
-              <img
-                v-if="thumbnailOf(step.exerciseId)"
-                :src="thumbnailOf(step.exerciseId)"
-                alt=""
-                class="alt-thumb"
-              />
-              <span>{{ t('session.seeMovement') }}</span>
-            </router-link>
-            <ion-button expand="block" @click="session.machineFree(step.exerciseId)">
-              {{ t('session.free') }}
-            </ion-button>
-            <ion-button
-              expand="block"
-              fill="outline"
-              @click="session.machineStillBusy(step.exerciseId)"
-            >
-              {{ t('session.stillBusy') }}
-            </ion-button>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card v-else-if="step?.kind === 'finished'">
-          <ion-card-content>
-            <p>{{ t('session.allDone') }}</p>
-            <p v-if="step.carryOver.length > 0">
-              {{ t('session.carryOver', { names: step.carryOver.map(nameOf).join(', ') }) }}
-            </p>
-            <p v-if="autoFinishTime" class="muted">
-              {{ t('session.autoFinishAt', { time: autoFinishTime }) }}
-            </p>
-          </ion-card-content>
-        </ion-card>
+          <ion-card v-else-if="step?.kind === 'finished'">
+            <ion-card-content>
+              <p>{{ t('session.allDone') }}</p>
+              <p v-if="step.carryOver.length > 0">
+                {{ t('session.carryOver', { names: step.carryOver.map(nameOf).join(', ') }) }}
+              </p>
+              <p v-if="autoFinishTime" class="muted">
+                {{ t('session.autoFinishAt', { time: autoFinishTime }) }}
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </div>
 
         <SessionCardio place="bottom" />
         <ion-button expand="block" fill="outline" @click="pickingExercise = true">
@@ -659,7 +725,7 @@ async function logWarmup(): Promise<void> {
         <section v-if="loggedSets.length > 0" class="logged">
           <h3>{{ t('session.logged') }}</h3>
           <!-- Newest first: the set to fix is usually the last one, at the top. -->
-          <ol reversed>
+          <TransitionGroup tag="ol" reversed name="tr-list" @leave="leaveAtOnce">
             <li v-for="set in newestFirst" :key="set.id">
               <button
                 type="button"
@@ -679,7 +745,7 @@ async function logWarmup(): Promise<void> {
                 <Pencil :size="16" aria-hidden="true" />
               </button>
             </li>
-          </ol>
+          </TransitionGroup>
           <ion-button fill="clear" size="small" @click="session.undoLastSet()">
             {{ t('session.undo') }}
           </ion-button>

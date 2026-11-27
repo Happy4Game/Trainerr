@@ -62,6 +62,8 @@
   --tr-accent-soft: #fff1e8;
   --tr-hero: linear-gradient(135deg, #c2410c 0%, #9a3412 100%);
   --tr-hero-text: #ffffff;
+  /* Fin du repos : vert, texte blanc dessus à 5:1. */
+  --tr-hero-go: linear-gradient(135deg, #15803d 0%, #166534 100%);
   --tr-chart-1: #c2410c;
   --tr-chart-2: #1d4ed8;
   --tr-chart-grid: #e3e6ec;
@@ -154,6 +156,7 @@
   --tr-accent-soft: #2b1a10;
   --tr-hero: linear-gradient(135deg, #ff8a3d 0%, #ff5f2e 100%);
   --tr-hero-text: #1a0b00;
+  --tr-hero-go: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
   --tr-chart-1: #ff7a2f;
   --tr-chart-2: #5eb8ff;
   --tr-chart-grid: #262c3a;
@@ -433,6 +436,98 @@ ion-toggle {
     transform: none;
     opacity: 1;
   }
+}
+
+/*
+ * Transitions entre écrans (Material 3, « transition patterns ») :
+ * - onglet : « fade through », l'écran arrive en fondu en grossissant à peine ;
+ * - sélecteur (Séances / Stats / Corps…) : « shared axis » horizontal, le
+ *   contenu glisse depuis le côté du choix.
+ * Seul l'écran qui arrive est animé : l'ancien disparaît tout de suite, rien
+ * ne bloque un appui pendant l'animation.
+ */
+/*
+ * Ionic hides the screen left at once: starting from fully transparent made
+ * a dark flash between the two. The new screen starts half visible, so the
+ * change reads as one movement, not as a blink.
+ */
+@keyframes tr-fade-through {
+  from {
+    opacity: 0.45;
+    transform: scale(0.985);
+  }
+}
+@keyframes tr-from-right {
+  from {
+    opacity: 0.35;
+    transform: translateX(20px);
+  }
+}
+@keyframes tr-from-left {
+  from {
+    opacity: 0.35;
+    transform: translateX(-20px);
+  }
+}
+/*
+ * Ionic cache un onglet quitté avec .ion-page-hidden (display: none). Un
+ * élément qui réapparaît relance son animation CSS : l'onglet choisi, ou
+ * l'écran retrouvé après un retour, arrive donc en fondu, sans JavaScript.
+ * Quand une fiche s'ouvre, l'animation d'Ionic (Web Animations) passe devant.
+ */
+ion-tabs ion-router-outlet > .ion-page {
+  animation: tr-fade-through 210ms var(--tr-ease-out);
+}
+.tr-from-right {
+  animation: tr-from-right var(--tr-duration) var(--tr-ease-out);
+}
+.tr-from-left {
+  animation: tr-from-left var(--tr-duration) var(--tr-ease-out);
+}
+
+/*
+ * Listes (<TransitionGroup name="tr-list">) : une ligne ajoutée arrive en
+ * fondu, les autres glissent à leur nouvelle place au lieu de sauter
+ * (technique FLIP de Vue). Une ligne retirée part tout de suite.
+ */
+.tr-list-enter-active {
+  transition:
+    opacity var(--tr-duration) var(--tr-ease-out),
+    transform var(--tr-duration) var(--tr-ease-out);
+}
+.tr-list-enter-from {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+.tr-list-move {
+  transition: transform var(--tr-duration) var(--tr-ease-out);
+}
+
+/* Carte ou ligne cliquable : elle s'enfonce un peu sous le doigt, comme un bouton. */
+.tr-pressable {
+  transition: transform var(--tr-duration-fast) var(--tr-ease-out);
+}
+.tr-pressable:active {
+  transform: scale(0.98);
+}
+
+/*
+ * Blocs repliables (<details>) : ils s'ouvrent en glissant. Navigateurs
+ * récents seulement (::details-content, interpolate-size : Chrome 131) ;
+ * ailleurs ils s'ouvrent d'un coup, comme avant.
+ */
+:root {
+  interpolate-size: allow-keywords;
+}
+details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size var(--tr-duration) var(--tr-ease-out),
+    content-visibility var(--tr-duration) allow-discrete;
+}
+details[open]::details-content {
+  block-size: auto;
 }
 
 /* Animations réduites si le téléphone le demande (WCAG 2.3.3). */

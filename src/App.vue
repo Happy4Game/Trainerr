@@ -6,6 +6,7 @@ import { onNotificationTap, refreshNotifications } from '@/ui/notifications';
 import { checkWhenDue } from '@/ui/updates';
 import { useAutoFinish } from '@/ui/session/useAutoFinish';
 import { keepTodayUpToDate } from '@/ui/today';
+import CelebrationLayer from '@/ui/decor/CelebrationLayer.vue';
 
 const router = useRouter();
 // A session left open once everything is done closes by itself after 10 min.
@@ -39,5 +40,7 @@ onUnmounted(() => {
 <template>
   <ion-app>
     <ion-router-outlet />
+    <!-- The mascot, above every screen (stretching included), never in the way. -->
+    <CelebrationLayer />
   </ion-app>
 </template>
